@@ -1,0 +1,21 @@
+{
+  "extends": ["stylelint-config-standard"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "order/properties-alphabetical-order": true,
+    "color-hex-length": "long",
+    "color-no-invalid-hex": true,
+    "selector-class-pattern": null,
+    "no-descending-specificity": null,
+    "value-keyword-case": null
+  },
+  "ignoreFiles": [
+    "node_modules/**/*",
+    "dist/**/*",
+    "build/**/*",
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx"
+  ]
+}
