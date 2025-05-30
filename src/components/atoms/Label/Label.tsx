@@ -7,12 +7,8 @@ type LabelVariant =
   | 'pageTitle'
   | 'sectionTitle'
   | 'title'
-  | 'subTitle'
   | 'inputLabel'
   | 'bodyText'
-  | 'tab'
-  | 'buttonWhite'
-  | 'lightgray'
   | string;
 
 type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray';
