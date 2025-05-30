@@ -13,10 +13,9 @@ type LabelVariant =
   | 'tab'
   | 'buttonWhite'
   | 'lightgray'
-  | 'inputTextLeft'
   | string;
 
-type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray' | 'inputTextLeft';
+type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray';
 
 type LabelProps = {
   children: React.ReactNode;
