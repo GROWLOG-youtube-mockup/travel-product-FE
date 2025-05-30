@@ -1,0 +1,64 @@
+@mixin label-font($size, $height, $weight: 500) {
+  font-family: Roboto-Medium, sans-serif;
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $height;
+}
+
+.label {
+  color: #000000;
+  display: inline-block;
+  margin-bottom: 4px;
+
+  @include label-font(16px, 24px, 500);
+}
+
+/* 크기(폰트/라인/굵기) 전용 */
+.label-pageTitle {
+  @include label-font(40px, 48px, 700);
+
+  font-family: Roboto-Bold, sans-serif;
+}
+
+.label-sectionTitle {
+  @include label-font(36px, 48px, 700);
+
+  font-family: Roboto-Bold, sans-serif;
+}
+
+.label-title {
+  @include label-font(28px, 36px, 500);
+}
+
+.label-subtitle {
+  @include label-font(20px, 24px, 500);
+}
+
+.label-bodyText {
+  @include label-font(16px, 24px, 500);
+}
+
+.label-inputLabel {
+  @include label-font(14px, 20px, 500);
+}
+
+/* 색상 전용 클래스 */
+.label-color-gray {
+  color: #8d8d8d;
+}
+
+.label-color-darkgray {
+  color: #5f5a5a;
+}
+
+.label-color-accent {
+  color: #e18c04;
+}
+
+.label-color-buttonWhite {
+  color: #ffffff;
+}
+
+.label-color-lightgray {
+  color: rgb(0 0 0 / 50%);
+}
