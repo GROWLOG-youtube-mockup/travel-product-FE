@@ -1,6 +1,6 @@
 import React from 'react';
 
-import styles from './Label.module.scss';
+import './Label.scss';
 
 type LabelVariant =
   | 'default'
@@ -15,9 +15,9 @@ type LabelVariant =
   | 'bodyText'
   | 'tab'
   | 'buttonWhite'
-  | 'grayRgba'
-  | 'inputText'
-  | 'inputTextCenter';
+  | 'lightgray'
+  | 'inputTextLeft'
+  | string; // 여러 조합을 허용하기 위해 string 추가
 
 type LabelProps = {
   children: React.ReactNode;
@@ -34,10 +34,9 @@ const Label: React.FC<LabelProps> = ({
   style = {},
   variant = 'default'
 }) => {
-  const variantClass = variant && styles[variant] ? styles[variant] : '';
-  const composedClassName = [styles['atom-label'], variantClass, className]
-    .filter(Boolean)
-    .join(' ');
+  // 여러 variant 조합 지원 (예: "title gray")
+  const variantClasses = variant ? variant.split(' ').join(' ') : '';
+  const composedClassName = ['atom-label', variantClasses, className].filter(Boolean).join(' ');
 
   return (
     <label htmlFor={htmlFor} className={composedClassName} style={style}>
