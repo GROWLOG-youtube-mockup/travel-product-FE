@@ -30,6 +30,10 @@
   @include label-font(28px, 36px, 500);
 }
 
+.label-subtitle {
+  @include label-font(20px, 24px, 500);
+}
+
 .label-bodyText {
   @include label-font(16px, 24px, 500);
 }

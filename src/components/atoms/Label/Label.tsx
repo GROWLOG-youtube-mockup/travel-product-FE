@@ -9,6 +9,7 @@ type LabelVariant =
   | 'title'
   | 'inputLabel'
   | 'bodyText'
+  | 'subtitle'
   | string;
 
 type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray';
