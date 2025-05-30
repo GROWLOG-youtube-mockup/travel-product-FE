@@ -1,12 +1,9 @@
 import React from 'react';
 
-import './Label.scss';
+import styles from './Label.module.scss';
 
 type LabelVariant =
   | 'default'
-  | 'gray'
-  | 'darkgray'
-  | 'accent'
   | 'pageTitle'
   | 'sectionTitle'
   | 'title'
@@ -17,7 +14,9 @@ type LabelVariant =
   | 'buttonWhite'
   | 'lightgray'
   | 'inputTextLeft'
-  | string; // 여러 조합을 허용하기 위해 string 추가
+  | string;
+
+type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray' | 'inputTextLeft';
 
 type LabelProps = {
   children: React.ReactNode;
@@ -25,6 +24,7 @@ type LabelProps = {
   className?: string;
   style?: React.CSSProperties;
   variant?: LabelVariant;
+  color?: LabelColor;
 };
 
 const Label: React.FC<LabelProps> = ({
@@ -32,11 +32,14 @@ const Label: React.FC<LabelProps> = ({
   htmlFor,
   className = '',
   style = {},
-  variant = 'default'
+  variant = 'default',
+  color
 }) => {
-  // 여러 variant 조합 지원 (예: "title gray")
-  const variantClasses = variant ? variant.split(' ').join(' ') : '';
-  const composedClassName = ['atom-label', variantClasses, className].filter(Boolean).join(' ');
+  const variantKey = variant && variant !== 'default' ? `label-${variant}` : 'label';
+  const colorKey = color ? `label-color-${color}` : '';
+  const variantClass = styles[variantKey] || '';
+  const colorClass = colorKey ? styles[colorKey] : '';
+  const composedClassName = [variantClass, colorClass, className].filter(Boolean).join(' ');
 
   return (
     <label htmlFor={htmlFor} className={composedClassName} style={style}>

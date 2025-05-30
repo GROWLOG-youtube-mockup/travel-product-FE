@@ -10,7 +10,6 @@ export type ButtonVariant =
   | 'default'
   | 'rounded'
   | 'lg'
-  | 'lgWhite'
   | 'xl';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
