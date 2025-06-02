@@ -1,6 +1,6 @@
 {
-  "extends": ["stylelint-config-standard"],
-  "plugins": ["stylelint-order"],
+  "extends": ["stylelint-config-standard", "stylelint-config-standard-scss"],
+  "plugins": ["stylelint-order", "stylelint-scss"],
   "rules": {
     "order/properties-alphabetical-order": true,
     "color-hex-length": "long",
