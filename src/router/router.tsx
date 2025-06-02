@@ -72,7 +72,8 @@ const routes: AppRouteObject[] = [
       },
       {
         path: 'reservation',
-        element: <ReservationPage />
+        element: <ReservationPage />,
+        requiredRole: 'USER'
       },
       {
         path: 'user',
