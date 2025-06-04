@@ -75,7 +75,7 @@ const routes: AppRouteObject[] = [
           {
             path: 'reservation',
             element: <ReservationPage />
-            // 페이지 레이아웃 구성을 위해 임시로 비활성화
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
             // requiredRole: 'USER'
           },
           {
@@ -85,10 +85,14 @@ const routes: AppRouteObject[] = [
           {
             path: 'payment-process',
             element: <PaymentProcessPage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
           },
           {
             path: 'payment-complete',
             element: <PaymentCompletePage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
           }
         ]
       },
@@ -98,13 +102,15 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'user',
-            element: <UserPage />,
-            requiredRole: 'USER'
+            element: <UserPage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
           },
           {
             path: 'user-edit',
-            element: <UserEditPage />,
-            requiredRole: 'USER'
+            element: <UserEditPage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
           }
         ]
       },
@@ -113,8 +119,9 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'admin',
-            element: <Admin />,
-            requiredRole: 'ADMIN'
+            element: <Admin />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'ADMIN'
           }
         ]
       },
