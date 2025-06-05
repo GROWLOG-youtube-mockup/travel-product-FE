@@ -5,6 +5,7 @@ import App from '../App';
 import Authorization from '../components/Authorization';
 import AdminLayout from '../layouts/AdminLayout';
 import AuthLayout from '../layouts/AuthLayout';
+import CheckoutLayout from '../layouts/CheckoutLayout';
 import DefaultLayout from '../layouts/DefaultLayout';
 import UserLayout from '../layouts/UserLayout';
 import Admin from '../pages/Admin/index';
@@ -71,7 +72,12 @@ const routes: AppRouteObject[] = [
           {
             path: 'product/:id', // 동적 라우팅. 엔드포인트 관련 추가 논의 필요
             element: <ProductDetailPage />
-          },
+          }
+        ]
+      },
+      {
+        element: <CheckoutLayout />, // 일반 사용자용 레이아웃
+        children: [
           {
             path: 'reservation',
             element: <ReservationPage />
