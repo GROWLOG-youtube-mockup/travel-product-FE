@@ -1,9 +1,9 @@
 @use '../../styles/core';
 
 .baseForm {
-  @include core.normal-layout-set;
-
   width: core.$default-layout-width;
+  max-width: core.$default-layout-width;
   margin: 0 auto;
+  padding: 40px 16px;
   background-color: lightblue;
 }
