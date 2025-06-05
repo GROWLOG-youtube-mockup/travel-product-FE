@@ -1,6 +1,5 @@
 @use './reset'; // 리셋 SCSS
-@use './variables'; // 전역 SCSS 변수
-@use './mixins'; // 전역 믹스인
+@use './core';
 
 // 루트 스타일링
 #root {
@@ -24,7 +23,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   margin: 0;
-  line-height: 1.4;
+  line-height: core.$default-line-height;
 }
 
 // 버튼 스타일링
