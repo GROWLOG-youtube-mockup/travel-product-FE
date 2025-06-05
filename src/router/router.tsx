@@ -111,7 +111,12 @@ const routes: AppRouteObject[] = [
             element: <UserPage />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
             // requiredRole: 'USER'
-          },
+          }
+        ]
+      },
+      {
+        element: <UserLayout />, // 일반 사용자용 레이아웃
+        children: [
           {
             path: 'user-edit',
             element: <UserEditPage />
