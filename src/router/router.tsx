@@ -7,6 +7,7 @@ import AdminLayout from '../layouts/AdminLayout';
 import AuthLayout from '../layouts/AuthLayout';
 import CheckoutLayout from '../layouts/CheckoutLayout';
 import DefaultLayout from '../layouts/DefaultLayout';
+import UserEditLayout from '../layouts/UserEditLayout';
 import UserLayout from '../layouts/UserLayout';
 import Admin from '../pages/Admin/index';
 import CartPage from '../pages/Cart/index';
@@ -76,7 +77,7 @@ const routes: AppRouteObject[] = [
         ]
       },
       {
-        element: <CheckoutLayout />, // 일반 사용자용 레이아웃
+        element: <CheckoutLayout />, // 결제 관련 페이지 레이아웃
         children: [
           {
             path: 'reservation',
@@ -104,7 +105,7 @@ const routes: AppRouteObject[] = [
       },
 
       {
-        element: <UserLayout />, // 일반 사용자용 레이아웃
+        element: <UserLayout />, // 마이페이지 레이아웃
         children: [
           {
             path: 'user',
@@ -115,7 +116,7 @@ const routes: AppRouteObject[] = [
         ]
       },
       {
-        element: <UserLayout />, // 일반 사용자용 레이아웃
+        element: <UserEditLayout />, // 정보 수정 레이아웃
         children: [
           {
             path: 'user-edit',
