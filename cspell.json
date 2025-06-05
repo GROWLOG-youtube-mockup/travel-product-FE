@@ -13,7 +13,8 @@
     "**/package.json",
     "**/package-lock.json",
     "**/tsconfig.json",
-    "**/.husky/**"
+    "**/.husky/**",
+    "**/*.json"
   ],
   "words": ["eslint", "stylelint", "prettierrc", "pnpm", "vite", "zustand", "tanstack", "Avenir"]
 }
