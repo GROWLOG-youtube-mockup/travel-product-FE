@@ -1,9 +1,11 @@
 import { Outlet, useLocation } from 'react-router-dom';
 
-import MainBanner from '../components/Banner/MainBanner/index';
-import ProductBanner from '../components/Banner/ProductBanner/index';
-import Footer from '../components/Footer/Footer';
-import DefaultHeader from '../components/Header/DefaultHeader/index';
+import MainBanner from '../../components/Banner/MainBanner/index';
+import ProductBanner from '../../components/Banner/ProductBanner/index';
+import Footer from '../../components/Footer/Footer';
+import DefaultHeader from '../../components/Header/DefaultHeader/index';
+
+import styles from './DefaultLayout.module.scss';
 
 const DefaultLayout = () => {
   const location = useLocation();
@@ -22,7 +24,7 @@ const DefaultLayout = () => {
     <>
       <DefaultHeader />
       {renderBanner()}
-      <main>
+      <main className={styles.baseForm}>
         <Outlet />
       </main>
       <Footer />
