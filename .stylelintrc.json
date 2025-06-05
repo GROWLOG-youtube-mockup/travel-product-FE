@@ -17,6 +17,7 @@
             "flex",
             "flex-direction",
             "flex-wrap",
+            "flex-grow",
             "align-items",
             "justify-content"
           ],
