@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  background-color: pink;
+}
+
+.left__section {
+  flex: 2.5;
+  background-color: lightyellow;
+}
+
+.right__section {
+  flex: 1;
+  min-width: 250px;
+  background-color: lightgreen;
+}
