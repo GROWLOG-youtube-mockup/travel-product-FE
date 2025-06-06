@@ -6,9 +6,9 @@
 }
 
 .label {
-  color: #000000;
   display: inline-block;
   margin-bottom: 4px;
+  color: #000000;
 
   @include label-font(16px, 24px, 500);
 }

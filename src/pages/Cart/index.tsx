@@ -1,12 +1,12 @@
-import styles from './Reservation.module.scss';
+import styles from './Cart.module.scss';
 
-const ReservationPage = () => {
+const CartPage = () => {
   return (
     <>
       <div className={styles.container}>
         <div className={styles.left__section}>
-          <h1>Reservation Page</h1>
-          <p>This is the reservation page where users can make reservations.</p>
+          <h1>Shopping Cart</h1>
+          <p>Check your selected items and make adjustments before checkout.</p>
         </div>
         <div className={styles.right__section}>
           <p>modal place</p>
@@ -16,4 +16,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+export default CartPage;

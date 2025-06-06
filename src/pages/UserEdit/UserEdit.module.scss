@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: pink;
+}
+
+.first__section,
+.second__section,
+.third__section {
+  display: flex;
+  flex-direction: row;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.first__section__left,
+.second__section__left,
+.third__section__left {
+  flex: 1;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+.first__section__right,
+.second__section__right,
+.third__section__right {
+  flex: 1;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}

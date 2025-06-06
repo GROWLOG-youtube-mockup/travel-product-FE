@@ -1,23 +1,23 @@
 @mixin input-base {
-  align-items: center;
-  background: #ffffff;
-  border-color: rgb(0 0 0 / 10%);
-  border-radius: 6px;
-  border-style: solid;
-  border-width: 1px;
-  box-sizing: border-box;
-  color: #000000;
+  position: relative;
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 36px;
+  padding: 8px 12px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgb(0 0 0 / 10%);
+  box-sizing: border-box;
   font-family: Roboto-Regular, sans-serif;
   font-size: 14px;
   font-weight: 400;
-  gap: 4px;
-  height: 36px;
-  justify-content: flex-start;
   line-height: 20px;
+  color: #000000;
+  background: #ffffff;
+  border-radius: 6px;
+  gap: 4px;
   outline: none;
-  padding: 8px 12px;
-  position: relative;
 }
 
 .atom-input {

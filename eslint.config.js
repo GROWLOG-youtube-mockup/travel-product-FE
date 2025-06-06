@@ -38,7 +38,8 @@ export default tseslint.config(
           trailingComma: 'none',
           printWidth: 100,
           bracketSpacing: true,
-          useTabs: false
+          useTabs: false,
+          endOfLine: 'auto'
         }
       ],
       'simple-import-sort/imports': [
