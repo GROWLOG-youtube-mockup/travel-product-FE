@@ -1,13 +1,21 @@
 import styles from './Main.module.scss';
 
 const MainPage = () => {
+  const contents = [
+    '국내 추천 여행',
+    '인기 여행',
+    '일찍 준비하는 여름휴가',
+    '지금이 딱 예약할 때!'
+  ];
+
   return (
     <>
-      <div className={styles.container}>
-        <h1>Main Page</h1>
-        <p>Welcome to the main page of our application!</p>
-        <p>This is where you can find the latest updates and features.</p>
-      </div>
+      {contents.map((content) => (
+        <section className={styles.main_cards_section} key={content}>
+          <h2 className={styles.main_cards_section_title}>{content}</h2>
+          <div>Card</div>
+        </section>
+      ))}
     </>
   );
 };
