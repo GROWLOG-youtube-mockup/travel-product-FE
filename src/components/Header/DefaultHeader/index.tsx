@@ -2,7 +2,7 @@ import Label from '../../atoms/Label/Label';
 
 import styles from './DefaultHeader.module.scss';
 
-//props로 받아오도록 되어있는데 추후 zustand에 맞춰서 변경 예정
+// 현재는 로그인 상태를 props로 받지만, 추후 논의후 변경예정
 interface DefaultHeaderProps {
   isLoggedIn: boolean;
   onLogout?: () => void;
