@@ -10,29 +10,31 @@ interface DefaultHeaderProps {
 
 const DefaultHeader = ({ isLoggedIn, onLogout }: DefaultHeaderProps) => {
   return (
-    <header className={styles.header}>
-      <div className={styles.logoArea}>
-        <Label className={styles.logo} variant="title" style={{ fontWeight: 700 }}>
-          logo
-        </Label>
-      </div>
-      <nav className={styles.menuArea}>
-        {isLoggedIn ? (
-          <>
-            <Label variant="bodyText">장바구니</Label>
-            <Label variant="bodyText">마이페이지</Label>
-            <span onClick={onLogout} style={{ cursor: 'pointer' }}>
-              <Label variant="bodyText">로그아웃</Label>
-            </span>
-          </>
-        ) : (
-          <>
-            <Label variant="bodyText">회원가입</Label>
-            <Label variant="bodyText">로그인</Label>
-          </>
-        )}
-      </nav>
-    </header>
+    <div className={styles.headerWrapper}>
+      <header className={styles.header}>
+        <div className={styles.logoArea}>
+          <Label className={styles.logo} variant="title" style={{ fontWeight: 700 }}>
+            logo
+          </Label>
+        </div>
+        <nav className={styles.menuArea}>
+          {isLoggedIn ? (
+            <>
+              <Label variant="bodyText">장바구니</Label>
+              <Label variant="bodyText">마이페이지</Label>
+              <span onClick={onLogout} style={{ cursor: 'pointer' }}>
+                <Label variant="bodyText">로그아웃</Label>
+              </span>
+            </>
+          ) : (
+            <>
+              <Label variant="bodyText">회원가입</Label>
+              <Label variant="bodyText">로그인</Label>
+            </>
+          )}
+        </nav>
+      </header>
+    </div>
   );
 };
 

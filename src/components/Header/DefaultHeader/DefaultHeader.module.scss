@@ -1,4 +1,13 @@
+.headerWrapper {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  border-bottom: 1px solid #ededed;
+}
+
 .header {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,7 +17,8 @@
   margin: 0 auto;
   padding: 0 32px;
   box-sizing: border-box;
-  border-bottom: 1px solid #ededed;
+  background: transparent;
+  border-bottom: none;
 }
 
 .logoArea {
