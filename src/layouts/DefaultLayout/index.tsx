@@ -14,7 +14,8 @@ const DefaultLayout = () => {
     if (location.pathname === '/') {
       return <MainBanner />;
     }
-    if (location.pathname.includes('/product')) {
+    // '/product'만 정확히 일치할 때만 ProductBanner 렌더링
+    if (location.pathname === '/product') {
       return <ProductBanner />;
     }
     return null;
