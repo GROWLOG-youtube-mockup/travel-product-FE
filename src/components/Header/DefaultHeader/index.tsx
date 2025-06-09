@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Label from '../../atoms/Label/Label';
 
 import styles from './DefaultHeader.module.scss';
@@ -9,11 +11,16 @@ interface DefaultHeaderProps {
 }
 
 const DefaultHeader = ({ isLoggedIn, onLogout }: DefaultHeaderProps) => {
+  const navigate = useNavigate();
   return (
     <div className={styles.headerWrapper}>
       <header className={styles.header}>
-        <div className={styles.logoArea}>
-          <Label className={styles.logo} variant="title" style={{ fontWeight: 700 }}>
+        <div
+          className={styles.logoArea}
+          onClick={() => navigate('/')}
+          style={{ cursor: 'pointer' }}
+        >
+          <Label variant="title" style={{ fontWeight: 700 }}>
             logo
           </Label>
         </div>
