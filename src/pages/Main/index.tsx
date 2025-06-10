@@ -7,8 +7,8 @@ const MainPage = () => {
   const contentsTitleList = [
     { title: '국내 추천 여행' },
     { title: '인기 여행', subtitle: '다른 여행객들이 많이 찾는 인기 여행 상품' },
-    { title: '일찍 준비하는 여름휴가', subtitle: '5늘부터 준비!' },
-    { title: '지금이 딱 예약할 때!', Subsubtitletitle: '선착순 타임특가부터 다양한 헤택' }
+    { title: '일찍 준비하는 여름휴가', subtitle: '오늘부터 준비!' },
+    { title: '지금이 딱 예약할 때!', subtitle: '선착순 타임특가부터 다양한 헤택' }
   ];
   const contents: CardProps[][] = [
     // TODO: 추후 API 연동 완료 시 수정해야 함.
