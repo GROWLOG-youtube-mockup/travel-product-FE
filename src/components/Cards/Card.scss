@@ -4,6 +4,10 @@
   border: 1px solid #888888;
   border-radius: 12px;
   cursor: pointer;
+  user-select: none;
+  user-select: none;
+  user-select: none;
+  user-select: none;
   flex-shrink: 0;
   gap: 0.5rem;
   overflow: hidden;
@@ -12,16 +16,6 @@
   &.longHeight {
     width: calc((100% - 5rem) / 5);
     min-width: 210px;
-  }
-
-  &.longWidth {
-    width: calc((100% - 2.4rem) / 3);
-    min-width: 370px;
-    height: 200px;
-
-    .card_image {
-      margin-right: 1rem;
-    }
   }
 
   &.normal {
@@ -34,6 +28,16 @@
     .card_image {
       flex: 1;
       height: 75%;
+    }
+  }
+
+  &.longWidth {
+    width: calc((100% - 2.4rem) / 3);
+    min-width: 370px;
+    height: 200px;
+
+    .card_image {
+      margin-right: 1rem;
     }
   }
 
