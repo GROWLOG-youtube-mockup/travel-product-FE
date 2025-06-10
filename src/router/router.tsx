@@ -10,6 +10,7 @@ import DefaultLayout from '../layouts/DefaultLayout';
 import UserEditLayout from '../layouts/UserEditLayout';
 import UserLayout from '../layouts/UserLayout';
 import Admin from '../pages/Admin/index';
+import AdminLoginPage from '../pages/AdminLogin/index';
 import CartPage from '../pages/Cart/index';
 import ErrorPage from '../pages/Error/index';
 import LoginPage from '../pages/Login/index';
@@ -134,6 +135,10 @@ const routes: AppRouteObject[] = [
             element: <Admin />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
             // requiredRole: 'ADMIN'
+          },
+          {
+            path: 'admin/login',
+            element: <AdminLoginPage />
           }
         ]
       },
