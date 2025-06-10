@@ -6,7 +6,7 @@ import styles from './LocationCardList.module.scss';
 
 const LocationCardList = ({ LocationCardList }: LocationCardListProps) => {
   return (
-    <div className={styles.card_slide}>
+    <div className={styles['card-slide']}>
       {LocationCardList.map((card: LocationCardProps) => (
         <LocationCard key={card.title} image={card.image} title={card.title} />
       ))}
