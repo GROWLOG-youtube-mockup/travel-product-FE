@@ -13,3 +13,7 @@ export type LocationCardProps = {
   image: string;
   title: string;
 };
+
+export type LocationCardListProps = {
+  LocationCardList: LocationCardProps[];
+};
