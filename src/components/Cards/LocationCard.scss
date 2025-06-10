@@ -2,6 +2,8 @@
   position: relative;
   width: calc((100% - 5rem) / 6);
   border-radius: 15px;
+  cursor: pointer;
+  user-select: none;
   overflow: hidden;
 
   .location_card_image {
