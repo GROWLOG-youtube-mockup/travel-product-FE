@@ -6,7 +6,7 @@ const Card = ({ styleName, image, title, price }: CardProps) => {
   return (
     <div className={`card ${styleName ?? 'normal'}`}>
       <div className="card_image">
-        <img src={image} alt="Card" />
+        <img src={image} alt="Card" draggable="false" />
       </div>
       <div className="card_content">
         <span className="card_title">{title}</span>
