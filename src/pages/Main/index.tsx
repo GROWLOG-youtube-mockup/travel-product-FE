@@ -150,10 +150,12 @@ const MainPage = () => {
     <>
       {contentsTitleList.map((item, index) => (
         <section className={styles.main_cards_section} key={item.title}>
-          <h2 className={styles.main_cards_section_title}>{item.title}</h2>
-          {item.subtitle && (
-            <span className={styles.main_cards_section_subtitle}>{item.subtitle}</span>
-          )}
+          <div className={styles.main_cards_section_title}>
+            <h2 className={styles.main_cards_section_main_title}>{item.title}</h2>
+            {item.subtitle && (
+              <span className={styles.main_cards_section_subtitle}>{item.subtitle}</span>
+            )}
+          </div>
           <CardSlide cardList={contents[index]} />
         </section>
       ))}

@@ -8,14 +8,18 @@
   overflow: hidden;
 
   .main_cards_section_title {
-    font-weight: bold;
-  }
+    margin-bottom: 1rem;
 
-  .main_cards_section_subtitle {
-    color: #888888;
+    .main_cards_section_main_title {
+      font-weight: bold;
+    }
+
+    .main_cards_section_subtitle {
+      color: #888888;
+    }
   }
 }
 
 .main_cards_section:not(:last-child) {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
