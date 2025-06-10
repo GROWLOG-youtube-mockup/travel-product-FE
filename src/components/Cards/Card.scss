@@ -1,6 +1,8 @@
 .card {
+  min-width: 210px;
   border: 1px solid #272727;
   border-radius: 12px;
+  cursor: pointer;
   flex-shrink: 0;
   overflow: hidden;
 
@@ -10,15 +12,11 @@
   }
 
   &.longWidth {
-    width: calc((100% - 3rem) / 3);
+    width: calc((100% - 2.5rem) / 3);
     height: 200px;
 
     .card_image {
       margin-right: 1rem;
-    }
-
-    .card_content {
-      text-align: left;
     }
   }
 
@@ -28,6 +26,11 @@
 
   &.longHeight {
     height: 300px;
+
+    .card_image {
+      flex: 1;
+      height: 75%;
+    }
   }
 
   .card_image {
@@ -47,6 +50,7 @@
     margin-top: 0.5rem;
     padding: 0 1rem;
     box-sizing: border-box;
+    text-align: left;
 
     .card_title {
       margin: 0;
