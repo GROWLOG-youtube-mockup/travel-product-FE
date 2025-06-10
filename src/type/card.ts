@@ -8,3 +8,8 @@ export type CardProps = {
 export type CardSlideProps = {
   cardList: CardProps[];
 };
+
+export type LocationCardProps = {
+  image: string;
+  title: string;
+};
