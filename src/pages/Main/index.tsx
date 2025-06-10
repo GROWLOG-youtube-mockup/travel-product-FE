@@ -16,31 +16,31 @@ const MainPage = () => {
     [
       {
         styleName: 'longHeight',
-        image: 'https://source.unsplash.com/400x300/?jeju,island',
+        image: 'https://cdn.pixabay.com/photo/2022/04/28/19/47/republic-of-korea-7161860_1280.jpg',
         title: '제주 감성 여행',
         price: 130000
       },
       {
         styleName: 'longHeight',
-        image: 'https://source.unsplash.com/400x300/?daegu,market',
+        image: 'https://cdn.pixabay.com/photo/2017/01/26/02/17/food-2009596_1280.jpg',
         title: '대구 먹거리 투어',
         price: 60000
       },
       {
         styleName: 'longHeight',
-        image: 'https://source.unsplash.com/400x300/?sunset,beach',
+        image: 'https://cdn.pixabay.com/photo/2018/10/05/14/39/sunset-3726030_1280.jpg',
         title: '일몰이 아름다운 해변',
         price: 105000
       },
       {
         styleName: 'longHeight',
-        image: 'https://source.unsplash.com/400x300/?forest,path',
+        image: 'https://cdn.pixabay.com/photo/2020/03/18/23/58/chunnam-4945781_1280.jpg',
         title: '숲길 산책 힐링',
         price: 90000
       },
       {
         styleName: 'longHeight',
-        image: 'https://source.unsplash.com/400x300/?spa,resort',
+        image: 'https://cdn.pixabay.com/photo/2017/03/09/06/30/pool-2128578_1280.jpg',
         title: '스파 리조트 패키지',
         price: 150000
       }
@@ -49,31 +49,31 @@ const MainPage = () => {
     [
       {
         styleName: 'longWidth',
-        image: 'https://source.unsplash.com/400x300/?vacation,summer',
+        image: 'https://cdn.pixabay.com/photo/2013/01/17/02/17/busan-75137_1280.jpg',
         title: '여름 바다 여행',
         price: 140000
       },
       {
         styleName: 'longWidth',
-        image: 'https://source.unsplash.com/400x300/?island,resort',
+        image: 'https://cdn.pixabay.com/photo/2018/05/31/00/13/cape-verde-3442859_1280.jpg',
         title: '고급 리조트 스테이',
         price: 200000
       },
       {
         styleName: 'longWidth',
-        image: 'https://source.unsplash.com/400x300/?rafting,adventure',
+        image: 'https://cdn.pixabay.com/photo/2015/03/18/17/45/rafting-679694_1280.jpg',
         title: '래프팅 체험 여행',
         price: 85000
       },
       {
         styleName: 'longWidth',
-        image: 'https://source.unsplash.com/400x300/?camping,site',
+        image: 'https://cdn.pixabay.com/photo/2021/12/20/08/07/camping-6882479_1280.jpg',
         title: '감성 캠핑',
         price: 75000
       },
       {
         styleName: 'longWidth',
-        image: 'https://source.unsplash.com/400x300/?ocean,view',
+        image: 'https://cdn.pixabay.com/photo/2021/09/12/22/41/italy-6619559_1280.jpg',
         title: '오션뷰 숙소',
         price: 170000
       }
@@ -82,32 +82,32 @@ const MainPage = () => {
     [
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?travel,plan',
-        title: '여행 플래너 추천',
+        image: 'https://cdn.pixabay.com/photo/2023/01/26/02/15/books-7744938_1280.jpg',
+        title: '서울 강남 투어',
         price: 30000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?map,trip',
-        title: '지도와 함께하는 여행',
+        image: 'https://cdn.pixabay.com/photo/2020/01/14/07/26/koreanstyle-house-4764298_1280.jpg',
+        title: '북촌마을 투어',
         price: 25000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?bag,packing',
-        title: '여행 준비 키트',
+        image: 'https://cdn.pixabay.com/photo/2015/06/29/10/32/busan-825441_1280.jpg',
+        title: '부산 투어',
         price: 40000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?suncream,beach',
-        title: '썬크림과 여름 준비물',
+        image: 'https://cdn.pixabay.com/photo/2017/10/26/23/26/suncheon-bay-2892768_1280.jpg',
+        title: '순천만 자연 탐방',
         price: 18000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?suitcase,travel',
-        title: '여행 캐리어 세트',
+        image: 'https://cdn.pixabay.com/photo/2020/03/09/08/53/seorak-4915009_1280.jpg',
+        title: '설악산 트래킹',
         price: 60000
       }
     ],
@@ -115,31 +115,31 @@ const MainPage = () => {
     [
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?korea,travel',
+        image: 'https://cdn.pixabay.com/photo/2017/07/07/16/23/jeju-island-2481947_1280.jpg',
         title: '제주 올레길 산책',
         price: 120000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?seoul,city',
+        image: 'https://cdn.pixabay.com/photo/2022/08/31/15/06/seoul-7423589_1280.jpg',
         title: '서울 야경 투어',
         price: 80000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?busan,beach',
+        image: 'https://cdn.pixabay.com/photo/2018/11/26/08/20/haeundae-beach-3838960_1280.jpg',
         title: '부산 해운대 힐링',
         price: 95000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?gyeongju,temple',
+        image: 'https://cdn.pixabay.com/photo/2019/02/28/16/30/asia-4026267_1280.jpg',
         title: '경주 역사 탐방',
         price: 70000
       },
       {
         styleName: 'normal',
-        image: 'https://source.unsplash.com/400x300/?gangwon,mountain',
+        image: 'https://cdn.pixabay.com/photo/2022/09/30/04/27/mountains-7488621_1280.jpg',
         title: '강원도 트레킹',
         price: 110000
       }
