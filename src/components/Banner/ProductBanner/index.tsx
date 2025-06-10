@@ -1,5 +1,5 @@
 import Label from '../../atoms/Label/Label';
-import LocalRecommendCard from '../../Cards/product_Card-localRecommend';
+import ProductCardLocalRecommend from '../../Cards/ProductCardLocalRecommend';
 
 import styles from './ProductBanner.module.scss';
 
@@ -22,11 +22,11 @@ const ProductBanner = () => {
       </div>
       <div className={styles.regionBarWrapper}>
         <div className={styles.regionBar}>
-          <LocalRecommendCard>강원</LocalRecommendCard>
-          <LocalRecommendCard>경상</LocalRecommendCard>
-          <LocalRecommendCard>전라</LocalRecommendCard>
-          <LocalRecommendCard>충청</LocalRecommendCard>
-          <LocalRecommendCard>수도권</LocalRecommendCard>
+          <ProductCardLocalRecommend>강원</ProductCardLocalRecommend>
+          <ProductCardLocalRecommend>경상</ProductCardLocalRecommend>
+          <ProductCardLocalRecommend>전라</ProductCardLocalRecommend>
+          <ProductCardLocalRecommend>충청</ProductCardLocalRecommend>
+          <ProductCardLocalRecommend>수도권</ProductCardLocalRecommend>
         </div>
       </div>
     </div>

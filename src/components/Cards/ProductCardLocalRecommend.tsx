@@ -4,8 +4,8 @@ interface LocalRecommendCardProps {
   children: React.ReactNode;
 }
 
-const LocalRecommendCard: React.FC<LocalRecommendCardProps> = ({ children }) => {
+const ProductCardLocalRecommend: React.FC<LocalRecommendCardProps> = ({ children }) => {
   return <div>{children}</div>;
 };
 
-export default LocalRecommendCard;
+export default ProductCardLocalRecommend;
