@@ -3,11 +3,16 @@
   flex-direction: column;
   align-items: stretch;
   width: 100%;
+  text-align: left;
   align-content: flex-start;
   overflow: hidden;
 
   .main_cards_section_title {
     font-weight: bold;
+  }
+
+  .main_cards_section_subtitle {
+    color: #888888;
   }
 }
 

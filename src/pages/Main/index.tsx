@@ -5,10 +5,10 @@ import styles from './Main.module.scss';
 
 const MainPage = () => {
   const contentsTitleList = [
-    '국내 추천 여행',
-    '인기 여행',
-    '일찍 준비하는 여름휴가',
-    '지금이 딱 예약할 때!'
+    { title: '국내 추천 여행' },
+    { title: '인기 여행', subtitle: '다른 여행객들이 많이 찾는 인기 여행 상품' },
+    { title: '일찍 준비하는 여름휴가', subtitle: '5늘부터 준비!' },
+    { title: '지금이 딱 예약할 때!', Subsubtitletitle: '선착순 타임특가부터 다양한 헤택' }
   ];
   const contents: CardProps[][] = [
     // TODO: 추후 API 연동 완료 시 수정해야 함.
@@ -148,9 +148,12 @@ const MainPage = () => {
 
   return (
     <>
-      {contentsTitleList.map((title, index) => (
-        <section className={styles.main_cards_section} key={title}>
-          <h2 className={styles.main_cards_section_title}>{title}</h2>
+      {contentsTitleList.map((item, index) => (
+        <section className={styles.main_cards_section} key={item.title}>
+          <h2 className={styles.main_cards_section_title}>{item.title}</h2>
+          {item.subtitle && (
+            <span className={styles.main_cards_section_subtitle}>{item.subtitle}</span>
+          )}
           <CardSlide cardList={contents[index]} />
         </section>
       ))}
