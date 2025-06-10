@@ -1,10 +1,20 @@
+import ImageGallery from '../../components/ImageGallery';
+
 import styles from './ProductDetail.module.scss';
 
 const ProductDetailPage = () => {
+  const images = [
+    '',
+    '',
+    '',
+    '' // 실제 이미지 url로 교체 가능
+  ];
   return (
     <div className={styles.productDetailContainer}>
-      {/* 상단 메인 이미지 */}
-      <div className={styles.mainImage}>image container</div>
+      {/* 상단 이미지 갤러리 */}
+      <div className={styles.mainImage}>
+        <ImageGallery images={images} />
+      </div>
       {/* 하단 2단 그리드 */}
       <div className={styles.detailGridSimple}>
         <div className={styles.leftColumnSimple}>
