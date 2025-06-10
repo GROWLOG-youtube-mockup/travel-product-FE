@@ -2,33 +2,20 @@
   background: #ffffff;
 }
 
-.topContainer {
-  display: flex;
-  width: 1100px;
-  height: 400px;
-  margin: 40px auto 0;
-  background: #f8f8f8;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.textArea {
+.productTitleArea {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 580px;
-  padding: 48px 32px;
+  width: 1100px;
+  margin: 0 auto;
+  text-align: left;
+  gap: 8px;
 }
 
-.imageArea {
-  width: 520px;
-}
-
-.imageArea img {
-  width: 100%;
-  height: 100%;
-  border-radius: 0 16px 16px 0;
-  object-fit: cover;
+.productTitle {
+  display: flex;
+  flex-direction: column;
+  margin-top: 30px;
+  gap: 8px;
 }
 
 .localCard {
@@ -41,8 +28,17 @@
 .categoryBar {
   display: flex;
   width: 1100px;
-  margin: 40px auto 24px;
+  margin: 20px auto 24px;
   gap: 12px;
+}
+
+.categoryBar button {
+  width: 120px;
+  height: 48px;
+  border: 1.5px solid #dddddd;
+  font-size: 16px;
+  background: #ffffff;
+  border-radius: 24px;
 }
 
 .activeCategory {
@@ -56,6 +52,7 @@
   display: grid;
   width: 1100px;
   margin: 0 auto 40px;
+  padding-bottom: 40px;
   gap: 32px;
   grid-template-columns: repeat(4, 1fr);
 }
