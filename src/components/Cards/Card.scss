@@ -1,18 +1,22 @@
 .card {
-  min-width: 210px;
+  display: flex;
+  flex-direction: column;
   border: 1px solid #272727;
   border-radius: 12px;
   cursor: pointer;
   flex-shrink: 0;
+  gap: 0.5rem;
   overflow: hidden;
 
   &.normal,
   &.longHeight {
     width: calc((100% - 5rem) / 5);
+    min-width: 210px;
   }
 
   &.longWidth {
-    width: calc((100% - 2.5rem) / 3);
+    width: calc((100% - 2.4rem) / 3);
+    min-width: 370px;
     height: 200px;
 
     .card_image {
@@ -47,18 +51,15 @@
 
   .card_content {
     margin: auto 0;
-    margin-top: 0.5rem;
     padding: 0 1rem;
     box-sizing: border-box;
     text-align: left;
 
     .card_title {
       margin: 0;
-      font-size: 1.1rem;
     }
 
     .card_price {
-      font-size: 0.9rem;
       color: #888888;
     }
   }

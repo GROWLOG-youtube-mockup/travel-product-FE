@@ -9,7 +9,7 @@ const Card = ({ styleName, image, title, price }: CardProps) => {
         <img src={image} alt="Card" />
       </div>
       <div className="card_content">
-        <h3 className="card_title">{title}</h3>
+        <span className="card_title">{title}</span>
         <p className="card_price">₩{price}</p>
       </div>
     </div>
