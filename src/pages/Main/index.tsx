@@ -1,14 +1,47 @@
 import CardSlide from '../../components/Cards/CardSlide';
+import LocationCardList from '../../components/Cards/LocationCardList';
 import type { CardProps } from '../../type/card';
 
 import styles from './Main.module.scss';
 
 const MainPage = () => {
+  const locationTitle = '한국 추천 여행지';
+  const locationList = [
+    {
+      title: '서울',
+      image:
+        'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg'
+    },
+    {
+      title: '경기도',
+      image: 'https://cdn.pixabay.com/photo/2018/05/15/23/02/football-stadium-3404535_1280.jpg'
+    },
+    {
+      title: '강원도',
+      image: 'https://cdn.pixabay.com/photo/2019/07/21/18/30/mountain-4353332_1280.jpg'
+    },
+    {
+      title: '충청도',
+      image: 'https://cdn.pixabay.com/photo/2020/06/17/11/39/taian-5309184_1280.jpg'
+    },
+    {
+      title: '전라도',
+      image: 'https://cdn.pixabay.com/photo/2020/09/02/04/16/image-5537275_1280.jpg'
+    },
+    {
+      title: '경상도',
+      image: 'https://cdn.pixabay.com/photo/2022/08/09/12/10/wolyeong-bridge-7374859_1280.jpg'
+    },
+    {
+      title: '제주도',
+      image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg'
+    }
+  ];
   const contentsTitleList = [
-    { title: '국내 추천 여행' },
     { title: '인기 여행', subtitle: '다른 여행객들이 많이 찾는 인기 여행 상품' },
     { title: '일찍 준비하는 여름휴가', subtitle: '오늘부터 준비!' },
-    { title: '지금이 딱 예약할 때!', subtitle: '선착순 타임특가부터 다양한 헤택' }
+    { title: '지금이 딱 예약할 때!', subtitle: '선착순 타임특가부터 다양한 헤택' },
+    { title: '마감 임박', subtitle: '곧 예약 마감됩니다!' }
   ];
   const contents: CardProps[][] = [
     // TODO: 추후 API 연동 완료 시 수정해야 함.
@@ -148,6 +181,13 @@ const MainPage = () => {
 
   return (
     <>
+      <section className={styles.main_cards_section}>
+        <div className={styles.main_cards_section_title}>
+          <h2 className={styles.main_cards_section_main_title}>{locationTitle}</h2>
+        </div>
+        <LocationCardList LocationCardList={locationList} />
+      </section>
+
       {contentsTitleList.map((item, index) => (
         <section className={styles.main_cards_section} key={item.title}>
           <div className={styles.main_cards_section_title}>
