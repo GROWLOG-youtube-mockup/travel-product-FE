@@ -1,4 +1,4 @@
-.topContainer {
+.product-banner {
   position: relative;
   left: 50%;
   display: flex;
@@ -11,7 +11,7 @@
   background: #9b9b9b;
 }
 
-.bannerWrapper {
+.product-banner__wrapper {
   display: flex;
   align-items: stretch;
   width: 1100px;
@@ -22,7 +22,7 @@
   overflow: hidden;
 }
 
-.textArea {
+.product-banner__text-area {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,29 +32,29 @@
   gap: 24px;
 }
 
-.imageArea {
+.product-banner__image-area {
   width: 520px;
   height: 100%;
 }
 
-.imageArea img {
+.product-banner__image-area img {
   width: 100%;
   height: 100%;
   border-radius: 0 10px 10px 0;
   object-fit: cover;
 }
 
-.regionBarWrapper {
+.product-banner__region-bar-wrapper {
   width: 1100px;
   margin: 32px auto 0;
 }
 
-.regionBar {
+.product-banner__region-bar {
   display: flex;
   gap: 24px;
 }
 
-.regionBarItem {
+.product-banner__region-bar-item {
   display: flex;
   flex: 1;
   align-items: center;
@@ -65,7 +65,7 @@
   cursor: pointer;
 }
 
-.activeRegion {
+.product-banner__region-bar-item--active {
   color: #ffffff;
   background: #222222;
 }

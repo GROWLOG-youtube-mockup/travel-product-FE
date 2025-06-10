@@ -16,11 +16,11 @@ const categories = [
 const ProductPage = () => {
   const [activeCategory, setActiveCategory] = useState('best');
   return (
-    <div className={styles.productPage}>
+    <div className={styles['product-page']}>
       <ProductBanner />
 
-      <div className={styles.productTitleArea}>
-        <div className={styles.productTitle}>
+      <div className={styles['product-page__title-area']}>
+        <div className={styles['product-page__title']}>
           <Label variant="title" style={{ fontWeight: 700 }}>
             지역명 상품 전체
           </Label>
@@ -30,23 +30,27 @@ const ProductPage = () => {
         </div>
       </div>
 
-      <div className={styles.categoryBar}>
-        {categories.map((cat) => (
-          <button
-            key={cat.key}
-            className={activeCategory === cat.key ? styles.activeCategory : ''}
-            onClick={() => setActiveCategory(cat.key)}
-          >
-            {cat.label}
-          </button>
-        ))}
+      <div className={styles['product-page__category-bar']}>
+        {categories.map((cat) => {
+          // prettier-ignore
+          const buttonClass = styles['product-page__category-bar__button'] + (activeCategory === cat.key ? ' ' + styles['product-page__category-bar__button--active'] : '');
+          return (
+            <button
+              key={cat.key}
+              className={buttonClass}
+              onClick={() => setActiveCategory(cat.key)}
+            >
+              {cat.label}
+            </button>
+          );
+        })}
       </div>
 
-      <div className={styles.gridList}>
+      <div className={styles['product-page__grid-list']}>
         {Array(16)
           .fill(null)
           .map((_, idx) => (
-            <div className={styles.productCard} key={idx} />
+            <div className={styles['product-page__card']} key={idx} />
           ))}
       </div>
     </div>

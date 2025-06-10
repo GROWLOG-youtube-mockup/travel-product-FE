@@ -1,4 +1,4 @@
-.overlay {
+.modal-overlay {
   position: fixed;
   display: flex;
   align-items: center;
@@ -18,7 +18,7 @@
   border-radius: 16px;
 }
 
-.close {
+.modal__close {
   position: absolute;
   top: -48px;
   right: 24px;
@@ -28,24 +28,24 @@
   background: none;
 }
 
-.title {
+.modal__title {
   margin-bottom: 10px;
 }
 
-.content {
+.modal__content {
   height: 100px; // 임시 높이 설정
   margin-top: 30px;
   background-color: red;
 }
 
-.container {
+.modal__container {
   position: relative;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
 }
 
-.contentInner {
+.modal__content-inner {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;

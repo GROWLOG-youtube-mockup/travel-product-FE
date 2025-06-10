@@ -13,15 +13,15 @@ interface ModalProps {
 
 const Modal: React.FC<ModalProps> = ({ title, subtitle, onClose, children }) => {
   return (
-    <div className={styles.overlay}>
-      <div className={styles.modal}>
-        <div className={styles.container}>
-          <button className={styles.close} onClick={onClose} aria-label="닫기">
+    <div className={styles['modal-overlay']}>
+      <div className={styles['modal']}>
+        <div className={styles['modal__container']}>
+          <button className={styles['modal__close']} onClick={onClose} aria-label="닫기">
             ×
           </button>
-          <div className={styles.contentInner}>
+          <div className={styles['modal__content-inner']}>
             {title && (
-              <div className={styles.title}>
+              <div className={styles['modal__title']}>
                 <Label variant="pageTitle">{title}</Label>
               </div>
             )}
@@ -30,7 +30,7 @@ const Modal: React.FC<ModalProps> = ({ title, subtitle, onClose, children }) => 
                 {subtitle}
               </Label>
             )}
-            <div className={styles.content}>{children}</div>
+            <div className={styles['modal__content']}>{children}</div>
           </div>
         </div>
       </div>
