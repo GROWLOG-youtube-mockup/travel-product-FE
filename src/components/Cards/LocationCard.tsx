@@ -1,12 +1,12 @@
 import type { LocationCardProps } from '../../type/card';
 
-import './LocationCard.scss';
+import styles from './LocationCard.module.scss';
 
 const LocationCard = ({ image, title }: LocationCardProps) => {
   return (
-    <div className="location_card">
-      <img className="location_card_image" src={image} alt="" />
-      <div className="location_card_content">
+    <div className={styles.location_card}>
+      <img className={styles.location_card_image} src={image} alt="" />
+      <div className={styles.location_card_content}>
         <span>{title}</span>
       </div>
     </div>

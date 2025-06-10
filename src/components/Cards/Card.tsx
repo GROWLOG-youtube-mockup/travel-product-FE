@@ -1,16 +1,16 @@
 import type { CardProps } from '../../type/card';
 
-import './Card.scss';
+import styles from './Card.module.scss';
 
 const Card = ({ styleName, image, title, price }: CardProps) => {
   return (
-    <div className={`card ${styleName ?? 'normal'}`}>
-      <div className="card_image">
+    <div className={`${styles.card} ${styles[styleName ?? 'normal']}`}>
+      <div className={styles.card_image}>
         <img src={image} alt="Card" draggable="false" />
       </div>
-      <div className="card_content">
-        <span className="card_title">{title}</span>
-        <p className="card_price">₩{price}</p>
+      <div className={styles.card_content}>
+        <span className={styles.card_title}>{title}</span>
+        <p className={styles.card_price}>₩{price}</p>
       </div>
     </div>
   );

@@ -2,11 +2,11 @@ import type { CardProps, CardSlideProps } from '../../type/card';
 
 import Card from './Card';
 
-import './CardSlide.scss';
+import styles from './CardSlide.module.scss';
 
 const CardSlide = ({ cardList }: CardSlideProps) => {
   return (
-    <div className="card_slide">
+    <div className={styles.card_slide}>
       {cardList.map((card: CardProps) => (
         <Card
           key={card.title}
