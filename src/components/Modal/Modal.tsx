@@ -4,25 +4,14 @@ import Label from '../atoms/Label/Label';
 
 import styles from './Modal.module.scss';
 
-// 예시용 더미 컴포넌트들 추후에 연결필요
-const LoginForm = () => <div>로그인 폼</div>;
-const UserEditForm = () => <div>회원정보 수정 폼</div>;
-const DeleteAccount = () => <div>계정 탈퇴 폼</div>;
-const SignupForm = () => <div>회원가입 폼</div>;
-const SignupAccountView = () => <div>계정 조회 결과</div>;
-
-export type ModalType = 'login' | 'edit' | 'delete' | 'signup' | 'signupView' | null;
-
 interface ModalProps {
-  show: boolean;
-  type: ModalType;
+  title: string;
+  subtitle?: string;
   onClose: () => void;
-  footer?: React.ReactNode;
+  children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ show, title, subTitle, children, onClose }) => {
-  if (!show) return null;
-
+const Modal: React.FC<ModalProps> = ({ title, subtitle, onClose, children }) => {
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -41,9 +30,7 @@ const Modal: React.FC<ModalProps> = ({ show, title, subTitle, children, onClose 
                 {subtitle}
               </Label>
             )}
-            <div className={styles.content}>
-              <Label variant="bodyText">{content}</Label>
-            </div>
+            <div className={styles.content}>{children}</div>
           </div>
         </div>
       </div>
