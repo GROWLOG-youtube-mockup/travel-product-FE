@@ -1,23 +1,15 @@
 import { useState } from 'react';
 
+import type { LoginFormProps } from '../../type/login';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
 import styles from './LoginForm.module.scss';
 
-interface UserInformation {
-  username: string;
-  password: string;
-}
-
-interface LoginFormProps {
-  onSubmit: (credentials: UserInformation) => void;
-  authError?: string;
-}
-
 const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  // TODO: 추후 로그인 에러 처리 수정해야 함
   const [error, setError] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {

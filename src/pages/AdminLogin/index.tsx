@@ -1,14 +1,10 @@
 import LoginForm from '../../components/LoginForm/LoginForm';
+import type { UserInformation } from '../../type/login';
 
 import styles from './AdminLogin.module.scss';
-
-interface UserInformation {
-  username: string;
-  password: string;
-}
-
 const AdminLoginPage = () => {
   const onSubmit = ({ username, password }: UserInformation) => {
+    // TODO: 관리자 로그인 API 연동 시 수정해야 함.
     console.log('관리자 로그인 시도:', { username, password });
   };
 
