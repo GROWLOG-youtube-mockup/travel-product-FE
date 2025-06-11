@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import styles from './AdminHeader.module.scss';
 
 const AdminHeader = () => {
@@ -5,6 +7,11 @@ const AdminHeader = () => {
   const userName = '테스트';
   // const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
   const isLoggedIn = true;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate('admin/login');
+  };
 
   return (
     <header className={styles['admin-header']}>
@@ -14,8 +21,8 @@ const AdminHeader = () => {
           <div>
             <span>안녕하세요 관리자 {userName}님!</span>
           </div>
-          <button className={styles['admin-header__logout-button']}>
-            <span>로그아웃</span>
+          <button className={styles['admin-header__logout-button']} onClick={handleLogout}>
+            로그아웃
           </button>
         </div>
       )}
