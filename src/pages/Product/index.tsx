@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import Label from '../../components/atoms/Label/Label';
-import ProductBanner from '../../components/Banner/ProductBanner';
 
 import styles from './Product.module.scss';
 
@@ -17,8 +16,6 @@ const ProductPage = () => {
   const [activeCategory, setActiveCategory] = useState('best');
   return (
     <div className={styles['product-page']}>
-      <ProductBanner />
-
       <div className={styles['product-page__title-area']}>
         <div className={styles['product-page__title']}>
           <Label variant="title" style={{ fontWeight: 700 }}>
