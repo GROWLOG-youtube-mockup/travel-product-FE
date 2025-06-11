@@ -15,6 +15,7 @@ import CartPage from '../pages/Cart/index';
 import ErrorPage from '../pages/Error/index';
 import LoginPage from '../pages/Login/index';
 import MainPage from '../pages/Main/index';
+import ModalExamplePage from '../pages/ModalExamplePage';
 import PaymentCompletePage from '../pages/PaymentComplete/index';
 import PaymentProcessPage from '../pages/PaymentProcess/index';
 import ProductPage from '../pages/Product/index';
@@ -74,6 +75,11 @@ const routes: AppRouteObject[] = [
           {
             path: 'product/:id', // 동적 라우팅. 엔드포인트 관련 추가 논의 필요
             element: <ProductDetailPage />
+          },
+          {
+            // 기능 구현 후 삭제 필요 @@@@@@@@@@@@@
+            path: 'modal-example', // 모달 예제 페이지
+            element: <ModalExamplePage />
           }
         ]
       },

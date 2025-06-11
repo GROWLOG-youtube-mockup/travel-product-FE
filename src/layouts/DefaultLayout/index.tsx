@@ -14,7 +14,7 @@ const DefaultLayout = () => {
     if (location.pathname === '/') {
       return <MainBanner />;
     }
-    if (location.pathname.includes('/product')) {
+    if (location.pathname === '/product') {
       return <ProductBanner />;
     }
     return null;
