@@ -1,0 +1,33 @@
+.headerWrapper {
+  position: relative;
+  left: 50%;
+  width: 100vw;
+  margin-left: -50vw;
+  border-bottom: 1px solid #ededed;
+}
+
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 1440px;
+  height: 58px;
+  margin: 0 auto;
+  padding: 0 32px;
+  box-sizing: border-box;
+  background: transparent;
+  border-bottom: none;
+}
+
+.logoArea {
+  display: flex;
+  align-items: center;
+}
+
+.menuArea {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}

@@ -1,3 +1,60 @@
-.container {
-  background-color: pink;
+.product-detail {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.product-detail__main-image {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 392px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  background: #ffffff;
+}
+
+.product-detail__grid {
+  display: grid;
+  gap: 58px;
+  grid-template-columns: 730px 312px;
+}
+
+.product-detail__left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.product-detail__calendar-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 160px;
+  font-weight: 500;
+  background: #dddddd;
+}
+
+.product-detail__info-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 1000px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: #dddddd;
+}
+
+.product-detail__add-cart-box {
+  position: sticky;
+  top: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 390px;
+  background: #dddddd;
 }

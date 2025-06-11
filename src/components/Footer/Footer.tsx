@@ -1,10 +1,9 @@
+import styles from './Footer.module.scss';
+
 const Footer = () => {
-  return (
-    <header>
-      <h1>Footer</h1>
-      {/* 추후 푸터 내용 추가 */}
-    </header>
-  );
+  const fullYear = new Date().getFullYear();
+
+  return <footer className={styles.footer}>{`© ${fullYear} GᖇOᗯᒪOG. All rights reserved.`}</footer>;
 };
 
 export default Footer;
