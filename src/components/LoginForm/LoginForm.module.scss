@@ -1,0 +1,32 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 500px;
+  height: 100%;
+  margin-top: 3rem;
+  text-align: left;
+
+  .login-form__email,
+  .login-form__password {
+    margin-bottom: 1rem;
+  }
+
+  .login-form__email-label,
+  .login-form__password-label {
+    line-height: 1.5rem;
+  }
+
+  .login-form__email-label,
+  .login-form__email,
+  .login-form__password-label,
+  .login-form__password {
+    width: 100%;
+  }
+
+  .login-form__login-button {
+    margin-top: 1rem;
+  }
+}

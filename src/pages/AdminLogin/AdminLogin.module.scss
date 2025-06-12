@@ -1,0 +1,22 @@
+.admin-login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 3rem 0;
+  box-sizing: border-box;
+
+  .admin-login__title {
+    width: 100%;
+    font-size: xx-large;
+    font-weight: bolder;
+    line-height: 4rem;
+  }
+
+  .admin-login__subtitle {
+    width: 100%;
+    margin-bottom: 2rem;
+  }
+}
