@@ -13,7 +13,7 @@ const MainPage = () => {
         'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg'
     },
     {
-      title: '경기도',
+      title: '경기・인천',
       image: 'https://cdn.pixabay.com/photo/2018/05/15/23/02/football-stadium-3404535_1280.jpg'
     },
     {
