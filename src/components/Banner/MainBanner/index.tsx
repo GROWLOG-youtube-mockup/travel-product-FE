@@ -28,23 +28,23 @@ const MainBanner = () => {
   };
 
   return (
-    <div className={styles['main-banner']}>
+    <div className={styles['mainBanner']}>
       <div
-        className={styles['banner-track']}
+        className={styles['bannerTrack']}
         style={{ transform: `translateX(-${current * 100}%)` }}
       >
         {images.map((src, idx) => (
-          <div className={styles['banner-slide']} key={idx}>
+          <div className={styles['bannerSlide']} key={idx}>
             <img src={src} alt={`banner-${idx}`} draggable="false" />
           </div>
         ))}
       </div>
 
-      <div className={styles['banner-indicators']}>
+      <div className={styles['bannerIndicators']}>
         {images.map((_, idx) => (
           <button
             key={idx}
-            className={`${styles['banner-indicator']} ${current === idx ? styles['active'] : ''}`}
+            className={`${styles['bannerIndicator']} ${current === idx ? styles['active'] : ''}`}
             onClick={() => handleIndicatorClick(idx)}
             aria-label={`Go to slide ${idx + 1}`}
           />

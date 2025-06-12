@@ -1,4 +1,4 @@
-.main-banner {
+.mainBanner {
   position: relative;
   width: 70%;
   max-width: 1280px;
@@ -6,14 +6,14 @@
   margin: 0 auto;
   overflow: hidden;
 
-  .banner-track {
+  .bannerTrack {
     display: flex;
     width: 100%;
     height: 100%;
     transition: transform 0.5s ease-in-out;
   }
 
-  .banner-slide {
+  .bannerSlide {
     display: block;
     width: 100%;
     height: 100%;
@@ -29,18 +29,16 @@
     }
   }
 
-  .banner-indicators {
+  .bannerIndicators {
     position: absolute;
     right: 5%;
     bottom: 1rem;
-
-    // transform: translateX(-50%);
     display: flex;
     z-index: 10;
     gap: 0.5rem;
   }
 
-  .banner-indicator {
+  .bannerIndicator {
     width: 2rem;
     height: 6px;
     border: none;
