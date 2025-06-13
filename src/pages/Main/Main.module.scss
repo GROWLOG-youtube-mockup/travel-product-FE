@@ -1,4 +1,4 @@
-.main-cards-section {
+.cardsSection {
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -7,19 +7,19 @@
   align-content: flex-start;
   overflow: hidden;
 
-  &__title {
+  .title {
     margin-bottom: 1rem;
 
-    &__main-title {
+    .mainTitle {
       font-weight: bold;
     }
 
-    &__subtitle {
+    .subtitle {
       color: #888888;
     }
   }
 }
 
-.main-cards-section:not(:last-child) {
+.cardsSection:not(:last-child) {
   margin-bottom: 3rem;
 }

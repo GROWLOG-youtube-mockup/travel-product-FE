@@ -6,7 +6,7 @@ import styles from './CardSlide.module.scss';
 
 const CardSlide = ({ cardList }: CardSlideProps) => {
   return (
-    <div className={styles['card-slide']}>
+    <div className={styles['cardSlide']}>
       {cardList.map((card: CardProps) => (
         <Card
           key={card.title}
