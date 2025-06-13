@@ -1,8 +1,8 @@
-.admin-layout {
+.layout {
   width: 100%;
   height: 100vh;
 
-  &__main {
+  .main {
     display: flex;
     flex-direction: row;
     width: 100%;

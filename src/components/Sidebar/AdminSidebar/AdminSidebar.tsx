@@ -11,12 +11,12 @@ const AdminSidebar = () => {
 
   return (
     <aside className={styles.sidebar}>
-      <nav className={styles.sidebar__nav}>
-        <ul className={styles.sidebar__list}>
+      <nav className={styles.nav}>
+        <ul className={styles.list}>
           {sidebarItems.map((item) => (
-            <li className={styles.sidebar__item} key={item.name}>
+            <li className={styles.item} key={item.name}>
               {/* <Link to="/admin/dashboard" className={styles.sidebar__link}> */}
-              <span className={styles.sidebar__icon}>{item.icon}</span>
+              <span className={styles.icon}>{item.icon}</span>
               {item.name}
               {/* </Link> */}
             </li>

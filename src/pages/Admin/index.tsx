@@ -2,7 +2,7 @@ import styles from './Admin.module.scss';
 
 const AdminPage = () => {
   return (
-    <div className={styles['admin-page']}>
+    <div className={styles['adminWrapper']}>
       <h1>Admin Page</h1>
       <p>This is the admin page where you can manage the application settings.</p>
     </div>
