@@ -1,4 +1,4 @@
-.admin-header {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -8,18 +8,18 @@
   box-sizing: border-box;
   box-shadow: 2px 0 5px rgb(0 0 0 / 10%);
 
-  .admin-header__title {
+  .title {
     font-size: xx-large;
   }
 
-  .admin-header__user-info {
+  .userInfo {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
 
-    .admin-header__logout-button {
+    .logoutButton {
       border: 0;
       font-size: medium;
       color: #000000;
