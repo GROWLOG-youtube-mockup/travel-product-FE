@@ -7,7 +7,7 @@ interface LocalRecommendCardProps {
 }
 
 const ProductCardLocalRecommend: React.FC<LocalRecommendCardProps> = ({ children }) => {
-  return <div className={styles['product-banner__region-bar-item']}>{children}</div>;
+  return <div className={styles.regionBarItem}>{children}</div>;
 };
 
 export default ProductCardLocalRecommend;

@@ -1,4 +1,4 @@
-.product-banner {
+.banner {
   position: relative;
   left: 50%;
   display: flex;
@@ -11,7 +11,7 @@
   background: #9b9b9b;
 }
 
-.product-banner__wrapper {
+.wrapper {
   display: flex;
   align-items: stretch;
   width: 1100px;
@@ -22,7 +22,7 @@
   overflow: hidden;
 }
 
-.product-banner__text-area {
+.textArea {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -32,29 +32,29 @@
   gap: 24px;
 }
 
-.product-banner__image-area {
+.imageArea {
   width: 520px;
   height: 100%;
 }
 
-.product-banner__image-area img {
+.imageArea img {
   width: 100%;
   height: 100%;
   border-radius: 0 10px 10px 0;
   object-fit: cover;
 }
 
-.product-banner__region-bar-wrapper {
+.regionBarWrapper {
   width: 1100px;
   margin: 32px auto 0;
 }
 
-.product-banner__region-bar {
+.regionBar {
   display: flex;
   gap: 24px;
 }
 
-.product-banner__region-bar-item {
+.regionBarItem {
   display: flex;
   flex: 1;
   align-items: center;
@@ -65,7 +65,7 @@
   cursor: pointer;
 }
 
-.product-banner__region-bar-item--active {
+.regionBarItemActive {
   color: #ffffff;
   background: #222222;
 }
