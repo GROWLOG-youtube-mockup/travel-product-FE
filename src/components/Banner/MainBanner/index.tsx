@@ -20,7 +20,7 @@ const MainBanner = () => {
     return () => {
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
-  }, [current]);
+  }, []);
 
   const handleIndicatorClick = (index: number) => {
     setCurrent(index);
