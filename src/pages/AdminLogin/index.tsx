@@ -9,11 +9,11 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className={styles['admin-login']}>
-      <div className={styles['admin-login__title']}>
+    <div className={styles['login']}>
+      <div className={styles['title']}>
         <h1>관리자 로그인</h1>
       </div>
-      <div className={styles['admin-login__subtitle']}>
+      <div className={styles['subtitle']}>
         <span>정보를 입력해주세요</span>
       </div>
       <LoginForm onSubmit={onSubmit} />
