@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
 import Modal from '../components/Modal/Modal';
+import ModalCloseButton from '../components/Modal/ModalCloseButton';
+import ModalHeader from '../components/Modal/ModalHeader';
 
 const LoginForm = () => <div>로그인 폼</div>;
 const UserEditForm = () => <div>회원정보 수정 폼</div>;
@@ -25,44 +27,53 @@ const ModalExamplePage: React.FC = () => {
       <button onClick={() => openModal('signupView')}>회원가입 조회 모달</button>
 
       {modalType === 'login' && (
-        <Modal
-          onClose={handleCloseModal}
-          title="로그인"
-          subtitle="서비스 이용을 위해 로그인 해주세요."
-        >
-          <LoginForm />
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader title="로그인" subtitle="서비스 이용을 위해 로그인 해주세요.">
+            <ModalCloseButton onClick={handleCloseModal} />
+          </ModalHeader>
+          <div className="modal-content-inner">
+            <LoginForm />
+          </div>
         </Modal>
       )}
       {modalType === 'edit' && (
-        <Modal
-          onClose={handleCloseModal}
-          title="회원정보 수정"
-          subtitle="회원정보를 수정할 수 있습니다."
-        >
-          <UserEditForm />
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader title="회원정보 수정" subtitle="회원정보를 수정할 수 있습니다.">
+            <ModalCloseButton onClick={handleCloseModal} />
+          </ModalHeader>
+          <div className="modal-content-inner">
+            <UserEditForm />
+          </div>
         </Modal>
       )}
       {modalType === 'delete' && (
-        <Modal
-          onClose={handleCloseModal}
-          title="계정 탈퇴"
-          subtitle="계정 탈퇴 시 모든 정보가 삭제됩니다."
-        >
-          <DeleteAccount />
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader title="계정 탈퇴" subtitle="계정 탈퇴 시 모든 정보가 삭제됩니다.">
+            <ModalCloseButton onClick={handleCloseModal} />
+          </ModalHeader>
+          <div className="modal-content-inner">
+            <DeleteAccount />
+          </div>
         </Modal>
       )}
       {modalType === 'signup' && (
-        <Modal onClose={handleCloseModal} title="회원가입" subtitle="회원가입을 진행해 주세요.">
-          <SignupForm />
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader title="회원가입" subtitle="회원가입을 진행해 주세요.">
+            <ModalCloseButton onClick={handleCloseModal} />
+          </ModalHeader>
+          <div className="modal-content-inner">
+            <SignupForm />
+          </div>
         </Modal>
       )}
       {modalType === 'signupView' && (
-        <Modal
-          onClose={handleCloseModal}
-          title="계정 조회 결과"
-          subtitle="가입된 계정 정보를 확인하세요."
-        >
-          <SignupAccountView />
+        <Modal onClose={handleCloseModal}>
+          <ModalHeader title="계정 조회 결과" subtitle="가입된 계정 정보를 확인하세요.">
+            <ModalCloseButton onClick={handleCloseModal} />
+          </ModalHeader>
+          <div className="modal-content-inner">
+            <SignupAccountView />
+          </div>
         </Modal>
       )}
     </div>
