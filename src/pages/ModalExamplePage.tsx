@@ -33,7 +33,7 @@ const ModalExamplePage: React.FC = () => {
           <ModalHeader title="로그인" subtitle="서비스 이용을 위해 로그인 해주세요.">
             <ModalCloseButton onClick={handleCloseModal} />
           </ModalHeader>
-          <div className={styles.ContentInner}>
+          <div className={styles.contentInner}>
             <LoginForm />
           </div>
         </Modal>
@@ -43,7 +43,7 @@ const ModalExamplePage: React.FC = () => {
           <ModalHeader title="회원정보 수정" subtitle="회원정보를 수정할 수 있습니다.">
             <ModalCloseButton onClick={handleCloseModal} />
           </ModalHeader>
-          <div className={styles.ContentInner}>
+          <div className={styles.contentInner}>
             <UserEditForm />
           </div>
         </Modal>
@@ -53,7 +53,7 @@ const ModalExamplePage: React.FC = () => {
           <ModalHeader title="계정 탈퇴" subtitle="계정 탈퇴 시 모든 정보가 삭제됩니다.">
             <ModalCloseButton onClick={handleCloseModal} />
           </ModalHeader>
-          <div className={styles.ContentInner}>
+          <div className={styles.contentInner}>
             <DeleteAccount />
           </div>
         </Modal>
@@ -63,7 +63,7 @@ const ModalExamplePage: React.FC = () => {
           <ModalHeader title="회원가입" subtitle="회원가입을 진행해 주세요.">
             <ModalCloseButton onClick={handleCloseModal} />
           </ModalHeader>
-          <div className={styles.ContentInner}>
+          <div className={styles.contentInner}>
             <SignupForm />
           </div>
         </Modal>
@@ -73,7 +73,7 @@ const ModalExamplePage: React.FC = () => {
           <ModalHeader title="계정 조회 결과" subtitle="가입된 계정 정보를 확인하세요.">
             <ModalCloseButton onClick={handleCloseModal} />
           </ModalHeader>
-          <div className={styles.ContentInner}>
+          <div className={styles.contentInner}>
             <SignupAccountView />
           </div>
         </Modal>

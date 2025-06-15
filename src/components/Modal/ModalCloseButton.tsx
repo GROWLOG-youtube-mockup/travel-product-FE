@@ -7,7 +7,7 @@ interface ModalCloseButtonProps {
 }
 
 const ModalCloseButton: React.FC<ModalCloseButtonProps> = ({ onClick }) => (
-  <button className={styles.CloseButton} onClick={onClick} aria-label="닫기">
+  <button className={styles.closeButton} onClick={onClick} aria-label="닫기">
     ×
   </button>
 );

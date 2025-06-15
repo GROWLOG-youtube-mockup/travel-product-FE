@@ -1,4 +1,4 @@
-.Overlay {
+.overlay {
   position: fixed;
   display: flex;
   align-items: center;
@@ -8,7 +8,7 @@
   inset: 0;
 }
 
-.Box {
+.box {
   position: relative;
   width: 700px;
   max-width: 700px;
@@ -18,7 +18,7 @@
   border-radius: 16px;
 }
 
-.CloseButton {
+.closeButton {
   position: absolute;
   top: 20px; // 모달 내부 상단에서 24px
   right: 24px; // 모달 내부 우측에서 24px
@@ -35,33 +35,33 @@
   }
 }
 
-.Title {
+.title {
   margin-bottom: 10px;
   font-size: 32px;
   font-weight: bold;
 }
 
-.Content {
+.content {
   height: 100px; // 임시 높이 설정
   margin-top: 30px;
   background-color: red;
 }
 
-.Container {
+.container {
   position: relative;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
 }
 
-.ContentInner {
+.contentInner {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
   text-align: left;
 }
 
-.Header {
+.header {
   max-width: 500px;
   margin: 0 auto;
   padding: 20px 0;

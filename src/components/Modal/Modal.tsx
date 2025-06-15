@@ -16,8 +16,8 @@ const Modal: React.FC<ModalProps> = ({
   modalClassName = ''
 }) => {
   return (
-    <div className={`${styles.Overlay} ${overlayClassName}`}>
-      <div className={`${styles.Box} ${modalClassName}`}>{children}</div>
+    <div className={`${styles.overlay} ${overlayClassName}`}>
+      <div className={`${styles.box} ${modalClassName}`}>{children}</div>
     </div>
   );
 };
