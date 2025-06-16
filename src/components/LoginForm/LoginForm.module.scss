@@ -1,4 +1,4 @@
-.login-form {
+.loginForm {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -9,24 +9,24 @@
   margin-top: 3rem;
   text-align: left;
 
-  .login-form__email,
-  .login-form__password {
+  .emailInput,
+  .password {
     margin-bottom: 1rem;
   }
 
-  .login-form__email-label,
-  .login-form__password-label {
+  .emailLabel,
+  .passwordLabel {
     line-height: 1.5rem;
   }
 
-  .login-form__email-label,
-  .login-form__email,
-  .login-form__password-label,
-  .login-form__password {
+  .emailLabel,
+  .emailInput,
+  .passwordLabel,
+  .passwordInput {
     width: 100%;
   }
 
-  .login-form__login-button {
+  .loginButton {
     margin-top: 1rem;
   }
 }
