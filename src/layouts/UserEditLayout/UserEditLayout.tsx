@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 
 import Footer from '../../components/Footer/Footer';
-import DefaultHeader from '../../components/Header/DefaultHeader/index';
+import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 
-import styles from './CheckoutLayout.module.scss';
+import styles from './UserEditLayout.module.scss';
 
-const CheckoutLayout = () => {
+const UserLayout = () => {
   return (
     <>
       <DefaultHeader />
@@ -17,4 +17,4 @@ const CheckoutLayout = () => {
   );
 };
 
-export default CheckoutLayout;
+export default UserLayout;
