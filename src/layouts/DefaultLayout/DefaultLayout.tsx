@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 
-import MainBanner from '../../components/Banner/MainBanner/index';
-import ProductBanner from '../../components/Banner/ProductBanner/index';
+import MainBanner from '../../components/Banner/MainBanner/MainBanner';
+import ProductBanner from '../../components/Banner/ProductBanner/ProductBanner';
 import Footer from '../../components/Footer/Footer';
 import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 
