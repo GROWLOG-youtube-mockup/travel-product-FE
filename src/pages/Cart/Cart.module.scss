@@ -1,3 +1,30 @@
 .container {
-  background-color: pink;
+  // background-color: #c8c8c8;
+
+  .selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 15px;
+    flex-flow: row nowrap;
+
+    .checkboxLabel {
+      .checkbox {
+        width: 1rem;
+        height: 1rem;
+        border: 1px solid #151515;
+      }
+    }
+
+    .deleteButton {
+      height: fit-content;
+      border: 1px solid #151515;
+      font-size: small;
+      line-height: 1.8rem;
+      border-radius: 5px;
+    }
+  }
 }
