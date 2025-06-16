@@ -15,7 +15,7 @@ const AdminHeader = () => {
 
   return (
     <header className={styles['header']}>
-      <h1 className={styles['title']}>관리자 대시보드</h1>
+      <h1 className={styles['headerTitle']}>관리자 대시보드</h1>
       {isLoggedIn && (
         <div className={styles['userInfo']}>
           <div>
