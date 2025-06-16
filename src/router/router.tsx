@@ -3,12 +3,12 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from '../App';
 import Authorization from '../components/Authorization';
-import AdminLayout from '../layouts/AdminLayout';
-import AuthLayout from '../layouts/AuthLayout';
-import CheckoutLayout from '../layouts/CheckoutLayout';
-import DefaultLayout from '../layouts/DefaultLayout';
-import UserEditLayout from '../layouts/UserEditLayout';
-import UserLayout from '../layouts/UserLayout';
+import AdminLayout from '../layouts/AdminLayout/AdminLayout';
+import AuthLayout from '../layouts/AuthLayout/AuthLayout';
+import CheckoutLayout from '../layouts/CheckoutLayout/CheckoutLayout';
+import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
+import UserEditLayout from '../layouts/UserEditLayout/UserEditLayout';
+import UserLayout from '../layouts/UserLayout/UserLayout';
 import Admin from '../pages/Admin/Admin';
 import AdminLoginPage from '../pages/AdminLogin/AdminLogin';
 import CartPage from '../pages/Cart/Cart';

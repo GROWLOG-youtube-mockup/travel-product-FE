@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router-dom';
 
-import DefaultHeader from '../../components/Header/DefaultHeader/index';
+import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 
 const AuthLayout = () => {
   return (

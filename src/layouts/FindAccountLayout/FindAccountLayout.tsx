@@ -1,11 +1,11 @@
 import { Outlet } from 'react-router-dom';
 
 import Footer from '../../components/Footer/Footer';
-import DefaultHeader from '../../components/Header/DefaultHeader';
+import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 
-import styles from './UserEditLayout.module.scss';
+import styles from './FindAccountLayout.module.scss';
 
-const UserLayout = () => {
+const FindAccountLayout = () => {
   return (
     <>
       <DefaultHeader />
@@ -17,4 +17,4 @@ const UserLayout = () => {
   );
 };
 
-export default UserLayout;
+export default FindAccountLayout;
