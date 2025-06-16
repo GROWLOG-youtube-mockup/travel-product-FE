@@ -15,9 +15,9 @@ const categories = [
 const ProductPage = () => {
   const [activeCategory, setActiveCategory] = useState('best');
   return (
-    <div className={styles['product-page']}>
-      <div className={styles['product-page__title-area']}>
-        <div className={styles['product-page__title']}>
+    <div className={styles.page}>
+      <div className={styles.titleArea}>
+        <div className={styles.title}>
           <Label variant="title" style={{ fontWeight: 700 }}>
             지역명 상품 전체
           </Label>
@@ -27,10 +27,10 @@ const ProductPage = () => {
         </div>
       </div>
 
-      <div className={styles['product-page__category-bar']}>
+      <div className={styles.categoryBar}>
         {categories.map((cat) => {
           // prettier-ignore
-          const buttonClass = styles['product-page__category-bar__button'] + (activeCategory === cat.key ? ' ' + styles['product-page__category-bar__button--active'] : '');
+          const buttonClass = styles.button + (activeCategory === cat.key ? ' ' + styles.buttonActive : '');
           return (
             <button
               key={cat.key}
@@ -43,11 +43,11 @@ const ProductPage = () => {
         })}
       </div>
 
-      <div className={styles['product-page__grid-list']}>
+      <div className={styles.gridList}>
         {Array(16)
           .fill(null)
           .map((_, idx) => (
-            <div className={styles['product-page__card']} key={idx} />
+            <div className={styles.card} key={idx} />
           ))}
       </div>
     </div>
