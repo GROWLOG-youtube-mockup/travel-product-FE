@@ -57,7 +57,10 @@ const sections: Section[] = [
   },
   {
     title: '기타',
-    pages: [{ label: '모달 예제', path: '/modal-example' }]
+    pages: [
+      { label: '모달 예제', path: '/modal-example' },
+      { label: 'Msw 테스트 (모든 핸들러가 들어있지 않음)', path: '/msw' }
+    ]
   }
 ];
 
