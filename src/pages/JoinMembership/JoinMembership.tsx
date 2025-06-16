@@ -1,4 +1,4 @@
-import styles from './SignUp.module.scss';
+import styles from './JoinMembership.module.scss';
 
 const JoinMembershipPage = () => {
   return (
