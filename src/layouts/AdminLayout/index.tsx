@@ -10,9 +10,9 @@ const AdminLayout = () => {
   const isLoggedIn = false;
 
   return (
-    <div className={styles['admin-layout']}>
+    <div className={styles['layout']}>
       <AdminHeader />
-      <main className={styles['admin-layout__main']}>
+      <main className={styles['main']}>
         {isLoggedIn && <AdminSidebar />}
         <Outlet />
       </main>

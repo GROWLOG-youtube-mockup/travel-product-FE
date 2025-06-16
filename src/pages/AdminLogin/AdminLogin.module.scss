@@ -1,4 +1,4 @@
-.admin-login {
+.login {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -8,14 +8,14 @@
   padding: 3rem 0;
   box-sizing: border-box;
 
-  .admin-login__title {
+  .title {
     width: 100%;
     font-size: xx-large;
     font-weight: bolder;
     line-height: 4rem;
   }
 
-  .admin-login__subtitle {
+  .subtitle {
     width: 100%;
     margin-bottom: 2rem;
   }

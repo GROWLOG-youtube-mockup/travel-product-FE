@@ -19,8 +19,8 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
   };
 
   return (
-    <form className={styles['login-form']} onSubmit={handleSubmit}>
-      <label className={styles['login-form__email-label']} htmlFor="username">
+    <form className={styles['loginForm']} onSubmit={handleSubmit}>
+      <label className={styles['emailLabel']} htmlFor="username">
         Email
       </label>
       <Input
@@ -29,10 +29,10 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
         value={username}
         placeholder="이메일을 입력해주세요"
         onChange={(e) => setUsername(e.target.value)}
-        className={styles['login-form__email']}
+        className={styles['emailInput']}
         required
       />
-      <label className={styles['login-form__password-label']} htmlFor="password">
+      <label className={styles['passwordLabel']} htmlFor="password">
         Password
       </label>
       <Input
@@ -41,11 +41,11 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
         value={password}
         placeholder="비밀번호를 입력해주세요"
         onChange={(e) => setPassword(e.target.value)}
-        className={styles['login-form__password']}
+        className={styles['passwordInput']}
         required
       />
       {error && <p className="error">{error}</p>}
-      <Button className={styles['login-form__login-button']} variant="xl" type="submit">
+      <Button className={styles['loginButton']} variant="xl" type="submit">
         Log In
       </Button>
     </form>

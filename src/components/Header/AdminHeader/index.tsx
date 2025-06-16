@@ -14,14 +14,14 @@ const AdminHeader = () => {
   };
 
   return (
-    <header className={styles['admin-header']}>
-      <h1 className={styles['admin-header__title']}>관리자 대시보드</h1>
+    <header className={styles['header']}>
+      <h1 className={styles['headerTitle']}>관리자 대시보드</h1>
       {isLoggedIn && (
-        <div className={styles['admin-header__user-info']}>
+        <div className={styles['userInfo']}>
           <div>
             <span>안녕하세요 관리자 {userName}님!</span>
           </div>
-          <button className={styles['admin-header__logout-button']} onClick={handleLogout}>
+          <button className={styles['logoutButton']} onClick={handleLogout}>
             로그아웃
           </button>
         </div>
