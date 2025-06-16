@@ -7,12 +7,19 @@ import AdminLayout from '../layouts/AdminLayout/AdminLayout';
 import AuthLayout from '../layouts/AuthLayout/AuthLayout';
 import CheckoutLayout from '../layouts/CheckoutLayout/CheckoutLayout';
 import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
+import FindAccountLayout from '../layouts/FindAccountLayout/FindAccountLayout';
 import UserEditLayout from '../layouts/UserEditLayout/UserEditLayout';
 import UserLayout from '../layouts/UserLayout/UserLayout';
 import Admin from '../pages/Admin/Admin';
 import AdminLoginPage from '../pages/AdminLogin/AdminLogin';
+import CancelCompletePage from '../pages/CancelComplete/CancelComplete';
+import CancelConfirmPage from '../pages/CancelConfirm/CancelConfirm';
+import CancelProgressPage from '../pages/CancelProgress/CancelProgress';
 import CartPage from '../pages/Cart/Cart';
+import DevelopGoto from '../pages/DevelopGoto/DevelopGoto';
 import ErrorPage from '../pages/Error/Error';
+import FindAccountPage from '../pages/FindAccount/FindAccount';
+import JoinMembershipPage from '../pages/JoinMembership/JoinMembership';
 import LoginPage from '../pages/Login/Login';
 import MainPage from '../pages/Main/Main';
 import ModalExamplePage from '../pages/ModalExamplePage';
@@ -62,10 +69,14 @@ const routes: AppRouteObject[] = [
     element: <App />,
     children: [
       {
+        index: true, // 루트 경로('/')에서 보여질 페이지
+        element: <DevelopGoto /> // 개발 시에만 사용할 페이지
+      },
+      {
         element: <DefaultLayout />, // 일반 사용자용 레이아웃
         children: [
           {
-            index: true, // 루트 경로('/')에서 보여질 페이지
+            path: 'main', // 루트 경로('/')에서 보여질 페이지
             element: <MainPage /> // 기존 HomePage 대신 MainPage를 홈으로 사용
           },
           {
@@ -105,6 +116,24 @@ const routes: AppRouteObject[] = [
           {
             path: 'payment-complete',
             element: <PaymentCompletePage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
+          },
+          {
+            path: 'CancelConfirm',
+            element: <CancelConfirmPage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
+          },
+          {
+            path: 'CancelProgress',
+            element: <CancelProgressPage />
+            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
+            // requiredRole: 'USER'
+          },
+          {
+            path: 'CancelComplete',
+            element: <CancelCompletePage />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
             // requiredRole: 'USER'
           }
@@ -154,6 +183,19 @@ const routes: AppRouteObject[] = [
           {
             path: 'login',
             element: <LoginPage />
+          },
+          {
+            path: 'Join',
+            element: <JoinMembershipPage />
+          }
+        ]
+      },
+      {
+        element: <FindAccountLayout />, // 인증 페이지용 레이아웃
+        children: [
+          {
+            path: 'find-account',
+            element: <FindAccountPage />
           }
         ]
       },
