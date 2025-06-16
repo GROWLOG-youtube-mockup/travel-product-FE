@@ -1,4 +1,4 @@
-.modal-overlay {
+.overlay {
   position: fixed;
   display: flex;
   align-items: center;
@@ -8,7 +8,7 @@
   inset: 0;
 }
 
-.modal {
+.box {
   position: relative;
   width: 700px;
   max-width: 700px;
@@ -18,36 +18,52 @@
   border-radius: 16px;
 }
 
-.modal__close {
+.closeButton {
   position: absolute;
-  top: -48px;
-  right: 24px;
+  top: 20px; // 모달 내부 상단에서 24px
+  right: 24px; // 모달 내부 우측에서 24px
   border: none;
   font-size: 48px;
   color: #bdbdbd;
   background: none;
+  transition: color 0.2s;
+  cursor: pointer;
+  z-index: 10;
+
+  &:hover {
+    color: #333333;
+  }
 }
 
-.modal__title {
+.title {
   margin-bottom: 10px;
+  font-size: 32px;
+  font-weight: bold;
 }
 
-.modal__content {
+.content {
   height: 100px; // 임시 높이 설정
   margin-top: 30px;
   background-color: red;
 }
 
-.modal__container {
+.container {
   position: relative;
   width: 100%;
   max-width: 700px;
   margin: 0 auto;
 }
 
-.modal__content-inner {
+.contentInner {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
+  text-align: left;
+}
+
+.header {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px 0;
   text-align: left;
 }
