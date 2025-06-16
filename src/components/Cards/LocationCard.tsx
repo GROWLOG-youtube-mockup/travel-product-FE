@@ -4,9 +4,9 @@ import styles from './LocationCard.module.scss';
 
 const LocationCard = ({ image, title }: LocationCardProps) => {
   return (
-    <div className={styles['location-card']}>
-      <img className={styles['location-card__image']} src={image} alt="" />
-      <div className={styles['location-card__content']}>
+    <div className={styles['locationCard']}>
+      <img className={styles['cardImage']} src={image} alt="" />
+      <div className={styles['content']}>
         <span>{title}</span>
       </div>
     </div>
