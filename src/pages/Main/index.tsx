@@ -181,20 +181,18 @@ const MainPage = () => {
 
   return (
     <>
-      <section className={styles['main-cards-section']}>
-        <div className={styles['main-cards-section__title']}>
-          <h2 className={styles['main-cards-section__main-title']}>{locationTitle}</h2>
+      <section className={styles['cardsSection']}>
+        <div className={styles['title']}>
+          <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
         <LocationCardList LocationCardList={locationList} />
       </section>
 
       {contentsTitleList.map((item, index) => (
-        <section className={styles['main-cards-section']} key={item.title}>
-          <div className={styles['main-cards-section__title']}>
-            <h2 className={styles['main-cards-section__title__main-title']}>{item.title}</h2>
-            {item.subtitle && (
-              <p className={styles['main-cards-section__title__subtitle']}>{item.subtitle}</p>
-            )}
+        <section className={styles['cardsSection']} key={item.title}>
+          <div className={styles['title']}>
+            <h2 className={styles['mainTitle']}>{item.title}</h2>
+            {item.subtitle && <p className={styles['subtitle']}>{item.subtitle}</p>}
           </div>
           <CardSlide cardList={contents[index]} />
         </section>

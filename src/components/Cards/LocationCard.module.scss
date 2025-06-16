@@ -1,4 +1,4 @@
-.location-card {
+.locationCard {
   position: relative;
   width: calc((100% - 5rem) / 6);
   border-radius: 15px;
@@ -6,7 +6,7 @@
   user-select: none;
   overflow: hidden;
 
-  &__image {
+  .cardImage {
     display: block;
     width: 100%;
     height: 100%;
@@ -23,7 +23,7 @@
     }
   }
 
-  &__content {
+  .content {
     position: absolute;
     right: 1vw;
     bottom: 1vw;
