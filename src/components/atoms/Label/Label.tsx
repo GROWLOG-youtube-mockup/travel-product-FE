@@ -2,17 +2,12 @@ import React from 'react';
 
 import styles from './Label.module.scss';
 
-type LabelVariant =
-  | 'default'
-  | 'pageTitle'
-  | 'sectionTitle'
-  | 'title'
-  | 'inputLabel'
-  | 'bodyText'
-  | 'subtitle'
-  | string;
+type LabelVariant = 'default' | 'bold' | 'small';
 
-type LabelColor = 'gray' | 'darkgray' | 'accent' | 'buttonWhite' | 'lightgray';
+// 색상 클래스명도 접두어 없이 camelCase로 사용
+// gray, darkgray, accent, buttonWhite, lightgray
+
+type LabelColor = 'gray' | 'darkgray' | 'accent' | 'white' | 'lightgray' | 'red' | 'blue';
 
 type LabelProps = {
   children: React.ReactNode;
@@ -31,10 +26,8 @@ const Label: React.FC<LabelProps> = ({
   variant = 'default',
   color
 }) => {
-  const variantKey = variant && variant !== 'default' ? `label-${variant}` : 'label';
-  const colorKey = color ? `label-color-${color}` : '';
-  const variantClass = styles[variantKey] || '';
-  const colorClass = colorKey ? styles[colorKey] : '';
+  const variantClass = styles[variant] || '';
+  const colorClass = color ? styles[color] : '';
   const composedClassName = [variantClass, colorClass, className].filter(Boolean).join(' ');
 
   return (

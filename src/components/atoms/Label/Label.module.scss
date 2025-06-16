@@ -1,64 +1,56 @@
-@mixin label-font($size, $height, $weight: 500) {
+// stylelint-disable-next-line scss/at-mixin-pattern
+@mixin labelFont($size, $height, $weight: 500) {
   font-family: Roboto-Medium, sans-serif;
   font-size: $size;
   font-weight: $weight;
   line-height: $height;
 }
 
-.label {
+.default {
   display: inline-block;
   margin-bottom: 4px;
   color: #000000;
 
-  @include label-font(16px, 24px, 500);
+  @include labelFont(16px, 24px, 500);
 }
 
 /* 크기(폰트/라인/굵기) 전용 */
-.label-pageTitle {
-  @include label-font(40px, 48px, 700);
+
+.bold {
+  @include labelFont(16px, 24px, 700);
 
   font-family: Roboto-Bold, sans-serif;
 }
 
-.label-sectionTitle {
-  @include label-font(36px, 48px, 700);
-
-  font-family: Roboto-Bold, sans-serif;
-}
-
-.label-title {
-  @include label-font(28px, 36px, 500);
-}
-
-.label-subtitle {
-  @include label-font(20px, 24px, 500);
-}
-
-.label-bodyText {
-  @include label-font(16px, 24px, 500);
-}
-
-.label-inputLabel {
-  @include label-font(14px, 20px, 500);
+.small {
+  @include labelFont(14px, 20px, 500);
 }
 
 /* 색상 전용 클래스 */
-.label-color-gray {
+.colorGray {
   color: #8d8d8d;
 }
 
-.label-color-darkgray {
+.colorDarkgray {
   color: #5f5a5a;
 }
 
-.label-color-accent {
+.colorAccent {
   color: #e18c04;
 }
 
-.label-color-buttonWhite {
+.colorWhite {
   color: #ffffff;
 }
 
-.label-color-lightgray {
+.colorRed {
+  color: #ff0000;
+}
+
+.colorBlue {
+  color: #0000ff;
+}
+
+.colorLightgray {
   color: rgb(0 0 0 / 50%);
 }
