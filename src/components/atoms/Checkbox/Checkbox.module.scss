@@ -1,8 +1,7 @@
 .checkboxWrapper {
   display: inline-flex;
-  align-items: center;
+  align-items: flex-start;
   font-size: inherit;
-  cursor: pointer;
 }
 
 .checkboxInput {
@@ -20,6 +19,7 @@
   transition:
     background-color 0.2s ease,
     border-color 0.2s ease;
+  cursor: pointer;
 }
 
 /* 항상 존재하는 체크 모양 (투명 또는 색상 변화로 제어) */
