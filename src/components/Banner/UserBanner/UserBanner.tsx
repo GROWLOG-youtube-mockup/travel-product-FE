@@ -15,7 +15,7 @@ const UserBanner = () => {
           <div className={styles.userDesc}>
             반갑습니다! 여기에 회원님의 정보를 확인하실 수 있습니다.
           </div>
-          <Button className={styles.editBtn}>회원정보 수정</Button>
+          <Button variant="xs">회원정보 수정</Button>
         </div>
         <div className={styles.tripSummary}>
           <div>
