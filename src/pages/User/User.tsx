@@ -35,17 +35,23 @@ const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
           <div>{emptyMsg}</div>
         ) : (
           trips.map((trip) => (
-            <div key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}>
-              <MyTripCard trip={trip} />
-              <Button
-                variant="sm"
-                color="gray"
-                onClick={() => {
-                  window.location.href = `/product/${trip.product_id}`;
-                }}
-              >
-                해당 상품 페이지로
-              </Button>
+            <div
+              key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}
+              className={styles.userTripWrapper}
+            >
+              <div className={styles.tripWrapper}>
+                <MyTripCard trip={trip} />
+                <Button
+                  variant="sm"
+                  color="gray"
+                  style={{ margin: '0 0 16px 0' }}
+                  onClick={() => {
+                    window.location.href = `/product/${trip.product_id}`;
+                  }}
+                >
+                  해당 상품 페이지로
+                </Button>
+              </div>
             </div>
           ))
         )}

@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom';
-
 import styles from './MyTripCard.module.scss';
 
 export interface MyTripCardProps {
@@ -21,7 +19,6 @@ const getTripDays = (start: string, end: string) =>
     : Math.round((new Date(end).getTime() - new Date(start).getTime()) / (1000 * 60 * 60 * 24)) + 1;
 
 const MyTripCard = ({ trip }: MyTripCardProps) => {
-  const navigate = useNavigate();
   return (
     <div className={styles.wrapper}>
       <div className={styles.image} />

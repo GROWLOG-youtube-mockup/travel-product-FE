@@ -1,12 +1,29 @@
 .userPageWrapper {
+  min-width: 1160px;
   padding: 0;
-  border: 2px solid #222222;
   background: #ffffff;
-  border-radius: 10px;
 }
 
 .sectionTitle {
-  margin: 36px 0 18px 40px;
-  font-size: 1.2rem;
+  font-size: 2rem;
   font-weight: bold;
+  text-align: left;
+}
+
+.userTripWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #222222;
+  border-radius: 20px;
+}
+
+.tripWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 90%;
 }
