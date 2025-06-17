@@ -1,9 +1,9 @@
-.bannerBg {
+.banner {
   width: 100vw;
   background: #626262;
 }
 
-.profileHeader {
+.header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -14,34 +14,38 @@
   color: #ffffff;
 }
 
-.leftSection {
+.profile {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  padding-top: 20px;
 }
 
-.userName {
+.name {
   font-size: 1.4rem;
   font-weight: bold;
 }
 
-.userDesc {
+.desc {
   margin-top: 4px;
   padding-bottom: 1rem;
   font-size: 1rem;
   color: #cccccc;
 }
 
-.tripSummary {
+.tabs {
   display: flex;
   padding-right: 170px;
   gap: 80px;
 }
 
-.tripLabel {
+.tabBtn {
+  cursor: pointer;
+}
+
+.tabLabel {
   font-size: 0.95rem;
   color: #cccccc;
-  cursor: pointer;
 }
 
 .active {
@@ -50,7 +54,7 @@
   border-bottom: 2px solid #ffffff;
 }
 
-.tripCount {
+.tabCount {
   font-size: 2rem;
   font-weight: bold;
   text-align: center;
