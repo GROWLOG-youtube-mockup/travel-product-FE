@@ -16,35 +16,34 @@ const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = 'llXWcfOW-4tEH31eNrv69';
 
 const PaymentProcessPage = () => {
-  const [amount, setAmount] = useState({
+  const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
     value: 50000
   });
   const [ready, setReady] = useState(false);
-  const [widgets, setWidgets] = useState(null);
+  const [widgets, setWidgets] = useState<any>(null);
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
       // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
       // 회원 결제
-      const widgets = tossPayments.widgets({
+      const paymentWidgets = tossPayments.widgets({
         customerKey
       });
       // 비회원 결제
-      // const widgets = tossPayments.widgets({ customerKey: ANONYMOUS });
+      // const paymentWidgets = tossPayments.widgets({ customerKey: ANONYMOUS });
 
-      setWidgets(widgets);
+      setWidgets(paymentWidgets);
     }
 
     fetchPaymentWidgets();
-  }, [clientKey, customerKey]);
+  }, []);
 
   useEffect(() => {
     async function renderPaymentWidgets() {
-      if (widgets == null) {
-        return;
-      }
+      if (!widgets) return;
+
       // ------ 주문의 결제 금액 설정 ------
       await widgets.setAmount(amount);
 
@@ -68,9 +67,7 @@ const PaymentProcessPage = () => {
   }, [widgets]);
 
   useEffect(() => {
-    if (widgets == null) {
-      return;
-    }
+    if (!widgets) return;
 
     widgets.setAmount(amount);
   }, [widgets, amount]);
@@ -105,6 +102,7 @@ const PaymentProcessPage = () => {
                 className={styles.paymentButton}
                 disabled={!ready}
                 onClick={async () => {
+                  if (!widgets) return;
                   try {
                     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
