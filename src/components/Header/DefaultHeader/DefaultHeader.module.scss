@@ -1,8 +1,6 @@
 .headerWrapper {
   position: relative;
-  left: 50%;
-  width: 100vw;
-  margin-left: -50vw;
+  width: 100%;
   border-bottom: 1px solid #ededed;
 }
 
@@ -24,6 +22,8 @@
 .logoArea {
   display: flex;
   align-items: center;
+  height: 40px;
+  object-fit: contain;
 }
 
 .logoStyle {
