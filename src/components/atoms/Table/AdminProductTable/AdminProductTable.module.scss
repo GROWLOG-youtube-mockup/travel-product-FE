@@ -1,0 +1,98 @@
+.tableWrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 0;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.createButton {
+  padding: 8px 16px;
+  border: none;
+  font-size: 1rem;
+  color: white;
+  background-color: #3498db;
+  border-radius: 6px;
+  transition: background 0.2s;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: #b1c5d1;
+    cursor: not-allowed;
+  }
+}
+
+.table {
+  width: 100%;
+  background: white;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+  border-radius: 8px;
+  border-collapse: collapse;
+  overflow: hidden;
+
+  th,
+  td {
+    padding: 14px 10px;
+    font-size: 1rem;
+    text-align: center;
+    border-bottom: 1px solid #e6e6e6;
+  }
+
+  th {
+    font-weight: 600;
+    background: #f8fafb;
+  }
+}
+
+.emptyRow {
+  padding: 32px 0;
+  color: #b2bec3;
+  text-align: center;
+}
+
+.onSale {
+  font-weight: 600;
+  color: #27ae60;
+}
+
+.soldOut {
+  font-weight: 600;
+  color: #e74c3c;
+}
+
+.editButton,
+.deleteButton {
+  margin: 0 4px;
+  padding: 6px 14px;
+  border: none;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+  cursor: pointer;
+}
+
+.editButton {
+  color: #222222;
+  background: #f1c40f;
+
+  &:disabled {
+    color: #a8a8a8;
+    background: #f3e9c7;
+    cursor: not-allowed;
+  }
+}
+
+.deleteButton {
+  color: white;
+  background: #e74c3c;
+
+  &:disabled {
+    color: #f5f5f5;
+    background: #f3b8ab;
+    cursor: not-allowed;
+  }
+}
