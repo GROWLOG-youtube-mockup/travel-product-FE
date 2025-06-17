@@ -96,9 +96,7 @@ const PaymentProcessPage = () => {
 
             <div className={styles.amountWrapper}>
               <span className={styles.amountLabel}>결제 금액 : </span>
-              <span className={styles.amountValue}>
-                {amount.value.toLocaleString()} {amount.currency}
-              </span>
+              <span className={styles.amountValue}>₩{amount.value.toLocaleString()}</span>
             </div>
             {/* 결제하기 버튼 */}
             <div className={styles.paymentButtonWrapper}>
