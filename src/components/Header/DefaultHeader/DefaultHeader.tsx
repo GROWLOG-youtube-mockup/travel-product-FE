@@ -4,7 +4,7 @@ import logo from '../../../assets/GrowLog.svg';
 
 import styles from './DefaultHeader.module.scss';
 
-// 현재는 로그인 상태를 props로 받지만, 추후 논의후 변경예정
+// TODO: 현재는 로그인 상태를 props로 받지만, 추후 논의후 변경예정
 interface DefaultHeaderProps {
   isLoggedIn: boolean;
   onLogout?: () => void;
