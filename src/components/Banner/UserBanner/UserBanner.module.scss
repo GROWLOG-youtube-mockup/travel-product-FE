@@ -1,0 +1,54 @@
+.profileHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 40px 24px;
+  color: #ffffff;
+  background: #444444;
+  border-bottom: 4px solid #e0b86b;
+}
+
+.userName {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.userDesc {
+  margin-top: 4px;
+  font-size: 1rem;
+  color: #cccccc;
+}
+
+.editBtn {
+  margin-left: 32px;
+  padding: 8px 18px;
+  border: none;
+  font-weight: 500;
+  color: #444444;
+  background: #ffffff;
+  border-radius: 4px;
+  transition: background 0.2s;
+  cursor: pointer;
+
+  &:hover {
+    color: #222222;
+    background: #e0b86b;
+  }
+}
+
+.tripSummary {
+  display: flex;
+  gap: 32px;
+}
+
+.tripLabel {
+  margin-bottom: 2px;
+  font-size: 0.95rem;
+  color: #cccccc;
+}
+
+.tripCount {
+  font-size: 1.3rem;
+  font-weight: bold;
+  text-align: center;
+}
