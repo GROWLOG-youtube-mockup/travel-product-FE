@@ -22,21 +22,19 @@
   cursor: pointer;
 }
 
-/* 항상 존재하는 체크 모양 (투명 또는 색상 변화로 제어) */
 .checkmark::after {
   position: absolute;
   top: 34%;
   left: 49.5%;
   width: 0.35em;
   height: 0.6em;
-  border: solid #c7cacd; /* 기본은 회색 */
+  border: solid #c7cacd;
   border-width: 0 2px 2px 0;
   transition: border-color 0.2s ease;
   transform: translate(-50%, -50%) rotate(45deg);
   content: '';
 }
 
-/* 체크된 상태 - 배경/테두리 파랑, 체크 표시 흰색 */
 .checkboxInput:checked + .checkmark {
   border-color: #007bff;
   background-color: #007bff;
