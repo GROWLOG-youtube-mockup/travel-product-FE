@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
+import logo from '../../../assets/GrowLog.svg';
+
 import styles from './DefaultHeader.module.scss';
 
 // 현재는 로그인 상태를 props로 받지만, 추후 논의후 변경예정
@@ -14,7 +16,7 @@ const DefaultHeader = ({ isLoggedIn, onLogout }: DefaultHeaderProps) => {
     <div className={styles.headerWrapper}>
       <header className={styles.header}>
         <div className={styles.logoArea} onClick={() => navigate('/')}>
-          <label className={styles.logoStyle}>logo</label>
+          <img src={logo} alt="" />
         </div>
         <nav className={styles.menuArea}>
           {isLoggedIn ? (
