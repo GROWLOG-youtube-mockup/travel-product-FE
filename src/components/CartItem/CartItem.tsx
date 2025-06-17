@@ -32,6 +32,7 @@ const CartItem = ({ item }: CartItemProps) => {
         </div>
         <div className={styles.price}>₩{item.product.price.toLocaleString()}</div>
       </div>
+      <span className={styles.line}></span>
       <div className={styles.buttonLayout}>
         <div>
           <Button className={`${styles.itemButton} ${styles.secondary}`}>
