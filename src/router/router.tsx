@@ -15,6 +15,7 @@ import AdminLoginPage from '../pages/Admin/AdminLogin/AdminLogin';
 import AdminLogsPage from '../pages/Admin/AdminLogs/AdminLogs';
 import AdminOrdersPage from '../pages/Admin/AdminOrders/AdminOrders';
 import AdminProductsPage from '../pages/Admin/AdminProducts/AdminProducts';
+import AdminUsersPage from '../pages/Admin/AdminUsers/AdminUsers';
 import CancelCompletePage from '../pages/CancelComplete/CancelComplete';
 import CancelConfirmPage from '../pages/CancelConfirm/CancelConfirm';
 import CancelProgressPage from '../pages/CancelProgress/CancelProgress';
@@ -172,36 +173,29 @@ const routes: AppRouteObject[] = [
       },
       {
         element: <AdminLayout />, // 관리자용 레이아웃
+        // requiredRole: 'ADMIN',
         children: [
           {
             path: 'admin/admins',
             element: <AdminAdminsPage />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
+            // requiredRole: 'SUPER_ADMIN'
           },
           {
             path: 'admin/logs',
             element: <AdminLogsPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
           },
           {
             path: 'admin/orders',
             element: <AdminOrdersPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
           },
           {
             path: 'admin/products',
             element: <AdminProductsPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
           },
           {
             path: 'admin/users',
-            element: <AdminProductsPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
+            element: <AdminUsersPage />
           },
           {
             path: 'admin/login',
