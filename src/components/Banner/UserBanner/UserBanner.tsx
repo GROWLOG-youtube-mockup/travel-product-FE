@@ -1,12 +1,17 @@
-import { useState } from 'react';
-
 import Button from '../../atoms/Button/Button';
 
 import styles from './UserBanner.module.scss';
 
-const UserBanner = () => {
-  const [activeTrip, setActiveTrip] = useState<'upcoming' | 'past'>('upcoming');
+type TripTab = 'upcoming' | 'past';
 
+interface UserBannerProps {
+  tab: TripTab;
+  setTab: (tab: TripTab) => void;
+  upcomingCount: number;
+  pastCount: number;
+}
+
+const UserBanner = ({ tab, setTab, upcomingCount, pastCount }: UserBannerProps) => {
   return (
     <div className={styles.bannerBg}>
       <div className={styles.profileHeader}>
@@ -21,32 +26,28 @@ const UserBanner = () => {
           <div>
             <div
               className={
-                activeTrip === 'upcoming'
-                  ? `${styles.tripLabel} ${styles.active}`
-                  : styles.tripLabel
+                tab === 'upcoming' ? `${styles.tripLabel} ${styles.active}` : styles.tripLabel
               }
-              onClick={() => setActiveTrip('upcoming')}
+              onClick={() => setTab('upcoming')}
               role="button"
               tabIndex={0}
               style={{ cursor: 'pointer' }}
             >
               예정된 여행
             </div>
-            <div className={styles.tripCount}>1</div>
+            <div className={styles.tripCount}>{upcomingCount}</div>
           </div>
           <div>
             <div
-              className={
-                activeTrip === 'past' ? `${styles.tripLabel} ${styles.active}` : styles.tripLabel
-              }
-              onClick={() => setActiveTrip('past')}
+              className={tab === 'past' ? `${styles.tripLabel} ${styles.active}` : styles.tripLabel}
+              onClick={() => setTab('past')}
               role="button"
               tabIndex={0}
               style={{ cursor: 'pointer' }}
             >
               다녀온 여행
             </div>
-            <div className={styles.tripCount}>0</div>
+            <div className={styles.tripCount}>{pastCount}</div>
           </div>
         </div>
       </div>
