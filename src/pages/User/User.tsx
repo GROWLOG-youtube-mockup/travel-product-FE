@@ -1,3 +1,5 @@
+import Button from '../../components/atoms/Button/Button';
+
 import styles from './User.module.scss';
 
 interface Trip {
@@ -15,18 +17,18 @@ const TripList = ({ trips, emptyMsg }: { trips: Trip[]; emptyMsg: string }) => {
     <>
       {trips.length === 0 && <div>{emptyMsg}</div>}
       {trips.map((trip) => (
-        <div className={styles.tripCard} key={trip.product_id}>
-          <div className={styles.tripCardHeader}>
+        <div className={styles.card} key={trip.product_id}>
+          <div className={styles.cardHeader}>
             <span className={styles.orderNumber}>{trip.title}</span>
           </div>
-          <div className={styles.tripInfo}>
-            <div className={styles.tripImage} />
-            <div className={styles.tripDetails}>
-              <div className={styles.tripTitle}>{trip.title}</div>
-              <div className={styles.tripDate}>
+          <div className={styles.cardInfo}>
+            <div className={styles.cardImage} />
+            <div className={styles.cardDetails}>
+              <div className={styles.cardTitle}>{trip.title}</div>
+              <div className={styles.cardDate}>
                 {trip.start_date} ~ {trip.end_date}
               </div>
-              <div className={styles.tripPrice}>₩{trip.price.toLocaleString()}</div>
+              <div className={styles.cardPrice}>₩{trip.price.toLocaleString()}</div>
             </div>
           </div>
         </div>
@@ -47,11 +49,13 @@ const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
       <div className={styles.sectionTitle}>
         {tab === 'upcoming' ? '예정된 여행' : '다녀온 여행'}
       </div>
+
       <div className={styles.userPageWrapper}>
         <TripList
           trips={tab === 'upcoming' ? upcoming : past}
           emptyMsg={tab === 'upcoming' ? '예정된 여행이 없습니다.' : '다녀온 여행이 없습니다.'}
         />
+        <Button variant="xs">140px 버튼</Button>
       </div>
     </>
   );
