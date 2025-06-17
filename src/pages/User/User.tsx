@@ -1,3 +1,4 @@
+import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
 
 import styles from './User.module.scss';
@@ -34,10 +35,18 @@ const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
           <div>{emptyMsg}</div>
         ) : (
           trips.map((trip) => (
-            <MyTripCard
-              key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}
-              trip={trip}
-            />
+            <div key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}>
+              <MyTripCard trip={trip} />
+              <Button
+                variant="sm"
+                color="gray"
+                onClick={() => {
+                  window.location.href = `/product/${trip.product_id}`;
+                }}
+              >
+                해당 상품 페이지로
+              </Button>
+            </div>
           ))
         )}
       </div>

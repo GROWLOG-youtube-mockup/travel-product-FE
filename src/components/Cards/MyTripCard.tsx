@@ -1,7 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import Button from '../atoms/Button/Button';
-
 import styles from './MyTripCard.module.scss';
 
 export interface MyTripCardProps {
@@ -35,14 +33,6 @@ const MyTripCard = ({ trip }: MyTripCardProps) => {
         </div>
         <div className={styles.price}>₩{trip.price.toLocaleString()}</div>
       </div>
-      <Button
-        variant="sm"
-        color="gray"
-        onClick={() => navigate(`/product/${trip.product_id}`)}
-        style={{ marginLeft: 24 }}
-      >
-        해당 상품 페이지로
-      </Button>
     </div>
   );
 };
