@@ -1,4 +1,6 @@
 import Button from '../../components/atoms/Button/Button';
+import Checkbox from '../../components/atoms/Checkbox/Checkbox';
+import CartItem from '../../components/CartItem/CartItem';
 
 import styles from './Cart.module.scss';
 
@@ -22,33 +24,16 @@ const CartPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.selected}>
-        <label className={styles.checkboxLabel}>
-          <input type="checkbox" name="" id="" className={styles.checkbox} />
-          전체선택
-        </label>
+        <Checkbox label={'전체 선택'} />
 
         <Button variant="xs" color="white" className={styles.deleteButton}>
           <span>선택한 상품 삭제</span>
         </Button>
       </div>
 
-      <div>
-        {items.map((item) => (
-          <div key={item.cart_item_id}>
-            <div>
-              <input type="checkbox" name="" id="" />
-            </div>
-            <div>
-              <img src={item.product.thumbnail_image_url} />
-            </div>
-            <div>
-              <div>{item.product.name}</div>
-              <div>{item.start_date}</div>
-              <div>{item.quantity}</div>
-            </div>
-          </div>
-        ))}
-      </div>
+      {items.map((item) => (
+        <CartItem key={item.cart_item_id} item={item} />
+      ))}
     </div>
   );
 };

@@ -11,19 +11,14 @@
     border-radius: 15px;
     flex-flow: row nowrap;
 
-    .checkboxLabel {
-      .checkbox {
-        width: 1rem;
-        height: 1rem;
-        border: 1px solid #151515;
-      }
-    }
-
     .deleteButton {
       height: fit-content;
-      border: 1px solid #151515;
-      font-size: small;
+      border: 1px solid #d5dade;
+      font-weight: normal;
       line-height: 1.8rem;
+
+      // font-size: normal;
+      color: #444444;
       border-radius: 5px;
     }
   }
