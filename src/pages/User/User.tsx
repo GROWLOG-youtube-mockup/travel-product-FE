@@ -29,11 +29,16 @@ const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
   return (
     <>
       <div className={styles.sectionTitle}>{title}</div>
-      <div className={styles.userPageWrapper}>
+      <div key={tab} className={styles.userPageWrapper}>
         {trips.length === 0 ? (
           <div>{emptyMsg}</div>
         ) : (
-          trips.map((trip) => <MyTripCard key={trip.product_id} trip={trip} />)
+          trips.map((trip) => (
+            <MyTripCard
+              key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}
+              trip={trip}
+            />
+          ))
         )}
       </div>
     </>
