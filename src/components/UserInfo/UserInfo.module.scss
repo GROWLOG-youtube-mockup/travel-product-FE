@@ -1,0 +1,19 @@
+.userInfoWrapper {
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px 60px;
+  border: 1px solid #222222;
+  box-sizing: border-box;
+  font-size: 1rem;
+  color: #222222;
+  text-align: left;
+  border-radius: 8px;
+}
+
+.userInfoWrapper > div {
+  margin-bottom: 8px;
+}
+
+.userInfoWrapper > div:last-child {
+  margin-bottom: 0;
+}
