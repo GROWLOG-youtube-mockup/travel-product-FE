@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
@@ -20,30 +21,29 @@ interface Trip {
 type TripTab = 'upcoming' | 'past';
 
 const UserLayout = () => {
-  const [trips, setTrips] = useState<Trip[]>([]);
-  const [tab, setTab] = useState<TripTab>('upcoming');
+  const navigate = useNavigate();
   const [upcoming, setUpcoming] = useState<Trip[]>([]);
   const [past, setPast] = useState<Trip[]>([]);
+  const [tab, setTab] = useState<TripTab>('upcoming');
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    axios.get('/users/me/trips').then((res) => setTrips(res.data));
+    axios
+      .get('/users/me/trips')
+      .then((res) => {
+        const data = Array.isArray(res.data) ? res.data : [];
+        const today = new Date();
+        setUpcoming(data.filter((trip) => new Date(trip.end_date) >= today));
+        setPast(data.filter((trip) => new Date(trip.end_date) < today));
+      })
+      .catch(() => setError(true));
   }, []);
 
   useEffect(() => {
-    const today = new Date();
-    const upcomingTrips: Trip[] = [];
-    const pastTrips: Trip[] = [];
-    trips.forEach((trip) => {
-      const endDate = new Date(trip.end_date);
-      if (endDate >= today) {
-        upcomingTrips.push(trip);
-      } else {
-        pastTrips.push(trip);
-      }
-    });
-    setUpcoming(upcomingTrips);
-    setPast(pastTrips);
-  }, [trips]);
+    if (error) {
+      navigate('/error');
+    }
+  }, [error, navigate]);
 
   return (
     <>
