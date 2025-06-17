@@ -43,15 +43,17 @@ interface UserPageProps {
 
 const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
   return (
-    <div className={styles.userPageWrapper}>
+    <>
       <div className={styles.sectionTitle}>
         {tab === 'upcoming' ? '예정된 여행' : '다녀온 여행'}
       </div>
-      <TripList
-        trips={tab === 'upcoming' ? upcoming : past}
-        emptyMsg={tab === 'upcoming' ? '예정된 여행이 없습니다.' : '다녀온 여행이 없습니다.'}
-      />
-    </div>
+      <div className={styles.userPageWrapper}>
+        <TripList
+          trips={tab === 'upcoming' ? upcoming : past}
+          emptyMsg={tab === 'upcoming' ? '예정된 여행이 없습니다.' : '다녀온 여행이 없습니다.'}
+        />
+      </div>
+    </>
   );
 };
 
