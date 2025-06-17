@@ -26,6 +26,9 @@ const UserLayout = () => {
   const [past, setPast] = useState<Trip[]>([]);
   const [tab, setTab] = useState<TripTab>('upcoming');
   const [error, setError] = useState(false);
+  const [userInfo, setUserInfo] = useState<{ name: string; phone: string; email: string } | null>(
+    null
+  );
 
   useEffect(() => {
     axios
@@ -37,6 +40,14 @@ const UserLayout = () => {
         setPast(data.filter((trip) => new Date(trip.end_date) < today));
       })
       .catch(() => setError(true));
+    // 사용자 정보 fetch
+    axios.get('/users/me').then(({ data }) => {
+      setUserInfo({
+        name: data.name,
+        phone: data.phone_number,
+        email: data.email
+      });
+    });
   }, []);
 
   useEffect(() => {
@@ -55,7 +66,7 @@ const UserLayout = () => {
         pastCount={past.length}
       />
       <main className={styles.baseForm}>
-        <UserPage tab={tab} upcoming={upcoming} past={past} />
+        <UserPage tab={tab} upcoming={upcoming} past={past} userInfo={userInfo} />
       </main>
       <Footer />
     </>

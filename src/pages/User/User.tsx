@@ -1,17 +1,15 @@
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
+import UserInfo from '../../components/UserInfo/UserInfo';
 
 import styles from './User.module.scss';
 
-interface Trip {
-  product_id: number;
-  title: string;
-  start_date: string;
-  end_date: string;
-  price: number;
+interface UserPageProps {
+  tab: 'upcoming' | 'past';
+  upcoming: any[];
+  past: any[];
+  userInfo: { name: string; phone: string; email: string } | null;
 }
-
-type TripTab = 'upcoming' | 'past';
 
 const tabInfo = {
   upcoming: {
@@ -24,7 +22,7 @@ const tabInfo = {
   }
 } as const;
 
-const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
+const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
   const { title, emptyMsg } = tabInfo[tab];
   const trips = tab === 'upcoming' ? upcoming : past;
   return (
@@ -39,12 +37,15 @@ const UserPage = ({ tab, upcoming, past }: UserPageProps) => {
               key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}
               className={styles.userTripWrapper}
             >
-              <div className={styles.tripWrapper}>
-                <MyTripCard trip={trip} />
+              <MyTripCard trip={trip} />
+              {userInfo && (
+                <UserInfo name={userInfo.name} phone={userInfo.phone} email={userInfo.email} />
+              )}
+              <div className={styles.tripButtonWrapper}>
                 <Button
                   variant="sm"
                   color="gray"
-                  style={{ margin: '0 0 16px 0' }}
+                  style={{ margin: '16px 0 0 0' }}
                   onClick={() => {
                     window.location.href = `/product/${trip.product_id}`;
                   }}
