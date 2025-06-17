@@ -23,6 +23,7 @@ import JoinMembershipPage from '../pages/JoinMembership/JoinMembership';
 import LoginPage from '../pages/Login/Login';
 import MainPage from '../pages/Main/Main';
 import ModalExamplePage from '../pages/ModalExamplePage';
+import MswTestPage from '../pages/MswTestpage';
 import PaymentCompletePage from '../pages/PaymentComplete/PaymentComplete';
 import PaymentProcessPage from '../pages/PaymentProcess/PaymentProcess';
 import ProductPage from '../pages/Product/Product';
@@ -71,6 +72,10 @@ const routes: AppRouteObject[] = [
       {
         index: true, // 루트 경로('/')에서 보여질 페이지
         element: <DevelopGoto /> // 개발 시에만 사용할 페이지
+      },
+      {
+        path: 'msw', // 루트 경로('/')에서 보여질 페이지
+        element: <MswTestPage /> // Msw 테스트 페이지
       },
       {
         element: <DefaultLayout />, // 일반 사용자용 레이아웃
