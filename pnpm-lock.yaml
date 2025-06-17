@@ -47,6 +47,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.6.1
         version: 14.6.1(@testing-library/dom@10.4.0)
+      '@tosspayments/tosspayments-sdk':
+        specifier: ^2.3.5
+        version: 2.3.5
       '@types/react':
         specifier: ^19.1.2
         version: 19.1.6
@@ -1213,6 +1216,12 @@ packages:
     engines: { node: '>=12', npm: '>=6' }
     peerDependencies:
       '@testing-library/dom': '>=7.21.4'
+
+  '@tosspayments/tosspayments-sdk@2.3.5':
+    resolution:
+      {
+        integrity: sha512-XHi6e9LrF02vm4vuhrt8B4BaDUuyL0sQtdp21HITCUFdyRRB+lQKLZSRcBb8VTpymrCISlg/j8mT2r/QlJmipg==
+      }
 
   '@types/aria-query@5.0.4':
     resolution:
@@ -5524,6 +5533,8 @@ snapshots:
   '@testing-library/user-event@14.6.1(@testing-library/dom@10.4.0)':
     dependencies:
       '@testing-library/dom': 10.4.0
+
+  '@tosspayments/tosspayments-sdk@2.3.5': {}
 
   '@types/aria-query@5.0.4': {}
 

@@ -4,8 +4,14 @@ const ReservationPage = () => {
   return (
     <>
       <div className={styles.container}>
-        <h1>Reservation Page</h1>
-        <p>This is the reservation page where users can make reservations.</p>
+        <div className={styles.selected}>
+          <div>
+            <span>예약 정보 확인</span>
+          </div>
+          <div>
+            <span>결제 진행</span>
+          </div>
+        </div>
       </div>
     </>
   );
