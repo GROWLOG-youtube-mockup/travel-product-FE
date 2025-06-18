@@ -1,29 +1,18 @@
 import { useEffect, useState } from 'react';
 
 import Button from '../../components/atoms/Button/Button';
-import type { CartItems } from '../../type/cart';
+import { useCartStore } from '../../store/CartStore';
 import type { User } from '../../type/user';
 import { normalizePhoneNumber } from '../../utils/phone';
 
 import styles from './Reservation.module.scss';
 
 const ReservationPage = () => {
+  const selectedItem = useCartStore((state) => state.selectedItem);
   const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [items, setItems] = useState<CartItems | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch('/cart');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setItems(data);
-      } catch (err: any) {
-        setError(err.message);
-      }
-    };
-
     const fetchUser = async () => {
       try {
         const res = await fetch('/users/me');
@@ -35,7 +24,6 @@ const ReservationPage = () => {
       }
     };
 
-    fetchCart();
     fetchUser();
   }, []);
 
@@ -53,20 +41,17 @@ const ReservationPage = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.item}>
           <h1 className={styles.title}>결제 상품</h1>
-
-          {items?.map((item) => (
-            <div className={styles.itemWrapper} key={item.cart_item_id}>
-              <div className={styles.itemImage}>
-                <img src={item.product.thumbnail_image_url} alt="" />
-              </div>
-              <div className={styles.itemInfoWrapper}>
-                <div>{item.product.name}</div>
-                <div>{item.start_date}</div>
-                <div>인원 {item.quantity}명</div>
-              </div>
-              <div className={styles.price}>₩{item.product.price.toLocaleString()}</div>
+          <div className={styles.itemWrapper}>
+            <div className={styles.itemImage}>
+              <img src={selectedItem?.product.thumbnail_image_url} alt="" />
             </div>
-          ))}
+            <div className={styles.itemInfoWrapper}>
+              <div>{selectedItem?.product.name}</div>
+              <div>{selectedItem?.start_date}</div>
+              <div>인원 {selectedItem?.quantity}명</div>
+            </div>
+            <div className={styles.price}>₩{selectedItem?.product.price.toLocaleString()}</div>
+          </div>
         </div>
 
         <div className={styles.info}>
