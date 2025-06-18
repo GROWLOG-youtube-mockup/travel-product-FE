@@ -8,9 +8,11 @@ interface UserInfoProps {
 
 const UserInfo = ({ name, phone, email }: UserInfoProps) => (
   <div className={styles.userInfoWrapper}>
-    <div>이름 : {name}</div>
-    <div>전화번호 : {phone}</div>
-    <div>이메일주소 : {email}</div>
+    <ul className={styles.userInfoList}>
+      <li className={styles.userInfoItem}>이름 : {name}</li>
+      <li className={styles.userInfoItem}>전화번호 : {phone}</li>
+      <li className={styles.userInfoItem}>이메일주소 : {email}</li>
+    </ul>
   </div>
 );
 

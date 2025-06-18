@@ -1,19 +1,25 @@
 .userInfoWrapper {
-  width: 100%;
+  width: fit-content;
   margin: 0 auto;
-  padding: 20px 60px;
+  padding: 20px 32px;
   border: 1px solid #222222;
   box-sizing: border-box;
   font-size: 1rem;
   color: #222222;
-  text-align: left;
+  background: #ffffff;
   border-radius: 8px;
 }
 
-.userInfoWrapper > div {
+.userInfoList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.userInfoItem {
   margin-bottom: 8px;
 }
 
-.userInfoWrapper > div:last-child {
+.userInfoItem:last-child {
   margin-bottom: 0;
 }
