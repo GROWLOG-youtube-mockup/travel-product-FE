@@ -6,14 +6,16 @@ import styles from './CartItemCard.module.scss';
 
 type CartItemProps = {
   item: CartItem;
+  checked: boolean;
+  onCheckChange: (checked: boolean) => void;
   handlePaymentClick: (item: CartItem) => void;
 };
 
-const CartItemCard = ({ item, handlePaymentClick }: CartItemProps) => {
+const CartItemCard = ({ item, checked, handlePaymentClick, onCheckChange }: CartItemProps) => {
   return (
     <div className={styles.cartItemWrapper}>
       <div className={styles.itemLayout}>
-        <Checkbox />
+        <Checkbox checked={checked} onChange={(e) => onCheckChange(e.target.checked)} />
         <div className={styles.itemImage}>
           <img src={item.product.thumbnail_image_url} alt="" />
         </div>

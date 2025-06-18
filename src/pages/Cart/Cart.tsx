@@ -11,6 +11,7 @@ import styles from './Cart.module.scss';
 
 const CartPage = () => {
   const [items, setItems] = useState<CartItems>([]);
+  const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
 
@@ -34,18 +35,47 @@ const CartPage = () => {
     navigate('/reservation');
   };
 
+  const handleAllSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+
+    const newChecked: { [id: number]: boolean } = {};
+    items.forEach((item) => {
+      newChecked[item.cart_item_id] = checked;
+    });
+    setCheckedItems(newChecked);
+  };
+
+  const handleItemCheck = (id: number, checked: boolean) => {
+    setCheckedItems((prev) => ({ ...prev, [id]: checked }));
+  };
+
+  const handleDeleteClick = () => {
+    console.log(checkedItems);
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.selected}>
-        <Checkbox label={'전체 선택'} />
+        <Checkbox label={'전체 선택'} onChange={handleAllSelectChange} />
 
-        <Button variant="xs" color="white" className={styles.deleteButton}>
+        <Button
+          variant="xs"
+          color="white"
+          className={styles.deleteButton}
+          onClick={handleDeleteClick}
+        >
           <span>선택한 상품 삭제</span>
         </Button>
       </div>
 
       {items.map((item) => (
-        <CartItemCard key={item.cart_item_id} item={item} handlePaymentClick={handlePaymentClick} />
+        <CartItemCard
+          key={item.cart_item_id}
+          item={item}
+          checked={!!checkedItems[item.cart_item_id]}
+          handlePaymentClick={handlePaymentClick}
+          onCheckChange={(checked) => handleItemCheck(item.cart_item_id, checked)}
+        />
       ))}
     </div>
   );
