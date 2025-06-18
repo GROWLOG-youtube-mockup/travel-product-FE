@@ -1,13 +1,15 @@
 import { create } from 'zustand';
 
-import type { CartItems } from '../type/cart';
+import type { CartItem } from '../type/cart';
 
 interface CartStore {
-  selectedItems: CartItems;
-  setSelectedItems: (items: CartItems) => void;
+  selectedItem: CartItem | null;
+  setSelectedItem: (item: CartItem) => void;
+  clearSelectedItem: () => void;
 }
 
 export const useCartStore = create<CartStore>((set) => ({
-  selectedItems: [],
-  setSelectedItems: (items) => set({ selectedItems: items })
+  selectedItem: null,
+  setSelectedItem: (item) => set({ selectedItem: item }),
+  clearSelectedItem: () => set({ selectedItem: null })
 }));
