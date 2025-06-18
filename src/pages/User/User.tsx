@@ -1,13 +1,14 @@
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
 import UserInfo from '../../components/UserInfo/UserInfo';
+import type { Trip } from '../../types/trip';
 
 import styles from './User.module.scss';
 
 interface UserPageProps {
   tab: 'upcoming' | 'past';
-  upcoming: any[];
-  past: any[];
+  upcoming: Trip[];
+  past: Trip[];
   userInfo: { name: string; phone: string; email: string } | null;
 }
 

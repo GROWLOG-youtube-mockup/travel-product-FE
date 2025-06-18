@@ -7,16 +7,9 @@ import UserBanner from '../../components/Banner/UserBanner/UserBanner';
 import Footer from '../../components/Footer/Footer';
 import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 import UserPage from '../../pages/User/User';
+import type { Trip } from '../../types/trip';
 
 import styles from './UserLayout.module.scss';
-
-interface Trip {
-  product_id: number;
-  title: string;
-  start_date: string;
-  end_date: string;
-  price: number;
-}
 
 type TripTab = 'upcoming' | 'past';
 
