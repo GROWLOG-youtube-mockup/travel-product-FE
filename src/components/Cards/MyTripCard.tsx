@@ -13,10 +13,16 @@ export interface MyTripCardProps {
 const formatDate = (dateStr: string) =>
   dateStr ? `${dateStr.slice(0, 4)}년 ${dateStr.slice(5, 7)}월 ${dateStr.slice(8, 10)}일` : '-';
 
-const getTripDays = (start: string, end: string) =>
-  isNaN(new Date(start).getTime()) || isNaN(new Date(end).getTime())
-    ? '-'
-    : Math.round((new Date(end).getTime() - new Date(start).getTime()) / (1000 * 60 * 60 * 24)) + 1;
+const getTripDays = (start: string, end: string) => {
+  const startTime = new Date(start).getTime()
+  const endTime = new Date(end).getTime()
+
+  if (isNaN(startTime) || isNaN(endTime)) {
+    return '-';
+  }
+  
+  return Math.round((endTime - endTime) / (1000 * 60 * 60 * 24)) + 1;
+}
 
 const MyTripCard = ({ trip }: MyTripCardProps) => {
   return (
