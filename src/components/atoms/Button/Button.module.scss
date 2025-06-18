@@ -1,20 +1,20 @@
 /* 공통 버튼 스타일 placeholder */
 %button-base {
-  background: #000000;
+  height: 48px;
   border: none;
-  color: #ffffff;
   font-size: 16px;
   font-weight: 500;
-  height: 48px;
   line-height: 24px;
+  color: #ffffff;
+  background: #000000;
 }
 
 @mixin button-shape($radius, $width, $font-size: 16px, $height: 48px, $line-height: 24px) {
-  border-radius: $radius;
-  font-size: $font-size;
-  height: $height;
-  line-height: $line-height;
   width: $width;
+  height: $height;
+  font-size: $font-size;
+  line-height: $line-height;
+  border-radius: $radius;
 }
 
 .button {
@@ -54,19 +54,19 @@
 }
 
 .button.white {
-  background: #ffffff;
   border: 2px solid #000000;
   color: #000000;
+  background: #ffffff;
 }
 
 .button.gray {
-  background: #ffffff;
   border: 2px solid #dcdcdc;
   color: #898989;
+  background: #ffffff;
 }
 
 .button.none {
-  background: none;
   border: 2px solid #ffffff;
   color: #ffffff;
+  background: none;
 }
