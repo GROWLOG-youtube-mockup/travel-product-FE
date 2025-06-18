@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
@@ -8,6 +9,7 @@ import { normalizePhoneNumber } from '../../utils/phone';
 import styles from './Reservation.module.scss';
 
 const ReservationPage = () => {
+  const navigate = useNavigate();
   const selectedItem = useCartStore((state) => state.selectedItem);
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +28,10 @@ const ReservationPage = () => {
 
     fetchUser();
   }, []);
+
+  const onClickNextStep = () => {
+    navigate('/payment-process');
+  };
 
   return (
     <div className={styles.container}>
@@ -73,7 +79,7 @@ const ReservationPage = () => {
           </div>
 
           <div className={styles.buttonWrapper}>
-            <Button className={styles.nextButton}>
+            <Button className={styles.nextButton} onClick={onClickNextStep}>
               <span>다음으로</span>
             </Button>
           </div>
