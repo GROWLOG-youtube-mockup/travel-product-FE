@@ -1,7 +1,7 @@
-import Button from '../../components/atoms/Button/Button';
-import Checkbox from '../../components/atoms/Checkbox/Checkbox';
+import Button from '../atoms/Button/Button';
+import Checkbox from '../atoms/Checkbox/Checkbox';
 
-import styles from './CartItem.module.scss';
+import styles from './CartItemCard.module.scss';
 
 type CartItemProps = {
   item: {
@@ -17,7 +17,7 @@ type CartItemProps = {
   };
 };
 
-const CartItem = ({ item }: CartItemProps) => {
+const CartItemCard = ({ item }: CartItemProps) => {
   return (
     <div className={styles.cartItemWrapper}>
       <div className={styles.itemLayout}>
@@ -50,4 +50,4 @@ const CartItem = ({ item }: CartItemProps) => {
   );
 };
 
-export default CartItem;
+export default CartItemCard;
