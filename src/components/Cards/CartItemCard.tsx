@@ -1,23 +1,15 @@
+import type { CartItem } from '../../type/cart';
 import Button from '../atoms/Button/Button';
 import Checkbox from '../atoms/Checkbox/Checkbox';
 
 import styles from './CartItemCard.module.scss';
 
 type CartItemProps = {
-  item: {
-    cart_item_id: number;
-    product: {
-      product_id: number;
-      name: string;
-      thumbnail_image_url: string;
-      price: number;
-    };
-    quantity: number;
-    start_date: string;
-  };
+  item: CartItem;
+  handlePaymentClick: (item: CartItem) => void;
 };
 
-const CartItemCard = ({ item }: CartItemProps) => {
+const CartItemCard = ({ item, handlePaymentClick }: CartItemProps) => {
   return (
     <div className={styles.cartItemWrapper}>
       <div className={styles.itemLayout}>
@@ -43,7 +35,12 @@ const CartItemCard = ({ item }: CartItemProps) => {
           </Button>
         </div>
         <div>
-          <Button className={`${styles.itemButton} ${styles.paymentButton}`}>결제</Button>
+          <Button
+            className={`${styles.itemButton} ${styles.paymentButton}`}
+            onClick={() => handlePaymentClick(item)}
+          >
+            결제
+          </Button>
         </div>
       </div>
     </div>
