@@ -38,15 +38,17 @@
 
     .title,
     .description {
+      width: 60%;
+      margin: auto;
       text-align: left;
     }
 
     .title {
-      width: 100%;
       line-height: 2rem;
     }
 
     .description {
+      margin-bottom: 1rem;
       font-size: small;
       line-height: 1.5rem;
     }
@@ -105,6 +107,8 @@
       }
 
       .buttonWrapper {
+        display: flex;
+        justify-content: flex-end;
         width: 50%;
         margin: auto;
 
