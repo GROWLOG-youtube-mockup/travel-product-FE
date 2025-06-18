@@ -49,8 +49,20 @@ const CartPage = () => {
     setCheckedItems((prev) => ({ ...prev, [id]: checked }));
   };
 
-  const handleDeleteClick = () => {
-    console.log(checkedItems);
+  const handleDeleteClick = async () => {
+    for (const id in checkedItems) {
+      if (checkedItems[id]) {
+        try {
+          const res = await fetch(`/cart/${id}`, {
+            method: 'DELETE'
+          });
+          if (!res.ok) throw new Error('삭제 실패');
+        } catch (err: any) {
+          console.error(err);
+          return;
+        }
+      }
+    }
   };
 
   return (
