@@ -10,8 +10,6 @@
 
 .box {
   position: relative;
-  width: 700px;
-  max-width: 700px;
   padding: 40px 0 60px; // 좌우 패딩 제거
   background: #ffffff;
   box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
@@ -50,8 +48,6 @@
 .container {
   position: relative;
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
 }
 
 .contentInner {
@@ -62,8 +58,7 @@
 }
 
 .header {
-  max-width: 520px;
-  margin: 0 auto;
+  padding: 0 90px;
   text-align: left;
 }
 
@@ -73,8 +68,6 @@
 }
 
 .headerWrapper {
-  max-width: 600px;
-  margin: 0 auto;
   padding: 20px 0;
 }
 

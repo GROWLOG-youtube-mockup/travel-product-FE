@@ -12,9 +12,17 @@ interface AgreementModalProps {
   title: string;
   subtitle?: string;
   fileUrl: string; // md 또는 txt 파일 경로
+  boxWidth?: number;
 }
 
-const AgreementModal = ({ open, onClose, title, subtitle, fileUrl }: AgreementModalProps) => {
+const AgreementModal = ({
+  open,
+  onClose,
+  title,
+  subtitle,
+  fileUrl,
+  boxWidth
+}: AgreementModalProps) => {
   const [content, setContent] = useState('');
 
   useEffect(() => {
@@ -28,10 +36,17 @@ const AgreementModal = ({ open, onClose, title, subtitle, fileUrl }: AgreementMo
   if (!open) return null;
 
   return (
-    <Modal onClose={onClose}>
-      <ModalHeader title={title} subtitle={subtitle} />
+    <Modal
+      onClose={onClose}
+      boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}
+    >
+      <div className={`${styles.headerWrapper} ${styles.agreementHeaderWrapper}`}>
+        <ModalHeader title={title} subtitle={subtitle} />
+      </div>
       <ModalCloseButton onClick={onClose} />
-      <div className={styles.agreementContent}>{content}</div>
+      <div className={styles.agreementContentWrapper}>
+        <div className={styles.agreementContent}>{content}</div>
+      </div>
     </Modal>
   );
 };
