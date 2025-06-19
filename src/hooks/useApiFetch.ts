@@ -8,15 +8,26 @@ export function useApiFetch() {
     async (input: RequestInfo, init?: RequestInit) => {
       try {
         const res = await fetch(input, init);
+
         if (!res.ok) {
-          // HTTP 상태코드가 비정상이면 /error/:status 로
-          navigate(`/error/${res.status}`);
-          throw new Error(`API error: ${res.status}`);
+          navigate(`/error/${res.status}`, { replace: true });
+
+          throw new Error(`API error: ${res.status} ${res.statusText}`);
         }
+
         return res;
       } catch (err) {
-        // 네트워크 에러 등 예기치 않은 경우
-        navigate('/error/500');
+        // fetch 자체가 실패한 경우 (네트워크 오류 등)
+        if (err instanceof TypeError) {
+          // 네트워크 오류
+          navigate('/error/503', { replace: true });
+        } else if (err instanceof Error && err.message.includes('API error')) {
+          // 이미 처리된 API 오류는 다시 throw
+          throw err;
+        } else {
+          // 기타 예기치 않은 오류
+          navigate('/error/500', { replace: true });
+        }
         throw err;
       }
     },
