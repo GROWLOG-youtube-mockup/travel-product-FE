@@ -30,6 +30,13 @@ export const userHandlers = [
         start_date: '2025-05-01',
         end_date: '2025-05-01',
         price: 55000
+      },
+      {
+        product_id: 102,
+        title: '강릉 당일치기 여행',
+        start_date: '2025-05-01',
+        end_date: '2025-05-01',
+        price: 55000
       }
     ]);
   }),
