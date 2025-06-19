@@ -91,6 +91,23 @@ const PaymentProcessPage = () => {
     widgets.setAmount(amount);
   }, [widgets, amount]);
 
+  const handleCreateOrder = () => {
+    fetch('/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error('주문 실패');
+        return res.json();
+      })
+      .then((data) => {
+        console.log('주문 생성:', data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.selectedPage}>
@@ -125,6 +142,7 @@ const PaymentProcessPage = () => {
                   try {
                     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
+                    handleCreateOrder();
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                     await widgets.requestPayment({
                       orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
