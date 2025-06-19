@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
@@ -7,10 +8,10 @@ import type { Order } from '../../type/order';
 import styles from './PaymentComplete.module.scss';
 
 const PaymentCompletePage = () => {
-  const selectedItem = useCartStore((state) => state.selectedItem);
+  const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
 
-  const { setSelectedItem } = useCartStore();
+  const { selectedItem, setSelectedItem, clearSelectedItem } = useCartStore();
 
   useEffect(() => {
     fetch('/orders')
@@ -47,6 +48,16 @@ const PaymentCompletePage = () => {
     return { ...order, order_date: new Date(order.order_date).toLocaleString() };
   }, [order]);
 
+  const handleMainButtonClick = () => {
+    navigate('/main');
+    clearSelectedItem();
+  };
+
+  const handleUserButtonClick = () => {
+    navigate('/user');
+    clearSelectedItem();
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -74,11 +85,11 @@ const PaymentCompletePage = () => {
         </div>
 
         <div className={styles.buttonWrapper}>
-          <Button>
+          <Button onClick={handleMainButtonClick}>
             <span>메인으로 돌아가기</span>
           </Button>
-          <Button>
-            <span>메인페이지에서 확인하기</span>
+          <Button onClick={handleUserButtonClick}>
+            <span>마이페이지에서 확인하기</span>
           </Button>
         </div>
       </div>
