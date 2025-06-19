@@ -41,7 +41,6 @@ const PaymentProcessPage = () => {
   }, []);
 
   useEffect(() => {
-    console.log(window.location.origin);
     async function fetchPaymentWidgets() {
       // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
