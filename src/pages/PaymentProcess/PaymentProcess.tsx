@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 import Button from '../../components/atoms/Button/Button';
+import type { User } from '../../type/user';
 
 import styles from './PaymentProcess.module.scss';
 
@@ -20,8 +21,24 @@ const PaymentProcessPage = () => {
     currency: 'KRW',
     value: 1
   });
+  const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/users/me');
+        if (!res.ok) throw new Error('네트워크 오류');
+        const data = await res.json();
+        setUserInfo(data);
+      } catch (err: any) {
+        console.error('사용자 정보를 가져오는 중 오류 발생:', err.message);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     console.log(window.location.origin);
@@ -113,9 +130,9 @@ const PaymentProcessPage = () => {
                       orderName: '토스 티셔츠 외 2건',
                       successUrl: window.location.origin + '/payment-complete',
                       failUrl: window.location.origin + '/payment-process',
-                      customerEmail: 'customer123@gmail.com',
-                      customerName: '김토스',
-                      customerMobilePhone: '01012341234'
+                      customerEmail: userInfo?.email,
+                      customerName: userInfo?.name,
+                      customerMobilePhone: userInfo?.phone_number
                     });
                   } catch (error) {
                     // 에러 처리하기
