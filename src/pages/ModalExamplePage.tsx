@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import AgreementModal from '../components/Modal/AgreementModal';
 import Modal from '../components/Modal/Modal';
 import ModalCloseButton from '../components/Modal/ModalCloseButton';
 import ModalHeader from '../components/Modal/ModalHeader';
@@ -13,6 +14,8 @@ type ModalType = null | 'delete' | 'signupView';
 
 const ModalExamplePage: React.FC = () => {
   const [modalType, setModalType] = useState<ModalType>(null);
+  const [isTermsOpen, setTermsOpen] = useState(false);
+  const [isRefundOpen, setRefundOpen] = useState(false);
   const openModal = (type: ModalType) => setModalType(type);
   const handleCloseModal = () => setModalType(null);
 
@@ -21,6 +24,8 @@ const ModalExamplePage: React.FC = () => {
       <h1>Modal Example Page</h1>
       <button onClick={() => openModal('delete')}>계정 탈퇴 모달</button>
       <button onClick={() => openModal('signupView')}>회원가입 조회 모달</button>
+      <button onClick={() => setTermsOpen(true)}>이용약관 보기</button>
+      <button onClick={() => setRefundOpen(true)}>취소/환불 규정 보기</button>
 
       {modalType === 'delete' && (
         <Modal onClose={handleCloseModal}>
@@ -42,6 +47,20 @@ const ModalExamplePage: React.FC = () => {
           </div>
         </Modal>
       )}
+      <AgreementModal
+        open={isTermsOpen}
+        onClose={() => setTermsOpen(false)}
+        title="이용약관"
+        subtitle="2025년 6월 기준"
+        fileUrl="/terms.md"
+      />
+      <AgreementModal
+        open={isRefundOpen}
+        onClose={() => setRefundOpen(false)}
+        title="취소/환불 규정"
+        subtitle="2025년 6월 기준"
+        fileUrl="/refund-policy.md"
+      />
     </div>
   );
 };
