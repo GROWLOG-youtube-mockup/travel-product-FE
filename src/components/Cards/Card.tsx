@@ -10,7 +10,7 @@ const Card = ({ styleName, image, title, price }: CardProps) => {
       </div>
       <div className={styles['cardContent']}>
         <span className={styles['cardTitle']}>{title}</span>
-        <p className={styles['cardPrice']}>₩{price}</p>
+        <p className={styles['cardPrice']}>₩{price.toLocaleString()}</p>
       </div>
     </div>
   );
