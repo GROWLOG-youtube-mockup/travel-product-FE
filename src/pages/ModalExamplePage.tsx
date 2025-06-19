@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 import AgreementModal from '../components/Modals/AgreementModal';
-import DeleteAccountModal from '../components/Modals/DeleteAccountModal';
-import SignupAccountModal from '../components/Modals/SignupAccountModal';
+import GenericModal from '../components/Modals/GenericModal';
 
 const ModalExamplePage: React.FC = () => {
   const [isTermsOpen, setTermsOpen] = useState(false);
@@ -18,8 +17,23 @@ const ModalExamplePage: React.FC = () => {
       <button onClick={() => setTermsOpen(true)}>이용약관 보기</button>
       <button onClick={() => setRefundOpen(true)}>취소/환불 규정 보기</button>
 
-      <DeleteAccountModal open={isDeleteOpen} onClose={() => setDeleteOpen(false)} />
-      <SignupAccountModal open={isSignupViewOpen} onClose={() => setSignupViewOpen(false)} />
+      <GenericModal
+        open={isDeleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        title="계정 탈퇴"
+        subtitle="계정 탈퇴 시 모든 정보가 삭제됩니다."
+      >
+        <div>계정 탈퇴 폼</div>
+      </GenericModal>
+
+      <GenericModal
+        open={isSignupViewOpen}
+        onClose={() => setSignupViewOpen(false)}
+        title="계정 조회 결과"
+        subtitle="가입된 계정 정보를 확인하세요."
+      >
+        <div>계정 조회 결과</div>
+      </GenericModal>
 
       <AgreementModal
         open={isTermsOpen}
