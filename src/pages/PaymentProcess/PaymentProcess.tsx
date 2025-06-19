@@ -14,14 +14,14 @@ declare global {
   }
 }
 
-const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-const customerKey = 'llXWcfOW-4tEH31eNrv69';
+const clientKey = import.meta.env.VITE_CLIENT_KEY;
+const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
   const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: 1
+    value: 500000
   });
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
