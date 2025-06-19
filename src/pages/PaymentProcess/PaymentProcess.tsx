@@ -18,12 +18,13 @@ const customerKey = 'llXWcfOW-4tEH31eNrv69';
 const PaymentProcessPage = () => {
   const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: 50000
+    value: 1
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
 
   useEffect(() => {
+    console.log(window.location.origin);
     async function fetchPaymentWidgets() {
       // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
@@ -110,8 +111,8 @@ const PaymentProcessPage = () => {
                     await widgets.requestPayment({
                       orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
                       orderName: '토스 티셔츠 외 2건',
-                      successUrl: window.location.origin + '/success',
-                      failUrl: window.location.origin + '/fail',
+                      successUrl: window.location.origin + '/payment-complete',
+                      failUrl: window.location.origin + '/payment-process',
                       customerEmail: 'customer123@gmail.com',
                       customerName: '김토스',
                       customerMobilePhone: '01012341234'
