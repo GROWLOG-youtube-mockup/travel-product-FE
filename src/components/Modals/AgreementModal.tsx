@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
 
-import Modal from './Modal';
-import ModalHeader from './ModalHeader';
+import Modal from '../Modal/Modal';
+import ModalCloseButton from '../Modal/ModalCloseButton';
+import ModalHeader from '../Modal/ModalHeader';
+
+import styles from '../Modal/Modal.module.scss';
 
 interface AgreementModalProps {
   open: boolean;
@@ -27,7 +30,8 @@ const AgreementModal = ({ open, onClose, title, subtitle, fileUrl }: AgreementMo
   return (
     <Modal onClose={onClose}>
       <ModalHeader title={title} subtitle={subtitle} />
-      <div style={{ maxHeight: 400, overflowY: 'auto', whiteSpace: 'pre-line' }}>{content}</div>
+      <ModalCloseButton onClick={onClose} />
+      <div className={styles.agreementContent}>{content}</div>
     </Modal>
   );
 };

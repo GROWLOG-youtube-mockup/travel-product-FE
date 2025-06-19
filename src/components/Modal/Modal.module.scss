@@ -12,7 +12,7 @@
   position: relative;
   width: 700px;
   max-width: 700px;
-  padding: 60px 0; // 좌우 패딩 제거
+  padding: 40px 0 60px; // 좌우 패딩 제거
   background: #ffffff;
   box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
   border-radius: 16px;
@@ -64,6 +64,22 @@
 .header {
   max-width: 500px;
   margin: 0 auto;
-  padding: 20px 0;
   text-align: left;
+}
+
+.headerWrapper {
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 40px;
+  padding: 20px 0;
+  border-bottom: 2px solid #cdcdcd;
+}
+
+.agreementContent {
+  width: 500px;
+  max-height: 600px;
+  padding: 0 50px 0 100px;
+  text-align: left;
+  overflow-y: auto;
+  white-space: pre-line;
 }
