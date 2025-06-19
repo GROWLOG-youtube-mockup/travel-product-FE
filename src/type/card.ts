@@ -1,12 +1,10 @@
 export type CardProps = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
+  product_id: number;
   image: string;
   title: string;
   price: number;
-};
-
-export type CardSlideProps = {
-  cardList: CardProps[];
+  handleCardClick: (product_id: number) => void;
 };
 
 export type LocationCardProps = {
