@@ -51,22 +51,28 @@ const PaymentCompletePage = () => {
     <>
       <div className={styles.container}>
         <div className={styles.orderContent}>
-          <p>
-            <span>{selectedItem?.product.name} 결제가 완료되었습니다.</span>
-          </p>
-          <p>
-            <span>주문번호 #{order?.order_id}</span>
-          </p>
-
-          <span className={styles.line}></span>
-
-          <p>
-            <span>주문일시 {processedOrders?.order_date}</span>
-          </p>
-          <p>
-            <span>결제금액 ₩{processedOrders?.total_price.toLocaleString()}</span>
-          </p>
+          <dl className={styles.orderInfo}>
+            <div className={styles.infoRow}>
+              <dd>{selectedItem?.product.name} 결제가 완료되었습니다.</dd>
+            </div>
+            <div className={styles.infoRow}>
+              <dt>주문번호</dt>
+              <dd>#{order?.order_id}</dd>
+            </div>
+            <div className={styles.infoRow}>
+              <span className={styles.line}></span>
+            </div>
+            <div className={styles.infoRow}>
+              <dt>주문일시</dt>
+              <dd>{processedOrders?.order_date}</dd>
+            </div>
+            <div className={styles.infoRow}>
+              <dt>결제금액</dt>
+              <dd>₩{processedOrders?.total_price.toLocaleString()}</dd>
+            </div>
+          </dl>
         </div>
+
         <div className={styles.buttonWrapper}>
           <Button>
             <span>메인으로 돌아가기</span>
