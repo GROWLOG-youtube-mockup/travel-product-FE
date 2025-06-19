@@ -1,4 +1,4 @@
-import type { Trip } from '../../types/trip';
+import type { Trip } from '../../type/trip';
 
 import styles from './MyTripCard.module.scss';
 
@@ -6,15 +6,15 @@ const formatDate = (dateStr: string) =>
   dateStr ? `${dateStr.slice(0, 4)}년 ${dateStr.slice(5, 7)}월 ${dateStr.slice(8, 10)}일` : '-';
 
 const getTripDays = (start: string, end: string) => {
-  const startTime = new Date(start).getTime()
-  const endTime = new Date(end).getTime()
+  const startTime = new Date(start).getTime();
+  const endTime = new Date(end).getTime();
 
   if (isNaN(startTime) || isNaN(endTime)) {
     return '-';
   }
-  
+
   return Math.round((endTime - endTime) / (1000 * 60 * 60 * 24)) + 1;
-}
+};
 
 const MyTripCard = ({ trip }: { trip: Trip }) => {
   return (

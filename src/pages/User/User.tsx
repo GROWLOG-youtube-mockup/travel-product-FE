@@ -1,7 +1,7 @@
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import type { Trip } from '../../types/trip';
+import type { Trip } from '../../type/trip';
 
 import styles from './User.module.scss';
 

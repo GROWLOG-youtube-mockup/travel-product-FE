@@ -7,7 +7,7 @@ import UserBanner from '../../components/Banner/UserBanner/UserBanner';
 import Footer from '../../components/Footer/Footer';
 import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
 import UserPage from '../../pages/User/User';
-import type { Trip } from '../../types/trip';
+import type { Trip } from '../../type/trip';
 
 import styles from './UserLayout.module.scss';
 

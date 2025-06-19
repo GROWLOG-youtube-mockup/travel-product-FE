@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom';
+
 import Button from '../../atoms/Button/Button';
 
 import styles from './UserBanner.module.scss';
@@ -12,6 +14,7 @@ interface UserBannerProps {
 }
 
 const UserBanner = ({ tab, setTab, upcomingCount, pastCount }: UserBannerProps) => {
+  const navigate = useNavigate();
   const tabList = [
     { label: '예정된 여행', tab: 'upcoming', count: upcomingCount },
     { label: '다녀온 여행', tab: 'past', count: pastCount }
@@ -25,7 +28,9 @@ const UserBanner = ({ tab, setTab, upcomingCount, pastCount }: UserBannerProps) 
           <div className={styles.desc}>
             반갑습니다! 여기에 회원님의 정보를 확인하실 수 있습니다.
           </div>
-          <Button variant="xs">회원정보 수정</Button>
+          <Button variant="xs" onClick={() => navigate('/user-edit')}>
+            회원정보 수정
+          </Button>
         </div>
         <div className={styles.tabs}>
           {tabList.map(({ label, tab: t, count }) => (
