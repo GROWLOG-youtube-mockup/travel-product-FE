@@ -5,23 +5,22 @@ import DeleteAccountModal from '../components/Modals/DeleteAccountModal';
 import SignupAccountModal from '../components/Modals/SignupAccountModal';
 
 const ModalExamplePage: React.FC = () => {
-  const [modalType, setModalType] = useState<null | 'delete'>(null);
   const [isTermsOpen, setTermsOpen] = useState(false);
   const [isRefundOpen, setRefundOpen] = useState(false);
   const [isSignupViewOpen, setSignupViewOpen] = useState(false);
-  const openModal = (type: 'delete') => setModalType(type);
-  const handleCloseModal = () => setModalType(null);
+  const [isDeleteOpen, setDeleteOpen] = useState(false);
 
   return (
     <div>
       <h1>Modal Example Page</h1>
-      <button onClick={() => openModal('delete')}>계정 탈퇴 모달</button>
+      <button onClick={() => setDeleteOpen(true)}>계정 탈퇴 모달</button>
       <button onClick={() => setSignupViewOpen(true)}>회원가입 조회 모달</button>
       <button onClick={() => setTermsOpen(true)}>이용약관 보기</button>
       <button onClick={() => setRefundOpen(true)}>취소/환불 규정 보기</button>
 
-      <DeleteAccountModal open={modalType === 'delete'} onClose={handleCloseModal} />
+      <DeleteAccountModal open={isDeleteOpen} onClose={() => setDeleteOpen(false)} />
       <SignupAccountModal open={isSignupViewOpen} onClose={() => setSignupViewOpen(false)} />
+
       <AgreementModal
         open={isTermsOpen}
         onClose={() => setTermsOpen(false)}
