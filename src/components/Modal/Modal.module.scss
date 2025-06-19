@@ -62,24 +62,28 @@
 }
 
 .header {
-  max-width: 500px;
+  max-width: 520px;
   margin: 0 auto;
   text-align: left;
+}
+
+.subtitle {
+  padding-bottom: 10px;
+  white-space: pre-line;
 }
 
 .headerWrapper {
   max-width: 600px;
   margin: 0 auto;
-  margin-bottom: 40px;
   padding: 20px 0;
-  border-bottom: 2px solid #cdcdcd;
 }
 
 .agreementContent {
-  width: 500px;
   max-height: 600px;
-  padding: 0 50px 0 100px;
+  margin: 0 auto;
+  padding: 40px 90px 0;
   text-align: left;
+  border-top: 2px solid #cdcdcd;
   overflow-y: auto;
   white-space: pre-line;
 }
