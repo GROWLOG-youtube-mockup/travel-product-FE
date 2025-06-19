@@ -10,7 +10,6 @@ import styles from './PaymentComplete.module.scss';
 const PaymentCompletePage = () => {
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
-
   const { selectedItem, setSelectedItem, clearSelectedItem } = useCartStore();
 
   useEffect(() => {
