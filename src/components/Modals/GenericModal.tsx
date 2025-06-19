@@ -1,16 +1,7 @@
-import React from 'react';
-
+import type { GenericModalProps } from '../../type/modal';
 import Modal from '../Modal/Modal';
 import ModalCloseButton from '../Modal/ModalCloseButton';
 import ModalHeader from '../Modal/ModalHeader';
-
-interface GenericModalProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  subtitle?: string;
-  children: React.ReactNode;
-}
 
 const GenericModal = ({ open, onClose, title, subtitle, children }: GenericModalProps) => {
   if (!open) return null;

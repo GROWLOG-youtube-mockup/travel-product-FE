@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react';
 
+import type { AgreementModalProps } from '../../type/modal';
 import Modal from '../Modal/Modal';
 import ModalCloseButton from '../Modal/ModalCloseButton';
 import ModalHeader from '../Modal/ModalHeader';
 
 import styles from '../Modal/Modal.module.scss';
-
-interface AgreementModalProps {
-  open: boolean;
-  onClose: () => void;
-  title: string;
-  subtitle?: string;
-  fileUrl: string; // md 또는 txt 파일 경로
-  boxWidth?: number;
-}
 
 const AgreementModal = ({
   open,
@@ -40,13 +32,11 @@ const AgreementModal = ({
       onClose={onClose}
       boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}
     >
-      <div className={`${styles.headerWrapper} ${styles.agreementHeaderWrapper}`}>
+      <div className={styles.headerWrapper}>
         <ModalHeader title={title} subtitle={subtitle} />
       </div>
       <ModalCloseButton onClick={onClose} />
-      <div className={styles.agreementContentWrapper}>
-        <div className={styles.agreementContent}>{content}</div>
-      </div>
+      <div className={styles.agreementContent}>{content}</div>
     </Modal>
   );
 };
