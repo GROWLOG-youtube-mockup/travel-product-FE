@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
@@ -17,6 +18,7 @@ const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
 const customerKey = 'llXWcfOW-4tEH31eNrv69';
 
 const PaymentProcessPage = () => {
+  const navigate = useNavigate();
   const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
     value: 1
@@ -33,7 +35,7 @@ const PaymentProcessPage = () => {
         const data = await res.json();
         setUserInfo(data);
       } catch (err: any) {
-        console.error('사용자 정보를 가져오는 중 오류 발생:', err.message);
+        navigate('/error');
       }
     };
 
