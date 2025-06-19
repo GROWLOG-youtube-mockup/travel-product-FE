@@ -12,6 +12,34 @@ type ContentsTitleList = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
 };
 
+const contentsTitleList: ContentsTitleList[] = [
+  {
+    title: '내 마음대로 떠나는 여행 🗺️',
+    subtitle: '일정도 코스도 모두 자유롭게!',
+    styleName: 'longHeight'
+  },
+  {
+    title: '알차게 즐기는 패키지 🧳',
+    subtitle: '교통·숙소 걱정 없이 편하게 떠나세요!',
+    styleName: 'longWidth'
+  },
+  {
+    title: '여름 방학 특가 진행 중 🏖️',
+    subtitle: '방학 기간 한정, 지금 바로 예약하세요!',
+    styleName: 'normal'
+  },
+  {
+    title: '살아있는 역사 현장 🏛️',
+    subtitle: '우리 문화유산을 직접 경험해보세요!',
+    styleName: 'normal'
+  },
+  {
+    title: '짜릿한 순간, 액티비티 🤿',
+    subtitle: '지금 떠나면 모험이 기다립니다!',
+    styleName: 'normal'
+  }
+];
+
 const MainPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
@@ -62,20 +90,6 @@ const MainPage = () => {
       title: '제주도',
       image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg'
     }
-  ];
-  const contentsTitleList: ContentsTitleList[] = [
-    {
-      title: '인기 여행',
-      subtitle: '다른 여행객들이 많이 찾는 인기 여행 상품',
-      styleName: 'longHeight'
-    },
-    { title: '일찍 준비하는 여름휴가', subtitle: '오늘부터 준비!', styleName: 'longWidth' },
-    {
-      title: '지금이 딱 예약할 때!',
-      subtitle: '선착순 타임특가부터 다양한 헤택',
-      styleName: 'normal'
-    },
-    { title: '마감 임박', subtitle: '곧 예약 마감됩니다!', styleName: 'normal' }
   ];
 
   const handleCardClick = (product_id: number) => {
