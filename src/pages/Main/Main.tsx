@@ -4,6 +4,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import CardSlide from '../../components/Cards/CardSlide';
 import LocationCardList from '../../components/Cards/LocationCardList';
 import type { Product } from '../../type/product';
+import type { Region } from '../../type/region';
 
 import styles from './Main.module.scss';
 
@@ -82,6 +83,7 @@ const locationTitle = '한국 추천 여행지';
 
 const MainPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,6 +96,22 @@ const MainPage = () => {
       })
       .then((data) => {
         setProducts(data);
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch('/regions')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRegions(data);
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
