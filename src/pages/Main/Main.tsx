@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import LocationCardList from '../../components/Cards/LocationCardList';
@@ -42,6 +43,7 @@ const contentsTitleList: ContentsTitleList[] = [
 
 const MainPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('/products')
@@ -100,8 +102,12 @@ const MainPage = () => {
   ];
 
   const handleLocationCardClick = (regionId: number) => {
-    // 예: 상세 페이지 이동
-    console.log('위치 카드 클릭:', regionId);
+    navigate({
+      pathname: '/product',
+      search: createSearchParams({
+        regionId: regionId.toString()
+      }).toString()
+    });
   };
 
   const handleCardClick = (product_id: number) => {
