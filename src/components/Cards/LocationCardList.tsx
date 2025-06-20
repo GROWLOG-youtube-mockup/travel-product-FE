@@ -1,13 +1,11 @@
+import type { LocationItem } from '../../type/card';
+
 import LocationCard from './LocationCard';
 
 import styles from './LocationCardList.module.scss';
 
 type LocationCardListProps = {
-  locationCardList: {
-    image: string;
-    title: string;
-    regionId: number;
-  }[];
+  locationCardList: LocationItem[];
   handleLocationCardClick: (regionId: number) => void;
 };
 
