@@ -10,8 +10,6 @@ export type CardProps = {
 export type LocationCardProps = {
   image: string;
   title: string;
-};
-
-export type LocationCardListProps = {
-  LocationCardList: LocationCardProps[];
+  regionId: number;
+  handleLocationCardClick: (regionId: number) => void;
 };
