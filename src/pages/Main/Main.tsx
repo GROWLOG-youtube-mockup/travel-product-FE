@@ -92,6 +92,11 @@ const MainPage = () => {
     }
   ];
 
+  const handleLocationCardClick = (location: string) => {
+    // 예: 상세 페이지 이동
+    console.log('위치 카드 클릭:', location);
+  };
+
   const handleCardClick = (product_id: number) => {
     // 예: 상세 페이지 이동
     console.log('카드 클릭:', product_id);
@@ -103,7 +108,10 @@ const MainPage = () => {
         <div className={styles['title']}>
           <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
-        <LocationCardList LocationCardList={locationList} />
+        <LocationCardList
+          LocationCardList={locationList}
+          handleLocationCardClick={handleLocationCardClick}
+        />
       </section>
 
       {contentsTitleList.map((item, index) => (
