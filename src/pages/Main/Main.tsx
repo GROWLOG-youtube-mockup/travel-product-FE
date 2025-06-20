@@ -111,8 +111,7 @@ const MainPage = () => {
   };
 
   const handleCardClick = (product_id: number) => {
-    // 예: 상세 페이지 이동
-    console.log('카드 클릭:', product_id);
+    navigate(`/product/${product_id}`);
   };
 
   return (
