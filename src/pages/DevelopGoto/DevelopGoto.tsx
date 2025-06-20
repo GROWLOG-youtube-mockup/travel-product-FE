@@ -43,7 +43,7 @@ const sections: Section[] = [
   {
     title: '어드민',
     pages: [
-      { label: '관리자 페이지', path: '/admin' },
+      { label: '관리자 페이지', path: '/admin/products' },
       { label: '관리자 로그인', path: '/admin/login' }
     ]
   },

@@ -1,3 +1,4 @@
+// data/products.ts
 export const products = [
   {
     product_id: 102,
