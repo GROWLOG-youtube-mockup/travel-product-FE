@@ -7,13 +7,13 @@ import styles from './CheckoutLayout.module.scss';
 
 const CheckoutLayout = () => {
   return (
-    <>
+    <div className={styles.layout}>
       <DefaultHeader />
       <main className={styles.baseForm}>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
