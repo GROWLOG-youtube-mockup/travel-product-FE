@@ -50,8 +50,7 @@ const locationImages = [
   },
   {
     name: '경상남도',
-    image:
-      'https://sdmntprsouthcentralus.oaiusercontent.com/files/00000000-2898-61f7-8051-0b5bdb4941ff/raw?se=2025-06-20T03%3A47%3A09Z&sp=r&sv=2024-08-04&sr=b&scid=1854b46b-5eae-55a3-975e-c1f307e3aa86&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-20T02%3A16%3A41Z&ske=2025-06-21T02%3A16%3A41Z&sks=b&skv=2024-08-04&sig=iQbmNeo7OqZ8EZgGV%2BBJQQZtvX/p5FnhhwaAQhgoLF4%3D'
+    image: 'https://cdn.pixabay.com/photo/2017/01/14/07/35/sunflower-1978914_960_720.jpg'
   },
   {
     name: '경상북도',
