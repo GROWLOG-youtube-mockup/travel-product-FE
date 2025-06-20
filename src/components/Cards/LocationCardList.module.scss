@@ -1,7 +1,74 @@
-.cardSlide {
-  display: flex;
-  align-items: stretch;
-  justify-content: space-around;
-  flex-flow: row nowrap;
-  gap: 1rem;
+.cardSlideWrapper {
+  position: relative;
+
+  .arrowButton {
+    position: absolute;
+    bottom: 0;
+    width: 24px;
+    height: 100%;
+    border: none;
+    background: #00000018;
+    border-radius: 15px;
+
+    &:hover {
+      background: #00000030;
+    }
+
+    &.left {
+      left: 0;
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 1.5rem;
+        color: #ffffff80;
+        transform: translate(-50%, -50%);
+        content: '◀';
+      }
+    }
+
+    &.right {
+      right: 0;
+
+      &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 1.5rem;
+        color: #ffffff80;
+        transform: translate(-50%, -50%);
+        content: '▶';
+      }
+    }
+
+    &.hidden {
+      display: none;
+    }
+  }
+
+  .cardSlide {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+    gap: 1rem;
+    -ms-overflow-style: none; /* IE/Edge */
+    overflow: auto hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: none; /* Firefox */
+
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+      height: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgb(0 0 0 / 15%);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
+  }
 }
