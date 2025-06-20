@@ -64,37 +64,44 @@ const MainPage = () => {
     {
       title: '서울',
       image:
-        'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg'
+        'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg',
+      regionId: 1
     },
     {
       title: '경기・인천',
-      image: 'https://cdn.pixabay.com/photo/2018/05/15/23/02/football-stadium-3404535_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2018/05/15/23/02/football-stadium-3404535_1280.jpg',
+      regionId: 2
     },
     {
       title: '강원도',
-      image: 'https://cdn.pixabay.com/photo/2019/07/21/18/30/mountain-4353332_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2019/07/21/18/30/mountain-4353332_1280.jpg',
+      regionId: 3
     },
     {
       title: '충청도',
-      image: 'https://cdn.pixabay.com/photo/2020/06/17/11/39/taian-5309184_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2020/06/17/11/39/taian-5309184_1280.jpg',
+      regionId: 4
     },
     {
       title: '전라도',
-      image: 'https://cdn.pixabay.com/photo/2020/09/02/04/16/image-5537275_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2020/09/02/04/16/image-5537275_1280.jpg',
+      regionId: 5
     },
     {
       title: '경상도',
-      image: 'https://cdn.pixabay.com/photo/2022/08/09/12/10/wolyeong-bridge-7374859_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2022/08/09/12/10/wolyeong-bridge-7374859_1280.jpg',
+      regionId: 6
     },
     {
       title: '제주도',
-      image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg'
+      image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg',
+      regionId: 7
     }
   ];
 
-  const handleLocationCardClick = (location: string) => {
+  const handleLocationCardClick = (regionId: number) => {
     // 예: 상세 페이지 이동
-    console.log('위치 카드 클릭:', location);
+    console.log('위치 카드 클릭:', regionId);
   };
 
   const handleCardClick = (product_id: number) => {
@@ -109,7 +116,7 @@ const MainPage = () => {
           <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
         <LocationCardList
-          LocationCardList={locationList}
+          locationCardList={locationList}
           handleLocationCardClick={handleLocationCardClick}
         />
       </section>
