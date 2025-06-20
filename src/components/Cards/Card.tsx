@@ -12,6 +12,7 @@ type CardProps = {
 const Card = ({ styleName, product_id, image, title, price, handleCardClick }: CardProps) => {
   return (
     <div
+      role="button"
       className={`${styles.card} ${styles[`${styleName ?? 'normal'}`]}`}
       onClick={() => handleCardClick(product_id)}
     >
