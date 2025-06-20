@@ -1,14 +1,27 @@
-import type { LocationCardListProps, LocationCardProps } from '../../type/card';
-
 import LocationCard from './LocationCard';
 
 import styles from './LocationCardList.module.scss';
 
-const LocationCardList = ({ LocationCardList }: LocationCardListProps) => {
+type LocationCardListProps = {
+  locationCardList: {
+    image: string;
+    title: string;
+    regionId: number;
+  }[];
+  handleLocationCardClick: (regionId: number) => void;
+};
+
+const LocationCardList = ({ locationCardList, handleLocationCardClick }: LocationCardListProps) => {
   return (
     <div className={styles['cardSlide']}>
-      {LocationCardList.map((card: LocationCardProps) => (
-        <LocationCard key={card.title} image={card.image} title={card.title} />
+      {locationCardList.map((card) => (
+        <LocationCard
+          key={card.regionId}
+          image={card.image}
+          title={card.title}
+          regionId={card.regionId}
+          handleLocationCardClick={handleLocationCardClick}
+        />
       ))}
     </div>
   );
