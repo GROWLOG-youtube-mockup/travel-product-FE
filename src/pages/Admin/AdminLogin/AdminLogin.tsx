@@ -1,5 +1,5 @@
-import LoginForm from '../../components/LoginForm/LoginForm';
-import type { UserInformation } from '../../type/login';
+import type { UserInformation } from '../../..//type/login';
+import LoginForm from '../../../components/LoginForm/LoginForm';
 
 import styles from './AdminLogin.module.scss';
 const AdminLoginPage = () => {
