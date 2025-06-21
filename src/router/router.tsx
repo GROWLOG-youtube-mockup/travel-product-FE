@@ -10,6 +10,7 @@ import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
 import FindAccountLayout from '../layouts/FindAccountLayout/FindAccountLayout';
 import UserEditLayout from '../layouts/UserEditLayout/UserEditLayout';
 import UserLayout from '../layouts/UserLayout/UserLayout';
+import ErrorPage from '../pages//Error/Error';
 import AdminAdminsPage from '../pages/Admin/AdminAdmins/AdminAdmins';
 import AdminLoginPage from '../pages/Admin/AdminLogin/AdminLogin';
 import AdminLogsPage from '../pages/Admin/AdminLogs/AdminLogs';
@@ -21,7 +22,6 @@ import CancelConfirmPage from '../pages/CancelConfirm/CancelConfirm';
 import CancelProgressPage from '../pages/CancelProgress/CancelProgress';
 import CartPage from '../pages/Cart/Cart';
 import DevelopGoto from '../pages/DevelopGoto/DevelopGoto';
-import ErrorPage from '../pages/Error/Error';
 import FindAccountPage from '../pages/FindAccount/FindAccount';
 import JoinMembershipPage from '../pages/JoinMembership/JoinMembership';
 import LoginPage from '../pages/Login/Login';
@@ -224,6 +224,10 @@ const routes: AppRouteObject[] = [
             element: <FindAccountPage />
           }
         ]
+      },
+      {
+        path: 'error/:status',
+        element: <ErrorPage />
       },
 
       {
