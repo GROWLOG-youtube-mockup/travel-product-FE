@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 import Button from '../../components/atoms/Button/Button';
+import { useCartStore } from '../../store/CartStore';
 import type { User } from '../../type/user';
 
 import styles from './PaymentProcess.module.scss';
@@ -19,9 +20,10 @@ const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
+  const { selectedItem } = useCartStore((state) => state);
   const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: 500000
+    value: selectedItem?.product.price || 0
   });
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
