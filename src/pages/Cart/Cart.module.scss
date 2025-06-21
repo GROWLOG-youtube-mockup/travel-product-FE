@@ -1,3 +1,25 @@
 .container {
-  background-color: pink;
+  // background-color: #c8c8c8;
+
+  .selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 15px;
+    flex-flow: row nowrap;
+
+    .deleteButton {
+      height: fit-content;
+      border: 1px solid #d5dade;
+      font-weight: normal;
+      line-height: 1.8rem;
+
+      // font-size: normal;
+      color: #444444;
+      border-radius: 5px;
+    }
+  }
 }

@@ -1,3 +1,4 @@
+// data/products.ts
 export const products = [
   {
     product_id: 101,
@@ -18,7 +19,7 @@ export const products = [
       level: 2,
       parentId: 5
     },
-    description: '단양 8경 투어',
+    description: '호주 시드니 5일 여행',
     total_quantity: 20,
     descriptionGroups: [
       {
@@ -43,5 +44,58 @@ export const products = [
     ],
     created_at: '2025-06-01T00:00:00Z',
     updated_at: '2025-06-04T23:00:00Z'
+  },
+  {
+    product_id: 102,
+    name: '제주도 3박 4일 패키지',
+    imageUrls: ['https://cdn.example.com/jeju1.jpg', 'https://cdn.example.com/jeju2.jpg'],
+    price: 800000,
+    stock_quantity: 30,
+    duration: 4,
+    sale_status: 1,
+    type: 1,
+    region: {
+      regionId: 3,
+      name: '제주도',
+      level: 1,
+      parentId: null
+    },
+    description: '아름다운 제주도에서의 힐링 여행',
+    total_quantity: 50,
+    descriptionGroups: [
+      {
+        title: '포함사항',
+        type: 0,
+        items: [{ content: '왕복 항공권' }, { content: '호텔 3박' }]
+      },
+      {
+        title: '불포함사항',
+        type: 1,
+        items: [{ content: '여행자 보험' }]
+      }
+    ],
+    created_at: '2025-06-05T11:00:00Z',
+    updated_at: '2025-06-06T09:00:00Z'
+  },
+  {
+    product_id: 103,
+    name: '부산 해운대 투어',
+    imageUrls: ['https://cdn.example.com/busan1.jpg'],
+    price: 400000,
+    stock_quantity: 5,
+    duration: 2,
+    sale_status: 0,
+    type: 0,
+    region: {
+      regionId: 8,
+      name: '부산',
+      level: 1,
+      parentId: null
+    },
+    description: '부산 해운대와 맛집 투어',
+    total_quantity: 10,
+    descriptionGroups: [],
+    created_at: '2025-05-15T10:00:00Z',
+    updated_at: '2025-05-18T10:00:00Z'
   }
 ];

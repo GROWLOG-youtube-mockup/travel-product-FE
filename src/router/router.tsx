@@ -10,8 +10,12 @@ import DefaultLayout from '../layouts/DefaultLayout/DefaultLayout';
 import FindAccountLayout from '../layouts/FindAccountLayout/FindAccountLayout';
 import UserEditLayout from '../layouts/UserEditLayout/UserEditLayout';
 import UserLayout from '../layouts/UserLayout/UserLayout';
-import Admin from '../pages/Admin/Admin';
-import AdminLoginPage from '../pages/AdminLogin/AdminLogin';
+import AdminAdminsPage from '../pages/Admin/AdminAdmins/AdminAdmins';
+import AdminLoginPage from '../pages/Admin/AdminLogin/AdminLogin';
+import AdminLogsPage from '../pages/Admin/AdminLogs/AdminLogs';
+import AdminOrdersPage from '../pages/Admin/AdminOrders/AdminOrders';
+import AdminProductsPage from '../pages/Admin/AdminProducts/AdminProducts';
+import AdminUsersPage from '../pages/Admin/AdminUsers/AdminUsers';
 import CancelCompletePage from '../pages/CancelComplete/CancelComplete';
 import CancelConfirmPage from '../pages/CancelConfirm/CancelConfirm';
 import CancelProgressPage from '../pages/CancelProgress/CancelProgress';
@@ -169,12 +173,29 @@ const routes: AppRouteObject[] = [
       },
       {
         element: <AdminLayout />, // 관리자용 레이아웃
+        // requiredRole: 'ADMIN',
         children: [
           {
-            path: 'admin',
-            element: <Admin />
+            path: 'admin/admins',
+            element: <AdminAdminsPage />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'ADMIN'
+            // requiredRole: 'SUPER_ADMIN'
+          },
+          {
+            path: 'admin/logs',
+            element: <AdminLogsPage />
+          },
+          {
+            path: 'admin/orders',
+            element: <AdminOrdersPage />
+          },
+          {
+            path: 'admin/products',
+            element: <AdminProductsPage />
+          },
+          {
+            path: 'admin/users',
+            element: <AdminUsersPage />
           },
           {
             path: 'admin/login',
