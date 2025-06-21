@@ -22,7 +22,7 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
   return (
     <form className={styles['loginForm']} onSubmit={handleSubmit}>
       <label className={styles['emailLabel']} htmlFor="username">
-        Email
+        이메일
       </label>
       <Input
         type="email"
