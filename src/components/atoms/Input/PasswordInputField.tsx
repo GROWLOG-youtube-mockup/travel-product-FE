@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import type { PasswordInputFieldProps } from '../../type/PasswordInputField.types';
+
 import PasswordInput from './PasswordInput';
 
 import styles from './PasswordInput.module.scss';
@@ -11,12 +13,6 @@ const defaultValidate = (pw: string) => {
   if (!/[!@#$%^&*]/.test(pw)) return '특수문자를 포함하세요.';
   return undefined;
 };
-
-interface PasswordInputFieldProps {
-  value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  [key: string]: unknown;
-}
 
 const PasswordInputField: React.FC<PasswordInputFieldProps> = ({ value, onChange, ...rest }) => {
   const [touched, setTouched] = useState(false);
