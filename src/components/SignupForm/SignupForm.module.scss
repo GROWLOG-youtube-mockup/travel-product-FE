@@ -1,0 +1,19 @@
+.flexRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.spacer {
+  height: 16px;
+}
+
+.disabledInput {
+  color: #aaaaaa !important;
+  background: #f5f5f5 !important;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: 16px;
+}
