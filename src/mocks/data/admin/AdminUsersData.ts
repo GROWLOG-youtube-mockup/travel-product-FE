@@ -1,5 +1,6 @@
 // data/admins.ts
-export const admins = [
+
+export const AdminUsersData = [
   {
     user_id: 2,
     name: '관리자1',
