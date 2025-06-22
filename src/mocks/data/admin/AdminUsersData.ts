@@ -1,5 +1,3 @@
-// data/admins.ts
-
 export const AdminUsersData = [
   {
     user_id: 2,
