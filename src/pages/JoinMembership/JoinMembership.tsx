@@ -1,6 +1,5 @@
-import JoinMembershipForm, {
-  JoinMembershipFormValues
-} from '../../components/JoinMembershipForm/JoinMembershipForm';
+import JoinMembershipForm from '../../components/JoinMembershipForm/JoinMembershipForm';
+import type { JoinMembershipFormValues } from '../../type/joinMembership';
 
 import styles from './JoinMembership.module.scss';
 

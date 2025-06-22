@@ -44,7 +44,7 @@ const JoinMembershipForm = ({ onSubmit }: JoinMembershipFormProps) => {
         id="name"
         name="name"
         placeholder="본 서비스에 사용하실 이름을 입력해주세요 (건별 찾기시 사용됩니다)"
-        variant="short"
+        variant="long"
         value={form.name}
         onChange={handleChange}
       />
@@ -54,25 +54,10 @@ const JoinMembershipForm = ({ onSubmit }: JoinMembershipFormProps) => {
           id="phone"
           name="phone"
           placeholder="본 서비스에 사용하실 전화번호를 입력해주세요"
-          variant="short"
+          variant="long"
           value={form.phone}
           onChange={handleChange}
         />
-        <Button type="button" variant="account">
-          인증번호 받기
-        </Button>
-      </div>
-      <div className={styles.flexRow}>
-        <Input
-          name="phoneCode"
-          placeholder="인증번호를 입력하세요"
-          variant="short"
-          value={form.phoneCode}
-          onChange={handleChange}
-        />
-        <Button type="button" variant="account">
-          인증번호 확인
-        </Button>
       </div>
       <Label htmlFor="email">이메일</Label>
       <div className={styles.flexRow}>
@@ -117,7 +102,7 @@ const JoinMembershipForm = ({ onSubmit }: JoinMembershipFormProps) => {
         value={form.passwordCheck}
         onChange={handleChange}
       />
-      <Button type="submit" variant="default" className={styles.submitBtn}>
+      <Button type="submit" className={styles.submitBtn}>
         계정 생성하기
       </Button>
     </form>
