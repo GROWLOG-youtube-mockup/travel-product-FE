@@ -1,4 +1,4 @@
-import JoinMembershipForm from '../../components/JoinMembershipForm/JoinMembershipForm';
+import SignupForm from '../../components/SignupForm/SignupForm';
 import type { JoinMembershipFormValues } from '../../type/joinMembership';
 
 import styles from './JoinMembership.module.scss';
@@ -27,7 +27,7 @@ const JoinMembershipPage = () => {
         <div className={styles.subtitle}>
           <span>새로운 계정을 생성합니다</span>
         </div>
-        <JoinMembershipForm onSubmit={handleSubmit} />
+        <SignupForm onSubmit={handleSubmit} />
         <div className={styles.footer}>
           <span>로그인 | 아이디/비밀번호 찾기</span>
         </div>
