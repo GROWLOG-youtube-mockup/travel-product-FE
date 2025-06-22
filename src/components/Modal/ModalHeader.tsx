@@ -9,10 +9,12 @@ interface ModalHeaderProps {
 }
 
 const ModalHeader: React.FC<ModalHeaderProps> = ({ title, subtitle, children }) => (
-  <div className={styles.header}>
-    {title && <div className={styles.title}>{title}</div>}
-    {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
-    {children}
+  <div className={styles.headerWrapper}>
+    <div className={styles.header}>
+      {title && <div className={styles.title}>{title}</div>}
+      {subtitle && <div className={styles.subtitle}>{subtitle}</div>}
+      {children}
+    </div>
   </div>
 );
 
