@@ -7,8 +7,16 @@ import styles from './JoinMembership.module.scss';
 const JoinMembershipPage = () => {
   // 회원가입 폼 제출 핸들러
   const handleSubmit = (form: JoinMembershipFormValues) => {
+    // 서버에 제출할 데이터만 추출
+    const payload = {
+      name: form.name,
+      phoneNumber: form.phone,
+      email: form.email,
+      password: form.password
+    };
     // TODO: 회원가입 API 연동
-    console.log('회원가입 시도:', form);
+    console.log('회원가입 제출 payload:', payload);
+    // 예시: fetch('/users/signup', { method: 'POST', body: JSON.stringify(payload) })
   };
 
   return (
