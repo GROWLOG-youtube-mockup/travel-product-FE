@@ -55,7 +55,7 @@ const ProductPage = () => {
       <div className={styles.titleArea}>
         <div className={styles.title}>
           <Label style={{ fontWeight: 700 }}>지역명 상품 전체</Label>
-          <Label style={{ fontWeight: 700 }}>{products.length}개의 상품이 있어요</Label>
+          <Label style={{ fontWeight: 700 }}>{filteredProducts.length}개의 상품이 있어요</Label>
         </div>
       </div>
 
