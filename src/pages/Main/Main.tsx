@@ -105,11 +105,11 @@ const MainPage = () => {
     }, []);
   }, [regions]);
 
-  const handleRegionCardClick = (regionId: number) => {
+  const handleRegionCardClick = (item: RegionItem) => {
     navigate({
       pathname: '/product',
       search: createSearchParams({
-        regionId: regionId.toString()
+        regionId: item.regionId.toString()
       }).toString()
     });
   };

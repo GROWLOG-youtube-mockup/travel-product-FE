@@ -7,7 +7,7 @@ const RegionCard = ({ image, title, regionId, handleRegionCardClick }: RegionCar
     <div
       className={styles['RegionCard']}
       role="button"
-      onClick={() => handleRegionCardClick(regionId)}
+      onClick={() => handleRegionCardClick({ image, title, regionId })}
     >
       <img className={styles['cardImage']} src={image} alt="" />
       <div className={styles['content']}>

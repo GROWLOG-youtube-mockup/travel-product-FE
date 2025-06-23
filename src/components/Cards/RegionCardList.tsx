@@ -8,7 +8,7 @@ import styles from './RegionCardList.module.scss';
 
 type RegionCardListProps = {
   RegionCardList: RegionItem[];
-  handleRegionCardClick: (regionId: number) => void;
+  handleRegionCardClick: (item: RegionItem) => void;
 };
 
 const RegionCardList = ({ RegionCardList, handleRegionCardClick }: RegionCardListProps) => {
