@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import imageLinks from '@/constants/imageLinks';
+import { useRegionStore } from '@/store/RegionStore';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
@@ -50,6 +51,7 @@ const MainPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [regions, setRegions] = useState<Region[]>([]);
   const navigate = useNavigate();
+  const { setSelectedRegion, setRegionList } = useRegionStore();
 
   useEffect(() => {
     fetch('/products')
@@ -106,6 +108,9 @@ const MainPage = () => {
   }, [regions]);
 
   const handleRegionCardClick = (item: RegionItem) => {
+    setSelectedRegion(item);
+    setRegionList(regionList);
+
     navigate({
       pathname: '/product',
       search: createSearchParams({

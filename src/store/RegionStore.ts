@@ -8,6 +8,7 @@ interface RegionStore {
   setSelectedRegion: (item: RegionItem) => void;
   setRegionList: (regionList: RegionItem[]) => void;
   clearSelectedRegion: () => void;
+  clearRegionList: () => void;
 }
 
 export const useRegionStore = create<RegionStore>((set) => ({
@@ -15,5 +16,6 @@ export const useRegionStore = create<RegionStore>((set) => ({
   regionList: [],
   setSelectedRegion: (item) => set({ selectedRegion: item }),
   setRegionList: (regionList) => set({ regionList: regionList }),
-  clearSelectedRegion: () => set({ selectedRegion: null })
+  clearSelectedRegion: () => set({ selectedRegion: null }),
+  clearRegionList: () => set({ regionList: [] })
 }));
