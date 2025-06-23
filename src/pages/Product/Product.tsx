@@ -10,8 +10,8 @@ import styles from './Product.module.scss';
 
 const categories = [
   { key: 'best', label: 'Best 추천 👍' },
-  { key: 'reserve', label: '예약폭주🔥' },
-  { key: 'like', label: '좋아요😍' },
+  { key: 'reserve', label: '예약폭주 🎉' },
+  { key: 'like', label: '좋아요 😘' },
   { key: 'mdpick', label: 'MD Pick ✨' },
   { key: 'last', label: '마감임박⏰' }
 ];
@@ -60,6 +60,9 @@ const ProductPage = () => {
       </div>
 
       <div className={styles.categoryBar}>
+        <button className={styles.button} onClick={() => setActiveCategory(null)}>
+          전체보기
+        </button>
         {categories.map((cat) => {
           // prettier-ignore
           const buttonClass = styles.button + (activeCategory === cat.key ? ' ' + styles.buttonActive : '');
