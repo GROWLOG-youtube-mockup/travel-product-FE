@@ -44,6 +44,7 @@ export const SIGNUP_ERROR_MSG = {
 export function useSignupForm(initialForm: SignupValues, onSubmit: (values: SignupValues) => void) {
   const [form, setForm] = useState<SignupValues>(initialForm);
   const [error, setError] = useState<SignupFormError>({});
+  const [info, setInfo] = useState<string>('');
   const [emailSent, setEmailSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
 
@@ -69,17 +70,37 @@ export function useSignupForm(initialForm: SignupValues, onSubmit: (values: Sign
     }
   }
 
-  function handleSendEmailCode() {
+  async function handleSendEmailCode() {
     if (!form.email) {
       setError((prev) => ({ ...prev, email: SIGNUP_ERROR_MSG.email }));
+      setInfo('');
       return;
     }
     if (!isValidEmail(form.email)) {
       setError((prev) => ({ ...prev, email: SIGNUP_ERROR_MSG.emailFormat }));
+      setInfo('');
       return;
     }
-    setEmailSent(true);
     setError((prev) => ({ ...prev, email: undefined }));
+    setInfo('');
+    setEmailSent(false);
+    try {
+      const res = await fetch('/auth/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: form.email })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setEmailSent(true);
+        setInfo('인증번호가 전송되었습니다. 메일을 확인해주세요.');
+      } else {
+        throw new Error();
+      }
+    } catch {
+      setError((prev) => ({ ...prev, email: '서버 문제입니다. 나중에 다시 시도해주세요.' }));
+      setInfo('');
+    }
   }
 
   function handleVerifyEmailCode() {
@@ -130,6 +151,7 @@ export function useSignupForm(initialForm: SignupValues, onSubmit: (values: Sign
   return {
     form,
     error,
+    info,
     emailSent,
     emailVerified,
     handleChange,

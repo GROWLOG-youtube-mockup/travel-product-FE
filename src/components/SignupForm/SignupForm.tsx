@@ -15,6 +15,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
   const {
     form,
     error,
+    info,
     emailSent,
     emailVerified,
     handleChange,
@@ -69,6 +70,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         </Button>
       </div>
       {error.email && <div className={styles.errorMessage}>{error.email}</div>}
+      {info && <div className={styles.infoMessage}>{info}</div>}
       <div className={styles.flexRow}>
         <Input
           name="emailCode"
@@ -97,7 +99,6 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         id="password"
         name="password"
         placeholder="본 서비스에 사용하실 비밀번호를 입력해주세요"
-        disabled={emailVerified}
         variant="long"
       />
       <div className={styles.spacer} />
