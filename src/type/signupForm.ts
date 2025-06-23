@@ -59,103 +59,72 @@ export function useSignupForm(initialForm: SignupValues, onSubmit: (values: Sign
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    switch (name) {
-      case 'password':
-        setForm((prev) => ({ ...prev, password: value, passwordCheck: '' }));
-        break;
-      case 'email':
-        setForm((prev) => ({ ...prev, email: value, emailCode: '' }));
-        setEmailSent(false);
-        setEmailVerified(false);
-        setError((prev) => ({ ...prev, emailAuth: undefined }));
-        break;
-      default:
-        setForm((prev) => ({ ...prev, [name]: value }));
-    }
+    setForm((prev) => ({ ...prev, [name]: value }));
     clearFieldError(name);
+    if (name === 'email') {
+      setEmailSent(false);
+      setEmailVerified(false);
+      setForm((prev) => ({ ...prev, emailCode: '' }));
+      setError((prev) => ({ ...prev, emailAuth: undefined }));
+    }
   }
 
-  async function handleSendEmailCode() {
-    setError((prev) => ({ ...prev, emailAuth: undefined }));
+  function handleSendEmailCode() {
     if (!form.email) {
-      setError((prev) => ({ ...prev, emailAuth: SIGNUP_ERROR_MSG.email }));
+      setError((prev) => ({ ...prev, email: SIGNUP_ERROR_MSG.email }));
       return;
     }
     if (!isValidEmail(form.email)) {
-      setError((prev) => ({ ...prev, emailAuth: SIGNUP_ERROR_MSG.emailFormat }));
+      setError((prev) => ({ ...prev, email: SIGNUP_ERROR_MSG.emailFormat }));
       return;
     }
-    try {
-      const res = await fetch('/auth/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setEmailSent(true);
-      } else {
-        setError((prev) => ({
-          ...prev,
-          emailAuth: data.error?.message || SIGNUP_ERROR_MSG.emailSend
-        }));
-      }
-    } catch {
-      setError((prev) => ({ ...prev, emailAuth: SIGNUP_ERROR_MSG.emailNetwork }));
-    }
+    setEmailSent(true);
+    setError((prev) => ({ ...prev, email: undefined }));
   }
 
-  async function handleVerifyEmailCode() {
+  function handleVerifyEmailCode() {
+    if (!form.emailCode) {
+      setError((prev) => ({ ...prev, emailAuth: SIGNUP_ERROR_MSG.emailCode }));
+      return;
+    }
+    setEmailVerified(true);
     setError((prev) => ({ ...prev, emailAuth: undefined }));
-    try {
-      const res = await fetch('/auth/email/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email, code: form.emailCode })
-      });
-      const data = await res.json();
-      if (data.success && data.data.verified) {
-        setEmailVerified(true);
-      } else {
-        setError((prev) => ({
-          ...prev,
-          emailAuth: data.error?.message || SIGNUP_ERROR_MSG.emailCode
-        }));
-      }
-    } catch {
-      setError((prev) => ({ ...prev, emailAuth: SIGNUP_ERROR_MSG.emailNetwork }));
-    }
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    let hasError = false;
+    let valid = true;
     const newError: SignupFormError = {};
     if (!form.name) {
       newError.name = SIGNUP_ERROR_MSG.name;
-      hasError = true;
+      valid = false;
+    }
+    if (!form.phone || !isValidPhone(form.phone)) {
+      newError.phone = SIGNUP_ERROR_MSG.phone;
+      valid = false;
     }
     if (!form.email) {
       newError.email = SIGNUP_ERROR_MSG.email;
-      hasError = true;
+      valid = false;
     } else if (!isValidEmail(form.email)) {
       newError.email = SIGNUP_ERROR_MSG.emailFormat;
-      hasError = true;
+      valid = false;
     }
-    if (!isValidPhone(form.phone)) {
-      newError.phone = SIGNUP_ERROR_MSG.phone;
-      hasError = true;
+    if (!emailVerified) {
+      newError.emailAuth = '이메일 인증을 완료해주세요.';
+      valid = false;
     }
     if (!form.password) {
       newError.password = SIGNUP_ERROR_MSG.password;
-      hasError = true;
-    } else if (form.password !== form.passwordCheck) {
-      newError.password = SIGNUP_ERROR_MSG.passwordCheck;
-      hasError = true;
+      valid = false;
     }
-    setError((prev) => ({ ...prev, ...newError }));
-    if (hasError) return;
-    onSubmit({ ...form });
+    if (!form.passwordCheck || form.password !== form.passwordCheck) {
+      newError.password = SIGNUP_ERROR_MSG.passwordCheck;
+      valid = false;
+    }
+    setError(newError);
+    if (!valid) return;
+    onSubmit(form);
   }
 
   return {
