@@ -1,7 +1,4 @@
-import { useState } from 'react';
-
-import type { SignupValues } from '../../type/joinMembership';
-import { signupInitialForm } from '../../type/signupInitialForm';
+import { signupInitialForm, SignupValues, useSignupForm } from '../../type/signupForm.types';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 import PasswordInputField from '../atoms/Input/PasswordInputField';
@@ -13,118 +10,17 @@ interface SignupFormProps {
   onSubmit: (values: SignupValues) => void;
 }
 
-type SignupFormError = Partial<
-  Record<'name' | 'phone' | 'email' | 'emailCode' | 'password' | 'passwordCheck', string>
-> & {
-  emailAuth?: string;
-};
-
 const SignupForm = ({ onSubmit }: SignupFormProps) => {
-  const [form, setForm] = useState<SignupValues>(signupInitialForm);
-  const [error, setError] = useState<SignupFormError>({});
-  const [emailSent, setEmailSent] = useState(false);
-  const [emailVerified, setEmailVerified] = useState(false);
-
-  // 전화번호 유효성 검사
-  const isValidPhone = (phone: string) => /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
-
-  // 에러 메시지 초기화 함수
-  const clearFieldError = (name: string) => {
-    setError((prev) => ({ ...prev, [name]: undefined }));
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name === 'password') {
-      setForm((prev) => ({ ...prev, password: value, passwordCheck: '' }));
-    } else if (name === 'email') {
-      setForm((prev) => ({ ...prev, email: value, emailCode: '' }));
-      setEmailSent(false);
-      setEmailVerified(false);
-      setError((prev) => ({ ...prev, emailAuth: undefined }));
-    } else {
-      setForm((prev) => ({ ...prev, [name]: value }));
-    }
-    clearFieldError(name);
-  };
-
-  // 이메일 인증코드 전송
-  const handleSendEmailCode = async () => {
-    setError((prev) => ({ ...prev, emailAuth: undefined }));
-    if (!form.email) {
-      setError((prev) => ({ ...prev, emailAuth: '이메일을 입력하세요.' }));
-      return;
-    }
-    try {
-      const res = await fetch('/auth/email/send', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email })
-      });
-      const data = await res.json();
-      if (data.success) {
-        setEmailSent(true);
-      } else {
-        setError((prev) => ({
-          ...prev,
-          emailAuth: data.error?.message || '이메일 인증코드 전송 실패'
-        }));
-      }
-    } catch {
-      setError((prev) => ({ ...prev, emailAuth: '네트워크 오류' }));
-    }
-  };
-
-  // 이메일 인증코드 확인
-  const handleVerifyEmailCode = async () => {
-    setError((prev) => ({ ...prev, emailAuth: undefined }));
-    try {
-      const res = await fetch('/auth/email/verify', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: form.email, code: form.emailCode })
-      });
-      const data = await res.json();
-      if (data.success && data.data.verified) {
-        setEmailVerified(true);
-      } else {
-        setError((prev) => ({
-          ...prev,
-          emailAuth: data.error?.message || '인증코드가 올바르지 않습니다'
-        }));
-      }
-    } catch {
-      setError((prev) => ({ ...prev, emailAuth: '네트워크 오류' }));
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    let hasError = false;
-    const newError: SignupFormError = {};
-    if (!form.name) {
-      newError.name = '이름을 입력하세요.';
-      hasError = true;
-    }
-    if (!form.email) {
-      newError.email = '이메일을 입력하세요.';
-      hasError = true;
-    }
-    if (!isValidPhone(form.phone)) {
-      newError.phone = '전화번호는 000-0000-0000 형식이어야 합니다.';
-      hasError = true;
-    }
-    if (!form.password) {
-      newError.password = '비밀번호를 입력하세요.';
-      hasError = true;
-    } else if (form.password !== form.passwordCheck) {
-      newError.password = '비밀번호가 일치하지 않습니다.';
-      hasError = true;
-    }
-    setError((prev) => ({ ...prev, ...newError }));
-    if (hasError) return;
-    onSubmit({ ...form });
-  };
+  const {
+    form,
+    error,
+    emailSent,
+    emailVerified,
+    handleChange,
+    handleSendEmailCode,
+    handleVerifyEmailCode,
+    handleSubmit
+  } = useSignupForm(signupInitialForm, onSubmit);
 
   return (
     <form onSubmit={handleSubmit}>
@@ -155,6 +51,8 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         <Input
           id="email"
           name="email"
+          type="email"
+          required
           placeholder="본 서비스에 사용하실 이메일을 입력해주세요"
           variant="short"
           value={form.email}
