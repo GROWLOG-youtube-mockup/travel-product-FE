@@ -162,7 +162,7 @@ const MainPage = () => {
       const regionName = region.name.slice(0, 2);
       const imageUrl = locationImages.find((item) => item.name.includes(regionName))?.image ?? '';
 
-      if (!acc.find((item) => item.title === regionName)) {
+      if (!acc.find((item) => item.title === `${regionName}${regionDo}`)) {
         acc.push({
           title: `${regionName}${regionDo}`,
           image: imageUrl,
