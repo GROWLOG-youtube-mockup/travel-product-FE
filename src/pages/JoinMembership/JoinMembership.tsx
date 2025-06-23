@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import SignupForm from '../../components/SignupForm/SignupForm';
 import type { JoinMembershipFormValues } from '../../type/joinMembership';
 
@@ -29,7 +31,15 @@ const JoinMembershipPage = () => {
         </div>
         <SignupForm onSubmit={handleSubmit} />
         <div className={styles.footer}>
-          <span>로그인 | 아이디/비밀번호 찾기</span>
+          <span>
+            <Link to="/login" className={styles.link}>
+              로그인
+            </Link>
+            {' | '}
+            <Link to="/find-account" className={styles.link}>
+              아이디/비밀번호 찾기
+            </Link>
+          </span>
         </div>
       </div>
     </div>

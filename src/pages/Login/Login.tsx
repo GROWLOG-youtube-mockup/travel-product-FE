@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 import LoginForm from '../../components/LoginForm/LoginForm';
 import type { UserInformation } from '../../type/login';
 
@@ -20,7 +22,15 @@ const LoginPage = () => {
         <LoginForm onSubmit={onSubmit} />
       </div>
       <div className={styles.footer}>
-        <span>회원가입 | 아이디/비밀번호 찾기</span>
+        <span>
+          <Link to="/join" className={styles.link}>
+            회원가입
+          </Link>
+          {' | '}
+          <Link to="/find-account" className={styles.link}>
+            아이디/비밀번호 찾기
+          </Link>
+        </span>
       </div>
     </div>
   );
