@@ -9,9 +9,9 @@ export type CardProps = {
 
 export type LocationItem = { title: string; regionId: number; image: string };
 
-export type LocationCardProps = {
+export type RegionCardProps = {
   image: string;
   title: string;
   regionId: number;
-  handleLocationCardClick: (regionId: number) => void;
+  handleRegionCardClick: (regionId: number) => void;
 };

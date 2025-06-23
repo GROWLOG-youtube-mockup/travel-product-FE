@@ -2,16 +2,16 @@ import { useRef, useState } from 'react';
 
 import type { LocationItem } from '../../type/card';
 
-import LocationCard from './LocationCard';
+import RegionCard from './RegionCard';
 
-import styles from './LocationCardList.module.scss';
+import styles from './RegionCardList.module.scss';
 
-type LocationCardListProps = {
-  locationCardList: LocationItem[];
-  handleLocationCardClick: (regionId: number) => void;
+type RegionCardListProps = {
+  RegionCardList: LocationItem[];
+  handleRegionCardClick: (regionId: number) => void;
 };
 
-const LocationCardList = ({ locationCardList, handleLocationCardClick }: LocationCardListProps) => {
+const RegionCardList = ({ RegionCardList, handleRegionCardClick }: RegionCardListProps) => {
   const sliderRef = useRef<HTMLDivElement>(null);
   const [showButton, setShowButton] = useState({
     right: false,
@@ -42,13 +42,13 @@ const LocationCardList = ({ locationCardList, handleLocationCardClick }: Locatio
     <>
       <div className={styles['cardSlideWrapper']}>
         <div className={styles['cardSlide']} ref={sliderRef}>
-          {locationCardList.map((card) => (
-            <LocationCard
+          {RegionCardList.map((card) => (
+            <RegionCard
               key={card.regionId}
               image={card.image}
               title={card.title}
               regionId={card.regionId}
-              handleLocationCardClick={handleLocationCardClick}
+              handleRegionCardClick={handleRegionCardClick}
             />
           ))}
         </div>
@@ -69,4 +69,4 @@ const LocationCardList = ({ locationCardList, handleLocationCardClick }: Locatio
   );
 };
 
-export default LocationCardList;
+export default RegionCardList;

@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import imageLinks from '@/constants/imageLinks';
 
 import CardSlide from '../../components/Cards/CardSlide';
-import LocationCardList from '../../components/Cards/LocationCardList';
+import RegionCardList from '../../components/Cards/RegionCardList';
 import type { LocationItem } from '../../type/card';
 import type { Product } from '../../type/product';
 import type { Region } from '../../type/region';
@@ -105,7 +105,7 @@ const MainPage = () => {
     }, []);
   }, [regions]);
 
-  const handleLocationCardClick = (regionId: number) => {
+  const handleRegionCardClick = (regionId: number) => {
     navigate({
       pathname: '/product',
       search: createSearchParams({
@@ -124,10 +124,7 @@ const MainPage = () => {
         <div className={styles['title']}>
           <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
-        <LocationCardList
-          locationCardList={regionList}
-          handleLocationCardClick={handleLocationCardClick}
-        />
+        <RegionCardList RegionCardList={regionList} handleRegionCardClick={handleRegionCardClick} />
       </section>
 
       {contentsTitleList.map((item, index) => (
