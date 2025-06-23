@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import Card from '@/components/Cards/Card';
+import { useRegionStore } from '@/store/RegionStore';
 
 import Label from '../../components/atoms/Label/Label';
 import type { Product } from '../../type/product';
@@ -21,6 +22,7 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
+  const { selectedRegion } = useRegionStore();
 
   useEffect(() => {
     fetch('/products' + location.search)
@@ -54,7 +56,7 @@ const ProductPage = () => {
     <div className={styles.page}>
       <div className={styles.titleArea}>
         <div className={styles.title}>
-          <Label style={{ fontWeight: 700 }}>지역명 상품 전체</Label>
+          <Label style={{ fontWeight: 700 }}>{selectedRegion?.title} 상품 전체</Label>
           <Label style={{ fontWeight: 700 }}>{filteredProducts.length}개의 상품이 있어요</Label>
         </div>
       </div>
