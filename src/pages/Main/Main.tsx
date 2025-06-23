@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import imageLinks from '@/constants/imageLinks';
@@ -49,9 +49,9 @@ const locationTitle = '한국 추천 여행지';
 
 const MainPage = () => {
   const [products, setProducts] = useState<Product[]>([]);
-  const [regions, setRegions] = useState<Region[]>([]);
   const navigate = useNavigate();
-  const { setSelectedRegion, setRegionList } = useRegionStore();
+  const { regionList, setSelectedRegion, setRegionList, clearSelectedRegion, clearRegionList } =
+    useRegionStore();
 
   useEffect(() => {
     fetch('/products')
@@ -70,42 +70,40 @@ const MainPage = () => {
   }, []);
 
   useEffect(() => {
-    fetch('/regions')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setRegions(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, []);
+    if (regionList.length <= 0) {
+      fetch('/regions')
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setRegionList(
+            data.reduce((acc: RegionItem[], region: Region) => {
+              const regionDo = region.name.includes('도') ? '도' : '';
+              const regionName = region.name.slice(0, 2);
+              const imageUrl =
+                imageLinks.find((item) => item.name.includes(regionName))?.image ?? '';
+              const findIndex = acc.findIndex((item) => item.title === `${regionName}${regionDo}`);
 
-  const regionList = useMemo(() => {
-    return regions.reduce((acc: RegionItem[], region) => {
-      const regionDo = region.name.includes('도') ? '도' : '';
-      const regionName = region.name.slice(0, 2);
-      const imageUrl = imageLinks.find((item) => item.name.includes(regionName))?.image ?? '';
-      const findIndex = acc.findIndex((item) => item.title === `${regionName}${regionDo}`);
+              if (!acc[findIndex]) {
+                acc.push({
+                  title: `${regionName}${regionDo}`,
+                  image: imageUrl,
+                  regionId: region.regionId
+                });
+              }
 
-      if (!acc[findIndex]) {
-        acc.push({
-          title: `${regionName}${regionDo}`,
-          image: imageUrl,
-          regionId: region.regionId
+              return acc;
+            }, [])
+          );
+        })
+        .catch((error) => {
+          console.error('There was a problem with the fetch operation:', error);
         });
-      }
-      // else {
-      //    acc[findIndex].regionId.push(region.regionId);
-      // }
-
-      return acc;
-    }, []);
-  }, [regions]);
+    }
+  }, []);
 
   const handleRegionCardClick = (item: RegionItem) => {
     setSelectedRegion(item);
@@ -121,6 +119,8 @@ const MainPage = () => {
 
   const handleCardClick = (product_id: number) => {
     navigate(`/product/${product_id}`);
+    clearSelectedRegion();
+    clearRegionList();
   };
 
   return (
