@@ -1,0 +1,232 @@
+// 색상 변수
+$gray-50: #f9fafb;
+$gray-100: #f3f4f6;
+$gray-200: #e5e7eb;
+$gray-300: #d1d5db;
+$gray-400: #9ca3af;
+$gray-500: #6b7280;
+$gray-600: #4b5563;
+$gray-700: #374151;
+$gray-900: #111827;
+$white: #ffffff;
+$indigo-50: #eef2ff;
+$indigo-500: #6366f1;
+$indigo-600: #4f46e5;
+$indigo-700: #4338ca;
+$blue-50: #eff6ff;
+$blue-100: #dbeafe;
+$blue-500: #3b82f6;
+$blue-600: #2563eb;
+$blue-700: #1d4ed8;
+
+// 페이지 컨테이너
+.pageContainer {
+  width: 100%;
+  min-height: 100vh;
+  background-color: $gray-50;
+}
+
+// 헤더 섹션
+.header {
+  padding: 2rem 1rem;
+  background-color: $white;
+  border-bottom: 1px solid $gray-200;
+}
+
+.headerContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  max-width: 1280px;
+  margin: 0 auto;
+  gap: 1rem;
+
+  @media (width <= 768px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+.headerInfo {
+  flex: 1;
+}
+
+.pageTitle {
+  margin: 0 0 0.5rem;
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: $gray-900;
+}
+
+.pageDescription {
+  margin: 0;
+  font-size: 1rem;
+  color: $gray-600;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.addButton {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.25rem;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $white;
+  background-color: $blue-600;
+  border-radius: 0.5rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $blue-700;
+    box-shadow: 0 4px 12px rgb(59 130 246 / 30%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 30%);
+    outline: none;
+  }
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+}
+
+// 필터 섹션
+.filterSection {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem;
+}
+
+.filterCard {
+  border: 1px solid $gray-200;
+  background-color: $white;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 10%);
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.filterHeader {
+  padding: 1rem 1.5rem;
+  background-color: $gray-50;
+  border-bottom: 1px solid $gray-200;
+}
+
+.filterTitle {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: $gray-900;
+}
+
+.filterContent {
+  display: grid;
+  padding: 1.5rem;
+  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+  @media (width <= 768px) {
+    gap: 1rem;
+    grid-template-columns: 1fr;
+  }
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.filterLabel {
+  margin-bottom: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $gray-700;
+}
+
+.filterButtons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.filterButton {
+  padding: 0.5rem 1rem;
+  border: 1px solid $gray-300;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: $gray-700;
+  background-color: $white;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $gray-400;
+    background-color: $gray-50;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 30%);
+    outline: none;
+  }
+}
+
+.filterButtonActive {
+  border-color: $blue-500;
+  color: $blue-700;
+  background-color: $blue-50;
+
+  &:hover {
+    border-color: $blue-600;
+    background-color: $blue-100;
+  }
+}
+
+.filterSelect {
+  padding: 0.75rem 1rem;
+  border: 1px solid $gray-300;
+  font-size: 0.875rem;
+  color: $gray-900;
+  background-color: $white;
+  border-radius: 0.375rem;
+  transition: border-color 0.15s ease-in-out;
+  cursor: pointer;
+
+  &:focus {
+    border-color: $blue-500;
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 30%);
+    outline: none;
+  }
+
+  &:hover {
+    border-color: $gray-400;
+  }
+}
+
+// 테이블 섹션
+.tableSection {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 1rem 2rem;
+}
+
+.tableWrapper {
+  min-height: auto;
+  padding: 0;
+  background-color: transparent;
+}
