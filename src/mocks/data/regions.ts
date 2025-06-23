@@ -52,7 +52,7 @@ export const regions = [
   },
   {
     regionId: 8,
-    name: '전라남도',
+    name: '전라북도',
     level: 1,
     children: [
       { regionId: 81, name: '여수시', level: 2 },
@@ -61,31 +61,52 @@ export const regions = [
   },
   {
     regionId: 9,
+    name: '전라남도',
+    level: 1,
+    children: [
+      { regionId: 81, name: '여수시', level: 2 },
+      { regionId: 82, name: '순천시', level: 2 }
+    ]
+  },
+  {
+    regionId: 10,
     name: '세종특별자치시',
     level: 1,
     children: []
   },
   {
-    regionId: 10,
+    regionId: 11,
     name: '광주광역시',
     level: 1,
     children: []
   },
   {
-    regionId: 11,
+    regionId: 12,
     name: '울산광역시',
     level: 1,
     children: []
   },
   {
-    regionId: 12,
+    regionId: 13,
+    name: '충청북도',
+    level: 1,
+    children: []
+  },
+  {
+    regionId: 14,
     name: '충청남도',
     level: 1,
     children: []
   },
   {
-    regionId: 13,
+    regionId: 15,
     name: '경상북도',
+    level: 1,
+    children: []
+  },
+  {
+    regionId: 16,
+    name: '경상남도',
     level: 1,
     children: []
   }

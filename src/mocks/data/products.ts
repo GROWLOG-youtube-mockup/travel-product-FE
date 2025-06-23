@@ -12,7 +12,7 @@ export const products = [
     duration: 6,
     sale_status: 2,
     type: 2,
-    region: { regionId: 23, name: '전주', level: 2, parentId: 4 },
+    region: { regionId: 8, name: '전주', level: 2, parentId: 4 },
     tags: ['좋아요 😘']
   },
   {
@@ -27,7 +27,7 @@ export const products = [
     duration: 6,
     sale_status: 1,
     type: 2,
-    region: { regionId: 21, name: '제주도', level: 2, parentId: 2 },
+    region: { regionId: 3, name: '제주도', level: 2, parentId: 2 },
     tags: ['좋아요 😘', 'Best 추천 👍']
   },
   {
@@ -42,7 +42,7 @@ export const products = [
     duration: 4,
     sale_status: 0,
     type: 4,
-    region: { regionId: 21, name: '제주도', level: 2, parentId: 2 },
+    region: { regionId: 3, name: '제주도', level: 2, parentId: 2 },
     tags: ['예약폭주 🎉']
   },
   {
@@ -177,7 +177,7 @@ export const products = [
     duration: 4,
     sale_status: 2,
     type: 3,
-    region: { regionId: 25, name: '서울', level: 2, parentId: 0 },
+    region: { regionId: 1, name: '서울', level: 2, parentId: 0 },
     tags: ['Best 추천 👍', '좋아요 😘']
   },
   {
@@ -207,7 +207,7 @@ export const products = [
     duration: 5,
     sale_status: 2,
     type: 1,
-    region: { regionId: 25, name: '서울', level: 2, parentId: 0 },
+    region: { regionId: 1, name: '서울', level: 2, parentId: 0 },
     tags: ['좋아요 😘', '예약폭주 🎉']
   },
   {
@@ -267,7 +267,7 @@ export const products = [
     duration: 3,
     sale_status: 0,
     type: 2,
-    region: { regionId: 25, name: '서울', level: 2, parentId: 0 },
+    region: { regionId: 1, name: '서울', level: 2, parentId: 0 },
     tags: ['좋아요 😘']
   },
   {
@@ -282,7 +282,7 @@ export const products = [
     duration: 2,
     sale_status: 0,
     type: 4,
-    region: { regionId: 25, name: '서울', level: 2, parentId: 0 },
+    region: { regionId: 1, name: '서울', level: 2, parentId: 0 },
     tags: ['예약폭주 🎉', 'Best 추천 👍', '좋아요 😘']
   },
   {
