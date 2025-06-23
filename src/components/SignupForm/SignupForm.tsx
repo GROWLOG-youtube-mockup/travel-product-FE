@@ -28,10 +28,24 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
   // 전화번호 유효성 검사
   const isValidPhone = (phone: string) => /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
 
+  // 에러 메시지 초기화 함수
+  const clearFieldError = (name: string) => {
+    setError((prev) => ({ ...prev, [name]: undefined }));
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
-    setError((prev) => ({ ...prev, [name]: undefined }));
+    if (name === 'password') {
+      setForm((prev) => ({ ...prev, password: value, passwordCheck: '' }));
+    } else if (name === 'email') {
+      setForm((prev) => ({ ...prev, email: value, emailCode: '' }));
+      setEmailSent(false);
+      setEmailVerified(false);
+      setError((prev) => ({ ...prev, emailAuth: undefined }));
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+    clearFieldError(name);
   };
 
   // 이메일 인증코드 전송
@@ -118,7 +132,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
       <Input
         id="name"
         name="name"
-        placeholder="본 서비스에 사용하실 이름을 입력해주세요 (건별 찾기시 사용됩니다)"
+        placeholder="본 서비스에 사용하실 이름을 입력해주세요 (계정 찾기시 사용됩니다)"
         variant="long"
         value={form.name}
         onChange={handleChange}
@@ -145,16 +159,16 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
           variant="short"
           value={form.email}
           onChange={handleChange}
-          disabled={emailSent || emailVerified}
-          className={emailSent || emailVerified ? styles.disabledInput : ''}
+          disabled={emailVerified}
+          className={emailVerified ? styles.disabledInput : ''}
         />
         <Button
           type="button"
           variant="account"
           onClick={handleSendEmailCode}
-          disabled={emailSent || emailVerified}
+          disabled={emailVerified || !form.email}
         >
-          {emailSent ? '전송됨' : '인증번호 받기'}
+          {emailSent ? '재전송' : '인증번호 받기'}
         </Button>
       </div>
       {error.email && <div className={styles.errorMessage}>{error.email}</div>}
