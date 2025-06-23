@@ -1,6 +1,7 @@
 .locationCard {
   position: relative;
   width: calc((100% - 5rem) / 6);
+  min-width: 180px;
   border-radius: 15px;
   cursor: pointer;
   user-select: none;

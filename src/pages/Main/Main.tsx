@@ -1,183 +1,191 @@
+import { useEffect, useMemo, useState } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+
 import CardSlide from '../../components/Cards/CardSlide';
 import LocationCardList from '../../components/Cards/LocationCardList';
-import type { CardProps } from '../../type/card';
+import type { LocationItem } from '../../type/card';
+import type { Product } from '../../type/product';
+import type { Region } from '../../type/region';
 
 import styles from './Main.module.scss';
 
+type ContentsTitleList = {
+  title: string;
+  subtitle: string;
+  styleName: 'normal' | 'longHeight' | 'longWidth';
+};
+
+const contentsTitleList: ContentsTitleList[] = [
+  {
+    title: '내 마음대로 떠나는 여행 🗺️',
+    subtitle: '일정도 코스도 모두 자유롭게!',
+    styleName: 'longHeight'
+  },
+  {
+    title: '알차게 즐기는 패키지 🧳',
+    subtitle: '교통·숙소 걱정 없이 편하게 떠나세요!',
+    styleName: 'longWidth'
+  },
+  {
+    title: '여름 방학 특가 진행 중 🏖️',
+    subtitle: '방학 기간 한정, 지금 바로 예약하세요!',
+    styleName: 'normal'
+  },
+  {
+    title: '살아있는 역사 현장 🏛️',
+    subtitle: '우리 문화유산을 직접 경험해보세요!',
+    styleName: 'normal'
+  },
+  {
+    title: '짜릿한 순간, 액티비티 🤿',
+    subtitle: '지금 떠나면 모험이 기다립니다!',
+    styleName: 'normal'
+  }
+];
+const locationImages = [
+  {
+    name: '서울특별시',
+    image:
+      'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg'
+  },
+  {
+    name: '경상남도',
+    image: 'https://cdn.pixabay.com/photo/2017/01/14/07/35/sunflower-1978914_960_720.jpg'
+  },
+  {
+    name: '경상북도',
+    image: 'https://cdn.pixabay.com/photo/2021/09/29/06/55/yeongju-6666506_1280.jpg'
+  },
+  {
+    name: '대구광역시',
+    image: 'https://cdn.pixabay.com/photo/2022/02/06/10/39/south-korea-6996746_1280.jpg'
+  },
+  {
+    name: '인천광역시',
+    image: 'https://cdn.pixabay.com/photo/2016/10/20/07/47/songdo-incheon-korea-1754841_1280.jpg'
+  },
+  {
+    name: '전라남도',
+    image: 'https://cdn.pixabay.com/photo/2018/10/21/04/05/night-view-3762230_1280.jpg'
+  },
+  {
+    name: '전라북도',
+    image:
+      'https://sdmntprcentralus.oaiusercontent.com/files/00000000-8300-61f5-9bc2-e828ec8b43b2/raw?se=2025-06-20T03%3A51%3A19Z&sp=r&sv=2024-08-04&sr=b&scid=c0f786f0-dd89-5186-a1ba-abe45058dff7&skoid=c953efd6-2ae8-41b4-a6d6-34b1475ac07c&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-06-20T01%3A58%3A45Z&ske=2025-06-21T01%3A58%3A45Z&sks=b&skv=2024-08-04&sig=s/K4DKNMQve0UiJ%2BG3Iehl8N7HLsgvOI8vDNSxmuoLY%3D'
+  },
+  {
+    name: '충청남도',
+    image: 'https://cdn.pixabay.com/photo/2020/06/17/11/39/taian-5309184_1280.jpg'
+  },
+  {
+    name: '충청북도',
+    image: 'https://cdn.pixabay.com/photo/2017/06/08/07/08/korea-2382741_1280.jpg'
+  },
+  {
+    name: '강원특별자치도',
+    image: 'https://cdn.pixabay.com/photo/2019/07/21/18/30/mountain-4353332_1280.jpg'
+  },
+  {
+    name: '세종특별자치시',
+    image: 'https://cdn.pixabay.com/photo/2023/06/03/11/26/arboretum-8037495_1280.jpg'
+  },
+  {
+    name: '광주광역시',
+    image:
+      'https://cdn.pixabay.com/photo/2022/10/06/09/29/national-asian-culture-center-7502312_1280.jpg'
+  },
+  {
+    name: '대전광역시',
+    image:
+      'https://i.namu.wiki/i/eCCEs8QoAalSwbviU5ragOFtuSj13RrtNNNMK_yYxiaizY_crItKnJ98YLcfiv5DajEFq5YExI6NaKoV363negDzqi5Rfh_M_HiKazZxUjWFj3Qy3I6n38ovERZDNx3CO6VTp2tzX6NH6zdGd06L2g.webp'
+  },
+  {
+    name: '울산광역시',
+    image: 'https://cdn.pixabay.com/photo/2019/05/16/09/47/homigot-4206783_1280.jpg'
+  },
+  {
+    name: '부산광역시',
+    image:
+      'https://cdn.pixabay.com/photo/2023/01/12/06/16/gamcheon-culture-village-7713364_1280.jpg'
+  },
+  {
+    name: '제주특별자치도',
+    image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg'
+  },
+  {
+    name: '경기도',
+    image: 'https://cdn.pixabay.com/photo/2019/11/01/05/50/suwon-4593383_1280.jpg'
+  }
+];
+const locationTitle = '한국 추천 여행지';
+
 const MainPage = () => {
-  const locationTitle = '한국 추천 여행지';
-  const locationList = [
-    {
-      title: '서울',
-      image:
-        'https://cdn.pixabay.com/photo/2016/07/10/05/48/seoul-international-fireworks-festival-1507332_1280.jpg'
-    },
-    {
-      title: '경기・인천',
-      image: 'https://cdn.pixabay.com/photo/2018/05/15/23/02/football-stadium-3404535_1280.jpg'
-    },
-    {
-      title: '강원도',
-      image: 'https://cdn.pixabay.com/photo/2019/07/21/18/30/mountain-4353332_1280.jpg'
-    },
-    {
-      title: '충청도',
-      image: 'https://cdn.pixabay.com/photo/2020/06/17/11/39/taian-5309184_1280.jpg'
-    },
-    {
-      title: '전라도',
-      image: 'https://cdn.pixabay.com/photo/2020/09/02/04/16/image-5537275_1280.jpg'
-    },
-    {
-      title: '경상도',
-      image: 'https://cdn.pixabay.com/photo/2022/08/09/12/10/wolyeong-bridge-7374859_1280.jpg'
-    },
-    {
-      title: '제주도',
-      image: 'https://cdn.pixabay.com/photo/2019/06/11/07/36/shiroyama-hiji-peak-4266254_1280.jpg'
-    }
-  ];
-  const contentsTitleList = [
-    { title: '인기 여행', subtitle: '다른 여행객들이 많이 찾는 인기 여행 상품' },
-    { title: '일찍 준비하는 여름휴가', subtitle: '오늘부터 준비!' },
-    { title: '지금이 딱 예약할 때!', subtitle: '선착순 타임특가부터 다양한 헤택' },
-    { title: '마감 임박', subtitle: '곧 예약 마감됩니다!' }
-  ];
-  const contents: CardProps[][] = [
-    // TODO: 추후 API 연동 완료 시 수정해야 함.
-    // index 0: longHeight
-    [
-      {
-        styleName: 'longHeight',
-        image: 'https://cdn.pixabay.com/photo/2022/04/28/19/47/republic-of-korea-7161860_1280.jpg',
-        title: '제주 감성 여행',
-        price: 130000
-      },
-      {
-        styleName: 'longHeight',
-        image: 'https://cdn.pixabay.com/photo/2017/01/26/02/17/food-2009596_1280.jpg',
-        title: '대구 먹거리 투어',
-        price: 60000
-      },
-      {
-        styleName: 'longHeight',
-        image: 'https://cdn.pixabay.com/photo/2018/10/05/14/39/sunset-3726030_1280.jpg',
-        title: '일몰이 아름다운 해변',
-        price: 105000
-      },
-      {
-        styleName: 'longHeight',
-        image: 'https://cdn.pixabay.com/photo/2020/03/18/23/58/chunnam-4945781_1280.jpg',
-        title: '숲길 산책 힐링',
-        price: 90000
-      },
-      {
-        styleName: 'longHeight',
-        image: 'https://cdn.pixabay.com/photo/2017/03/09/06/30/pool-2128578_1280.jpg',
-        title: '스파 리조트 패키지',
-        price: 150000
+  const [products, setProducts] = useState<Product[]>([]);
+  const [regions, setRegions] = useState<Region[]>([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetch('/products')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setProducts(data);
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }, []);
+
+  useEffect(() => {
+    fetch('/regions')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setRegions(data);
+      })
+      .catch((error) => {
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }, []);
+
+  const regionList = useMemo(() => {
+    return regions.reduce((acc: LocationItem[], region) => {
+      const regionDo = region.name.includes('도') ? '도' : '';
+      const regionName = region.name.slice(0, 2);
+      const imageUrl = locationImages.find((item) => item.name.includes(regionName))?.image ?? '';
+
+      if (!acc.find((item) => item.title === regionName)) {
+        acc.push({
+          title: `${regionName}${regionDo}`,
+          image: imageUrl,
+          regionId: region.regionId
+        });
       }
-    ],
-    // index 1: longWidth
-    [
-      {
-        styleName: 'longWidth',
-        image: 'https://cdn.pixabay.com/photo/2013/01/17/02/17/busan-75137_1280.jpg',
-        title: '여름 바다 여행',
-        price: 140000
-      },
-      {
-        styleName: 'longWidth',
-        image: 'https://cdn.pixabay.com/photo/2018/05/31/00/13/cape-verde-3442859_1280.jpg',
-        title: '고급 리조트 스테이',
-        price: 200000
-      },
-      {
-        styleName: 'longWidth',
-        image: 'https://cdn.pixabay.com/photo/2015/03/18/17/45/rafting-679694_1280.jpg',
-        title: '래프팅 체험 여행',
-        price: 85000
-      },
-      {
-        styleName: 'longWidth',
-        image: 'https://cdn.pixabay.com/photo/2021/12/20/08/07/camping-6882479_1280.jpg',
-        title: '감성 캠핑',
-        price: 75000
-      },
-      {
-        styleName: 'longWidth',
-        image: 'https://cdn.pixabay.com/photo/2021/09/12/22/41/italy-6619559_1280.jpg',
-        title: '오션뷰 숙소',
-        price: 170000
-      }
-    ],
-    // index 2: normal
-    [
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2023/01/26/02/15/books-7744938_1280.jpg',
-        title: '서울 강남 투어',
-        price: 30000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2020/01/14/07/26/koreanstyle-house-4764298_1280.jpg',
-        title: '북촌마을 투어',
-        price: 25000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2015/06/29/10/32/busan-825441_1280.jpg',
-        title: '부산 투어',
-        price: 40000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2017/10/26/23/26/suncheon-bay-2892768_1280.jpg',
-        title: '순천만 자연 탐방',
-        price: 18000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2020/03/09/08/53/seorak-4915009_1280.jpg',
-        title: '설악산 트래킹',
-        price: 60000
-      }
-    ],
-    // index 3: normal
-    [
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2017/07/07/16/23/jeju-island-2481947_1280.jpg',
-        title: '제주 올레길 산책',
-        price: 120000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2022/08/31/15/06/seoul-7423589_1280.jpg',
-        title: '서울 야경 투어',
-        price: 80000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2018/11/26/08/20/haeundae-beach-3838960_1280.jpg',
-        title: '부산 해운대 힐링',
-        price: 95000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2019/02/28/16/30/asia-4026267_1280.jpg',
-        title: '경주 역사 탐방',
-        price: 70000
-      },
-      {
-        styleName: 'normal',
-        image: 'https://cdn.pixabay.com/photo/2022/09/30/04/27/mountains-7488621_1280.jpg',
-        title: '강원도 트레킹',
-        price: 110000
-      }
-    ]
-  ];
+
+      return acc;
+    }, []);
+  }, [regions]);
+
+  const handleLocationCardClick = (regionId: number) => {
+    navigate({
+      pathname: '/product',
+      search: createSearchParams({
+        regionId: regionId.toString()
+      }).toString()
+    });
+  };
+
+  const handleCardClick = (product_id: number) => {
+    navigate(`/product/${product_id}`);
+  };
 
   return (
     <>
@@ -185,7 +193,10 @@ const MainPage = () => {
         <div className={styles['title']}>
           <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
-        <LocationCardList LocationCardList={locationList} />
+        <LocationCardList
+          locationCardList={regionList}
+          handleLocationCardClick={handleLocationCardClick}
+        />
       </section>
 
       {contentsTitleList.map((item, index) => (
@@ -194,7 +205,11 @@ const MainPage = () => {
             <h2 className={styles['mainTitle']}>{item.title}</h2>
             {item.subtitle && <p className={styles['subtitle']}>{item.subtitle}</p>}
           </div>
-          <CardSlide cardList={contents[index]} />
+          <CardSlide
+            productList={products.filter((product) => product?.type === index)}
+            styleName={item.styleName ?? 'normal'}
+            handleCardClick={handleCardClick}
+          />
         </section>
       ))}
     </>

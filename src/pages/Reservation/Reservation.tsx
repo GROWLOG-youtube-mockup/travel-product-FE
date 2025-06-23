@@ -10,7 +10,7 @@ import styles from './Reservation.module.scss';
 
 const ReservationPage = () => {
   const navigate = useNavigate();
-  const selectedItem = useCartStore((state) => state.selectedItem);
+  const { selectedItem } = useCartStore();
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [error, setError] = useState<string | null>(null);
 

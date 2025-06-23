@@ -1,7 +1,10 @@
+@use '../../../styles/core';
+
 .mainBanner {
   position: relative;
   width: 70%;
   max-width: 1280px;
+  min-width: core.$default-min-width;
   height: 40vh;
   margin: 0 auto;
   overflow: hidden;

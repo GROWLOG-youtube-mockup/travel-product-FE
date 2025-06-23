@@ -1,3 +1,49 @@
 .container {
-  background-color: pink;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+
+  .selectedPage {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 15px;
+    user-select: none;
+    flex-flow: row nowrap;
+
+    .payment {
+      color: #e18c04;
+    }
+  }
+
+  .paymentContainer {
+    position: relative;
+    width: 100%;
+    margin-top: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    background: #ffffff;
+    border-radius: 15px;
+
+    .amountWrapper {
+      text-align: right;
+      user-select: none;
+    }
+
+    .conditionsWrapper {
+      font-size: small;
+      font-weight: lighter;
+    }
+
+    .paymentButtonWrapper {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.5rem;
+    }
+  }
 }

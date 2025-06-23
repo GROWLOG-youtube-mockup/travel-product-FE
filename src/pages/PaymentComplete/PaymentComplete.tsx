@@ -10,7 +10,7 @@ import styles from './PaymentComplete.module.scss';
 const PaymentCompletePage = () => {
   const navigate = useNavigate();
   const [order, setOrder] = useState<Order | null>(null);
-  const { selectedItem, setSelectedItem, clearSelectedItem } = useCartStore();
+  const { selectedItem, clearSelectedItem } = useCartStore();
 
   useEffect(() => {
     fetch('/orders')
@@ -20,26 +20,12 @@ const PaymentCompletePage = () => {
         return response.json();
       })
       .then((data) => {
-        const latestOrder = data[data.length - 1];
-        setOrder(latestOrder);
+        const getOrder = data[0];
+        setOrder(getOrder);
       })
       .catch((error) => {
         console.error('Error fetching orders:', error);
       });
-  }, []);
-
-  useEffect(() => {
-    setSelectedItem({
-      cart_item_id: 10,
-      product: {
-        product_id: 101,
-        name: '시드니 4박 5일 자유 여행',
-        thumbnail_image_url: 'https://cdn.example.com/product101.jpg',
-        price: 1200000
-      },
-      quantity: 2,
-      start_date: '2025-12-23'
-    });
   }, []);
 
   const processedOrders = useMemo(() => {

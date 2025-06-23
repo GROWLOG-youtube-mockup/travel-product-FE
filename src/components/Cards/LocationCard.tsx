@@ -2,9 +2,13 @@ import type { LocationCardProps } from '../../type/card';
 
 import styles from './LocationCard.module.scss';
 
-const LocationCard = ({ image, title }: LocationCardProps) => {
+const LocationCard = ({ image, title, regionId, handleLocationCardClick }: LocationCardProps) => {
   return (
-    <div className={styles['locationCard']}>
+    <div
+      className={styles['locationCard']}
+      role="button"
+      onClick={() => handleLocationCardClick(regionId)}
+    >
       <img className={styles['cardImage']} src={image} alt="" />
       <div className={styles['content']}>
         <span>{title}</span>
