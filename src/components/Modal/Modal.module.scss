@@ -10,9 +10,7 @@
 
 .box {
   position: relative;
-  width: 700px;
-  max-width: 700px;
-  padding: 60px 0; // 좌우 패딩 제거
+  padding: 40px 0 60px; // 좌우 패딩 제거
   background: #ffffff;
   box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
   border-radius: 16px;
@@ -50,8 +48,6 @@
 .container {
   position: relative;
   width: 100%;
-  max-width: 700px;
-  margin: 0 auto;
 }
 
 .contentInner {
@@ -62,8 +58,25 @@
 }
 
 .header {
-  max-width: 500px;
-  margin: 0 auto;
-  padding: 20px 0;
+  padding: 0 90px;
   text-align: left;
+}
+
+.subtitle {
+  padding-bottom: 10px;
+  white-space: pre-line;
+}
+
+.headerWrapper {
+  padding: 20px 0;
+}
+
+.agreementContent {
+  max-height: 600px;
+  margin: 0 auto;
+  padding: 40px 90px 0;
+  text-align: left;
+  border-top: 2px solid #cdcdcd;
+  overflow-y: auto;
+  white-space: pre-line;
 }
