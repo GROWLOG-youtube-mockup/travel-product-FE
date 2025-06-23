@@ -1,13 +1,13 @@
 import { useRef, useState } from 'react';
 
-import type { LocationItem } from '../../type/card';
+import type { RegionItem } from '../../type/card';
 
 import RegionCard from './RegionCard';
 
 import styles from './RegionCardList.module.scss';
 
 type RegionCardListProps = {
-  RegionCardList: LocationItem[];
+  RegionCardList: RegionItem[];
   handleRegionCardClick: (regionId: number) => void;
 };
 

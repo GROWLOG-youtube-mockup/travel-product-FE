@@ -5,7 +5,7 @@ import imageLinks from '@/constants/imageLinks';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
-import type { LocationItem } from '../../type/card';
+import type { RegionItem } from '../../type/card';
 import type { Product } from '../../type/product';
 import type { Region } from '../../type/region';
 
@@ -84,7 +84,7 @@ const MainPage = () => {
   }, []);
 
   const regionList = useMemo(() => {
-    return regions.reduce((acc: LocationItem[], region) => {
+    return regions.reduce((acc: RegionItem[], region) => {
       const regionDo = region.name.includes('도') ? '도' : '';
       const regionName = region.name.slice(0, 2);
       const imageUrl = imageLinks.find((item) => item.name.includes(regionName))?.image ?? '';
