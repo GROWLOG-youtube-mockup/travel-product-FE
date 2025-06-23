@@ -36,18 +36,20 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         onChange={handleChange}
       />
       {error.name && <div className={styles.errorMessage}>{error.name}</div>}
+      <div className={styles.spacer} />
       <Label htmlFor="phone">전화번호</Label>
       <div className={styles.flexRow}>
         <Input
           id="phone"
           name="phone"
-          placeholder="000-0000-0000 형식으로 입력하세요"
+          placeholder="본 서비스에 사용하실 전화번호를 입력해주세요 (000-0000-0000)"
           variant="long"
           value={form.phone}
           onChange={handleChange}
         />
       </div>
       {error.phone && <div className={styles.errorMessage}>{error.phone}</div>}
+      <div className={styles.spacer} />
       <Label htmlFor="email">이메일</Label>
       <div className={styles.flexRow}>
         <Input
@@ -62,6 +64,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         />
         <Button
           type="button"
+          color="gray"
           variant="account"
           onClick={handleSendEmailCode}
           disabled={emailVerified || !form.email}
@@ -70,6 +73,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         </Button>
       </div>
       {error.email && <div className={styles.errorMessage}>{error.email}</div>}
+      <div className={styles.spacersm} />
       {info && <div className={styles.infoMessage}>{info}</div>}
       <div className={styles.flexRow}>
         <Input
@@ -83,6 +87,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         />
         <Button
           type="button"
+          color="gray"
           variant="account"
           onClick={handleVerifyEmailCode}
           disabled={!emailSent || emailVerified}
@@ -92,6 +97,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
       </div>
       {error.emailAuth && <div className={styles.errorMessage}>{error.emailAuth}</div>}
       {emailVerified && <div style={{ color: 'green', marginBottom: 8 }}>이메일 인증 완료</div>}
+      <div className={styles.spacer} />
       <Label htmlFor="password">비밀번호</Label>
       <PasswordInputField
         value={form.password}
@@ -101,7 +107,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         placeholder="본 서비스에 사용하실 비밀번호를 입력해주세요"
         variant="long"
       />
-      <div className={styles.spacer} />
+      <div className={styles.spacersm} />
       <Input
         name="passwordCheck"
         type="password"
@@ -113,6 +119,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         className={!form.password || emailVerified ? styles.disabledInput : ''}
       />
       {error.password && <div className={styles.errorMessage}>{error.password}</div>}
+
       <Button type="submit" className={styles.submitBtn}>
         계정 생성하기
       </Button>
