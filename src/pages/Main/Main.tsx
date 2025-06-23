@@ -161,20 +161,25 @@ const MainPage = () => {
       const regionDo = region.name.includes('도') ? '도' : '';
       const regionName = region.name.slice(0, 2);
       const imageUrl = locationImages.find((item) => item.name.includes(regionName))?.image ?? '';
+      const findIndex = acc.findIndex((item) => item.title === `${regionName}${regionDo}`);
 
-      if (!acc.find((item) => item.title === `${regionName}${regionDo}`)) {
+      if (!acc[findIndex]) {
         acc.push({
           title: `${regionName}${regionDo}`,
           image: imageUrl,
           regionId: region.regionId
         });
       }
+      // else {
+      //    acc[findIndex].regionId.push(region.regionId);
+      // }
 
       return acc;
     }, []);
   }, [regions]);
 
   const handleLocationCardClick = (regionId: number) => {
+    console.log('handleLocationCardClick', regionId.toString());
     navigate({
       pathname: '/product',
       search: createSearchParams({
