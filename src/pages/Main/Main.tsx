@@ -179,7 +179,6 @@ const MainPage = () => {
   }, [regions]);
 
   const handleLocationCardClick = (regionId: number) => {
-    console.log('handleLocationCardClick', regionId.toString());
     navigate({
       pathname: '/product',
       search: createSearchParams({
