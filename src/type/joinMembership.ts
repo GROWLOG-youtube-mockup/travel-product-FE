@@ -1,4 +1,4 @@
-export interface JoinMembershipFormValues {
+export interface SignupValues {
   name: string;
   phone: string;
   email: string;

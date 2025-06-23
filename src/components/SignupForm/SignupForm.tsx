@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import type { JoinMembershipFormValues } from '../../type/joinMembership';
+import type { SignupValues } from '../../type/joinMembership';
 import { signupInitialForm } from '../../type/signupInitialForm';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -10,7 +10,7 @@ import Label from '../atoms/Label/Label';
 import styles from './SignupForm.module.scss';
 
 interface SignupFormProps {
-  onSubmit: (values: JoinMembershipFormValues) => void;
+  onSubmit: (values: SignupValues) => void;
 }
 
 type SignupFormError = Partial<
@@ -20,7 +20,7 @@ type SignupFormError = Partial<
 };
 
 const SignupForm = ({ onSubmit }: SignupFormProps) => {
-  const [form, setForm] = useState<JoinMembershipFormValues>(signupInitialForm);
+  const [form, setForm] = useState<SignupValues>(signupInitialForm);
   const [error, setError] = useState<SignupFormError>({});
   const [emailSent, setEmailSent] = useState(false);
   const [emailVerified, setEmailVerified] = useState(false);
@@ -88,11 +88,22 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
     e.preventDefault();
     let hasError = false;
     const newError: SignupFormError = {};
+    if (!form.name) {
+      newError.name = '이름을 입력하세요.';
+      hasError = true;
+    }
+    if (!form.email) {
+      newError.email = '이메일을 입력하세요.';
+      hasError = true;
+    }
     if (!isValidPhone(form.phone)) {
       newError.phone = '전화번호는 000-0000-0000 형식이어야 합니다.';
       hasError = true;
     }
-    if (form.password && form.password !== form.passwordCheck) {
+    if (!form.password) {
+      newError.password = '비밀번호를 입력하세요.';
+      hasError = true;
+    } else if (form.password !== form.passwordCheck) {
       newError.password = '비밀번호가 일치하지 않습니다.';
       hasError = true;
     }
@@ -112,6 +123,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         value={form.name}
         onChange={handleChange}
       />
+      {error.name && <div className={styles.errorMessage}>{error.name}</div>}
       <Label htmlFor="phone">전화번호</Label>
       <div className={styles.flexRow}>
         <Input
@@ -123,7 +135,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
           onChange={handleChange}
         />
       </div>
-      {error.phone && <div style={{ color: 'red', marginBottom: 8 }}>{error.phone}</div>}
+      {error.phone && <div className={styles.errorMessage}>{error.phone}</div>}
       <Label htmlFor="email">이메일</Label>
       <div className={styles.flexRow}>
         <Input
@@ -145,6 +157,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
           {emailSent ? '전송됨' : '인증번호 받기'}
         </Button>
       </div>
+      {error.email && <div className={styles.errorMessage}>{error.email}</div>}
       <div className={styles.flexRow}>
         <Input
           name="emailCode"
@@ -164,7 +177,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
           {emailVerified ? '인증완료' : '인증번호 확인'}
         </Button>
       </div>
-      {error.emailAuth && <div style={{ color: 'red', marginBottom: 8 }}>{error.emailAuth}</div>}
+      {error.emailAuth && <div className={styles.errorMessage}>{error.emailAuth}</div>}
       {emailVerified && <div style={{ color: 'green', marginBottom: 8 }}>이메일 인증 완료</div>}
       <Label htmlFor="password">비밀번호</Label>
       <PasswordInputField
@@ -173,19 +186,21 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         id="password"
         name="password"
         placeholder="본 서비스에 사용하실 비밀번호를 입력해주세요"
+        disabled={emailVerified}
+        variant="long"
       />
       <div className={styles.spacer} />
       <Input
         name="passwordCheck"
         type="password"
         placeholder="비밀번호를 다시 입력해주세요"
-        variant="short"
+        variant="long"
         value={form.passwordCheck}
         onChange={handleChange}
-        disabled={!form.password}
-        className={!form.password ? styles.disabledInput : ''}
+        disabled={!form.password || emailVerified}
+        className={!form.password || emailVerified ? styles.disabledInput : ''}
       />
-      {error.password && <div style={{ color: 'red', marginBottom: 8 }}>{error.password}</div>}
+      {error.password && <div className={styles.errorMessage}>{error.password}</div>}
       <Button type="submit" className={styles.submitBtn}>
         계정 생성하기
       </Button>
