@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
@@ -22,6 +23,13 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
   const handleChange = async () => {
     setError('');
     try {
+      // 입력값 유효성 검사
+      try {
+        normalizePhoneNumber(phone.replace(/-/g, ''));
+      } catch (e: any) {
+        setError(e.message);
+        return;
+      }
       const res = await fetch('/users/me/phone', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -70,10 +78,10 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
               onChange={(e) => setPhone(e.target.value)}
               placeholder="새 전화번호를 입력하세요"
               variant="long"
-              className={styles.input}
             />
+            {error && <div className={styles.error}>{error}</div>}
           </div>
-          {error && <div className={styles.error}>{error}</div>}
+
           <Button
             type="button"
             variant="xl"
