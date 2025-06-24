@@ -1,0 +1,32 @@
+.modalWrapper {
+  padding: 24px;
+}
+
+.modalTitle {
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.input {
+  margin-bottom: 16px;
+}
+
+.button {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.error {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  color: #e74c3c;
+  text-align: left;
+}
+
+.success {
+  padding: 24px;
+  font-weight: 500;
+  color: #2ecc71;
+  text-align: center;
+}

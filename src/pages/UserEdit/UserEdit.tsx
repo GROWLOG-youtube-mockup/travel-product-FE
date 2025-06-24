@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import Input from '../../components/atoms/Input/Input';
-import DeleteAccountForm from '../../components/Modals/DeleteAccountForm';
-import GenericModal from '../../components/Modals/GenericModal';
-import NameChangeForm from '../../components/Modals/NameChangeForm';
-import PasswordChangeForm from '../../components/Modals/PasswordChangeForm';
-import PhoneChangeForm from '../../components/Modals/PhoneChangeForm';
+import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
+import NameChangeModal from '../../components/Modals/NameChangeModal';
+import PasswordChangeModal from '../../components/Modals/PasswordChangeModal';
+import PhoneChangeModal from '../../components/Modals/PhoneChangeModal';
 import type { User } from '../../type/user';
 
 import styles from './UserEdit.module.scss';
@@ -99,34 +98,27 @@ const UserEditPage = () => {
       </section>
 
       {/* 모달들 */}
-      <GenericModal
+      <NameChangeModal
         open={isNameModalOpen}
         onClose={() => setNameModalOpen(false)}
-        title="이름 변경"
-      >
-        <NameChangeForm onSuccess={() => setNameModalOpen(false)} />
-      </GenericModal>
-      <GenericModal
+        onSuccess={() => setNameModalOpen(false)}
+        currentName={user?.name ?? ''}
+      />
+      <PhoneChangeModal
         open={isPhoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
-        title="전화번호 변경"
-      >
-        <PhoneChangeForm onSuccess={() => setPhoneModalOpen(false)} />
-      </GenericModal>
-      <GenericModal
+        onSuccess={() => setPhoneModalOpen(false)}
+      />
+      <PasswordChangeModal
         open={isPasswordModalOpen}
         onClose={() => setPasswordModalOpen(false)}
-        title="비밀번호 변경"
-      >
-        <PasswordChangeForm onSuccess={() => setPasswordModalOpen(false)} />
-      </GenericModal>
-      <GenericModal
+        onSuccess={() => setPasswordModalOpen(false)}
+      />
+      <DeleteAccountModal
         open={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        title="계정 탈퇴"
-      >
-        <DeleteAccountForm onSuccess={() => setDeleteModalOpen(false)} />
-      </GenericModal>
+        onSuccess={() => setDeleteModalOpen(false)}
+      />
     </div>
   );
 };
