@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
 
 import SignupForm from '../../components/SignupForm/SignupForm';
-import type { JoinMembershipFormValues } from '../../type/joinMembership';
+import type { SignupValues } from '../../types/signupForm.types';
 
 import styles from './JoinMembership.module.scss';
 
 const JoinMembershipPage = () => {
   // 회원가입 폼 제출 핸들러
-  const handleSubmit = (form: JoinMembershipFormValues) => {
+  const handleSubmit = (form: SignupValues) => {
     // 서버에 제출할 데이터만 추출
     const payload = {
       name: form.name,
