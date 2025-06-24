@@ -57,6 +57,10 @@ export const userHandlers = [
     return HttpResponse.json({ success: true, data: '비밀번호가 변경되었습니다.', error: null });
   }),
 
+  http.patch('/users/me/password', async () => {
+    return HttpResponse.json({ success: true, data: '비밀번호가 변경되었습니다.', error: null });
+  }),
+
   http.delete('/users/me', async () => {
     return HttpResponse.json({ success: true, data: '회원 탈퇴가 완료되었습니다.', error: null });
   })

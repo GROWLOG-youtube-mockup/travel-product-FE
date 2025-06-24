@@ -54,17 +54,19 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
         <div className={styles.modalWrapper}>
           <div className={styles.input}>
             <label htmlFor="current-name">이전 이름</label>
-            <Input id="current-name" type="text" value={currentName} readOnly variant="long" />
+            <Input id="current-name" type="text" value={currentName} disabled variant="long" />
           </div>
-          <label htmlFor="name-change">새 이름</label>
-          <Input
-            id="name-change"
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="새 이름을 입력하세요"
-            variant="long"
-          />
+          <div className={styles.input}>
+            <label htmlFor="name-change">새 이름</label>
+            <Input
+              id="name-change"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="새 이름을 입력하세요"
+              variant="long"
+            />
+          </div>
           {error && <div className={styles.error}>{error}</div>}
           <Button
             type="button"

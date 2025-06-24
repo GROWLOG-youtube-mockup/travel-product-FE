@@ -108,6 +108,7 @@ const UserEditPage = () => {
         open={isPhoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
         onSuccess={() => setPhoneModalOpen(false)}
+        currentPhone={user?.phone_number ?? ''}
       />
       <PasswordChangeModal
         open={isPasswordModalOpen}

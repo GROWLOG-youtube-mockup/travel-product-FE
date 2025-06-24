@@ -11,9 +11,10 @@ interface PhoneChangeModalProps {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  currentPhone: string;
 }
 
-const PhoneChangeModal = ({ open, onClose, onSuccess }: PhoneChangeModalProps) => {
+const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChangeModalProps) => {
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -56,16 +57,22 @@ const PhoneChangeModal = ({ open, onClose, onSuccess }: PhoneChangeModalProps) =
         </div>
       ) : (
         <div className={styles.modalWrapper}>
-          <label htmlFor="phone-change">새 전화번호</label>
-          <Input
-            id="phone-change"
-            type="text"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="새 전화번호를 입력하세요"
-            variant="long"
-            className={styles.input}
-          />
+          <div className={styles.input}>
+            <label htmlFor="current-phone">이전 전화번호</label>
+            <Input id="current-phone" type="text" value={currentPhone} disabled variant="long" />
+          </div>
+          <div className={styles.input}>
+            <label htmlFor="phone-change">새 전화번호</label>
+            <Input
+              id="phone-change"
+              type="text"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="새 전화번호를 입력하세요"
+              variant="long"
+              className={styles.input}
+            />
+          </div>
           {error && <div className={styles.error}>{error}</div>}
           <Button
             type="button"
