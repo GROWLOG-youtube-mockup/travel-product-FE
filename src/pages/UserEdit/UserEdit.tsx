@@ -1,9 +1,28 @@
+import { useEffect, useState } from 'react';
+
 import Button from '../../components/atoms/Button/Button';
 import Input from '../../components/atoms/Input/Input';
+import type { User } from '../../type/user';
 
 import styles from './UserEdit.module.scss';
 
 const UserEditPage = () => {
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const res = await fetch('/users/me');
+        if (!res.ok) throw new Error('네트워크 오류');
+        const data = await res.json();
+        setUser(data);
+      } catch {
+        // 에러 핸들링 필요시 여기에 작성
+      }
+    };
+    fetchUser();
+  }, []);
+
   return (
     <div className={styles.container}>
       {/* 계정 정보 변경 */}
@@ -15,13 +34,13 @@ const UserEditPage = () => {
         <form className={styles.sectionRight}>
           <div className={styles.inputGroup}>
             <label>이메일</label>
-            <Input type="email" value="qwer@gmail.com" variant="long" disabled />
+            <Input type="email" value={user?.email ?? ''} variant="long" disabled />
           </div>
           <div className={styles.inputRow}>
             <div className={styles.inputGroup}>
               <label>이름</label>
               <div className={styles.inputInline}>
-                <Input type="text" value="홍길동" variant="short" disabled />
+                <Input type="text" value={user?.name ?? ''} variant="short" disabled />
                 <Button variant="account">이름 변경</Button>
               </div>
             </div>
@@ -30,7 +49,7 @@ const UserEditPage = () => {
             <div className={styles.inputGroup}>
               <label>전화번호</label>
               <div className={styles.inputInline}>
-                <Input type="text" value="010-1234-5678" variant="short" disabled />
+                <Input type="text" value={user?.phone_number ?? ''} variant="short" disabled />
                 <Button variant="account">전화번호 변경</Button>
               </div>
             </div>
@@ -39,7 +58,7 @@ const UserEditPage = () => {
             <div className={styles.inputGroup}>
               <label>비밀번호</label>
               <div className={styles.inputInline}>
-                <Input type="password" value="asd****45" variant="short" disabled />
+                <Input type="password" value="" variant="short" disabled />
                 <Button variant="account">비밀번호 변경</Button>
               </div>
             </div>
