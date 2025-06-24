@@ -1,12 +1,34 @@
+import { useMemo } from 'react';
+import { createSearchParams, useNavigate } from 'react-router-dom';
+
+import RegionCardList from '@/components/Cards/RegionCardList';
 import { useRegionStore } from '@/store/RegionStore';
 
+import type { RegionItem } from '../../../type/card';
 import Label from '../../atoms/Label/Label';
-import ProductCardLocalRecommend from '../../Cards/ProductCardLocalRecommend';
 
 import styles from './ProductBanner.module.scss';
 
 const ProductBanner = () => {
-  const { selectedRegion } = useRegionStore();
+  const navigate = useNavigate();
+  const { selectedRegion, regionList, setSelectedRegion, setRegionList } = useRegionStore();
+
+  const handleRegionCardClick = (item: RegionItem) => {
+    setSelectedRegion(item);
+    setRegionList(regionList);
+
+    navigate({
+      pathname: '/product',
+      search: createSearchParams({
+        regionId: item.regionId.toString()
+      }).toString()
+    });
+  };
+
+  const filteredRegionList = useMemo(
+    () => regionList.filter((region) => region.regionId !== selectedRegion?.regionId),
+    [regionList, selectedRegion]
+  );
 
   return (
     <div className={styles.banner}>
@@ -21,11 +43,10 @@ const ProductBanner = () => {
       </div>
       <div className={styles.regionBarWrapper}>
         <div className={styles.regionBar}>
-          <ProductCardLocalRecommend>강원</ProductCardLocalRecommend>
-          <ProductCardLocalRecommend>경상</ProductCardLocalRecommend>
-          <ProductCardLocalRecommend>전라</ProductCardLocalRecommend>
-          <ProductCardLocalRecommend>충청</ProductCardLocalRecommend>
-          <ProductCardLocalRecommend>수도권</ProductCardLocalRecommend>
+          <RegionCardList
+            RegionCardList={filteredRegionList}
+            handleRegionCardClick={handleRegionCardClick}
+          />
         </div>
       </div>
     </div>
