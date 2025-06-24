@@ -81,15 +81,14 @@ const MainPage = () => {
         .then((data) => {
           setRegionList(
             data.reduce((acc: RegionItem[], region: Region) => {
-              const regionDo = region.name.includes('도') ? '도' : '';
-              const regionName = region.name.slice(0, 2);
-              const imageUrl =
-                imageLinks.find((item) => item.name.includes(regionName))?.image ?? '';
-              const findIndex = acc.findIndex((item) => item.title === `${regionName}${regionDo}`);
+              if (region.level !== 1) return acc;
+
+              const imageUrl = imageLinks.find((item) => item.name === region.name)?.image ?? '';
+              const findIndex = acc.findIndex((item) => item.title === region.name);
 
               if (!acc[findIndex]) {
                 acc.push({
-                  title: `${regionName}${regionDo}`,
+                  title: region.name,
                   image: imageUrl,
                   regionId: region.regionId
                 });
