@@ -116,8 +116,8 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         variant="long"
         value={form.passwordCheck}
         onChange={handleChange}
-        disabled={!form.password || emailVerified}
-        className={!form.password || emailVerified ? styles.disabledInput : ''}
+        disabled={!form.password}
+        className={!form.password ? styles.disabledInput : ''}
       />
       {error.password && <div className={styles.errorMessage}>{error.password}</div>}
 

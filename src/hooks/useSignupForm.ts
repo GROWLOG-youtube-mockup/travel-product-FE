@@ -23,7 +23,13 @@ export function useSignupForm(initialForm: SignupValues, onSubmit: (values: Sign
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => {
+      // 비밀번호가 지워질 때 passwordCheck도 함께 초기화
+      if (name === 'password' && value === '') {
+        return { ...prev, password: '', passwordCheck: '' };
+      }
+      return { ...prev, [name]: value };
+    });
     clearFieldError(name);
     if (name === 'email') {
       setEmailSent(false);
