@@ -27,3 +27,16 @@
   justify-content: flex-start;
   width: 90%;
 }
+
+.emptyMsg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  height: 30vh;
+  margin: 20px auto;
+  padding: 20px;
+  border: #9d9d9d solid 2px;
+  letter-spacing: 0.02em;
+  border-radius: 20px;
+}
