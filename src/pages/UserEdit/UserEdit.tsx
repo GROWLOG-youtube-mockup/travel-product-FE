@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import Input from '../../components/atoms/Input/Input';
@@ -8,6 +9,7 @@ import styles from './UserEdit.module.scss';
 
 const UserEditPage = () => {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -17,18 +19,18 @@ const UserEditPage = () => {
         const data = await res.json();
         setUser(data);
       } catch {
-        // 에러 핸들링 필요시 여기에 작성
+        navigate('/error');
       }
     };
     fetchUser();
-  }, []);
+  }, [navigate]);
 
   return (
     <div className={styles.container}>
       {/* 계정 정보 변경 */}
       <section className={styles.section}>
         <div className={styles.sectionLeft}>
-          <h2>계정 정보 변경</h2>
+          <h2 className={styles.sectionLeftH2}>계정 정보 변경</h2>
           <p>계정 정보를 변경합니다.</p>
         </div>
         <form className={styles.sectionRight}>
@@ -69,7 +71,7 @@ const UserEditPage = () => {
       {/* 계정 탈퇴 */}
       <section className={styles.section}>
         <div className={styles.sectionLeft}>
-          <h2>계정 탈퇴</h2>
+          <h2 className={styles.sectionLeftH2}>계정 탈퇴</h2>
           <p>계정 및 개인정보를 삭제합니다.</p>
         </div>
         <div className={styles.sectionRight}>
