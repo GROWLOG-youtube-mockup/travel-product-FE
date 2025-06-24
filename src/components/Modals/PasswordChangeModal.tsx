@@ -78,7 +78,13 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             className={styles.input}
           />
           {error && <div className={styles.error}>{error}</div>}
-          <Button type="button" variant="account" onClick={handleChange} className={styles.button}>
+          <Button
+            type="button"
+            variant="xl"
+            onClick={handleChange}
+            className={styles.button}
+            style={{ width: '520px' }}
+          >
             비밀번호 변경
           </Button>
         </div>

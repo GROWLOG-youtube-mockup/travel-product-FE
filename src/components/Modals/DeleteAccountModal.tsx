@@ -56,9 +56,7 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
         </div>
       ) : (
         <div className={styles.modalWrapper}>
-          <label htmlFor="delete-password" className={styles.modalTitle}>
-            비밀번호 확인
-          </label>
+          <label htmlFor="delete-password">비밀번호 확인</label>
           <Input
             id="delete-password"
             type="password"
@@ -68,7 +66,14 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
             variant="long"
             className={styles.input}
           />
-          <Button type="button" variant="account" onClick={handleDelete} className={styles.button}>
+          <Button
+            type="button"
+            variant="xl"
+            color="white"
+            onClick={handleDelete}
+            className={styles.button}
+            style={{ width: '520px' }}
+          >
             회원 탈퇴
           </Button>
           {error && <div className={styles.error}>{error}</div>}
