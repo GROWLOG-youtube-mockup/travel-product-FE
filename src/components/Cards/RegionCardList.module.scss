@@ -8,10 +8,8 @@
     height: 100%;
     border: none;
 
-    &.left {
-      left: 0;
-      background: linear-gradient(to right, rgb(255 255 255), rgb(255 255 255 / 0%));
-
+    &.left,
+    &.right {
       &::after {
         position: absolute;
         top: 50%;
@@ -19,6 +17,14 @@
         font-size: 1.5rem;
         color: #ffffff;
         transform: translate(-50%, -50%);
+      }
+    }
+
+    &.left {
+      left: 0;
+      background: linear-gradient(to right, rgb(255 255 255), rgb(255 255 255 / 0%));
+
+      &::after {
         content: '◀';
       }
     }
@@ -28,12 +34,6 @@
       background: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255));
 
       &::after {
-        position: absolute;
-        top: 50%;
-        left: 60%;
-        font-size: 1.5rem;
-        color: #ffffff;
-        transform: translate(-50%, -50%);
         content: '▶';
       }
     }
