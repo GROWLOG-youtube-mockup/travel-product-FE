@@ -81,7 +81,7 @@ const MainPage = () => {
         .then((data) => {
           setRegionList(
             data.reduce((acc: RegionItem[], region: Region) => {
-              if (region.level !== 1) return acc;
+              if (!region.level || region.level !== 1) return acc;
 
               const imageUrl = imageLinks.find((item) => item.name === region.name)?.image ?? '';
               const findIndex = acc.findIndex((item) => item.title === region.name);
@@ -90,7 +90,7 @@ const MainPage = () => {
                 acc.push({
                   title: region.name,
                   image: imageUrl,
-                  regionId: region.regionId
+                  regionId: region.region_id
                 });
               }
 

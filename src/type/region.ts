@@ -1,6 +1,6 @@
 export type Region = {
-  regionId: number;
+  region_id: number;
   name: string;
   level: number;
-  children: { regionId: number; name: string; level: number }[];
+  children: { region_id: number; name: string; level: number }[];
 };
