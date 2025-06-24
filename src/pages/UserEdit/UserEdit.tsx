@@ -54,7 +54,7 @@ const UserEditPage = () => {
               <label>이름</label>
               <div className={styles.inputInline}>
                 <Input type="text" value={user?.name ?? ''} variant="short" disabled />
-                <Button variant="account" onClick={() => setNameModalOpen(true)}>
+                <Button type="button" variant="account" onClick={() => setNameModalOpen(true)}>
                   이름 변경
                 </Button>
               </div>
@@ -65,7 +65,7 @@ const UserEditPage = () => {
               <label>전화번호</label>
               <div className={styles.inputInline}>
                 <Input type="text" value={user?.phone_number ?? ''} variant="short" disabled />
-                <Button variant="account" onClick={() => setPhoneModalOpen(true)}>
+                <Button type="button" variant="account" onClick={() => setPhoneModalOpen(true)}>
                   전화번호 변경
                 </Button>
               </div>
@@ -76,7 +76,7 @@ const UserEditPage = () => {
               <label>비밀번호</label>
               <div className={styles.inputInline}>
                 <Input type="password" value="" variant="short" disabled />
-                <Button variant="account" onClick={() => setPasswordModalOpen(true)}>
+                <Button type="button" variant="account" onClick={() => setPasswordModalOpen(true)}>
                   비밀번호 변경
                 </Button>
               </div>
