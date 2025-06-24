@@ -3,6 +3,7 @@ import { useState } from 'react';
 import type { LoginFormProps } from '../../type/login';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
+import PasswordInput from '../atoms/Input/PasswordInput';
 
 import styles from './LoginForm.module.scss';
 
@@ -21,7 +22,7 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
   return (
     <form className={styles['loginForm']} onSubmit={handleSubmit}>
       <label className={styles['emailLabel']} htmlFor="username">
-        Email
+        이메일
       </label>
       <Input
         type="email"
@@ -33,15 +34,13 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
         required
       />
       <label className={styles['passwordLabel']} htmlFor="password">
-        Password
+        비밀번호
       </label>
-      <Input
-        type="password"
+      <PasswordInput
         id="password"
         value={password}
         placeholder="비밀번호를 입력해주세요"
         onChange={(e) => setPassword(e.target.value)}
-        className={styles['passwordInput']}
         required
       />
       {error && <p className="error">{error}</p>}
