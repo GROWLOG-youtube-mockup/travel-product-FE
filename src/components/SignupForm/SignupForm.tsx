@@ -1,5 +1,6 @@
-import type { SignupValues } from '../../type/signupForm';
-import { signupInitialForm, useSignupForm } from '../../type/signupForm';
+import { useSignupForm } from '../../hooks/useSignupForm';
+import type { SignupValues } from '../../types/signupForm.types';
+import { signupInitialForm } from '../../types/signupForm.types';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 import PasswordInputField from '../atoms/Input/PasswordInputField';
