@@ -42,15 +42,20 @@ const PhoneChangeModal = ({ open, onClose, onSuccess }: PhoneChangeModalProps) =
   };
 
   return (
-    <GenericModal open={open} onClose={onClose} title="전화번호 변경">
+    <GenericModal
+      open={open}
+      onClose={onClose}
+      title="전화번호 변경"
+      subtitle="전화번호를 변경합니다."
+    >
       {success ? (
-        <div className={styles.modalSuccess}>
+        <div className={styles.success}>
           정보 변경이 완료되었습니다.
           <br />
           5초 후 창이 닫힙니다.
         </div>
       ) : (
-        <div className={styles.modalContent}>
+        <div className={styles.modalWrapper}>
           <label htmlFor="phone-change">새 전화번호</label>
           <Input
             id="phone-change"
@@ -59,9 +64,10 @@ const PhoneChangeModal = ({ open, onClose, onSuccess }: PhoneChangeModalProps) =
             onChange={(e) => setPhone(e.target.value)}
             placeholder="새 전화번호를 입력하세요"
             variant="long"
+            className={styles.input}
           />
-          {error && <div className={styles.modalFormError}>{error}</div>}
-          <Button type="button" variant="account" onClick={handleChange}>
+          {error && <div className={styles.error}>{error}</div>}
+          <Button type="button" variant="account" onClick={handleChange} className={styles.button}>
             전화번호 변경
           </Button>
         </div>

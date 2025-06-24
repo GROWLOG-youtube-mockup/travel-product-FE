@@ -43,19 +43,17 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
   };
 
   return (
-    <GenericModal open={open} onClose={onClose} title="이름 변경">
+    <GenericModal open={open} onClose={onClose} title="이름 변경" subtitle="이름을 변경합니다.">
       {success ? (
-        <div className={styles.modalFormSuccess}>
+        <div className={styles.success}>
           정보 변경이 완료되었습니다.
           <br />
           5초 후 창이 닫힙니다.
         </div>
       ) : (
-        <div className={styles.modalFormContainer}>
-          <div className={styles.modalFormInput}>
-            <label htmlFor="current-name" className={styles.modalFormTitle}>
-              이전 이름
-            </label>
+        <div className={styles.modalWrapper}>
+          <div className={styles.input}>
+            <label htmlFor="current-name">이전 이름</label>
             <Input id="current-name" type="text" value={currentName} readOnly variant="long" />
           </div>
           <label htmlFor="name-change">새 이름</label>
@@ -67,13 +65,8 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
             placeholder="새 이름을 입력하세요"
             variant="long"
           />
-          {error && <div className={styles.modalFormError}>{error}</div>}
-          <Button
-            type="button"
-            variant="account"
-            onClick={handleChange}
-            className={styles.modalFormButton}
-          >
+          {error && <div className={styles.error}>{error}</div>}
+          <Button type="button" variant="account" onClick={handleChange} className={styles.button}>
             이름 변경
           </Button>
         </div>

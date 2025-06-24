@@ -42,16 +42,21 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
   };
 
   return (
-    <GenericModal open={open} onClose={onClose} title="계정 탈퇴">
+    <GenericModal
+      open={open}
+      onClose={onClose}
+      title="계정 탈퇴"
+      subtitle="계정을 탈퇴하면 다시 되돌릴 수 없습니다."
+    >
       {success ? (
-        <div className={styles.modalFormSuccess}>
+        <div className={styles.success}>
           정보 변경이 완료되었습니다.
           <br />
           5초 후 창이 닫힙니다.
         </div>
       ) : (
-        <div className={styles.modalFormWrapper}>
-          <label htmlFor="delete-password" className={styles.modalFormTitle}>
+        <div className={styles.modalWrapper}>
+          <label htmlFor="delete-password" className={styles.modalTitle}>
             비밀번호 확인
           </label>
           <Input
@@ -61,17 +66,12 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
             onChange={(e) => setPassword(e.target.value)}
             placeholder="비밀번호를 입력하세요"
             variant="long"
-            className={styles.modalFormInput}
+            className={styles.input}
           />
-          <Button
-            type="button"
-            variant="account"
-            onClick={handleDelete}
-            className={styles.modalFormButton}
-          >
+          <Button type="button" variant="account" onClick={handleDelete} className={styles.button}>
             회원 탈퇴
           </Button>
-          {error && <div className={styles.modalFormError}>{error}</div>}
+          {error && <div className={styles.error}>{error}</div>}
         </div>
       )}
     </GenericModal>

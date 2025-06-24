@@ -43,15 +43,20 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   };
 
   return (
-    <GenericModal open={open} onClose={onClose} title="비밀번호 변경">
+    <GenericModal
+      open={open}
+      onClose={onClose}
+      title="비밀번호 변경"
+      subtitle="비밀번호를 변경합니다."
+    >
       {success ? (
-        <div className={styles.modalSuccess}>
+        <div className={styles.success}>
           정보 변경이 완료되었습니다.
           <br />
           5초 후 창이 닫힙니다.
         </div>
       ) : (
-        <div className={styles.modalContent}>
+        <div className={styles.modalWrapper}>
           <label htmlFor="current-password">현재 비밀번호</label>
           <Input
             id="current-password"
@@ -60,6 +65,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             onChange={(e) => setCurrentPassword(e.target.value)}
             placeholder="현재 비밀번호를 입력하세요"
             variant="long"
+            className={styles.input}
           />
           <label htmlFor="new-password">새 비밀번호</label>
           <Input
@@ -69,9 +75,10 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             onChange={(e) => setNewPassword(e.target.value)}
             placeholder="새 비밀번호를 입력하세요"
             variant="long"
+            className={styles.input}
           />
-          {error && <div className={styles.modalFormError}>{error}</div>}
-          <Button type="button" variant="account" onClick={handleChange}>
+          {error && <div className={styles.error}>{error}</div>}
+          <Button type="button" variant="account" onClick={handleChange} className={styles.button}>
             비밀번호 변경
           </Button>
         </div>
