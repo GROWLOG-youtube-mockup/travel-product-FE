@@ -118,7 +118,10 @@ const UserEditPage = () => {
       <DeleteAccountModal
         open={isDeleteModalOpen}
         onClose={() => setDeleteModalOpen(false)}
-        onSuccess={() => setDeleteModalOpen(false)}
+        onSuccess={() => {
+          setDeleteModalOpen(false);
+          window.location.reload();
+        }}
       />
     </div>
   );
