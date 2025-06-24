@@ -42,22 +42,22 @@ export const userHandlers = [
   }),
 
   http.patch('/users/me/name', async () => {
-    return HttpResponse.json({ message: '이름이 성공적으로 변경되었습니다.' });
+    return HttpResponse.json({ success: true, data: '이름이 변경되었습니다.', error: null });
   }),
 
   http.patch('/users/me/phone', async () => {
-    return HttpResponse.json({ message: '전화번호가 성공적으로 변경되었습니다.' });
+    return HttpResponse.json({ success: true, data: '전화번호가 변경되었습니다.', error: null });
   }),
 
   http.post('/users/verify-password', async () => {
-    return HttpResponse.json({ verified: true });
+    return HttpResponse.json({ success: true, data: { verified: true }, error: null });
   }),
 
   http.put('/users/me/password', async () => {
-    return HttpResponse.json({ message: 'Password updated successfully' });
+    return HttpResponse.json({ success: true, data: '비밀번호가 변경되었습니다.', error: null });
   }),
 
   http.delete('/users/me', async () => {
-    return HttpResponse.json({ message: 'Account deleted successfully' });
+    return HttpResponse.json({ success: true, data: '회원 탈퇴가 완료되었습니다.', error: null });
   })
 ];
