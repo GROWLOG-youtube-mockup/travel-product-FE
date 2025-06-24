@@ -138,10 +138,7 @@ export const products = [
   {
     product_id: 111,
     name: '강릉 역사 탐방 1박 4일',
-    imageUrls: [
-      'https://cdn.example.com/images/강릉1.jpg',
-      'https://cdn.example.com/images/강릉2.jpg'
-    ],
+    imageUrls: ['https://cdn.pixabay.com/photo/2016/12/23/06/17/jung-dong-jin-1926871_1280.jpg'],
     price: 741323,
     stock_quantity: 28,
     duration: 6,
@@ -154,8 +151,8 @@ export const products = [
     product_id: 112,
     name: '경주 여름 방학 2박 2일',
     imageUrls: [
-      'https://cdn.example.com/images/경주1.jpg',
-      'https://cdn.example.com/images/경주2.jpg'
+      'https://cdn.pixabay.com/photo/2016/05/17/12/16/the-bulguksa-temple-1398010_1280.jpg',
+      'https://cdn.pixabay.com/photo/2019/02/28/16/33/asia-4026271_1280.jpg'
     ],
     price: 136552,
     stock_quantity: 27,
@@ -169,8 +166,9 @@ export const products = [
     product_id: 113,
     name: '서울 역사 탐방 2박 5일',
     imageUrls: [
-      'https://cdn.example.com/images/서울1.jpg',
-      'https://cdn.example.com/images/서울2.jpg'
+      'https://cdn.pixabay.com/photo/2019/11/14/18/20/korea-4626820_1280.jpg',
+      'https://cdn.pixabay.com/photo/2023/02/11/13/43/building-7782841_960_720.jpg',
+      'https://cdn.pixabay.com/photo/2023/01/24/15/45/palace-7741339_1280.jpg'
     ],
     price: 154831,
     stock_quantity: 22,
@@ -184,8 +182,10 @@ export const products = [
     product_id: 114,
     name: '부산 자유 여행 1박 4일',
     imageUrls: [
-      'https://cdn.example.com/images/부산1.jpg',
-      'https://cdn.example.com/images/부산2.jpg'
+      'https://cdn.pixabay.com/photo/2016/10/17/07/53/busan-night-scene-1747130_1280.jpg',
+      'https://cdn.pixabay.com/photo/2023/01/12/06/16/gamcheon-culture-village-7713364_1280.jpg',
+      'https://cdn.pixabay.com/photo/2020/08/09/11/26/road-5475262_1280.jpg',
+      'https://cdn.pixabay.com/photo/2018/03/15/13/42/skyscraper-3228264_1280.jpg'
     ],
     price: 487138,
     stock_quantity: 7,
