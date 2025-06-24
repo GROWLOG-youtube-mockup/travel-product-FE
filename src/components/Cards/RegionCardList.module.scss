@@ -12,7 +12,6 @@
     width: 32px;
     height: 32px;
     max-height: 100%;
-    border: none;
     border: 1px solid #e6e6e6;
     background-color: #ffffff;
     border-radius: 50%;
@@ -20,7 +19,6 @@
     &.left,
     &.right {
       top: 46%;
-      border-radius: 50%;
 
       &::before {
         position: absolute;
@@ -31,41 +29,27 @@
         padding: 3px;
         border: solid 1px #757575;
         border-width: 0 3px 3px 0;
-        transform: rotate(45deg);
-        transform: translate(-50%, -50%) rotate(45deg);
         transform-origin: center;
         content: '';
-      }
-
-      &.left::before {
-        left: 60%;
-        transform: translate(-50%, -50%) rotate(135deg); // ← 방향
-      }
-
-      &.right::before {
-        left: 46%;
-        transform: translate(-50%, -50%) rotate(-45deg); // → 방향
       }
     }
 
     &.left {
       left: 0;
 
-      // background: linear-gradient(to right, rgb(255 255 255), rgb(255 255 255 / 0%));
-
-      // &::after {
-      //   content: '<';
-      // }
+      &::before {
+        left: 60%;
+        transform: translate(-50%, -50%) rotate(135deg); // ← 방향
+      }
     }
 
     &.right {
       right: 0;
 
-      // background: linear-gradient(to right, rgb(255 255 255 / 0%), rgb(255 255 255));
-
-      // &::after {
-      //   content: '>';
-      // }
+      &::before {
+        left: 46%;
+        transform: translate(-50%, -50%) rotate(-45deg); // → 방향
+      }
     }
 
     &.hidden {
