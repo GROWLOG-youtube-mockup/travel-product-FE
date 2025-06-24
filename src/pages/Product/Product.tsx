@@ -38,7 +38,7 @@ const ProductPage = () => {
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
-  }, []);
+  }, [location.search]);
 
   const filteredProducts = useMemo(() => {
     if (!activeCategory) {
