@@ -2,9 +2,15 @@ import { useState } from 'react';
 
 import { SIGNUP_ERROR_MSG } from '../constants/signupForm.constants';
 import type { SignupFormError, SignupValues } from '../types/signupForm.types';
+import { normalizePhoneNumber } from '../utils/phone';
 
 function isValidPhone(phone: string) {
-  return /^\d{3}-\d{3,4}-\d{4}$/.test(phone);
+  try {
+    normalizePhoneNumber(phone.replace(/-/g, ''));
+    return true;
+  } catch {
+    return false;
+  }
 }
 function isValidEmail(email: string) {
   return /^[\w-.]+@[\w-]+\.[a-zA-Z]{2,}$/.test(email);

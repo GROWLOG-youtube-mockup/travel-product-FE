@@ -3,7 +3,7 @@ export const SIGNUP_ERROR_MSG = {
   name: '이름을 입력하세요.',
   email: '이메일을 입력하세요.',
   emailFormat: '올바른 이메일 형식을 입력하세요.',
-  phone: '전화번호는 000-0000-0000 형식이어야 합니다.',
+  phone: '전화번호는 숫자만 포함된 10자리 또는 11자리이어야 합니다.',
   password: '비밀번호를 입력하세요.',
   passwordCheck: '비밀번호가 일치하지 않습니다.',
   emailSend: '이메일 인증코드 전송 실패',
