@@ -60,6 +60,13 @@ const AddCart = ({ data, selectedData, handleSelectedCount }: AddCartProps) => {
           <span className={styles.price}>₩{data.price.toLocaleString()}</span>
         </div>
       </div>
+
+      {data.isSoldOut && (
+        <div>
+          <span className={styles.soldOut}>SLOD OUT</span>
+        </div>
+      )}
+
       <div className={styles.buttonLayout}>
         <Button variant="rounded" disabled={data.isSoldOut}>
           장바구니에 담기
