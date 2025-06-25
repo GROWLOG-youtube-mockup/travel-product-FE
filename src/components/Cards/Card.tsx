@@ -7,13 +7,22 @@ type CardProps = {
   title: string;
   price: number;
   handleCardClick: (product_id: number) => void;
+  isGrid?: boolean;
 };
 
-const Card = ({ styleName, product_id, image, title, price, handleCardClick }: CardProps) => {
+const Card = ({
+  styleName,
+  product_id,
+  image,
+  title,
+  price,
+  handleCardClick,
+  isGrid
+}: CardProps) => {
   return (
     <div
       role="button"
-      className={`${styles.card} ${styles[`${styleName ?? 'normal'}`]}`}
+      className={`${styles.card} ${styles[`${styleName ?? 'normal'}`]} ${isGrid ? styles.gridCard : ''}`}
       onClick={() => handleCardClick(product_id)}
     >
       <div className={styles['cardImage']}>

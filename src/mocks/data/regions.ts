@@ -1,92 +1,37 @@
 export const regions = [
-  {
-    regionId: 1,
-    name: '서울특별시',
-    level: 1,
-    children: [
-      { regionId: 11, name: '강남구', level: 2 },
-      { regionId: 12, name: '마포구', level: 2 }
-    ]
-  },
-  {
-    regionId: 3,
-    name: '제주도',
-    level: 1,
-    children: []
-  },
-  {
-    regionId: 4,
-    name: '부산광역시',
-    level: 1,
-    children: [
-      { regionId: 41, name: '해운대구', level: 2 },
-      { regionId: 42, name: '수영구', level: 2 }
-    ]
-  },
-  {
-    regionId: 5,
-    name: '대구광역시',
-    level: 1,
-    children: [
-      { regionId: 51, name: '중구', level: 2 },
-      { regionId: 52, name: '수성구', level: 2 }
-    ]
-  },
-  {
-    regionId: 6,
-    name: '경기도',
-    level: 1,
-    children: [
-      { regionId: 61, name: '성남시', level: 2 },
-      { regionId: 62, name: '수원시', level: 2 }
-    ]
-  },
-  {
-    regionId: 7,
-    name: '강원특별자치도',
-    level: 1,
-    children: [
-      { regionId: 71, name: '춘천시', level: 2 },
-      { regionId: 72, name: '강릉시', level: 2 }
-    ]
-  },
-  {
-    regionId: 8,
-    name: '전라남도',
-    level: 1,
-    children: [
-      { regionId: 81, name: '여수시', level: 2 },
-      { regionId: 82, name: '순천시', level: 2 }
-    ]
-  },
-  {
-    regionId: 9,
-    name: '세종특별자치시',
-    level: 1,
-    children: []
-  },
-  {
-    regionId: 10,
-    name: '광주광역시',
-    level: 1,
-    children: []
-  },
-  {
-    regionId: 11,
-    name: '울산광역시',
-    level: 1,
-    children: []
-  },
-  {
-    regionId: 12,
-    name: '충청남도',
-    level: 1,
-    children: []
-  },
-  {
-    regionId: 13,
-    name: '경상북도',
-    level: 1,
-    children: []
-  }
+  { region_id: 1, name: '대한민국', level: 0, parent_id: null },
+  { region_id: 2, name: '서울', level: 1, parent_id: 1 },
+  { region_id: 3, name: '부산', level: 1, parent_id: 1 },
+  { region_id: 4, name: '대구', level: 1, parent_id: 1 },
+  { region_id: 5, name: '인천', level: 1, parent_id: 1 },
+  { region_id: 6, name: '광주', level: 1, parent_id: 1 },
+  { region_id: 7, name: '대전', level: 1, parent_id: 1 },
+  { region_id: 8, name: '울산', level: 1, parent_id: 1 },
+  { region_id: 9, name: '세종', level: 1, parent_id: 1 },
+  { region_id: 10, name: '경기', level: 1, parent_id: 1 },
+  { region_id: 11, name: '강원', level: 1, parent_id: 1 },
+  { region_id: 12, name: '충북', level: 1, parent_id: 1 },
+  { region_id: 13, name: '충남', level: 1, parent_id: 1 },
+  { region_id: 14, name: '전북', level: 1, parent_id: 1 },
+  { region_id: 15, name: '전남', level: 1, parent_id: 1 },
+  { region_id: 16, name: '경북', level: 1, parent_id: 1 },
+  { region_id: 17, name: '경남', level: 1, parent_id: 1 },
+  { region_id: 18, name: '제주', level: 1, parent_id: 1 },
+  { region_id: 19, name: '수원', level: 2, parent_id: 10 },
+  { region_id: 20, name: '성남', level: 2, parent_id: 10 },
+  { region_id: 21, name: '용인', level: 2, parent_id: 10 },
+  { region_id: 22, name: '춘천', level: 2, parent_id: 11 },
+  { region_id: 23, name: '원주', level: 2, parent_id: 11 },
+  { region_id: 24, name: '강릉', level: 2, parent_id: 11 },
+  { region_id: 25, name: '동해', level: 2, parent_id: 11 },
+  { region_id: 26, name: '태백', level: 2, parent_id: 11 },
+  { region_id: 27, name: '속초', level: 2, parent_id: 11 },
+  { region_id: 28, name: '삼척', level: 2, parent_id: 11 },
+  { region_id: 29, name: '청주', level: 2, parent_id: 12 },
+  { region_id: 30, name: '충주', level: 2, parent_id: 12 },
+  { region_id: 31, name: '제천', level: 2, parent_id: 12 },
+  { region_id: 32, name: '천안', level: 2, parent_id: 13 },
+  { region_id: 33, name: '공주', level: 2, parent_id: 13 },
+  { region_id: 34, name: '보령', level: 2, parent_id: 13 },
+  { region_id: 35, name: '아산', level: 2, parent_id: 13 }
 ];
