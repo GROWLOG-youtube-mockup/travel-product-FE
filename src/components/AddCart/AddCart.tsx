@@ -35,7 +35,7 @@ const AddCart = ({ data, selectedData, handleSelectedCount }: AddCartProps) => {
             >
               -
             </Button>
-            <span>{selectedData.count}</span>
+            <span className={styles.countText}>{selectedData.count}</span>
             <Button
               color="white"
               className={styles.countButton}

@@ -10,6 +10,7 @@
   box-sizing: border-box;
   background: none;
   border-radius: 15px;
+  user-select: none;
 
   .line {
     width: 100%;
@@ -18,8 +19,14 @@
   }
 
   .text {
+    width: 3rem;
     font-size: 90%;
     color: #272727;
+  }
+
+  .countText {
+    width: 3rem;
+    text-align: center;
   }
 
   .soldOut {
