@@ -15,6 +15,10 @@
     width: calc((100% - 5rem) / 5);
   }
 
+  &.gridCard {
+    width: 100%;
+  }
+
   &.normal {
     height: 200px;
   }
