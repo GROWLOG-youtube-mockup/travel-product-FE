@@ -51,6 +51,12 @@
           width: 2rem;
           height: 2rem;
           border: 1px solid #272727;
+
+          &:disabled {
+            border: none;
+            color: #ffffff;
+            background: #00000052;
+          }
         }
       }
     }
