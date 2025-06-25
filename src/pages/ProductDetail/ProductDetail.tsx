@@ -14,6 +14,10 @@ const ProductDetailPage = () => {
   const { pathname } = useLocation();
   const productId = pathname.split('/').pop();
   const [product, setProduct] = useState<Product | null>(null);
+  const [selectedData, setSelectedData] = useState({
+    count: 0,
+    date: new Date()
+  });
 
   useEffect(() => {
     fetch('/products/' + productId)
@@ -24,13 +28,29 @@ const ProductDetailPage = () => {
         return response.json();
       })
       .then((data) => {
-        console.log('Product data:', data);
         setProduct(data);
       })
       .catch((error) => {
         console.error('There was a problem with the fetch operation:', error);
       });
   }, []);
+
+  const handleSelectedCount = (num: number) => {
+    setSelectedData((prev) => {
+      const newCount = prev.count + num;
+      return {
+        ...prev,
+        count: newCount < 0 ? 0 : newCount
+      };
+    });
+  };
+
+  const handleSelectedDate = (date: Date) => {
+    setSelectedData((prev) => ({
+      ...prev,
+      date
+    }));
+  };
 
   return (
     <div className={styles.page}>
@@ -48,7 +68,15 @@ const ProductDetailPage = () => {
           </div>
         </div>
         <div className={styles.addCartBox}>
-          <AddCart />
+          <AddCart
+            data={{
+              title: product?.name ?? '',
+              price: product?.price ?? 0,
+              isSoldOut: product?.stock_quantity === 0
+            }}
+            selectedData={selectedData}
+            handleSelectedCount={handleSelectedCount}
+          />
         </div>
       </div>
     </div>
