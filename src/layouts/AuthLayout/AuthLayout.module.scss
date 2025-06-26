@@ -1,10 +1,14 @@
 @use '../../styles/core';
 
 .baseForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center; // 가로 중앙 정렬 추가
+  justify-content: center;
   width: 65vw;
   max-width: 1280px;
   min-width: core.$default-min-width;
+  height: calc(100vh - 64px - 58px); // 헤더 64px, 풋터 58px 기준, min-height → height로 변경
   margin: 0 auto;
-  padding: 25px 16px;
-  background-color: rgb(191 193 194);
+  background-color: rgb(255 255 255);
 }

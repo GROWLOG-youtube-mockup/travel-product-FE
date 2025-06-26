@@ -1,0 +1,179 @@
+import React, { useEffect, useState } from 'react';
+
+import Button from '../atoms/Button/Button';
+import Input from '../atoms/Input/Input';
+import PasswordInput from '../atoms/Input/PasswordInput';
+
+import GenericModal from './GenericModal';
+
+import styles from './ModalCommon.module.scss';
+
+interface PasswordChangeModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalProps) => {
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [newPasswordCheck, setNewPasswordCheck] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const [step, setStep] = useState<'verify' | 'change'>('verify');
+  const [isVerified, setIsVerified] = useState(false);
+
+  // 새 비밀번호가 비워지면 확인란도 자동 초기화
+  useEffect(() => {
+    if (!newPassword) {
+      setNewPasswordCheck('');
+    }
+  }, [newPassword]);
+
+  const handleVerifyPassword = async () => {
+    setError('');
+    try {
+      const res = await fetch('/users/verify-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: currentPassword })
+      });
+      const data = await res.json();
+      if (data.success && data.data.verified) {
+        setStep('change');
+        setIsVerified(true);
+      } else {
+        setError('비밀번호가 일치하지 않습니다.');
+      }
+    } catch {
+      setError('서버 오류로 실패하였습니다.');
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!isVerified) {
+      setError('본인 인증이 필요합니다.');
+      return;
+    }
+    setError('');
+    try {
+      const res = await fetch('/users/me/password', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSuccess(true);
+        setTimeout(() => {
+          onSuccess();
+          setSuccess(false);
+          setStep('verify');
+          setCurrentPassword('');
+          setNewPassword('');
+          setNewPasswordCheck('');
+          setIsVerified(false);
+        }, 5000);
+      } else {
+        setError(data.error || '서버 오류로 실패하였습니다.');
+      }
+    } catch {
+      setError('서버 오류로 실패하였습니다.');
+    }
+  };
+
+  return (
+    <GenericModal
+      open={open}
+      onClose={() => {
+        onClose();
+        setStep('verify');
+        setCurrentPassword('');
+        setNewPassword('');
+        setNewPasswordCheck('');
+        setError('');
+        setSuccess(false);
+        setIsVerified(false);
+      }}
+      title="비밀번호 변경"
+      subtitle="비밀번호를 변경합니다."
+    >
+      {success ? (
+        <div className={styles.success}>
+          정보 변경이 완료되었습니다.
+          <br />
+          5초 후 창이 닫힙니다.
+        </div>
+      ) : step === 'verify' ? (
+        <div className={styles.modalWrapper}>
+          <div className={styles.input}>
+            <label htmlFor="current-password">현재 비밀번호</label>
+            <PasswordInput
+              id="current-password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              placeholder="현재 비밀번호를 입력하세요"
+              style={{ width: '520px' }}
+            />
+            {error && <div className={styles.error}>{error}</div>}
+          </div>
+
+          <Button
+            type="button"
+            variant="xl"
+            onClick={handleVerifyPassword}
+            className={styles.button}
+            style={{ width: '520px' }}
+            disabled={!currentPassword}
+          >
+            인증하기
+          </Button>
+        </div>
+      ) : (
+        <div className={styles.modalWrapper}>
+          <div className={styles.input}>
+            <label htmlFor="new-password">새 비밀번호</label>
+            <PasswordInput
+              id="new-password"
+              name="new-password"
+              value={newPassword}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
+              placeholder="새 비밀번호를 입력하세요"
+              variant="long"
+            />
+          </div>
+          <div className={styles.input}>
+            <label htmlFor="new-password-check">새 비밀번호 확인</label>
+            <Input
+              id="new-password-check"
+              type="password"
+              value={newPasswordCheck}
+              onChange={(e) => setNewPasswordCheck(e.target.value)}
+              placeholder="새 비밀번호를 다시 입력하세요"
+              variant="long"
+              disabled={!newPassword}
+            />
+            {newPassword && newPasswordCheck && newPassword !== newPasswordCheck && (
+              <div className={styles.error}>비밀번호가 일치하지 않습니다.</div>
+            )}
+            {error && <div className={styles.error}>{error}</div>}
+          </div>
+          <Button
+            type="button"
+            variant="xl"
+            onClick={handleChangePassword}
+            className={styles.button}
+            style={{ width: '520px' }}
+            disabled={
+              !isVerified || !newPassword || !newPasswordCheck || newPassword !== newPasswordCheck
+            }
+          >
+            비밀번호 변경
+          </Button>
+        </div>
+      )}
+    </GenericModal>
+  );
+};
+
+export default PasswordChangeModal;

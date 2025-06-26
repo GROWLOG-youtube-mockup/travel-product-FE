@@ -1,6 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
 import Router from './router/router';
 
 import './styles/index.scss';
@@ -27,7 +29,10 @@ prepare()
     console.log('✅ React 앱 렌더링 시작');
     createRoot(document.getElementById('root')!).render(
       <StrictMode>
-        <Router />
+        <QueryClientProvider client={new QueryClient()}>
+          <Router />
+        </QueryClientProvider>
+        d
       </StrictMode>
     );
   })
