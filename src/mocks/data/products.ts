@@ -1,7 +1,7 @@
 // data/products.ts
 export const products = [
   {
-    product_id: 102,
+    productId: 102,
     name: '전주 여름 방학 2박 5일',
     imageUrls: [
       'https://cdn.example.com/images/전주1.jpg',
@@ -16,7 +16,7 @@ export const products = [
     tags: ['좋아요 😘']
   },
   {
-    product_id: 103,
+    productId: 103,
     name: '제주도 여름 방학 3박 3일',
     imageUrls: [
       'https://cdn.example.com/images/제주도1.jpg',
@@ -31,7 +31,7 @@ export const products = [
     tags: ['좋아요 😘', 'Best 추천 👍']
   },
   {
-    product_id: 104,
+    productId: 104,
     name: '제주도 액티비티 5박 2일',
     imageUrls: [
       'https://cdn.example.com/images/제주도1.jpg',
@@ -46,7 +46,7 @@ export const products = [
     tags: ['예약폭주 🎉']
   },
   {
-    product_id: 105,
+    productId: 105,
     name: '부산 패키지 2박 2일',
     imageUrls: [
       'https://cdn.example.com/images/부산1.jpg',
@@ -61,7 +61,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘']
   },
   {
-    product_id: 106,
+    productId: 106,
     name: '담양 여름 방학 1박 3일',
     imageUrls: [
       'https://cdn.example.com/images/담양1.jpg',
@@ -76,7 +76,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘', 'Best 추천 👍']
   },
   {
-    product_id: 107,
+    productId: 107,
     name: '경주 여름 방학 5박 3일',
     imageUrls: [
       'https://cdn.example.com/images/경주1.jpg',
@@ -91,7 +91,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘', 'Best 추천 👍']
   },
   {
-    product_id: 108,
+    productId: 108,
     name: '인제 자유 여행 5박 3일',
     imageUrls: [
       'https://cdn.example.com/images/인제1.jpg',
@@ -106,7 +106,7 @@ export const products = [
     tags: ['Best 추천 👍', '좋아요 😘']
   },
   {
-    product_id: 109,
+    productId: 109,
     name: '강릉 패키지 4박 2일',
     imageUrls: [
       'https://cdn.example.com/images/강릉1.jpg',
@@ -121,7 +121,7 @@ export const products = [
     tags: ['좋아요 😘']
   },
   {
-    product_id: 110,
+    productId: 110,
     name: '남해 여름 방학 1박 4일',
     imageUrls: [
       'https://cdn.example.com/images/남해1.jpg',
@@ -136,7 +136,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘']
   },
   {
-    product_id: 111,
+    productId: 111,
     name: '강릉 역사 탐방 1박 4일',
     imageUrls: ['https://cdn.pixabay.com/photo/2016/12/23/06/17/jung-dong-jin-1926871_1280.jpg'],
     price: 741323,
@@ -149,7 +149,7 @@ export const products = [
     tags: ['Best 추천 👍', '예약폭주 🎉', '좋아요 😘']
   },
   {
-    product_id: 112,
+    productId: 112,
     name: '경주 여름 방학 2박 2일',
     imageUrls: [
       'https://cdn.pixabay.com/photo/2016/05/17/12/16/the-bulguksa-temple-1398010_1280.jpg',
@@ -164,7 +164,7 @@ export const products = [
     tags: ['예약폭주 🎉']
   },
   {
-    product_id: 113,
+    productId: 113,
     name: '서울 역사 탐방 2박 5일',
     imageUrls: [
       'https://cdn.pixabay.com/photo/2019/11/14/18/20/korea-4626820_1280.jpg',
@@ -180,7 +180,7 @@ export const products = [
     tags: ['Best 추천 👍', '좋아요 😘']
   },
   {
-    product_id: 114,
+    productId: 114,
     name: '부산 자유 여행 1박 4일',
     imageUrls: [
       'https://cdn.pixabay.com/photo/2016/10/17/07/53/busan-night-scene-1747130_1280.jpg',
@@ -197,7 +197,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘']
   },
   {
-    product_id: 115,
+    productId: 115,
     name: '서울 패키지 4박 6일',
     imageUrls: [
       'https://cdn.example.com/images/서울1.jpg',
@@ -212,7 +212,7 @@ export const products = [
     tags: ['좋아요 😘', '예약폭주 🎉']
   },
   {
-    product_id: 116,
+    productId: 116,
     name: '담양 역사 탐방 2박 2일',
     imageUrls: [
       'https://cdn.example.com/images/담양1.jpg',
@@ -227,7 +227,7 @@ export const products = [
     tags: ['Best 추천 👍', '예약폭주 🎉', '좋아요 😘']
   },
   {
-    product_id: 117,
+    productId: 117,
     name: '인제 역사 탐방 3박 6일',
     imageUrls: [
       'https://cdn.example.com/images/인제1.jpg',
@@ -242,7 +242,7 @@ export const products = [
     tags: ['예약폭주 🎉', '좋아요 😘', 'Best 추천 👍']
   },
   {
-    product_id: 118,
+    productId: 118,
     name: '속초 역사 탐방 3박 2일',
     imageUrls: [
       'https://cdn.example.com/images/속초1.jpg',
@@ -257,7 +257,7 @@ export const products = [
     tags: ['좋아요 😘', 'Best 추천 👍']
   },
   {
-    product_id: 119,
+    productId: 119,
     name: '서울 여름 방학 1박 4일',
     imageUrls: [
       'https://cdn.example.com/images/서울1.jpg',
@@ -272,7 +272,7 @@ export const products = [
     tags: ['좋아요 😘']
   },
   {
-    product_id: 120,
+    productId: 120,
     name: '서울 액티비티 2박 3일',
     imageUrls: [
       'https://cdn.example.com/images/서울1.jpg',
@@ -287,7 +287,7 @@ export const products = [
     tags: ['예약폭주 🎉', 'Best 추천 👍', '좋아요 😘']
   },
   {
-    product_id: 121,
+    productId: 121,
     name: '인제 패키지 1박 2일',
     imageUrls: [
       'https://cdn.example.com/images/인제1.jpg',
@@ -309,7 +309,7 @@ export const products = [
    - API 스키마 그대로   */
   /* ---------- 서울 (3) ---------- */
   {
-    product_id: 2001,
+    productId: 2001,
     name: '서울 시티투어 2박 3일',
     price: 298000,
     stock_quantity: 18,
@@ -347,7 +347,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2002,
+    productId: 2002,
     name: '서울 한강 액티비티 1일',
     price: 99000,
     stock_quantity: 25,
@@ -382,7 +382,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2003,
+    productId: 2003,
     name: '서울 미식 투어 1박 2일',
     price: 186000,
     stock_quantity: 12,
@@ -420,7 +420,7 @@ export const products = [
 
   /* ---------- 부산 (2) ---------- */
   {
-    product_id: 2004,
+    productId: 2004,
     name: '부산 오션뷰 패키지 2박 3일',
     price: 345000,
     stock_quantity: 20,
@@ -449,7 +449,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2005,
+    productId: 2005,
     name: '부산 씨푸드 데이투어',
     price: 88000,
     stock_quantity: 0,
@@ -482,7 +482,7 @@ export const products = [
 
   /* ---------- 대구 (1) ---------- */
   {
-    product_id: 2006,
+    productId: 2006,
     name: '대구 근대 골목 1일 투어',
     price: 65000,
     stock_quantity: 30,
@@ -507,7 +507,7 @@ export const products = [
 
   /* ---------- 인천 (2) ---------- */
   {
-    product_id: 2007,
+    productId: 2007,
     name: '인천 차이나타운 & 개항장',
     price: 72000,
     stock_quantity: 22,
@@ -530,7 +530,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2008,
+    productId: 2008,
     name: '영종도 씨사이드 1박',
     price: 143000,
     stock_quantity: 15,
@@ -555,7 +555,7 @@ export const products = [
 
   /* ---------- 광주 (1) ---------- */
   {
-    product_id: 2009,
+    productId: 2009,
     name: '광주 근대 예술 투어',
     price: 88000,
     stock_quantity: 18,
@@ -580,7 +580,7 @@ export const products = [
 
   /* ---------- 대전 (1) ---------- */
   {
-    product_id: 2010,
+    productId: 2010,
     name: '대전 과학 체험 1일',
     price: 57000,
     stock_quantity: 24,
@@ -605,7 +605,7 @@ export const products = [
 
   /* ---------- 울산 (1) ---------- */
   {
-    product_id: 2011,
+    productId: 2011,
     name: '울산 대왕암·일출 투어',
     price: 92000,
     stock_quantity: 21,
@@ -630,7 +630,7 @@ export const products = [
 
   /* ---------- 세종 (1) ---------- */
   {
-    product_id: 2012,
+    productId: 2012,
     name: '세종 호수공원 자전거 투어',
     price: 45000,
     stock_quantity: 30,
@@ -655,7 +655,7 @@ export const products = [
 
   /* ---------- 경기 (4) ---------- */
   {
-    product_id: 2013,
+    productId: 2013,
     name: '수원 화성 & 행궁 1일',
     price: 69000,
     stock_quantity: 18,
@@ -678,7 +678,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2014,
+    productId: 2014,
     name: '용인 에버랜드 자유이용권',
     price: 82000,
     stock_quantity: 50,
@@ -701,7 +701,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2015,
+    productId: 2015,
     name: '가평 레일바이크·자라섬',
     price: 56000,
     stock_quantity: 27,
@@ -724,7 +724,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2016,
+    productId: 2016,
     name: '파주 임진각 평화 투어',
     price: 77000,
     stock_quantity: 19,
@@ -749,7 +749,7 @@ export const products = [
 
   /* ---------- 강원 (2) ---------- */
   {
-    product_id: 2017,
+    productId: 2017,
     name: '강릉 커피거리·경포대 1박',
     price: 158000,
     stock_quantity: 20,
@@ -772,7 +772,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2018,
+    productId: 2018,
     name: '설악산 케이블카·속초 아바이마을',
     price: 99000,
     stock_quantity: 25,
@@ -797,7 +797,7 @@ export const products = [
 
   /* ---------- 충북 (1) ---------- */
   {
-    product_id: 2019,
+    productId: 2019,
     name: '충주 탄금대·중앙탑 둘레길',
     price: 68000,
     stock_quantity: 18,
@@ -822,7 +822,7 @@ export const products = [
 
   /* ---------- 충남 (2) ---------- */
   {
-    product_id: 2020,
+    productId: 2020,
     name: '공주 무령왕릉·공산성',
     price: 62000,
     stock_quantity: 16,
@@ -845,7 +845,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2021,
+    productId: 2021,
     name: '태안 꽃지해변 노을 1박',
     price: 158000,
     stock_quantity: 12,
@@ -870,7 +870,7 @@ export const products = [
 
   /* ---------- 전북 (1) ---------- */
   {
-    product_id: 2022,
+    productId: 2022,
     name: '전주 한옥마을 야간 투어',
     price: 73000,
     stock_quantity: 20,
@@ -895,7 +895,7 @@ export const products = [
 
   /* ---------- 전남 (1) ---------- */
   {
-    product_id: 2023,
+    productId: 2023,
     name: '여수 밤바다 2박 3일',
     price: 246000,
     stock_quantity: 18,
@@ -920,7 +920,7 @@ export const products = [
 
   /* ---------- 경북 (2) ---------- */
   {
-    product_id: 2024,
+    productId: 2024,
     name: '안동 하회마을·탈춤 1일',
     price: 74000,
     stock_quantity: 22,
@@ -943,7 +943,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2025,
+    productId: 2025,
     name: '포항 호미곶·영일대 1박',
     price: 142000,
     stock_quantity: 15,
@@ -968,7 +968,7 @@ export const products = [
 
   /* ---------- 경남 (2) ---------- */
   {
-    product_id: 2026,
+    productId: 2026,
     name: '통영 동피랑·욕지섬 1박 2일',
     price: 185000,
     stock_quantity: 17,
@@ -991,7 +991,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2027,
+    productId: 2027,
     name: '남해 독일마을·보리암',
     price: 132000,
     stock_quantity: 20,
@@ -1016,7 +1016,7 @@ export const products = [
 
   /* ---------- 제주 (3) ---------- */
   {
-    product_id: 2028,
+    productId: 2028,
     name: '제주 올레길 걷기 3박 4일',
     price: 412000,
     stock_quantity: 14,
@@ -1039,7 +1039,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2029,
+    productId: 2029,
     name: '제주 서쪽 해변 렌터카 2박',
     price: 286000,
     stock_quantity: 26,
@@ -1062,7 +1062,7 @@ export const products = [
     updated_at: '2025-06-04T23:00:00Z'
   },
   {
-    product_id: 2030,
+    productId: 2030,
     name: '제주 한라산 등반 당일',
     price: 98000,
     stock_quantity: 32,

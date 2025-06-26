@@ -90,7 +90,7 @@ const ProductDetailPage = () => {
         items: [
           {
             peopleCount: selectedData.count,
-            product_id: productId,
+            productId: productId,
             start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
           }
         ]
@@ -101,7 +101,7 @@ const ProductDetailPage = () => {
 
         setSelectedItem({
           product: {
-            product_id: Number(productId),
+            productId: Number(productId),
             name: product.name,
             thumbnail_image_url: product.imageUrls[0],
             price: product.price

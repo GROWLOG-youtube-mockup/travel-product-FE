@@ -18,7 +18,7 @@ export const orders = [
       {
         order_item_id: 1,
         product: {
-          product_id: 101,
+          productId: 101,
           name: '시드니 4박 5일 자유 여행',
           price: 1200000
         },
@@ -53,7 +53,7 @@ export const orders = [
       {
         order_item_id: 2,
         product: {
-          product_id: 102,
+          productId: 102,
           name: '제주도 3박 4일 패키지',
           price: 800000
         },
@@ -88,7 +88,7 @@ export const orders = [
       {
         order_item_id: 3,
         product: {
-          product_id: 103,
+          productId: 103,
           name: '부산 해운대 투어',
           price: 400000
         },

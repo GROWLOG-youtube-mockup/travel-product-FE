@@ -48,8 +48,8 @@ const ProductPage = () => {
     }
   }, [activeCategory, products]);
 
-  const handleCardClick = (product_id: number) => {
-    navigate(`/product/${product_id}`);
+  const handleCardClick = (productId: number) => {
+    navigate(`/product/${productId}`);
   };
 
   return (
@@ -83,10 +83,10 @@ const ProductPage = () => {
       <div className={styles.gridList}>
         {filteredProducts.map((product) => (
           <Card
-            key={product.product_id}
+            key={product.productId}
             styleName="normal"
             isGrid={true}
-            product_id={product.product_id}
+            productId={product.productId}
             image={product.imageUrls[0]}
             title={product.name}
             price={product.price}

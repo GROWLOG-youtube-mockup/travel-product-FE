@@ -6,15 +6,15 @@ export const cartHandlers = [
   // 장바구니 담기
   http.post('/cart', async ({ request }) => {
     const body = (await request.json()) as {
-      product_id: number;
+      productId: number;
       quantity: number;
       start_date: string;
     };
 
     return HttpResponse.json(
       {
-        cart_item_id: 10,
-        product_id: body.product_id,
+        cartItemId: 10,
+        productId: body.productId,
         quantity: body.quantity,
         start_date: body.start_date
       },
@@ -28,12 +28,12 @@ export const cartHandlers = [
   }),
 
   // 장바구니 수정
-  http.put('/cart/:cart_item_id', async () => {
+  http.put('/cart/:cartItemId', async () => {
     return HttpResponse.json({ message: 'Updated successfully' });
   }),
 
   // 장바구니 항목 삭제
-  http.delete('/cart/:cart_item_id', async () => {
+  http.delete('/cart/:cartItemId', async () => {
     return HttpResponse.json({ message: 'Item removed' });
   })
 ];
