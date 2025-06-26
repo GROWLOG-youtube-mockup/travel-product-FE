@@ -9,6 +9,7 @@ import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
+import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
 import type { Product } from '../../type/product';
@@ -25,6 +26,7 @@ const ProductDetailPage = () => {
     date: new Date()
   });
   const [isRefundOpen, setRefundOpen] = useState(false);
+  const { setSelectedItem } = useCartStore();
 
   useEffect(() => {
     fetch('/products/' + productId)
@@ -64,7 +66,7 @@ const ProductDetailPage = () => {
   };
 
   const handleCart = async () => {
-    const res = await fetch('/cart', {
+    await fetch('/cart', {
       method: 'POST',
       body: JSON.stringify({
         productId: productId ?? '',
@@ -80,8 +82,38 @@ const ProductDetailPage = () => {
       });
   };
 
-  const handleReservation = () => {
-    console.log('CLICK RESERVATION');
+  const handleReservation = async () => {
+    await fetch('/orders', {
+      method: 'POST',
+      body: JSON.stringify({
+        items: [
+          {
+            peopleCount: selectedData.count,
+            product_id: productId,
+            start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
+          }
+        ]
+      })
+    })
+      .then((response) => {
+        if (!productId || !product) throw new Error('상품 정보가 없습니다.');
+
+        setSelectedItem({
+          product: {
+            product_id: Number(productId),
+            name: product.name,
+            thumbnail_image_url: product.imageUrls[0],
+            price: product.price
+          },
+          quantity: selectedData.count,
+          start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
+        });
+
+        navigate('/reservation');
+      })
+      .catch((error) => {
+        throw new Error('주문 생성 실패');
+      });
   };
 
   return (
