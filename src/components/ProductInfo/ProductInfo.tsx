@@ -17,7 +17,6 @@ interface infoProps {
 }
 
 const ProductInfo = ({ title, description, info }: infoProps) => {
-  console.log(info);
   return (
     <div className={styles.infoWrapper}>
       <div className={`${styles.groupWrapper} ${styles.mainGroup}`}>
