@@ -1,12 +1,13 @@
 import 'dayjs/locale/ko';
 
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
+import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
@@ -15,6 +16,7 @@ import type { Product } from '../../type/product';
 import styles from './ProductDetail.module.scss';
 
 const ProductDetailPage = () => {
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const productId = pathname.split('/').pop();
   const [product, setProduct] = useState<Product | null>(null);
@@ -22,6 +24,7 @@ const ProductDetailPage = () => {
     count: 0,
     date: new Date()
   });
+  const [isRefundOpen, setRefundOpen] = useState(false);
 
   useEffect(() => {
     fetch('/products/' + productId)
@@ -56,6 +59,10 @@ const ProductDetailPage = () => {
     }));
   };
 
+  const openModal = () => {
+    setRefundOpen(true);
+  };
+
   const handleCart = async () => {
     const res = await fetch('/cart', {
       method: 'POST',
@@ -64,10 +71,13 @@ const ProductDetailPage = () => {
         quantity: selectedData.count,
         startDate: dayjs(selectedData.date).format('YYYY-MM-DD')
       })
-    });
-
-    if (!res.ok) throw new Error('주문 생성 실패');
-    return await res.json();
+    })
+      .then((response) => {
+        navigate('/cart');
+      })
+      .catch((error) => {
+        throw new Error('주문 생성 실패');
+      });
   };
 
   const handleReservation = () => {
@@ -102,11 +112,20 @@ const ProductDetailPage = () => {
             }}
             selectedData={selectedData}
             handleSelectedCount={handleSelectedCount}
-            handleCart={handleCart}
+            handleCart={openModal}
             handleReservation={handleReservation}
           />
         </div>
       </div>
+      <ConfirmModal
+        open={isRefundOpen}
+        onClose={() => setRefundOpen(false)}
+        handleConfirm={handleCart}
+        title="장바구니에 추가 완료"
+        subtitle="선택하신 인원과 날짜로 여행 상품을 장바구니에 성공적으로 추가하였습니다."
+        contents="장바구니 페이지로 이동하여 여행 상품을 확인하시겠습니까?"
+        boxWidth={500}
+      />
     </div>
   );
 };
