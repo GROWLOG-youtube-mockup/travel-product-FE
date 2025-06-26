@@ -9,4 +9,15 @@ export type Product = {
   type: number;
   region: { regionId: number; name: string; level: number; parentId: number };
   tags: string[];
+  descriptionGroups?: {
+    groupId: number;
+    title: string;
+    type: number;
+    sortOrder: number;
+    items: {
+      itemId: number;
+      content: string;
+      sortOrder: number;
+    }[];
+  }[];
 };

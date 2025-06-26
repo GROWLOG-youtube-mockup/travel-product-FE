@@ -52,6 +52,14 @@ const ProductDetailPage = () => {
     }));
   };
 
+  const handleCart = () => {
+    console.log('CLICK CART');
+  };
+
+  const handleReservation = () => {
+    console.log('CLICK RESERVATION');
+  };
+
   return (
     <div className={styles.page}>
       <div className={styles.mainImage}>
@@ -64,7 +72,7 @@ const ProductDetailPage = () => {
             <Calender />
           </div>
           <div className={styles.infoBox}>
-            <ProductInfo />
+            <ProductInfo info={product?.descriptionGroups ?? []} />
           </div>
         </div>
         <div className={styles.addCartBox}>
@@ -76,6 +84,8 @@ const ProductDetailPage = () => {
             }}
             selectedData={selectedData}
             handleSelectedCount={handleSelectedCount}
+            handleCart={handleCart}
+            handleReservation={handleReservation}
           />
         </div>
       </div>
