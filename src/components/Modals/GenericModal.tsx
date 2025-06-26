@@ -10,7 +10,7 @@ const GenericModal = ({ open, onClose, title, subtitle, children }: GenericModal
       <ModalHeader title={title} subtitle={subtitle}>
         <ModalCloseButton onClick={onClose} />
       </ModalHeader>
-      <div style={{ padding: 24 }}>{children}</div>
+      <div style={{ padding: 12 }}>{children}</div>
     </Modal>
   );
 };

@@ -31,7 +31,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
       <div className={styles.sectionTitle}>{title}</div>
       <div key={tab} className={styles.userPageWrapper}>
         {trips.length === 0 ? (
-          <div>{emptyMsg}</div>
+          <div className={styles.emptyMsg}>{emptyMsg}</div>
         ) : (
           trips.map((trip) => (
             <div
