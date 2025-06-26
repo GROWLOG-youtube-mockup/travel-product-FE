@@ -43,7 +43,7 @@ const SignupForm = ({ onSubmit }: SignupFormProps) => {
         <Input
           id="phone"
           name="phone"
-          placeholder="본 서비스에 사용하실 전화번호를 입력해주세요 (000-0000-0000)"
+          placeholder="본 서비스에 사용하실 전화번호를 입력해주세요 (01012345678)"
           variant="long"
           value={form.phone}
           onChange={handleChange}
