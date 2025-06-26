@@ -1,4 +1,7 @@
-import { formatKoreanDate } from '../../utils/date';
+import 'dayjs/locale/ko';
+
+import dayjs from 'dayjs';
+
 import Button from '../atoms/Button/Button';
 
 import styles from './AddCart.module.scss';
@@ -59,7 +62,7 @@ const AddCart = ({
 
         <div>
           <span>선택날짜: </span>
-          <span>{formatKoreanDate(selectedData.date)}</span>
+          <span>{dayjs(selectedData.date).locale('ko').format('MM월 DD일 dddd')}</span>
         </div>
 
         <span className={styles.line}></span>
