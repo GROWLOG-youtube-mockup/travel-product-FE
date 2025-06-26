@@ -1,5 +1,9 @@
+import 'dayjs/locale/ko';
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+
+import dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
@@ -52,8 +56,18 @@ const ProductDetailPage = () => {
     }));
   };
 
-  const handleCart = () => {
-    console.log('CLICK CART');
+  const handleCart = async () => {
+    const res = await fetch('/cart', {
+      method: 'POST',
+      body: JSON.stringify({
+        productId: productId ?? '',
+        quantity: selectedData.count,
+        startDate: dayjs(selectedData.date).format('YYYY-MM-DD')
+      })
+    });
+
+    if (!res.ok) throw new Error('주문 생성 실패');
+    return await res.json();
   };
 
   const handleReservation = () => {
