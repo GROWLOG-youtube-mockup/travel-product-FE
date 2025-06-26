@@ -13,8 +13,9 @@ const LoginPage = () => {
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: useLogin,
     onSuccess: (res) => {
-      console.log(res);
-      // TODO: 로그인 성공 시 토큰 저장 및 사용자 정보 처리
+      localStorage.setItem('accessToken', res.accessToken);
+      localStorage.setItem('refreshToken', res.refreshToken);
+
       navigate('/');
     },
     onError: (err) => {
