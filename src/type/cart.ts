@@ -1,13 +1,12 @@
 export type CartItem = {
-  cart_item_id: number;
-  product: {
-    product_id: number;
-    name: string;
-    thumbnail_image_url: string;
-    price: number;
-  };
+  cartItemId: number;
+  price: number;
+  productId: number;
+  productName: string;
   quantity: number;
-  start_date: string;
+  startDate: string;
+  stockQuantity: number;
+  totalPrice: number;
 };
 
 export type CartItems = CartItem[];

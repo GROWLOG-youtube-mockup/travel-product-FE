@@ -17,14 +17,14 @@ const CartItemCard = ({ item, checked, handlePaymentClick, onCheckChange }: Cart
       <div className={styles.itemLayout}>
         <Checkbox checked={checked} onChange={(e) => onCheckChange(e.target.checked)} />
         <div className={styles.itemImage}>
-          <img src={item.product.thumbnail_image_url} alt="" />
+          <img src="https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516_1280.jpg" alt="" />
         </div>
         <div className={styles.itemInfoWrapper}>
-          <div>{item.product.name}</div>
-          <div>{item.start_date}</div>
+          <div>{item.productName}</div>
+          <div>{item.startDate}</div>
           <div>인원 {item.quantity}명</div>
         </div>
-        <div className={styles.price}>₩{item.product.price.toLocaleString()}</div>
+        <div className={styles.price}>₩{item.price.toLocaleString()}</div>
       </div>
       <span className={styles.line}></span>
       <div className={styles.buttonLayout}>
