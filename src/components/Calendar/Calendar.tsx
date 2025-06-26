@@ -27,25 +27,12 @@ const Calender = ({ handleSelectedDate }: CalenderProps) => {
   return (
     <div className={styles.box}>
       <ReactHorizontalDatePicker
+        className={styles.datePicker}
         selectedDay={handleSelectedDate}
         enableScroll={true}
         enableDays={15}
         color={'#987876'}
       />
-      {/* <div className={styles.weekWrapper}>
-        {Array.from({ length: 14 }).map((_, index) => (
-          <div className={styles.week} key={index}>
-            {week[index % 7]}
-          </div>
-        ))}
-      </div>
-      <div className={styles.dateWrapper}>
-        {Array.from({ length: 14 }).map((_, index) => (
-          <div className={styles.date} key={index}>
-            {firstSunday.getDate() + index}
-          </div>
-        ))}
-      </div> */}
     </div>
   );
 };
