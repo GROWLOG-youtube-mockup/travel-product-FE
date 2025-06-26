@@ -1,13 +1,51 @@
 .infoWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
   width: 100%;
   height: 100%;
+  user-select: none;
+  gap: 3rem;
 
-  .infoWrapper {
+  .groupWrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
+    box-sizing: border-box;
+
+    .mainTitle,
+    .title {
+      width: 100%;
+      font-weight: bold;
+      line-height: 3rem;
+      text-align: left;
+    }
+
+    .mainTitle {
+      font-size: 1.5rem;
+    }
+
+    .title {
+      font-size: 1.2rem;
+    }
+
+    .itemWrapper {
+      width: 100%;
+      font-size: 90%;
+      text-align: left;
+
+      .content {
+        margin-left: 1rem;
+        line-height: 1.5rem;
+      }
+    }
+  }
+
+  .groupWrapper:not(.mainGroup) {
+    padding: 1rem;
+    border: 1px solid #373737;
+    border-radius: 5px;
   }
 }
