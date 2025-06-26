@@ -14,7 +14,7 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
   const [error, setError] = useState<string>('');
 
   const handleSubmit = (e: React.FormEvent) => {
-    onSubmit({ username, password });
+    onSubmit({ email: username, password });
     e.preventDefault();
     setError('');
   };
