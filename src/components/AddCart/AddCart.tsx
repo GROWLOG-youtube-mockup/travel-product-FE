@@ -79,10 +79,18 @@ const AddCart = ({
       )}
 
       <div className={styles.buttonLayout}>
-        <Button variant="rounded" disabled={data.isSoldOut} onClick={handleCart}>
+        <Button
+          variant="rounded"
+          disabled={data.isSoldOut || !selectedData.count}
+          onClick={handleCart}
+        >
           장바구니에 담기
         </Button>
-        <Button variant="rounded" disabled={data.isSoldOut} onClick={handleReservation}>
+        <Button
+          variant="rounded"
+          disabled={data.isSoldOut || !selectedData.count}
+          onClick={handleReservation}
+        >
           바로 예약하기
         </Button>
       </div>
