@@ -1,13 +1,31 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
+import { useMutation } from '@tanstack/react-query';
 
 import LoginForm from '../../components/LoginForm/LoginForm';
+import { useLogin } from '../../hooks/useLogin';
 import type { UserInformation } from '../../type/login';
 
 import styles from './Login.module.scss';
 const LoginPage = () => {
-  const onSubmit = ({ username, password }: UserInformation) => {
-    // TODO: 로그인 API 연동 시 수정해야 함.
-    console.log('로그인 시도:', { username, password });
+  const navigate = useNavigate();
+
+  const { mutate: loginMutate, isPending } = useMutation({
+    mutationFn: useLogin,
+    onSuccess: (res) => {
+      console.log(res);
+      // TODO: 로그인 성공 시 토큰 저장 및 사용자 정보 처리
+      navigate('/');
+    },
+    onError: (err) => {
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+    }
+  });
+
+  // ⑤ 폼 제출 핸들러
+  const onSubmit = (payload: UserInformation) => {
+    if (isPending) return; // 중복 클릭 방지
+    loginMutate(payload);
   };
 
   return (
