@@ -13,8 +13,8 @@ const LoginPage = () => {
   const { mutate: loginMutate, isPending } = useMutation({
     mutationFn: useLogin,
     onSuccess: (res) => {
-      localStorage.setItem('accessToken', res.accessToken);
-      localStorage.setItem('refreshToken', res.refreshToken);
+      localStorage.setItem('accessToken', res.data?.accessToken);
+      // localStorage.setItem('refreshToken', res.refreshToken);
 
       navigate('/');
     },
