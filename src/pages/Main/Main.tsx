@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import imageLinks from '@/constants/imageLinks';
+import { useProducts } from '@/hooks/useProducts';
 import { useRegionStore } from '@/store/RegionStore';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
 import type { RegionItem } from '../../type/card';
-import type { Product } from '../../type/product';
 import type { Region } from '../../type/region';
 
 import styles from './Main.module.scss';
@@ -48,26 +48,11 @@ const contentsTitleList: ContentsTitleList[] = [
 const locationTitle = '한국 추천 여행지';
 
 const MainPage = () => {
-  const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
   const { regionList, setSelectedRegion, setRegionList, clearSelectedRegion, clearRegionList } =
     useRegionStore();
 
-  useEffect(() => {
-    fetch('/products')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, []);
+  const { data, isLoading, isError } = useProducts();
 
   useEffect(() => {
     if (regionList.length <= 0) {
@@ -138,7 +123,7 @@ const MainPage = () => {
             {item.subtitle && <p className={styles['subtitle']}>{item.subtitle}</p>}
           </div>
           <CardSlide
-            productList={products.filter((product) => product?.type === index)}
+            productList={data?.data.filter((product) => product?.type === index) ?? []}
             styleName={item.styleName ?? 'normal'}
             handleCardClick={handleCardClick}
           />
