@@ -9,6 +9,7 @@ export type Product = {
   type: number;
   region: { regionId: number; name: string; level: number; parentId: number };
   tags: string[];
+  description?: string;
   descriptionGroups?: {
     groupId: number;
     title: string;
