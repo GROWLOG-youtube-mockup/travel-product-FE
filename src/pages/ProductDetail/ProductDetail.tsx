@@ -72,7 +72,11 @@ const ProductDetailPage = () => {
             <Calender />
           </div>
           <div className={styles.infoBox}>
-            <ProductInfo info={product?.descriptionGroups ?? []} />
+            <ProductInfo
+              title={product?.name ?? ''}
+              description={product?.description ?? ''}
+              info={product?.descriptionGroups ?? []}
+            />
           </div>
         </div>
         <div className={styles.addCartBox}>
