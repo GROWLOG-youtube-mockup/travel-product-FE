@@ -14,9 +14,17 @@ type AddCartProps = {
     date: Date;
   };
   handleSelectedCount: (count: number) => void;
+  handleCart: () => void;
+  handleReservation: () => void;
 };
 
-const AddCart = ({ data, selectedData, handleSelectedCount }: AddCartProps) => {
+const AddCart = ({
+  data,
+  selectedData,
+  handleSelectedCount,
+  handleCart,
+  handleReservation
+}: AddCartProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.infoLayout}>
@@ -68,10 +76,10 @@ const AddCart = ({ data, selectedData, handleSelectedCount }: AddCartProps) => {
       )}
 
       <div className={styles.buttonLayout}>
-        <Button variant="rounded" disabled={data.isSoldOut}>
+        <Button variant="rounded" disabled={data.isSoldOut} onClick={handleCart}>
           장바구니에 담기
         </Button>
-        <Button variant="rounded" disabled={data.isSoldOut}>
+        <Button variant="rounded" disabled={data.isSoldOut} onClick={handleReservation}>
           바로 예약하기
         </Button>
       </div>
