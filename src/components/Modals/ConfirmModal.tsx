@@ -12,7 +12,7 @@ interface ConfirmModalProps {
   subtitle?: string;
   contents?: string;
   boxWidth?: number;
-  handleConfirm?: () => void;
+  handleConfirm: (isChecked?: boolean) => void;
 }
 
 const ConfirmModal = ({
@@ -37,10 +37,22 @@ const ConfirmModal = ({
         </ModalHeader>
 
         <div className={styles.buttonLayout}>
-          <Button className={styles.confirmButton} color="white" onClick={onClose}>
+          <Button
+            className={styles.confirmButton}
+            color="white"
+            onClick={() => {
+              handleConfirm(false);
+            }}
+          >
             아니오
           </Button>
-          <Button className={styles.confirmButton} color="blue" onClick={handleConfirm}>
+          <Button
+            className={styles.confirmButton}
+            color="blue"
+            onClick={() => {
+              handleConfirm(true);
+            }}
+          >
             예
           </Button>
         </div>

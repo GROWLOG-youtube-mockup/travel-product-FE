@@ -65,7 +65,7 @@ const ProductDetailPage = () => {
     setRefundOpen(true);
   };
 
-  const handleCart = async () => {
+  const handleCart = async (isMove: boolean) => {
     await fetch('/cart', {
       method: 'POST',
       body: JSON.stringify({
@@ -75,7 +75,8 @@ const ProductDetailPage = () => {
       })
     })
       .then((response) => {
-        navigate('/cart');
+        if (isMove) navigate('/cart');
+        else setRefundOpen(false);
       })
       .catch((error) => {
         throw new Error('주문 생성 실패');
