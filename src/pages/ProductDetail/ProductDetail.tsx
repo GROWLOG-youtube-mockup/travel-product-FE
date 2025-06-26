@@ -69,7 +69,7 @@ const ProductDetailPage = () => {
       <div className={styles.grid}>
         <div className={styles.leftColumn}>
           <div className={styles.calendarBox}>
-            <Calender />
+            <Calender handleSelectedDate={handleSelectedDate} />
           </div>
           <div className={styles.infoBox}>
             <ProductInfo

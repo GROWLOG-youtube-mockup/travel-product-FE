@@ -1,3 +1,6 @@
+import ReactHorizontalDatePicker from 'react-horizontal-strip-datepicker';
+
+import 'react-horizontal-strip-datepicker/dist/ReactHorizontalDatePicker.css';
 import styles from './Calendar.module.scss';
 
 const getThisSunday = (): Date => {
@@ -11,7 +14,11 @@ const getThisSunday = (): Date => {
   return sunday;
 };
 
-const Calender = () => {
+type CalenderProps = {
+  handleSelectedDate: (date: Date) => void;
+};
+
+const Calender = ({ handleSelectedDate }: CalenderProps) => {
   const sunday = getThisSunday();
   const firstSunday = new Date(sunday);
   firstSunday.setDate(sunday.getDate() - 13);
@@ -19,7 +26,13 @@ const Calender = () => {
 
   return (
     <div className={styles.box}>
-      <div className={styles.weekWrapper}>
+      <ReactHorizontalDatePicker
+        selectedDay={handleSelectedDate}
+        enableScroll={true}
+        enableDays={15}
+        color={'#987876'}
+      />
+      {/* <div className={styles.weekWrapper}>
         {Array.from({ length: 14 }).map((_, index) => (
           <div className={styles.week} key={index}>
             {week[index % 7]}
@@ -32,7 +45,7 @@ const Calender = () => {
             {firstSunday.getDate() + index}
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
