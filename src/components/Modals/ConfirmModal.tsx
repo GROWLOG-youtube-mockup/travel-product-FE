@@ -37,10 +37,10 @@ const ConfirmModal = ({
         </ModalHeader>
 
         <div className={styles.buttonLayout}>
-          <Button color="white" onClick={onClose}>
+          <Button className={styles.confirmButton} color="white" onClick={onClose}>
             아니오
           </Button>
-          <Button color="white" onClick={handleConfirm}>
+          <Button className={styles.confirmButton} color="blue" onClick={handleConfirm}>
             예
           </Button>
         </div>
