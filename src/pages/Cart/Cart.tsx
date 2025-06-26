@@ -1,5 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useCart } from '@/hooks/useCart';
 
 import Button from '../../components/atoms/Button/Button';
 import Checkbox from '../../components/atoms/Checkbox/Checkbox';
@@ -10,25 +12,11 @@ import type { CartItem, CartItems } from '../../type/cart';
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
-  const [items, setItems] = useState<CartItems>([]);
+  const { data: cartItems, isLoading, isError, error, isFetching } = useCart();
+  const [items, setItems] = useState<CartItems>(cartItems?.data || []);
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchCart = async () => {
-      try {
-        const res = await fetch('/cart');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setItems(data);
-      } catch (err: any) {
-        navigate('/error');
-      }
-    };
-
-    fetchCart();
-  }, []);
 
   const handlePaymentClick = (item: CartItem) => {
     setSelectedItem(item);
@@ -40,7 +28,7 @@ const CartPage = () => {
 
     const newChecked: { [id: number]: boolean } = {};
     items.forEach((item) => {
-      newChecked[item.cart_item_id] = checked;
+      newChecked[item.cartItemId] = checked;
     });
     setCheckedItems(newChecked);
   };
@@ -80,13 +68,13 @@ const CartPage = () => {
         </Button>
       </div>
 
-      {items.map((item) => (
+      {cartItems?.data?.map((item) => (
         <CartItemCard
-          key={item.cart_item_id}
+          key={item.cartItemId}
           item={item}
-          checked={!!checkedItems[item.cart_item_id]}
+          checked={!!checkedItems[item.cartItemId]}
           handlePaymentClick={handlePaymentClick}
-          onCheckChange={(checked) => handleItemCheck(item.cart_item_id, checked)}
+          onCheckChange={(checked) => handleItemCheck(item.cartItemId, checked)}
         />
       ))}
     </div>
