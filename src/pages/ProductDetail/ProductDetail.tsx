@@ -3,7 +3,7 @@ import 'dayjs/locale/ko';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import dayjs from 'dayjs';
+import * as dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
