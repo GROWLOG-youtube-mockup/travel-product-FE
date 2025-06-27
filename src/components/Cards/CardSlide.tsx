@@ -1,4 +1,4 @@
-import type { Product } from '../../type/product';
+import type { Product } from '@/types/api/Product.type';
 
 import Card from './Card';
 
@@ -7,7 +7,7 @@ import styles from './CardSlide.module.scss';
 type CardSlideProps = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
   productList: Product[];
-  handleCardClick: (product_id: number) => void;
+  handleCardClick: (productId: number) => void;
 };
 
 const CardSlide = ({ styleName, productList, handleCardClick }: CardSlideProps) => {
@@ -15,8 +15,8 @@ const CardSlide = ({ styleName, productList, handleCardClick }: CardSlideProps) 
     <div className={styles['cardSlide']}>
       {productList.map((card: Product) => (
         <Card
-          key={card.product_id}
-          product_id={card.product_id}
+          key={card.productId}
+          productId={card.productId}
           styleName={styleName ?? 'normal'}
           image={card.imageUrls[0]}
           title={card.name}

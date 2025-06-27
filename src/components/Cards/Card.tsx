@@ -2,17 +2,17 @@ import styles from './Card.module.scss';
 
 type CardProps = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
-  product_id: number;
+  productId: number;
   image: string;
   title: string;
   price: number;
-  handleCardClick: (product_id: number) => void;
+  handleCardClick: (productId: number) => void;
   isGrid?: boolean;
 };
 
 const Card = ({
   styleName,
-  product_id,
+  productId,
   image,
   title,
   price,
@@ -23,7 +23,7 @@ const Card = ({
     <div
       role="button"
       className={`${styles.card} ${styles[`${styleName ?? 'normal'}`]} ${isGrid ? styles.gridCard : ''}`}
-      onClick={() => handleCardClick(product_id)}
+      onClick={() => handleCardClick(productId)}
     >
       <div className={styles['cardImage']}>
         <img src={image} alt="Card" draggable="false" />
