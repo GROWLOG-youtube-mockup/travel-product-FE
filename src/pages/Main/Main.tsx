@@ -90,8 +90,8 @@ const MainPage = () => {
     });
   };
 
-  const handleCardClick = (product_id: number) => {
-    navigate(`/product/${product_id}`);
+  const handleCardClick = (productId: number) => {
+    navigate(`/product/${productId}`);
     clearSelectedRegion();
     clearRegionList();
   };

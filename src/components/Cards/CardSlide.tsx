@@ -7,7 +7,7 @@ import styles from './CardSlide.module.scss';
 type CardSlideProps = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
   productList: Product[];
-  handleCardClick: (product_id: number) => void;
+  handleCardClick: (productId: number) => void;
 };
 
 const CardSlide = ({ styleName, productList, handleCardClick }: CardSlideProps) => {
