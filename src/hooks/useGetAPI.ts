@@ -14,7 +14,7 @@ export const useGetApi = <K extends keyof EndpointResponseMap>(
   useQuery({
     queryKey: [url, params ?? null],
     queryFn: async () => {
-      const { data } = await api.get<EndpointResponseMap[K]>(url as `/products/${string}`, { params });
+      const { data } = await api.get<EndpointResponseMap[K]>(url, { params });
       return data;
     },
     staleTime: 60_000,
