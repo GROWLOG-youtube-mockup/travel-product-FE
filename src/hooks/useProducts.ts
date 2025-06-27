@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
-import type { Product } from '@/types/product';
+import type { Product } from '@/types/api/product';
 
 export interface ProductsResponse {
   success: boolean;

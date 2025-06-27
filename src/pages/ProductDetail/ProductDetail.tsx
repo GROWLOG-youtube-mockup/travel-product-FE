@@ -12,7 +12,7 @@ import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
-import type { Product } from '../../types/product';
+import type { Product } from '../../types/api/product';
 
 import styles from './ProductDetail.module.scss';
 
