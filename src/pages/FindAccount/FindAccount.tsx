@@ -1,19 +1,21 @@
 import { useState } from 'react';
 
-import Button from '../../components/atoms/Button/Button';
-import Input from '../../components/atoms/Input/Input';
+import FindEmailForm from '../../components/FindAccount/FindEmailForm';
+import ResetPasswordForm from '../../components/FindAccount/ResetPasswordForm';
+import GenericModal from '../../components/Modals/GenericModal';
 
 import styles from './FindAccount.module.scss';
 
 const FindAccountPage = () => {
-  // 가입 계정 찾기 폼 상태
-  const [findName, setFindName] = useState('');
-  const [findPhone, setFindPhone] = useState('');
-  // 임시 비밀번호 발급 폼 상태
-  const [resetName, setResetName] = useState('');
-  const [resetPhone, setResetPhone] = useState('');
-  const [resetEmail, setResetEmail] = useState('');
-  // 에러 메시지 등 상태는 필요에 따라 추가
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
+
+  const handleResult = (title: string, message: string) => {
+    setModalTitle(title);
+    setModalMessage(message);
+    setModalOpen(true);
+  };
 
   return (
     <div className={styles.container}>
@@ -23,33 +25,7 @@ const FindAccountPage = () => {
           <h2 className={styles.sectionLeftH2}>가입 계정 찾기</h2>
           <p>가입한 계정의 이메일을 찾습니다.</p>
         </div>
-        <form className={styles.sectionRight}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="find-name">이름</label>
-            <Input
-              id="find-name"
-              type="text"
-              value={findName}
-              onChange={(e) => setFindName(e.target.value)}
-              placeholder="이름을 입력하세요"
-              variant="long"
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="find-phone">전화번호</label>
-            <Input
-              id="find-phone"
-              type="text"
-              value={findPhone}
-              onChange={(e) => setFindPhone(e.target.value)}
-              placeholder="휴대폰 번호를 입력하세요"
-              variant="long"
-            />
-          </div>
-          <Button type="submit" variant="lg" className={styles.rightAlignButton}>
-            계정 이메일 찾기
-          </Button>
-        </form>
+        <FindEmailForm onResult={handleResult} styles={styles} />
       </section>
 
       {/* 임시 비밀번호 발급받기 */}
@@ -58,46 +34,12 @@ const FindAccountPage = () => {
           <h2 className={styles.sectionLeftH2}>임시 비밀번호 발급받기</h2>
           <p>가입하신 이메일로 임시 비밀번호를 보내드립니다.</p>
         </div>
-        <form className={styles.sectionRight}>
-          <div className={styles.inputGroup}>
-            <label htmlFor="reset-name">이름</label>
-            <Input
-              id="reset-name"
-              type="text"
-              value={resetName}
-              onChange={(e) => setResetName(e.target.value)}
-              placeholder="이름을 입력하세요"
-              variant="long"
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="reset-phone">전화번호</label>
-            <Input
-              id="reset-phone"
-              type="text"
-              value={resetPhone}
-              onChange={(e) => setResetPhone(e.target.value)}
-              placeholder="휴대폰 번호를 입력하세요"
-              variant="long"
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <label htmlFor="reset-email">이메일</label>
-            <Input
-              id="reset-email"
-              type="email"
-              value={resetEmail}
-              onChange={(e) => setResetEmail(e.target.value)}
-              placeholder="이메일을 입력하세요"
-              variant="long"
-            />
-          </div>
-          {/* 에러 메시지 등은 필요시 아래에 추가 */}
-          <Button type="submit" variant="lg" className={styles.rightAlignButton}>
-            임시 비밀번호 발급받기
-          </Button>
-        </form>
+        <ResetPasswordForm onResult={handleResult} styles={styles} />
       </section>
+
+      <GenericModal open={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
+        <div>{modalMessage}</div>
+      </GenericModal>
     </div>
   );
 };
