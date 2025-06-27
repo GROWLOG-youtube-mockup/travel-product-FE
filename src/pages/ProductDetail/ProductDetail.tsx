@@ -1,14 +1,16 @@
 import 'dayjs/locale/ko';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import * as dayjs from 'dayjs';
+// import * as dayjs from 'dayjs';
+import dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
+import { useGetApi } from '@/hooks/useGetApi';
 import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
@@ -27,22 +29,8 @@ const ProductDetailPage = () => {
   });
   const [isRefundOpen, setRefundOpen] = useState(false);
   const { setSelectedItem } = useCartStore();
-
-  useEffect(() => {
-    fetch('/products/' + productId)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProduct(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, []);
+  const { data, isLoading, isError } = useGetApi(`/products/${productId}`);
+  console.log(data?.data);
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
@@ -100,14 +88,13 @@ const ProductDetailPage = () => {
         if (!productId || !product) throw new Error('상품 정보가 없습니다.');
 
         setSelectedItem({
-          product: {
-            productId: Number(productId),
-            name: product.name,
-            thumbnail_image_url: product.imageUrls[0],
-            price: product.price
-          },
+          productId: Number(productId),
+          productName: data?.data?.name ?? '',
+          imageUrls: data?.data?.imageUrls[0] ?? '',
+          price: data?.data?.price ?? 0,
           quantity: selectedData.count,
-          start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
+          startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
+          stockQuantity: data?.data?.stockQuantity ?? 0
         });
 
         navigate('/reservation');
@@ -120,7 +107,7 @@ const ProductDetailPage = () => {
   return (
     <div className={styles.page}>
       <div className={styles.mainImage}>
-        <ImageGallery images={product?.imageUrls ?? []} />
+        <ImageGallery images={data?.data?.imageUrls ?? []} />
       </div>
 
       <div className={styles.grid}>
@@ -130,18 +117,18 @@ const ProductDetailPage = () => {
           </div>
           <div className={styles.infoBox}>
             <ProductInfo
-              title={product?.name ?? ''}
-              description={product?.description ?? ''}
-              info={product?.descriptionGroups ?? []}
+              title={data?.data?.name ?? ''}
+              description={data?.data?.description ?? ''}
+              info={data?.data?.descriptionGroups ?? []}
             />
           </div>
         </div>
         <div className={styles.addCartBox}>
           <AddCart
             data={{
-              title: product?.name ?? '',
-              price: product?.price ?? 0,
-              isSoldOut: product?.stock_quantity === 0
+              title: data?.data?.name ?? '',
+              price: data?.data?.price ?? 0,
+              isSoldOut: data?.data?.stockQuantity === 0
             }}
             selectedData={selectedData}
             handleSelectedCount={handleSelectedCount}
