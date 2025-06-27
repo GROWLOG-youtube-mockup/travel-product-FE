@@ -19,11 +19,13 @@ const CartPage = () => {
   const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
 
-  console.log(getCarts?.data?.data);
-
   const handlePaymentClick = (item: Carts) => {
     setSelectedItem(item);
     navigate('/reservation');
+  };
+
+  const handleMoveProductPage = (productId: number) => {
+    navigate(`/product/${productId}`);
   };
 
   const handleAllSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -78,6 +80,7 @@ const CartPage = () => {
           handlePaymentClick={handlePaymentClick}
           onCheckChange={(checked) => handleItemCheck(item.cartItemId, checked)}
           handleDeleteClick={handleDeleteClick}
+          handleMoveProductPage={handleMoveProductPage}
         />
       ))}
     </div>

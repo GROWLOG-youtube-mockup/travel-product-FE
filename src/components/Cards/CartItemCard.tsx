@@ -11,6 +11,7 @@ type CartItemProps = {
   onCheckChange: (checked: boolean) => void;
   handlePaymentClick: (item: Carts) => void;
   handleDeleteClick: (cartItemId: number) => void;
+  handleMoveProductPage: (productId: number) => void;
 };
 
 const CartItemCard = ({
@@ -18,7 +19,8 @@ const CartItemCard = ({
   checked,
   handlePaymentClick,
   onCheckChange,
-  handleDeleteClick
+  handleDeleteClick,
+  handleMoveProductPage
 }: CartItemProps) => {
   return (
     <div className={styles.cartItemWrapper}>
@@ -37,7 +39,12 @@ const CartItemCard = ({
       <span className={styles.line}></span>
       <div className={styles.buttonLayout}>
         <div>
-          <Button className={`${styles.itemButton} ${styles.secondary}`}>
+          <Button
+            className={`${styles.itemButton} ${styles.secondary}`}
+            onClick={() => {
+              handleMoveProductPage(item?.productId);
+            }}
+          >
             <span>해당 상품 페이지로</span>
           </Button>
           <Button
