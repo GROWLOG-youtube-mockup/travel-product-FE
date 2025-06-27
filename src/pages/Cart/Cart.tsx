@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useCart } from '@/hooks/useCart';
+import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 
 import Button from '../../components/atoms/Button/Button';
 import Checkbox from '../../components/atoms/Checkbox/Checkbox';
@@ -17,6 +18,7 @@ const CartPage = () => {
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
+  const deleteCart = useDeleteCartItems();
 
   const handlePaymentClick = (item: CartItem) => {
     setSelectedItem(item);
@@ -37,20 +39,19 @@ const CartPage = () => {
     setCheckedItems((prev) => ({ ...prev, [id]: checked }));
   };
 
-  const handleDeleteClick = async () => {
-    for (const id in checkedItems) {
-      if (checkedItems[id]) {
-        try {
-          const res = await fetch(`/cart/${id}`, {
-            method: 'DELETE'
-          });
-          if (!res.ok) throw new Error('삭제 실패');
-        } catch (err: any) {
-          console.error(err);
-          return;
-        }
-      }
+  const handleDeleteChecked = () => {
+    const items: number[] = [];
+
+    for (const [key, value] of Object.entries(checkedItems)) {
+      if (value) items.push(Number(key));
+      else continue;
     }
+
+    if (items.length > 0) deleteCart.mutate({ itemIds: items });
+  };
+
+  const handleDeleteClick = (cartItemId: number) => {
+    deleteCart.mutate({ itemIds: [cartItemId] });
   };
 
   return (
@@ -62,7 +63,7 @@ const CartPage = () => {
           variant="xs"
           color="white"
           className={styles.deleteButton}
-          onClick={handleDeleteClick}
+          onClick={handleDeleteChecked}
         >
           <span>선택한 상품 삭제</span>
         </Button>
@@ -75,6 +76,7 @@ const CartPage = () => {
           checked={!!checkedItems[item.cartItemId]}
           handlePaymentClick={handlePaymentClick}
           onCheckChange={(checked) => handleItemCheck(item.cartItemId, checked)}
+          handleDeleteClick={handleDeleteClick}
         />
       ))}
     </div>

@@ -9,9 +9,16 @@ type CartItemProps = {
   checked: boolean;
   onCheckChange: (checked: boolean) => void;
   handlePaymentClick: (item: CartItem) => void;
+  handleDeleteClick: (cartItemId: number) => void;
 };
 
-const CartItemCard = ({ item, checked, handlePaymentClick, onCheckChange }: CartItemProps) => {
+const CartItemCard = ({
+  item,
+  checked,
+  handlePaymentClick,
+  onCheckChange,
+  handleDeleteClick
+}: CartItemProps) => {
   return (
     <div className={styles.cartItemWrapper}>
       <div className={styles.itemLayout}>
@@ -32,7 +39,12 @@ const CartItemCard = ({ item, checked, handlePaymentClick, onCheckChange }: Cart
           <Button className={`${styles.itemButton} ${styles.secondary}`}>
             <span>해당 상품 페이지로</span>
           </Button>
-          <Button className={`${styles.itemButton} ${styles.secondary}`}>
+          <Button
+            className={`${styles.itemButton} ${styles.secondary}`}
+            onClick={() => {
+              handleDeleteClick(item?.cartItemId ?? 0);
+            }}
+          >
             <span>삭제</span>
           </Button>
         </div>
