@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import LoginForm from '@/components/LoginForm/LoginForm';
 import type { UserInformation } from '@/types/login';
-import { getAccessToken, saveAuthToLocalStorage } from '@/utils/auth';
+import { getAuthAccessToken, handleAuthLoginResponse } from '@/utils/auth';
 
 import styles from './AdminLogin.module.scss';
 
@@ -26,7 +26,7 @@ const AdminLoginPage = () => {
   const [loginError, setLoginError] = useState<string>('');
 
   useEffect(() => {
-    const existingToken = getAccessToken();
+    const existingToken = getAuthAccessToken();
     if (existingToken) {
       window.location.href = '/admin/users';
     }
@@ -49,7 +49,7 @@ const AdminLoginPage = () => {
     },
     onSuccess: (data) => {
       if (data.success && data.data?.accessToken) {
-        saveAuthToLocalStorage(data.data.accessToken, data.data.name, data.data.userId);
+        handleAuthLoginResponse(data.data.accessToken, data.data.name, data.data.userId);
         window.location.href = '/admin/users';
       } else {
         const errorMsg = data.error?.message || data.message || '로그인에 실패했습니다.';

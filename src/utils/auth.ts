@@ -1,21 +1,20 @@
 // @/utils/auth.ts
 
-const ACCESS_TOKEN_KEY = 'accessToken';
-const ADMIN_NAME_KEY = 'adminName';
-const ADMIN_USER_ID_KEY = 'adminUserId';
-
-export const saveAuthToLocalStorage = (token: string, name: string, userId: number) => {
-  localStorage.setItem(ACCESS_TOKEN_KEY, token);
-  localStorage.setItem(ADMIN_NAME_KEY, name);
-  localStorage.setItem(ADMIN_USER_ID_KEY, userId.toString());
+// POST /auth/login 응답 처리용
+export const handleAuthLoginResponse = (token: string, name: string, userId: number) => {
+  localStorage.setItem('accessToken', token);
+  localStorage.setItem('adminName', name);
+  localStorage.setItem('adminUserId', userId.toString());
 };
 
-export const clearAuthFromLocalStorage = () => {
-  localStorage.removeItem(ACCESS_TOKEN_KEY);
-  localStorage.removeItem(ADMIN_NAME_KEY);
-  localStorage.removeItem(ADMIN_USER_ID_KEY);
+// 로그아웃 처리용
+export const handleAuthLogout = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('adminName');
+  localStorage.removeItem('adminUserId');
 };
 
-export const getAccessToken = (): string | null => {
-  return localStorage.getItem(ACCESS_TOKEN_KEY);
+// accessToken 조회용
+export const getAuthAccessToken = (): string | null => {
+  return localStorage.getItem('accessToken');
 };
