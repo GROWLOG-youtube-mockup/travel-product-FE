@@ -13,7 +13,7 @@ export type OrderDetailRes = ApiResponse<Orders>;
 export interface EndpointResponseMap {
   '/carts': CartRes;
   '/products': ProductRes;
-  [k: `/product/${string}`]: ProductDetailRes;
+  [k: `/products/${string}`]: ProductDetailRes;
   '/orders': OrdersRes;
   [k: `/orders/${string}`]: OrderDetailRes;
 }
