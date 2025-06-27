@@ -1,8 +1,6 @@
-// src/components/atoms/Table/AdminTable/AdminTable.tsx
-
 import React from 'react';
 
-import type { AdminTableProps, TableColumn } from '../../../../types/adminTable.types';
+import type { AdminTableProps, TableColumn } from '@/types/adminTable.types';
 
 import styles from './AdminTable.module.scss';
 
