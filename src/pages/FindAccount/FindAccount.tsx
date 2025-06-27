@@ -36,7 +36,7 @@ const FindAccountPage = () => {
             />
           </div>
           <div className={styles.inputGroup}>
-            <label htmlFor="find-phone">연락처</label>
+            <label htmlFor="find-phone">전화번호</label>
             <Input
               id="find-phone"
               type="text"
@@ -46,7 +46,7 @@ const FindAccountPage = () => {
               variant="long"
             />
           </div>
-          <Button type="submit" variant="account" style={{ marginTop: 8 }}>
+          <Button type="submit" variant="lg" className={styles.rightAlignButton}>
             계정 이메일 찾기
           </Button>
         </form>
@@ -71,7 +71,7 @@ const FindAccountPage = () => {
             />
           </div>
           <div className={styles.inputGroup}>
-            <label htmlFor="reset-phone">연락처</label>
+            <label htmlFor="reset-phone">전화번호</label>
             <Input
               id="reset-phone"
               type="text"
@@ -93,7 +93,7 @@ const FindAccountPage = () => {
             />
           </div>
           {/* 에러 메시지 등은 필요시 아래에 추가 */}
-          <Button type="submit" variant="account" style={{ marginTop: 8 }}>
+          <Button type="submit" variant="lg" className={styles.rightAlignButton}>
             임시 비밀번호 발급받기
           </Button>
         </form>
