@@ -12,7 +12,7 @@ interface ConfirmModalProps {
   subtitle?: string;
   contents?: string;
   boxWidth?: number;
-  handleConfirm: (isChecked?: boolean) => void;
+  handleConfirm: (isMove: boolean) => Promise<void>;
 }
 
 const ConfirmModal = ({
