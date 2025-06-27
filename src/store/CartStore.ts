@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import type { CartItem } from '../type/cart';
+import type { CartItem } from '../types/cart';
 
 interface CartStore {
   selectedItem: CartItem | null;

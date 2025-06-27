@@ -1,4 +1,4 @@
-import type { CartItem } from '../../type/cart';
+import type { CartItem } from '../../types/cart';
 import Button from '../atoms/Button/Button';
 import Checkbox from '../atoms/Checkbox/Checkbox';
 

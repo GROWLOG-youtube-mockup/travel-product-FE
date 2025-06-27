@@ -2,8 +2,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
-console.log('✅ vite.config.ts 로드됨');
-
 export default defineConfig({
   plugins: [react()],
   resolve: {

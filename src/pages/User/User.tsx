@@ -1,7 +1,7 @@
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import type { Trip } from '../../type/trip';
+import type { Trip } from '../../types/trip';
 
 import styles from './User.module.scss';
 
@@ -35,7 +35,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
         ) : (
           trips.map((trip) => (
             <div
-              key={`${trip.product_id}_${trip.start_date}_${trip.end_date}`}
+              key={`${trip.productId}_${trip.start_date}_${trip.end_date}`}
               className={styles.userTripWrapper}
             >
               <MyTripCard trip={trip} />
@@ -48,7 +48,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                   color="gray"
                   style={{ margin: '16px 0 0 0' }}
                   onClick={() => {
-                    window.location.href = `/product/${trip.product_id}`;
+                    window.location.href = `/product/${trip.productId}`;
                   }}
                 >
                   해당 상품 페이지로

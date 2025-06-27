@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import type { AgreementModalProps } from '../../type/modal';
+import type { AgreementModalProps } from '../../types/modal';
 import Modal from '../Modal/Modal';
 import ModalCloseButton from '../Modal/ModalCloseButton';
 import ModalHeader from '../Modal/ModalHeader';

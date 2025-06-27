@@ -1,10 +1,10 @@
 export type CardProps = {
   styleName: 'normal' | 'longHeight' | 'longWidth';
-  product_id: number;
+  productId: number;
   image: string;
   title: string;
   price: number;
-  handleCardClick: (product_id: number) => void;
+  handleCardClick: (productId: number) => void;
 };
 
 export type RegionItem = { title: string; regionId: number; image: string; description?: string };

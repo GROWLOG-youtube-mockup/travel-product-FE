@@ -31,8 +31,8 @@ export const productHandlers = [
     return HttpResponse.json(filteredProducts);
   }),
 
-  http.get('/products/:product_id', ({ params }) => {
-    const product = products.find((p) => p.product_id === parseInt(params.product_id as string));
+  http.get('/products/:productId', ({ params }) => {
+    const product = products.find((p) => p.productId === parseInt(params.productId as string));
     if (!product) {
       return HttpResponse.json(
         {

@@ -1,5 +1,5 @@
 export interface Trip {
-  product_id: number;
+  productId: number;
   title: string;
   start_date: string;
   end_date: string;

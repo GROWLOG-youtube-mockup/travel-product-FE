@@ -1,4 +1,4 @@
-import type { RegionCardProps } from '../../type/card';
+import type { RegionCardProps } from '../../types/card';
 
 import styles from './RegionCard.module.scss';
 

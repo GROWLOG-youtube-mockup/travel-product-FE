@@ -7,7 +7,7 @@ import Button from '../../components/atoms/Button/Button';
 import Checkbox from '../../components/atoms/Checkbox/Checkbox';
 import CartItemCard from '../../components/Cards/CartItemCard';
 import { useCartStore } from '../../store/CartStore';
-import type { CartItem, CartItems } from '../../type/cart';
+import type { CartItem, CartItems } from '../../types/cart';
 
 import styles from './Cart.module.scss';
 

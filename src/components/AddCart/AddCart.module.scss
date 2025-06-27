@@ -1,0 +1,85 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border: 1px solid #8f8e8e;
+  box-sizing: border-box;
+  background: none;
+  border-radius: 15px;
+  user-select: none;
+
+  .line {
+    width: 100%;
+    margin: 0.1rem 0;
+    border: 1px solid #8f8e8e;
+  }
+
+  .text {
+    width: 3rem;
+    font-size: 90%;
+    color: #272727;
+  }
+
+  .countText {
+    width: 3rem;
+    text-align: center;
+  }
+
+  .soldOut {
+    font-weight: bold;
+    color: red;
+    text-decoration: line-through;
+  }
+
+  .price {
+    font-weight: bold;
+  }
+
+  .infoLayout {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.5rem;
+
+    .title {
+      font-size: large;
+      line-height: 2.5rem;
+    }
+
+    .selectedWrapper {
+      width: 100%;
+      text-align: left;
+
+      .countWrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
+
+        .countButton {
+          width: 2rem;
+          height: 2rem;
+          border: 1px solid #272727;
+
+          &:disabled {
+            border: none;
+            color: #ffffff;
+            background: #00000052;
+          }
+        }
+      }
+    }
+  }
+
+  .buttonLayout {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    width: 100%;
+    gap: 1rem;
+  }
+}

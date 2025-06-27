@@ -14,7 +14,7 @@ export type ButtonVariant =
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
-  color?: 'default' | 'white' | 'none' | 'gray';
+  color?: 'default' | 'white' | 'none' | 'gray' | 'blue';
   children: React.ReactNode;
 }
 
