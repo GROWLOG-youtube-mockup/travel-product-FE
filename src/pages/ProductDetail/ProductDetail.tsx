@@ -15,7 +15,6 @@ import { useGetApi } from '@/hooks/useGetApi';
 import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
-import type { Product } from '../../types/api/product';
 
 import styles from './ProductDetail.module.scss';
 
@@ -23,7 +22,6 @@ const ProductDetailPage = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const productId = pathname.split('/').pop();
-  const [product, setProduct] = useState<Product | null>(null);
   const [selectedData, setSelectedData] = useState({
     count: 0,
     date: new Date()
@@ -34,7 +32,6 @@ const ProductDetailPage = () => {
   const usePostOrder = useAddOrder();
   const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
-  console.log(userRes.data?.data?.email);
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
@@ -57,7 +54,7 @@ const ProductDetailPage = () => {
     setRefundOpen(true);
   };
 
-  const handleCart = (isMove: boolean) => {
+  const handleCart = async (isMove: boolean) => {
     usePostCart.mutate(
       {
         productId: Number(productId),
@@ -77,7 +74,6 @@ const ProductDetailPage = () => {
   };
 
   const handleReservation = async () => {
-    console.log(userRes.data?.data?.email);
     usePostOrder.mutate(
       {
         email: userRes.data?.data?.email ?? '',
