@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { validatePhoneNumber } from '../../utils/phone';
+import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
@@ -24,7 +24,13 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
     const err: { name?: string; phone?: string; email?: string } = {};
     if (!name) err.name = '이름을 입력하세요.';
     if (!phone) err.phone = '전화번호를 입력하세요.';
-    else if (!validatePhoneNumber(phone)) err.phone = '올바른 전화번호를 입력하세요.';
+    else {
+      try {
+        normalizePhoneNumber(phone);
+      } catch {
+        err.phone = '올바른 전화번호를 입력하세요.';
+      }
+    }
     if (!email) err.email = '이메일을 입력하세요.';
     setError(err);
     if (Object.keys(err).length > 0) return;
