@@ -34,10 +34,8 @@ const AdminLoginPage = () => {
         const errorMsg = data.error?.message || data.message || '로그인에 실패했습니다.';
         setLoginError(errorMsg);
       }
-    },
-    onError: (error: Error) => {
-      setLoginError(error.message);
     }
+    // 에러는 전역 인터셉터에서 처리하므로 여기선 생략
   });
 
   const onSubmit = ({ email, password }: UserInformation) => {
