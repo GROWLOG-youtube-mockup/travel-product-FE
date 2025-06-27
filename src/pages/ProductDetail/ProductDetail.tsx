@@ -30,7 +30,6 @@ const ProductDetailPage = () => {
   const [isRefundOpen, setRefundOpen] = useState(false);
   const { setSelectedItem } = useCartStore();
   const { data, isLoading, isError } = useGetApi(`/products/${productId}`);
-  console.log(data?.data);
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
