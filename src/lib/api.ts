@@ -11,10 +11,27 @@ export const api = axios.create({
   }
 });
 
+// 에러 페이지 연동
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
   (error) => {
     console.error(error);
+    const status = error?.response?.status;
+
+    if (status) {
+      window.location.href = `/error/${status}`;
+    } else {
+      window.location.href = '/error/500';
+    }
+
     return Promise.reject(error);
   }
 );
+
+// api.interceptors.response.use(
+//   (res) => res,
+//   (error) => {
+//     console.error(error);
+//     return Promise.reject(error);
+//   }
+// );

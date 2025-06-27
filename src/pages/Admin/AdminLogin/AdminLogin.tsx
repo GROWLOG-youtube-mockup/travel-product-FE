@@ -4,24 +4,12 @@ import { useMutation } from '@tanstack/react-query';
 
 import AdminHeader from '@/components/Header/AdminHeader/AdminHeader';
 import LoginForm from '@/components/LoginForm/LoginForm';
+import { api } from '@/lib/api';
 import { useAuthStore } from '@/store/AuthStore';
+import type { AdminLoginResponse } from '@/types/api/Auth.type';
 import type { UserInformation } from '@/types/login';
 
 import styles from './AdminLogin.module.scss';
-
-interface AdminLoginResponse {
-  success: boolean;
-  data: {
-    userId: number;
-    name: string;
-    accessToken: string;
-  };
-  message?: string;
-  error?: {
-    code: string;
-    message: string;
-  };
-}
 
 const AdminLoginPage = () => {
   const [loginError, setLoginError] = useState<string>('');
@@ -29,29 +17,19 @@ const AdminLoginPage = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      window.location.href = '/admin/users';
+      window.location.href = '/admin/products';
     }
   }, [isLoggedIn]);
 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: UserInformation): Promise<AdminLoginResponse> => {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error?.message || errorData.message || '로그인에 실패했습니다.');
-      }
-
-      return response.json();
+      const response = await api.post<AdminLoginResponse>('/auth/login', { email, password });
+      return response.data;
     },
     onSuccess: (data) => {
       if (data.success && data.data?.accessToken) {
         login(data.data.accessToken, data.data.name, data.data.userId);
-        window.location.href = '/admin';
+        window.location.href = '/admin/products';
       } else {
         const errorMsg = data.error?.message || data.message || '로그인에 실패했습니다.';
         setLoginError(errorMsg);
@@ -74,7 +52,7 @@ const AdminLoginPage = () => {
         <div className={styles.title}>
           <h1>관리자 로그인</h1>
         </div>
-        <div className={styles['subtitle']}>
+        <div className={styles.subtitle}>
           <span>정보를 입력해주세요</span>
         </div>
 
