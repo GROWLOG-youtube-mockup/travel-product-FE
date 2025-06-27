@@ -2,19 +2,22 @@
 
 export interface EndpointRequestMap {
   '/users/signup': {
-    username: string;
+    userId?: number;
+    name: string;
+    email: string;
+    password: string;
     phoneNumber: string;
-    email: string;
-    password: string;
+    roleCode?: number;
   };
-  '/auth/login': {
-    email: string;
-    password: string;
+  '/payments/cancel': {
+    orderId: number;
   };
-  '/carts': {
-    productId: number;
-    quantity: number;
-    startDate: string;
+  '/payments/approve': {
+    amount: number;
+    payment_key: string;
+    order_id: number;
+    payment_gateway: string;
+    transaction_id?: string;
   };
   '/orders': {
     items: Array<{
@@ -22,6 +25,59 @@ export interface EndpointRequestMap {
       product_id: number;
       start_date: string;
     }>;
+    email: string;
+  };
+  '/images': {
+    files: File[];
+  };
+  '/carts': {
+    productId: number;
+    quantity: number;
+    startDate: string;
+  };
+  '/auth/reset-password': {
+    name: string;
+    phoneNumber: string;
+    email: string;
+  };
+  '/auth/logout': object;
+  '/auth/login': {
+    email: string;
+    password: string;
+  };
+  '/auth/find-email': {
+    name: string;
+    phoneNumber: string;
+  };
+  '/auth/email/verify': {
+    email: string;
+    code: string;
+  };
+  '/auth/email/send': {
+    email: string;
+  };
+  '/admin/products': {
+    name: string;
+    price: number;
+    totalQuantity: number;
+    description: string;
+    saleStatus: number;
+    type: number;
+    duration: number;
+    regionId: number;
+    imageUrls: string[];
+    descriptionGroups: Array<{
+      title: string;
+      type: number;
+      sortOrder: number;
+      items: Array<{
+        title: string;
+        description: string;
+      }>;
+    }>;
+  };
+  '/users/verify-password': {
+    password: string;
   };
   // 필요에 따라 추가 엔드포인트 정의
 }
