@@ -1,0 +1,121 @@
+@use '@/styles/core';
+
+.tableContainer {
+  border: 1px solid core.$admin-table-border;
+  background: core.$admin-table-bg;
+  box-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 10%),
+    0 1px 2px 0 rgb(0 0 0 / 6%);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th,
+  td {
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 1px solid core.$admin-table-border;
+  }
+
+  th {
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: core.$admin-table-header-text;
+    background-color: core.$admin-table-header-bg;
+    text-transform: uppercase;
+
+    &.center {
+      text-align: center;
+    }
+
+    &.right {
+      text-align: right;
+    }
+  }
+
+  td {
+    font-size: 14px;
+    color: core.$admin-table-text;
+
+    &.center {
+      text-align: center;
+    }
+
+    &.right {
+      text-align: right;
+    }
+  }
+
+  tbody tr {
+    &:hover {
+      background-color: core.$admin-table-row-hover;
+    }
+
+    &:last-child td {
+      border-bottom: none;
+    }
+  }
+}
+
+.loading {
+  padding: 48px 16px;
+  font-size: 16px;
+  color: core.$admin-table-text-secondary;
+  text-align: center;
+}
+
+.empty {
+  padding: 48px 16px;
+  font-size: 16px;
+  color: core.$admin-table-text-secondary;
+  text-align: center;
+}
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: core.$pagination-bg;
+  border-top: 1px solid core.$admin-table-border;
+  gap: 8px;
+}
+
+.paginationButton {
+  padding: 8px 12px;
+  border: 1px solid core.$pagination-border;
+  font-size: 14px;
+  font-weight: 500;
+  color: core.$pagination-text;
+  background: core.$pagination-bg;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(.disabled) {
+    background: core.$pagination-hover-bg;
+  }
+
+  &.active {
+    border-color: core.$pagination-active-bg;
+    color: core.$pagination-active-text;
+    background: core.$pagination-active-bg;
+  }
+
+  &.disabled {
+    color: core.$pagination-text-disabled;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.paginationInfo {
+  margin: 0 16px;
+  font-size: 14px;
+  color: core.$admin-table-text-secondary;
+}
