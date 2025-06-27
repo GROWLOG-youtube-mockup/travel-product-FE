@@ -1,3 +1,5 @@
+@use '@/styles/core';
+
 .login {
   display: flex;
   flex-direction: column;
@@ -13,10 +15,25 @@
     font-size: xx-large;
     font-weight: bolder;
     line-height: 4rem;
+    text-align: center;
   }
 
   .subtitle {
     width: 100%;
     margin-bottom: 2rem;
+    text-align: center;
+  }
+
+  .loading {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 16px;
+    padding: 16px;
+    border: 1px solid core.$admin-table-border;
+    font-size: 14px;
+    color: core.$admin-table-text;
+    text-align: center;
+    background-color: core.$admin-table-bg;
+    border-radius: 6px;
   }
 }
