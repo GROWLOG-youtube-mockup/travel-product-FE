@@ -11,10 +11,10 @@ import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
 import { useAddOrder } from '@/hooks/useAddOrder';
-import { useGetApi } from '@/hooks/useGetApi';
 import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
+import { useGetApi } from '../../hooks/useGetAPI';
 
 import styles from './ProductDetail.module.scss';
 
