@@ -3,13 +3,14 @@ import 'dayjs/locale/ko';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-// import * as dayjs from 'dayjs';
 import dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
+import { useAddCart } from '@/hooks/useAddCart';
+import { useAddOrder } from '@/hooks/useAddOrder';
 import { useGetApi } from '@/hooks/useGetApi';
 import { useCartStore } from '@/store/CartStore';
 
@@ -29,7 +30,11 @@ const ProductDetailPage = () => {
   });
   const [isRefundOpen, setRefundOpen] = useState(false);
   const { setSelectedItem } = useCartStore();
-  const { data, isLoading, isError } = useGetApi(`/products/${productId}`);
+  const usePostCart = useAddCart();
+  const usePostOrder = useAddOrder();
+  const { data } = useGetApi(`/products/${productId}`);
+  const userRes = useGetApi(`/users/me`);
+  console.log(userRes.data?.data?.email);
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
@@ -52,55 +57,57 @@ const ProductDetailPage = () => {
     setRefundOpen(true);
   };
 
-  const handleCart = async (isMove: boolean) => {
-    await fetch('/cart', {
-      method: 'POST',
-      body: JSON.stringify({
-        productId: productId ?? '',
+  const handleCart = (isMove: boolean) => {
+    usePostCart.mutate(
+      {
+        productId: Number(productId),
         quantity: selectedData.count,
         startDate: dayjs(selectedData.date).format('YYYY-MM-DD')
-      })
-    })
-      .then((response) => {
-        if (isMove) navigate('/cart');
-        else setRefundOpen(false);
-      })
-      .catch((error) => {
-        throw new Error('주문 생성 실패');
-      });
+      },
+      {
+        onSuccess: (res) => {
+          if (isMove) navigate('/cart');
+          else setRefundOpen(false);
+        },
+        onError: (err) => {
+          throw new Error('주문 생성 실패');
+        }
+      }
+    );
   };
 
   const handleReservation = async () => {
-    await fetch('/orders', {
-      method: 'POST',
-      body: JSON.stringify({
+    console.log(userRes.data?.data?.email);
+    usePostOrder.mutate(
+      {
+        email: userRes.data?.data?.email ?? '',
         items: [
           {
             peopleCount: selectedData.count,
-            productId: productId,
+            product_id: Number(productId),
             start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
           }
         ]
-      })
-    })
-      .then((response) => {
-        if (!productId || !product) throw new Error('상품 정보가 없습니다.');
+      },
+      {
+        onSuccess: (res) => {
+          setSelectedItem({
+            productId: Number(productId),
+            productName: data?.data?.name ?? '',
+            imageUrls: data?.data?.imageUrls[0] ?? '',
+            price: data?.data?.price ?? 0,
+            quantity: selectedData.count,
+            startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
+            stockQuantity: data?.data?.stockQuantity ?? 0
+          });
 
-        setSelectedItem({
-          productId: Number(productId),
-          productName: data?.data?.name ?? '',
-          imageUrls: data?.data?.imageUrls[0] ?? '',
-          price: data?.data?.price ?? 0,
-          quantity: selectedData.count,
-          startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
-          stockQuantity: data?.data?.stockQuantity ?? 0
-        });
-
-        navigate('/reservation');
-      })
-      .catch((error) => {
-        throw new Error('주문 생성 실패');
-      });
+          navigate('/reservation');
+        },
+        onError: (err) => {
+          throw new Error('주문 생성 실패');
+        }
+      }
+    );
   };
 
   return (
