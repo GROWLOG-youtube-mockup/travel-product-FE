@@ -1,25 +1,15 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { getAuthAccessToken, handleAuthLogout } from '@/utils/auth';
+import { useAuthStore } from '@/store/AuthStore';
 
 import styles from './AdminHeader.module.scss';
 
 const AdminHeader = () => {
   const navigate = useNavigate();
-  const [userName, setUserName] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    const token = getAuthAccessToken();
-    const name = localStorage.getItem('adminName');
-
-    setIsLoggedIn(!!token);
-    setUserName(name);
-  }, []);
+  const { isLoggedIn, userName, logout } = useAuthStore();
 
   const handleLogout = () => {
-    handleAuthLogout();
+    logout();
     navigate('/admin/login');
   };
 

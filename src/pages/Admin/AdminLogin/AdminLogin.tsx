@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react';
 
 import { useMutation } from '@tanstack/react-query';
 
+import AdminHeader from '@/components/Header/AdminHeader/AdminHeader';
 import LoginForm from '@/components/LoginForm/LoginForm';
+import { useAuthStore } from '@/store/AuthStore';
 import type { UserInformation } from '@/types/login';
-import { getAuthAccessToken, handleAuthLoginResponse } from '@/utils/auth';
 
 import styles from './AdminLogin.module.scss';
 
@@ -24,13 +25,13 @@ interface AdminLoginResponse {
 
 const AdminLoginPage = () => {
   const [loginError, setLoginError] = useState<string>('');
+  const { login, isLoggedIn } = useAuthStore();
 
   useEffect(() => {
-    const existingToken = getAuthAccessToken();
-    if (existingToken) {
+    if (isLoggedIn) {
       window.location.href = '/admin/users';
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const loginMutation = useMutation({
     mutationFn: async ({ email, password }: UserInformation): Promise<AdminLoginResponse> => {
@@ -49,8 +50,8 @@ const AdminLoginPage = () => {
     },
     onSuccess: (data) => {
       if (data.success && data.data?.accessToken) {
-        handleAuthLoginResponse(data.data.accessToken, data.data.name, data.data.userId);
-        window.location.href = '/admin/users';
+        login(data.data.accessToken, data.data.name, data.data.userId);
+        window.location.href = '/admin';
       } else {
         const errorMsg = data.error?.message || data.message || '로그인에 실패했습니다.';
         setLoginError(errorMsg);
@@ -67,18 +68,21 @@ const AdminLoginPage = () => {
   };
 
   return (
-    <div className={styles['login']}>
-      <div className={styles['title']}>
-        <h1>관리자 로그인</h1>
-      </div>
-      <div className={styles['subtitle']}>
-        <span>정보를 입력해주세요</span>
-      </div>
+    <>
+      <AdminHeader />
+      <div className={styles.login}>
+        <div className={styles.title}>
+          <h1>관리자 로그인</h1>
+        </div>
+        <div className={styles['subtitle']}>
+          <span>정보를 입력해주세요</span>
+        </div>
 
-      {loginMutation.isPending && <div className={styles['loading']}>로그인 처리 중...</div>}
+        {loginMutation.isPending && <div className={styles.loading}>로그인 처리 중...</div>}
 
-      <LoginForm onSubmit={onSubmit} authError={loginError} />
-    </div>
+        <LoginForm onSubmit={onSubmit} authError={loginError} />
+      </div>
+    </>
   );
 };
 

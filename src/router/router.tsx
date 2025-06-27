@@ -11,7 +11,6 @@ import FindAccountLayout from '../layouts/FindAccountLayout/FindAccountLayout';
 import UserEditLayout from '../layouts/UserEditLayout/UserEditLayout';
 import UserLayout from '../layouts/UserLayout/UserLayout';
 import ErrorPage from '../pages//Error/Error';
-import AdminAdminsPage from '../pages/Admin/AdminAdmins/AdminAdmins';
 import AdminLoginPage from '../pages/Admin/AdminLogin/AdminLogin';
 import AdminLogsPage from '../pages/Admin/AdminLogs/AdminLogs';
 import AdminOrdersPage from '../pages/Admin/AdminOrders/AdminOrders';
@@ -172,34 +171,32 @@ const routes: AppRouteObject[] = [
         ]
       },
       {
-        element: <AdminLayout />, // 관리자용 레이아웃
-        // requiredRole: 'ADMIN',
+        path: '/admin/login',
+        element: <AdminLoginPage />
+      },
+      {
+        path: '/admin',
+        element: <AdminLayout />,
         children: [
           {
-            path: 'admin/admins',
-            element: <AdminAdminsPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'SUPER_ADMIN'
+            index: true,
+            element: <AdminProductsPage /> // /admin 진입 시 기본 페이지
           },
           {
-            path: 'admin/logs',
-            element: <AdminLogsPage />
-          },
-          {
-            path: 'admin/orders',
-            element: <AdminOrdersPage />
-          },
-          {
-            path: 'admin/products',
+            path: 'products',
             element: <AdminProductsPage />
           },
           {
-            path: 'admin/users',
+            path: 'users',
             element: <AdminUsersPage />
           },
           {
-            path: 'admin/login',
-            element: <AdminLoginPage />
+            path: 'orders',
+            element: <AdminOrdersPage />
+          },
+          {
+            path: 'logs',
+            element: <AdminLogsPage />
           }
         ]
       },
