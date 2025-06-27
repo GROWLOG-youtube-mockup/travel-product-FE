@@ -1,8 +1,8 @@
 export const carts = [
   {
-    cart_item_id: 10,
+    cartItemId: 10,
     product: {
-      product_id: 101,
+      productId: 101,
       name: '시드니 4박 5일 자유 여행',
       thumbnail_image_url: 'https://cdn.example.com/product101.jpg',
       price: 1200000

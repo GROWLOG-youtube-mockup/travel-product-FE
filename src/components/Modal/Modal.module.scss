@@ -80,3 +80,13 @@
   overflow-y: auto;
   white-space: pre-line;
 }
+
+.buttonLayout {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+
+  .confirmButton {
+    width: 25%;
+  }
+}

@@ -7,6 +7,10 @@
   line-height: 24px;
   color: #ffffff;
   background: #000000;
+
+  &:disabled {
+    background: #00000052;
+  }
 }
 
 @mixin button-shape($radius, $width, $font-size: 16px, $height: 48px, $line-height: 24px) {
@@ -63,6 +67,12 @@
   border: 2px solid #dcdcdc;
   color: #898989;
   background: #ffffff;
+}
+
+.button.blue {
+  border: 2px solid #6097ef;
+  color: #ffffff;
+  background: #6097ef;
 }
 
 .button.none {

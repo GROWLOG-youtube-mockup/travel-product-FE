@@ -18,21 +18,21 @@ export const userHandlers = [
   http.get('/users/me/trips', () => {
     return HttpResponse.json([
       {
-        product_id: 101,
+        productId: 101,
         title: '제주도 패키지여행',
         start_date: '2025-06-20',
         end_date: '2025-06-23',
         price: 99000
       },
       {
-        product_id: 102,
+        productId: 102,
         title: '강릉 당일치기 여행',
         start_date: '2025-05-01',
         end_date: '2025-05-01',
         price: 55000
       },
       {
-        product_id: 102,
+        productId: 102,
         title: '강릉 당일치기 여행',
         start_date: '2025-05-01',
         end_date: '2025-05-01',

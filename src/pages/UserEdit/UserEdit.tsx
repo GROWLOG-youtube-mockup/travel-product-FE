@@ -7,7 +7,7 @@ import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
 import NameChangeModal from '../../components/Modals/NameChangeModal';
 import PasswordChangeModal from '../../components/Modals/PasswordChangeModal';
 import PhoneChangeModal from '../../components/Modals/PhoneChangeModal';
-import type { User } from '../../type/user';
+import type { User } from '../../types/user';
 
 import styles from './UserEdit.module.scss';
 

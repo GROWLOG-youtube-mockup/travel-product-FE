@@ -1,5 +1,5 @@
 import { api } from '@/lib/api';
-import type { UserInformation } from '@/type/login';
+import type { UserInformation } from '@/types/login';
 
 // 백엔드 응답 예시 타입
 interface LoginResponse {

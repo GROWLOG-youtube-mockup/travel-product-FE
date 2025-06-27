@@ -5,7 +5,7 @@ import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
-import type { User } from '../../type/user';
+import type { User } from '../../types/user';
 
 import styles from './PaymentProcess.module.scss';
 

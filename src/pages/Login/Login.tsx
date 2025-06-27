@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 
 import LoginForm from '../../components/LoginForm/LoginForm';
 import { useLogin } from '../../hooks/useLogin';
-import type { UserInformation } from '../../type/login';
+import type { UserInformation } from '../../types/login';
 
 import styles from './Login.module.scss';
 const LoginPage = () => {
