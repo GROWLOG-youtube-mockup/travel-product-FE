@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef, useState } from 'react';
 
-import type { RegionItem } from '../../type/card';
+import type { RegionItem } from '../../types/card';
 
 import RegionCard from './RegionCard';
 

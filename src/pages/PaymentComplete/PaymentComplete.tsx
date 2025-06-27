@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
-import type { Order } from '../../type/order';
+import type { Order } from '../../types/order';
 
 import styles from './PaymentComplete.module.scss';
 

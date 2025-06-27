@@ -1,12 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
-import type { Product } from '@/type/product';
+import type { Product } from '@/types/product';
 
 export interface ProductsResponse {
   success: boolean;
   data: Product[];
-  error: string | null;
+  error: {
+    code: string;
+    message: string;
+  };
 }
 
 const getProducts = async (): Promise<ProductsResponse> => {

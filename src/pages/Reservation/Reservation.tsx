@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
-import type { User } from '../../type/user';
+import type { User } from '../../types/user';
 import { normalizePhoneNumber } from '../../utils/phone';
 
 import styles from './Reservation.module.scss';

@@ -7,8 +7,8 @@ import { useRegionStore } from '@/store/RegionStore';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
-import type { RegionItem } from '../../type/card';
-import type { Region } from '../../type/region';
+import type { RegionItem } from '../../types/card';
+import type { Region } from '../../types/region';
 
 import styles from './Main.module.scss';
 
@@ -53,6 +53,10 @@ const MainPage = () => {
     useRegionStore();
 
   const { data, isLoading, isError } = useProducts();
+
+  console.log(data);
+
+  if (isError) navigate(`/error/${data?.error?.code}`);
 
   useEffect(() => {
     if (regionList.length <= 0) {

@@ -4,7 +4,7 @@ import { createSearchParams, useNavigate } from 'react-router-dom';
 import RegionCardList from '@/components/Cards/RegionCardList';
 import { useRegionStore } from '@/store/RegionStore';
 
-import type { RegionItem } from '../../../type/card';
+import type { RegionItem } from '../../../types/card';
 import Label from '../../atoms/Label/Label';
 
 import styles from './ProductBanner.module.scss';

@@ -5,7 +5,7 @@ import Card from '@/components/Cards/Card';
 import { useRegionStore } from '@/store/RegionStore';
 
 import Label from '../../components/atoms/Label/Label';
-import type { Product } from '../../type/product';
+import type { Product } from '../../types/product';
 
 import styles from './Product.module.scss';
 
