@@ -1,26 +1,27 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useCart } from '@/hooks/useCart';
 import { useDeleteCartItems } from '@/hooks/useDeleteCart';
+import { useGetApi } from '@/hooks/useGetAPI';
+import type { Carts } from '@/types/api/Carts.type';
 
 import Button from '../../components/atoms/Button/Button';
 import Checkbox from '../../components/atoms/Checkbox/Checkbox';
 import CartItemCard from '../../components/Cards/CartItemCard';
 import { useCartStore } from '../../store/CartStore';
-import type { CartItem, CartItems } from '../../types/cart';
 
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
-  const { data: cartItems, isLoading, isError, error, isFetching } = useCart();
-  const [items, setItems] = useState<CartItems>(cartItems?.data || []);
+  const getCarts = useGetApi('/carts');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
 
-  const handlePaymentClick = (item: CartItem) => {
+  console.log(getCarts?.data?.data);
+
+  const handlePaymentClick = (item: Carts) => {
     setSelectedItem(item);
     navigate('/reservation');
   };
@@ -29,7 +30,7 @@ const CartPage = () => {
     const checked = e.target.checked;
 
     const newChecked: { [id: number]: boolean } = {};
-    items.forEach((item) => {
+    getCarts?.data?.data.forEach((item) => {
       newChecked[item.cartItemId] = checked;
     });
     setCheckedItems(newChecked);
@@ -69,7 +70,7 @@ const CartPage = () => {
         </Button>
       </div>
 
-      {cartItems?.data?.map((item) => (
+      {getCarts?.data?.data?.map((item) => (
         <CartItemCard
           key={item.cartItemId}
           item={item}
