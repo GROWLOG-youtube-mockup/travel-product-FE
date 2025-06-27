@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Card from '@/components/Cards/Card';
+import { useGetApi } from '@/hooks/useGetAPI';
 import { useRegionStore } from '@/store/RegionStore';
 
 import Label from '../../components/atoms/Label/Label';
-import type { Product } from '../../types/api/product';
 
 import styles from './Product.module.scss';
 
@@ -18,39 +18,26 @@ const categories = [
 ];
 
 const ProductPage = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
   const { selectedRegion } = useRegionStore();
-
-  useEffect(() => {
-    fetch('/products' + location.search)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setProducts(data);
-      })
-      .catch((error) => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  }, [location.search]);
+  const { data, isLoading, isError } = useGetApi('/products', {
+    regionId: selectedRegion?.regionId?.toString()
+  });
 
   const filteredProducts = useMemo(() => {
     if (!activeCategory) {
-      return products;
+      return data?.data ?? [];
     } else {
-      return products.filter((product) => product.tags.includes(activeCategory || ''));
+      return data?.data.filter((product) => product.tags.includes(activeCategory || '')) ?? [];
     }
-  }, [activeCategory, products]);
+  }, [activeCategory, data?.data]);
 
   const handleCardClick = (productId: number) => {
     navigate(`/product/${productId}`);
   };
+
+  if (isError) navigate(`/error/${data?.error?.code}`);
 
   return (
     <div className={styles.page}>

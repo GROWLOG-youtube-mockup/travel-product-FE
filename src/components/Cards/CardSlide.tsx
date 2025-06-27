@@ -1,4 +1,4 @@
-import type { Product } from '../../types/api/product';
+import type { Product } from '@/types/api/Product.type';
 
 import Card from './Card';
 

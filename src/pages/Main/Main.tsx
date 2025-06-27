@@ -1,14 +1,14 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 import { createSearchParams, useNavigate } from 'react-router-dom';
 
 import imageLinks from '@/constants/imageLinks';
-import { useProducts } from '@/hooks/useProducts';
+import Regions from '@/constants/regions';
+import { useGetApi } from '@/hooks/useGetAPI';
 import { useRegionStore } from '@/store/RegionStore';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
-import type { RegionItem } from '../../types/card';
-import type { Region } from '../../types/region';
+import type { RegionItem } from '../../type/card';
 
 import styles from './Main.module.scss';
 
@@ -49,53 +49,38 @@ const locationTitle = '한국 추천 여행지';
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const { regionList, setSelectedRegion, setRegionList, clearSelectedRegion, clearRegionList } =
+  const { setSelectedRegion, setRegionList, clearSelectedRegion, clearRegionList } =
     useRegionStore();
+  const { data, isLoading, isError } = useGetApi('/products');
+  const regions = Regions.reduce((acc: RegionItem[], region) => {
+    if (!region.level || region.level !== 1) return acc;
 
-  const { data, isLoading, isError } = useProducts();
+    const imageUrl = imageLinks.find((item) => item.name === region.name)?.image ?? '';
+    const findIndex = acc.findIndex((item) => item.title === region.name);
 
-  console.log(data);
-
-  if (isError) navigate(`/error/${data?.error?.code}`);
-
-  useEffect(() => {
-    if (regionList.length <= 0) {
-      fetch('/regions')
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setRegionList(
-            data.reduce((acc: RegionItem[], region: Region) => {
-              if (!region.level || region.level !== 1) return acc;
-
-              const imageUrl = imageLinks.find((item) => item.name === region.name)?.image ?? '';
-              const findIndex = acc.findIndex((item) => item.title === region.name);
-
-              if (!acc[findIndex]) {
-                acc.push({
-                  title: region.name,
-                  image: imageUrl,
-                  regionId: region.region_id
-                });
-              }
-
-              return acc;
-            }, [])
-          );
-        })
-        .catch((error) => {
-          console.error('There was a problem with the fetch operation:', error);
-        });
+    if (!acc[findIndex]) {
+      acc.push({
+        title: region.name,
+        image: imageUrl,
+        regionId: region.region_id
+      });
     }
+
+    return acc;
   }, []);
+
+  const filteredTitleList = useMemo(() => {
+    return contentsTitleList.reduce((acc: ContentsTitleList[], item, index: number) => {
+      const filteredProducts = data?.data?.filter((product) => product?.type === index) ?? [];
+
+      if (filteredProducts.length > 0) acc.push(item);
+      return acc;
+    }, [] as ContentsTitleList[]);
+  }, [data?.data]);
 
   const handleRegionCardClick = (item: RegionItem) => {
     setSelectedRegion(item);
-    setRegionList(regionList);
+    setRegionList(regions);
 
     navigate({
       pathname: '/product',
@@ -105,11 +90,13 @@ const MainPage = () => {
     });
   };
 
-  const handleCardClick = (product_id: number) => {
-    navigate(`/product/${product_id}`);
+  const handleCardClick = (productId: number) => {
+    navigate(`/product/${productId}`);
     clearSelectedRegion();
     clearRegionList();
   };
+
+  if (isError) navigate(`/error/${data?.error?.code}`);
 
   return (
     <>
@@ -117,17 +104,17 @@ const MainPage = () => {
         <div className={styles['title']}>
           <h2 className={styles['mainTitle']}>{locationTitle}</h2>
         </div>
-        <RegionCardList RegionCardList={regionList} handleRegionCardClick={handleRegionCardClick} />
+        <RegionCardList RegionCardList={regions} handleRegionCardClick={handleRegionCardClick} />
       </section>
 
-      {contentsTitleList.map((item, index) => (
+      {filteredTitleList.map((item, index) => (
         <section className={styles['cardsSection']} key={item.title}>
           <div className={styles['title']}>
             <h2 className={styles['mainTitle']}>{item.title}</h2>
             {item.subtitle && <p className={styles['subtitle']}>{item.subtitle}</p>}
           </div>
           <CardSlide
-            productList={data?.data.filter((product) => product?.type === index) ?? []}
+            productList={data?.data?.filter((product) => product?.type === index) ?? []}
             styleName={item.styleName ?? 'normal'}
             handleCardClick={handleCardClick}
           />
