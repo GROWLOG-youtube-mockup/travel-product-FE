@@ -11,6 +11,8 @@ export type ProductDetailRes = ApiResponse<ProductDetail>;
 export type OrdersRes = ApiResponse<Orders[]>;
 export type OrderDetailRes = ApiResponse<Orders>;
 export type UserRes = ApiResponse<User>;
+export type LoginRes = ApiResponse<{ accessToken: string; name: string; userId: number }>;
+export type PasswordVerifyRes = ApiResponse<{ verified: boolean }>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -19,4 +21,6 @@ export interface EndpointResponseMap {
   '/orders': OrdersRes;
   [k: `/orders/${string}`]: OrderDetailRes;
   '/users/me': UserRes;
+  '/auth/login': LoginRes;
+  '/users/verify-password': PasswordVerifyRes;
 }

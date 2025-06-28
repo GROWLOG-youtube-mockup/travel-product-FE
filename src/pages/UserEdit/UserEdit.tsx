@@ -7,7 +7,9 @@ import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
 import NameChangeModal from '../../components/Modals/NameChangeModal';
 import PasswordChangeModal from '../../components/Modals/PasswordChangeModal';
 import PhoneChangeModal from '../../components/Modals/PhoneChangeModal';
-import type { User } from '../../types/user';
+import { api } from '../../lib/api';
+import type { EndpointResponseMap } from '../../types/api/EndpointResponseMap.type';
+import type { User } from '../../types/api/User.type';
 
 import styles from './UserEdit.module.scss';
 
@@ -24,10 +26,8 @@ const UserEditPage = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch('/users/me');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setUser(data);
+        const res = await api.get<EndpointResponseMap['/users/me']>('/users/me');
+        setUser(res.data.data);
       } catch {
         navigate('/error');
       }
@@ -63,7 +63,7 @@ const UserEditPage = () => {
             <div className={styles.inputGroup}>
               <label>전화번호</label>
               <div className={styles.inputInline}>
-                <Input type="text" value={user?.phone_number ?? ''} variant="short" disabled />
+                <Input type="text" value={user?.phoneNumber ?? ''} variant="short" disabled />
                 <Button type="button" variant="account" onClick={() => setPhoneModalOpen(true)}>
                   전화번호 변경
                 </Button>
@@ -108,7 +108,7 @@ const UserEditPage = () => {
         open={isPhoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
         onSuccess={() => setPhoneModalOpen(false)}
-        currentPhone={user?.phone_number ?? ''}
+        currentPhone={user?.phoneNumber ?? ''}
       />
       <PasswordChangeModal
         open={isPasswordModalOpen}

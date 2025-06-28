@@ -43,7 +43,7 @@ const LoginForm = ({ onSubmit, authError }: LoginFormProps) => {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      {error && <p className="error">{error}</p>}
+      {(authError || error) && <p className={styles['error']}>{authError || error}</p>}
       <Button className={styles['loginButton']} variant="xl" type="submit">
         Log In
       </Button>
