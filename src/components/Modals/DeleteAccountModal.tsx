@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
-import { api } from '../../lib/api';
-import type { EndpointResponseMap } from '../../types/api/EndpointResponseMap.type';
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
+import { api } from '@/lib/api';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 import GenericModal from './GenericModal';
 
