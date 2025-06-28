@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAddOrder } from '@/hooks/useAddOrder';
 import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 import { useGetApi } from '@/hooks/useGetAPI';
+import { usePostApi } from '@/hooks/usePostAPI';
 import type { Carts } from '@/types/api/Carts.type';
 
 import Button from '../../components/atoms/Button/Button';
@@ -16,16 +16,16 @@ import styles from './Cart.module.scss';
 const CartPage = () => {
   const cartRes = useGetApi('/carts');
   const userRes = useGetApi('/users/me');
-  const usePostOrder = useAddOrder();
+  const { mutate: createOrder, isPending } = usePostApi('/orders');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
 
   const handlePaymentClick = (item: Carts) => {
-    usePostOrder.mutate(
+    createOrder(
       {
-        email: userRes.data?.data?.email ?? '',
+        params: { email: userRes.data?.data?.email ?? '' },
         items: [
           {
             peopleCount: item.quantity,
@@ -35,7 +35,7 @@ const CartPage = () => {
         ]
       },
       {
-        onSuccess: (res) => {
+        onSuccess: () => {
           setSelectedItem({
             cartItemId: item.cartItemId,
             productId: Number(item.productId),
@@ -46,10 +46,9 @@ const CartPage = () => {
             stockQuantity: item.stockQuantity,
             totalPrice: item.totalPrice
           });
-
           navigate('/reservation');
         },
-        onError: (err) => {
+        onError: () => {
           throw new Error('주문 생성 실패');
         }
       }

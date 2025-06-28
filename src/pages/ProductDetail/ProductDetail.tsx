@@ -11,6 +11,7 @@ import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
 import { useAddOrder } from '@/hooks/useAddOrder';
+import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
 
 import ImageGallery from '../../components/ImageGallery/ImageGallery';
@@ -32,6 +33,7 @@ const ProductDetailPage = () => {
   const usePostOrder = useAddOrder();
   const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
+  const { mutate: createOrder, isPending } = usePostApi('/orders');
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
@@ -74,9 +76,9 @@ const ProductDetailPage = () => {
   };
 
   const handleReservation = async () => {
-    usePostOrder.mutate(
+    createOrder(
       {
-        email: userRes.data?.data?.email ?? '',
+        params: { email: userRes.data?.data?.email ?? '' },
         items: [
           {
             peopleCount: selectedData.count,
@@ -86,24 +88,54 @@ const ProductDetailPage = () => {
         ]
       },
       {
-        onSuccess: (res) => {
+        onSuccess: () => {
           setSelectedItem({
             productId: Number(productId),
+            cartItemId: 0,
             productName: data?.data?.name ?? '',
-            imageUrls: data?.data?.imageUrls[0] ?? '',
             price: data?.data?.price ?? 0,
             quantity: selectedData.count,
             startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
-            stockQuantity: data?.data?.stockQuantity ?? 0
+            stockQuantity: data?.data?.stockQuantity ?? 0,
+            totalPrice: (data?.data?.price ?? 0) * selectedData.count
           });
-
           navigate('/reservation');
         },
-        onError: (err) => {
+        onError: () => {
           throw new Error('주문 생성 실패');
         }
       }
     );
+    // usePostOrder.mutate(
+    //   {
+    //     email: userRes.data?.data?.email ?? '',
+    //     items: [
+    //       {
+    //         peopleCount: selectedData.count,
+    //         product_id: Number(productId),
+    //         start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
+    //       }
+    //     ]
+    //   },
+    //   {
+    //     onSuccess: (res) => {
+    //       setSelectedItem({
+    //         productId: Number(productId),
+    //         productName: data?.data?.name ?? '',
+    //         imageUrls: data?.data?.imageUrls[0] ?? '',
+    //         price: data?.data?.price ?? 0,
+    //         quantity: selectedData.count,
+    //         startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
+    //         stockQuantity: data?.data?.stockQuantity ?? 0
+    //       });
+
+    //       navigate('/reservation');
+    //     },
+    //     onError: (err) => {
+    //       throw new Error('주문 생성 실패');
+    //     }
+    //   }
+    // );
   };
 
   return (
