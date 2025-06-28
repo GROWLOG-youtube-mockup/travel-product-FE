@@ -36,4 +36,40 @@
     background-color: core.$admin-table-bg;
     border-radius: 6px;
   }
+
+  .homeLink {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .homeLinkButton {
+    padding: 8px 16px;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+    text-decoration: none;
+    background: none;
+    border-radius: 6px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+
+    &:hover {
+      color: #0262fc;
+      text-decoration: underline;
+      background-color: #f9fafb;
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 2px rgb(59 130 246 / 50%);
+      outline: none;
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
 }
