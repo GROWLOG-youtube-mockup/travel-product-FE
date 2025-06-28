@@ -95,7 +95,8 @@ const ProductDetailPage = () => {
             quantity: selectedData.count,
             startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
             stockQuantity: data?.data?.stockQuantity ?? 0,
-            totalPrice: (data?.data?.price ?? 0) * selectedData.count
+            totalPrice: (data?.data?.price ?? 0) * selectedData.count,
+            productImage: data?.data?.imageUrls[0] ?? ''
           });
           navigate('/reservation');
         },

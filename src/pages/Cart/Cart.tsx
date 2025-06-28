@@ -44,7 +44,8 @@ const CartPage = () => {
             quantity: item.quantity,
             startDate: item.startDate,
             stockQuantity: item.stockQuantity,
-            totalPrice: item.totalPrice
+            totalPrice: item.totalPrice,
+            productImage: item.productImage
           });
           navigate('/reservation');
         },
