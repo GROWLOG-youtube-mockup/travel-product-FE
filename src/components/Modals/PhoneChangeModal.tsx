@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
+
 import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -20,33 +22,36 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  // PATCH 훅 사용
+  const { mutateAsync: patchPhone } = usePatchApi('/users/me/phone');
+
   const handleChange = async () => {
     setError('');
     try {
       // 입력값 유효성 검사
       try {
         normalizePhoneNumber(phone.replace(/-/g, ''));
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : '유효하지 않은 전화번호입니다.');
         return;
       }
-      const res = await fetch('/users/me/phone', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone })
-      });
-      const data = await res.json();
-      if (data.success) {
+      // PATCH 요청
+      const res = await patchPhone({ phoneNumber: phone });
+      if (res.success) {
         setSuccess(true);
         setTimeout(() => {
           onSuccess();
           setSuccess(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        // 에러 객체/문자열 모두 대응
+        const errorMsg = typeof res.error === 'string' ? res.error : res.error?.message;
+        setError(errorMsg || '서버 오류로 실패하였습니다.');
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorMsg = (e as any)?.response?.data?.error?.message || '서버 오류로 실패하였습니다.';
+      setError(errorMsg);
     }
   };
 

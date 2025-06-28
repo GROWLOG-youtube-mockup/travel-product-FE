@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
 
@@ -27,6 +28,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   const [isVerified, setIsVerified] = useState(false);
 
   const verifyPasswordMutation = usePostApi('/users/verify-password');
+  const changePasswordMutation = usePatchApi('/users/me/password');
 
   // 새 비밀번호가 비워지면 확인란도 자동 초기화
   useEffect(() => {
@@ -59,12 +61,10 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
     }
     setError('');
     try {
-      const res = await fetch('/users/me/password', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
+      const data = await changePasswordMutation.mutateAsync({
+        currentPassword,
+        newPassword
       });
-      const data = await res.json();
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {

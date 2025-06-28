@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
+
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
@@ -19,15 +21,12 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
 
+  const nameChangeMutation = usePatchApi('/users/me/name');
+
   const handleChange = async () => {
     setError('');
     try {
-      const res = await fetch('/users/me/name', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
-      });
-      const data = await res.json();
+      const data = await nameChangeMutation.mutateAsync({ name });
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {
