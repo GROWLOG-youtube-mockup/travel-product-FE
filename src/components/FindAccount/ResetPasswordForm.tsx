@@ -17,6 +17,7 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<{ name?: string; phone?: string; email?: string }>({});
+  const [loading, setLoading] = useState(false);
   const { mutateAsync } = usePostApi('/auth/reset-password');
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -38,18 +39,25 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
     if (!email) err.email = '이메일을 입력하세요.';
     setError(err);
     if (Object.keys(err).length > 0) return;
+    setLoading(true);
     try {
       await mutateAsync({
         name,
         phoneNumber: phone,
         email
       } as EndpointRequestMap['/auth/reset-password']);
-      onResult('임시 비밀번호 발급 완료', '임시 비밀번호가 이메일로 발송되었습니다.');
+      onResult(
+        '임시 비밀번호 발급 완료',
+        '임시 비밀번호가 이메일로 발송되었습니다.',
+        '로그인 이후, “마이페이지 → 회원 정보 수정 → 비밀번호 변경” 을 통해 비밀번호를 변경해주시길 바랍니다.'
+      );
     } catch (error: any) {
       onResult(
         '임시 비밀번호 발급 실패',
         error?.response?.data?.error?.message || '임시 비밀번호 발급에 실패했습니다.'
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -91,9 +99,14 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
         />
         {error.email && <div className={styles.errorMessage}>{error.email}</div>}
       </div>
-      <Button type="submit" variant="lg" className={styles.rightAlignButton}>
+      <Button type="submit" variant="lg" className={styles.rightAlignButton} disabled={loading}>
         임시 비밀번호 발급받기
       </Button>
+      {loading && (
+        <div style={{ marginTop: '16px', textAlign: 'right', color: '#888' }}>
+          잠시만 기다려주세요...
+        </div>
+      )}
     </form>
   );
 };
