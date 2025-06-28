@@ -6,11 +6,10 @@ import styles from './AdminHeader.module.scss';
 
 const AdminHeader = () => {
   const navigate = useNavigate();
-  const { isAdminLoggedIn, userName, logout } = useAdminAuthStore();
+  const { isAdminLoggedIn, name } = useAdminAuthStore();
 
   const handleLogout = () => {
-    logout();
-    navigate('/admin/login');
+    navigate('/admin/login', { replace: true });
   };
 
   const handleLogin = () => {
@@ -23,7 +22,7 @@ const AdminHeader = () => {
       <div className={styles['userInfo']}>
         {isAdminLoggedIn ? (
           <>
-            <span>안녕하세요 관리자 {userName ?? '관리자'}님!</span>
+            <span>안녕하세요 관리자 {name ?? '관리자'}님!</span>
             <button className={styles['logoutButton']} onClick={handleLogout}>
               로그아웃
             </button>
