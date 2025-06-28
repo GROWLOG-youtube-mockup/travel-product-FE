@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import FindEmailForm from '../../components/FindAccount/FindEmailForm';
-import ResetPasswordForm from '../../components/FindAccount/ResetPasswordForm';
-import GenericModal from '../../components/Modals/GenericModal';
+import FindEmailForm from '@/components/FindAccount/FindEmailForm';
+import ResetPasswordForm from '@/components/FindAccount/ResetPasswordForm';
+import GenericModal from '@/components/Modals/GenericModal';
 
 import styles from './FindAccount.module.scss';
 
