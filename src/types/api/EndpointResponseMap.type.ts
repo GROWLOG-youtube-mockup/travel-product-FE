@@ -15,6 +15,8 @@ export type LoginRes = ApiResponse<{ accessToken: string; name: string; userId: 
 export type PasswordVerifyRes = ApiResponse<{ verified: boolean }>;
 export type EmailSendRes = ApiResponse<{ sent: boolean }>;
 export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
+export type FindEmailRes = ApiResponse<string>;
+export type PhoneChangeRes = ApiResponse<string>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -27,4 +29,6 @@ export interface EndpointResponseMap {
   '/users/verify-password': PasswordVerifyRes;
   '/auth/email/send': EmailSendRes;
   '/auth/email/verify': EmailVerifyRes;
+  '/auth/find-email': FindEmailRes;
+  '/users/me/phone': PhoneChangeRes;
 }
