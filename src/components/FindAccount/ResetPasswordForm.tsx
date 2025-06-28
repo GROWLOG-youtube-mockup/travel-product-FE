@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { usePostApi } from '@/hooks/usePostAPI';
+import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+
 import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -14,6 +17,7 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState<{ name?: string; phone?: string; email?: string }>({});
+  const { mutateAsync } = usePostApi('/auth/reset-password');
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(e.target.value.replace(/[^0-9]/g, ''));
@@ -35,22 +39,17 @@ const ResetPasswordForm = ({ onResult, styles }: ResetPasswordFormProps) => {
     setError(err);
     if (Object.keys(err).length > 0) return;
     try {
-      const res = await fetch('/auth/reset-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phoneNumber: phone, email })
-      });
-      const data = await res.json();
-      if (data.success) {
-        onResult('임시 비밀번호 발급 완료', '임시 비밀번호가 이메일로 발송되었습니다.');
-      } else {
-        onResult(
-          '임시 비밀번호 발급 실패',
-          data.error?.message || '임시 비밀번호 발급에 실패했습니다.'
-        );
-      }
-    } catch {
-      onResult('네트워크 오류', '잠시 후 다시 시도해 주세요.');
+      await mutateAsync({
+        name,
+        phoneNumber: phone,
+        email
+      } as EndpointRequestMap['/auth/reset-password']);
+      onResult('임시 비밀번호 발급 완료', '임시 비밀번호가 이메일로 발송되었습니다.');
+    } catch (error: any) {
+      onResult(
+        '임시 비밀번호 발급 실패',
+        error?.response?.data?.error?.message || '임시 비밀번호 발급에 실패했습니다.'
+      );
     }
   };
 
