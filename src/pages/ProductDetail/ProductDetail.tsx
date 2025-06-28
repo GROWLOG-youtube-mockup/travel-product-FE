@@ -10,7 +10,6 @@ import Calender from '@/components/Calendar/Calendar';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
-import { useAddOrder } from '@/hooks/useAddOrder';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
 
@@ -30,7 +29,6 @@ const ProductDetailPage = () => {
   const [isRefundOpen, setRefundOpen] = useState(false);
   const { setSelectedItem } = useCartStore();
   const usePostCart = useAddCart();
-  const usePostOrder = useAddOrder();
   const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
   const { mutate: createOrder, isPending } = usePostApi('/orders');
