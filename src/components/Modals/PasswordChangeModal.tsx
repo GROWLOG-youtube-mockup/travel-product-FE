@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { usePostApi } from '@/hooks/usePostAPI';
+import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 import PasswordInput from '../atoms/Input/PasswordInput';
@@ -23,6 +26,8 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   const [step, setStep] = useState<'verify' | 'change'>('verify');
   const [isVerified, setIsVerified] = useState(false);
 
+  const verifyPasswordMutation = usePostApi('/users/verify-password');
+
   // 새 비밀번호가 비워지면 확인란도 자동 초기화
   useEffect(() => {
     if (!newPassword) {
@@ -33,12 +38,9 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   const handleVerifyPassword = async () => {
     setError('');
     try {
-      const res = await fetch('/users/verify-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password: currentPassword })
-      });
-      const data = await res.json();
+      const data = await verifyPasswordMutation.mutateAsync({
+        password: currentPassword
+      } as EndpointRequestMap['/users/verify-password']);
       if (data.success && data.data.verified) {
         setStep('change');
         setIsVerified(true);
