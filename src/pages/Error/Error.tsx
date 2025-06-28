@@ -23,16 +23,19 @@ export default function ErrorPage() {
   const messageFromQuery = queryParams.get('message');
   const codeFromQuery = queryParams.get('code');
 
-  // 서버 응답이 있으면 우선적으로 사용, 없으면 준비된 에러메시지 사용
-  const errorInfo = messageFromQuery
+  // 준비된 에러 메시지가 있는지 확인
+  const preparedErrorInfo = errorMessages[code];
+
+  const errorInfo = preparedErrorInfo
     ? {
-        title: `오류가 발생했습니다 (${code})`,
-        description: messageFromQuery
+        // 준비된 메시지가 있으면 기존 title 사용, description은 서버 응답 우선
+        title: preparedErrorInfo.title,
+        description: messageFromQuery || preparedErrorInfo.description
       }
-    : errorMessages[code] ||
-      errorMessages[500] || {
-        title: '오류가 발생했습니다',
-        description: '알 수 없는 오류가 발생했습니다.'
+    : {
+        // 준비된 메시지가 없으면 서버 응답을 title로 사용하거나 기본값
+        title: messageFromQuery || `오류가 발생했습니다 (${code})`,
+        description: messageFromQuery || '알 수 없는 오류가 발생했습니다.'
       };
 
   const { title, description } = errorInfo;
