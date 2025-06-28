@@ -104,36 +104,6 @@ const ProductDetailPage = () => {
         }
       }
     );
-    // usePostOrder.mutate(
-    //   {
-    //     email: userRes.data?.data?.email ?? '',
-    //     items: [
-    //       {
-    //         peopleCount: selectedData.count,
-    //         product_id: Number(productId),
-    //         start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
-    //       }
-    //     ]
-    //   },
-    //   {
-    //     onSuccess: (res) => {
-    //       setSelectedItem({
-    //         productId: Number(productId),
-    //         productName: data?.data?.name ?? '',
-    //         imageUrls: data?.data?.imageUrls[0] ?? '',
-    //         price: data?.data?.price ?? 0,
-    //         quantity: selectedData.count,
-    //         startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
-    //         stockQuantity: data?.data?.stockQuantity ?? 0
-    //       });
-
-    //       navigate('/reservation');
-    //     },
-    //     onError: (err) => {
-    //       throw new Error('주문 생성 실패');
-    //     }
-    //   }
-    // );
   };
 
   return (
