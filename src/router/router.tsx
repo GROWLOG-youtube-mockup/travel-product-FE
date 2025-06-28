@@ -1,6 +1,8 @@
 import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
+import RequireAdminAccess from '@/components/Auth/RequireAdminAccess';
+
 import App from '../App';
 import Authorization from '../components/Authorization';
 import AdminLayout from '../layouts/AdminLayout/AdminLayout';
@@ -196,7 +198,11 @@ const routes: AppRouteObject[] = [
           },
           {
             path: 'logs',
-            element: <AdminLogsPage />
+            element: (
+              <RequireAdminAccess requireSuperAdmin>
+                <AdminLogsPage />
+              </RequireAdminAccess>
+            )
           }
         ]
       },
