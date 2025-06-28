@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import { api } from '../../lib/api';
+import type { EndpointResponseMap } from '../../types/api/EndpointResponseMap.type';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
@@ -22,23 +24,37 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
   const handleDelete = async () => {
     setError('');
     try {
-      const res = await fetch('/users/me', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ password })
+      const res = await api.delete<EndpointResponseMap['/users/me']>('/users/me', {
+        data: { password }
       });
-      const data = await res.json();
-      if (data.success) {
+      if (res.data.success) {
         setSuccess(true);
         setTimeout(() => {
           onSuccess();
           setSuccess(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        setError(res.data.error?.message || '서버 오류로 실패하였습니다.');
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    }
+  };
+
+  const handlePasswordCheck = async () => {
+    setError('');
+    try {
+      const res = await api.post<EndpointResponseMap['/users/verify-password']>(
+        '/users/verify-password',
+        { password }
+      );
+      if (res.data.data.verified) {
+        setConfirm(true);
+      } else {
+        setError('비밀번호가 올바르지 않습니다.');
+      }
+    } catch {
+      setError('비밀번호 확인 중 오류가 발생했습니다.');
     }
   };
 
@@ -84,28 +100,30 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
         </div>
       ) : (
         <div className={styles.modalWrapper}>
-          <label htmlFor="delete-password">비밀번호 확인</label>
-          <Input
-            id="delete-password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="비밀번호를 입력하세요"
-            variant="long"
-            className={styles.input}
-          />
+          <div className={styles.input}>
+            <label htmlFor="delete-password">비밀번호 확인</label>
+            <Input
+              id="delete-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="비밀번호를 입력하세요"
+              variant="long"
+            />
+            {error && <div className={styles.error}>{error}</div>}
+          </div>
+
           <Button
             type="button"
             variant="xl"
             color="white"
-            onClick={() => setConfirm(true)}
+            onClick={handlePasswordCheck}
             className={styles.button}
             style={{ width: '520px' }}
             disabled={!password}
           >
             회원 탈퇴
           </Button>
-          {error && <div className={styles.error}>{error}</div>}
         </div>
       )}
     </GenericModal>
