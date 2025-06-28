@@ -21,8 +21,8 @@ const LoginPage = () => {
       navigate('/');
     },
     onError: () => {
-      alert('잘못된 이메일 또는 비밀번호입니다');
-      setAuthError('아이디 또는 비밀번호가 올바르지 않습니다.');
+      alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+      setAuthError(null); // 에러 메시지 상태는 초기화
     }
   });
   const { mutate: loginMutate, isPending } = loginMutation;
