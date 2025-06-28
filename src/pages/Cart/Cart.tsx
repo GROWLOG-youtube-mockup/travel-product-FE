@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import { useAddOrder } from '@/hooks/useAddOrder';
 import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 import { useGetApi } from '@/hooks/useGetAPI';
 import type { Carts } from '@/types/api/Carts.type';
@@ -13,15 +14,46 @@ import { useCartStore } from '../../store/CartStore';
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
-  const getCarts = useGetApi('/carts');
+  const cartRes = useGetApi('/carts');
+  const userRes = useGetApi('/users/me');
+  const usePostOrder = useAddOrder();
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
 
   const handlePaymentClick = (item: Carts) => {
-    setSelectedItem(item);
-    navigate('/reservation');
+    usePostOrder.mutate(
+      {
+        email: userRes.data?.data?.email ?? '',
+        items: [
+          {
+            peopleCount: item.quantity,
+            product_id: Number(item.productId),
+            start_date: item.startDate
+          }
+        ]
+      },
+      {
+        onSuccess: (res) => {
+          setSelectedItem({
+            cartItemId: item.cartItemId,
+            productId: Number(item.productId),
+            productName: item.productName,
+            price: item.price,
+            quantity: item.quantity,
+            startDate: item.startDate,
+            stockQuantity: item.stockQuantity,
+            totalPrice: item.totalPrice
+          });
+
+          navigate('/reservation');
+        },
+        onError: (err) => {
+          throw new Error('주문 생성 실패');
+        }
+      }
+    );
   };
 
   const handleMoveProductPage = (productId: number) => {
@@ -32,7 +64,7 @@ const CartPage = () => {
     const checked = e.target.checked;
 
     const newChecked: { [id: number]: boolean } = {};
-    getCarts?.data?.data.forEach((item) => {
+    cartRes?.data?.data.forEach((item) => {
       newChecked[item.cartItemId] = checked;
     });
     setCheckedItems(newChecked);
@@ -72,7 +104,7 @@ const CartPage = () => {
         </Button>
       </div>
 
-      {getCarts?.data?.data?.map((item) => (
+      {cartRes?.data?.data?.map((item) => (
         <CartItemCard
           key={item.cartItemId}
           item={item}
