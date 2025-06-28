@@ -1,5 +1,11 @@
 // 각 POST 엔드포인트별 요청 타입 정의 (OpenAPI 명세 기반)
 
+export type OrderItem = {
+  peopleCount: number;
+  product_id: number;
+  start_date: string;
+};
+
 export interface EndpointRequestMap {
   '/users/signup': {
     userId?: number;
@@ -20,11 +26,7 @@ export interface EndpointRequestMap {
     transaction_id?: string;
   };
   '/orders': {
-    items: Array<{
-      peopleCount: number;
-      product_id: number;
-      start_date: string;
-    }>;
+    items: OrderItem[];
     email: string;
   };
   '/images': {
