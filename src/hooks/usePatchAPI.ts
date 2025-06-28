@@ -1,14 +1,21 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';
 import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
-/**
- * PATCH 요청을 위한 공통 커스텀 훅
- * @param endpoint API 엔드포인트
- */
-export function usePatchApi<T extends keyof EndpointRequestMap>(endpoint: T) {
-  return useMutation((body: EndpointRequestMap[T]) =>
-    api.patch(endpoint, body).then((res) => res.data)
-  );
+export function usePatchApi<K extends keyof EndpointResponseMap & keyof EndpointRequestMap>(
+  url: K,
+  options?: Omit<
+    UseMutationOptions<EndpointResponseMap[K], Error, EndpointRequestMap[K]>,
+    'mutationFn'
+  >
+) {
+  return useMutation<EndpointResponseMap[K], Error, EndpointRequestMap[K]>({
+    mutationFn: async (body) => {
+      const { data } = await api.patch<EndpointResponseMap[K]>(url, body);
+      return data;
+    },
+    ...options
+  });
 }
