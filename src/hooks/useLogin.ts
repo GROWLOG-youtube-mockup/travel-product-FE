@@ -1,19 +1,16 @@
-import { api } from '@/lib/api';
-import type { UserInformation } from '@/types/login';
+import type { UseMutationOptions } from '@tanstack/react-query';
 
-// 백엔드 응답 예시 타입
-interface LoginResponse {
-  success: boolean;
-  data: {
-    accessToken: string;
-    name: string;
-    userId: number;
-  };
-  error: string | null;
-}
+import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
-// POST /auth/login
-export const useLogin = async (payload: UserInformation) => {
-  const { data } = await api.post<LoginResponse>('/auth/login', payload);
-  return data;
+import { usePostApi } from './usePostAPI';
+
+export const useLogin = (
+  options?: UseMutationOptions<
+    EndpointResponseMap['/auth/login'],
+    Error,
+    EndpointRequestMap['/auth/login']
+  >
+) => {
+  return usePostApi('/auth/login', options);
 };

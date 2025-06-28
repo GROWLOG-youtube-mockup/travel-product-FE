@@ -1,17 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
+import { useAuthStore } from '@/store/authStore';
+
 import logo from '../../../assets/GrowLog.svg';
 
 import styles from './DefaultHeader.module.scss';
 
-// 현재는 로그인 상태를 props로 받지만, 추후 논의후 변경예정
-interface DefaultHeaderProps {
-  isLoggedIn: boolean;
-  onLogout?: () => void;
-}
-
-const DefaultHeader = ({ isLoggedIn, onLogout }: DefaultHeaderProps) => {
+const DefaultHeader = () => {
   const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
+  const logout = useAuthStore((state) => state.logout);
   return (
     <div className={styles.headerWrapper}>
       <header className={styles.header}>
@@ -23,7 +21,7 @@ const DefaultHeader = ({ isLoggedIn, onLogout }: DefaultHeaderProps) => {
             <>
               <label>장바구니</label>
               <label>마이페이지</label>
-              <span onClick={onLogout} style={{ cursor: 'pointer' }}>
+              <span onClick={logout} style={{ cursor: 'pointer' }}>
                 <label>로그아웃</label>
               </span>
             </>
