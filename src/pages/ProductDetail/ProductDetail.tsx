@@ -13,7 +13,7 @@ import { useAddCart } from '@/hooks/useAddCart';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
 
-import ImageGallery from '../../components/ImageGallery/ImageGallery';
+import ImageGallery from '@/components/ImageGallery/ImageGallery';
 import { useGetApi } from '../../hooks/useGetAPI';
 
 import styles from './ProductDetail.module.scss';
