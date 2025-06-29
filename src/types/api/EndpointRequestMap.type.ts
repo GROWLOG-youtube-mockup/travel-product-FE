@@ -27,7 +27,6 @@ export interface EndpointRequestMap {
   };
   '/orders': {
     items: OrderItem[];
-    email: string;
   };
   '/images': {
     files: File[];

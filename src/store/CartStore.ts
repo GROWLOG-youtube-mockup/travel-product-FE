@@ -1,10 +1,10 @@
 import { create } from 'zustand';
 
-import type { CartItem } from '../types/cart';
+import type { Carts } from '@/types/api/Carts.type';
 
 interface CartStore {
-  selectedItem: CartItem | null;
-  setSelectedItem: (item: CartItem) => void;
+  selectedItem: Carts | null;
+  setSelectedItem: (item: Carts) => void;
   clearSelectedItem: () => void;
 }
 
