@@ -1,33 +1,16 @@
-import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+
+import { useGetApi } from '@/hooks/useGetAPI';
 
 import Button from '../../components/atoms/Button/Button';
 import { useCartStore } from '../../store/CartStore';
-import type { User } from '../../types/user';
-import { normalizePhoneNumber } from '../../utils/phone';
 
 import styles from './Reservation.module.scss';
 
 const ReservationPage = () => {
   const navigate = useNavigate();
+  const userRes = useGetApi(`/users/me`);
   const { selectedItem } = useCartStore();
-  const [userInfo, setUserInfo] = useState<User | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/users/me');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setUserInfo(data);
-      } catch (err: any) {
-        setError(err.message);
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   const onClickNextStep = () => {
     navigate('/payment-process');
@@ -49,14 +32,19 @@ const ReservationPage = () => {
           <h1 className={styles.title}>결제 상품</h1>
           <div className={styles.itemWrapper}>
             <div className={styles.itemImage}>
-              <img src={selectedItem?.product.thumbnail_image_url} alt="" />
+              <img
+                src="https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516_1280.jpg"
+                alt=""
+              />
             </div>
             <div className={styles.itemInfoWrapper}>
-              <div>{selectedItem?.product.name}</div>
-              <div>{selectedItem?.start_date}</div>
+              <div>{selectedItem?.productName}</div>
+              <div>{selectedItem?.startDate}</div>
               <div>인원 {selectedItem?.quantity}명</div>
             </div>
-            <div className={styles.price}>₩{selectedItem?.product.price.toLocaleString()}</div>
+            <div className={styles.price}>
+              ₩{((selectedItem?.price ?? 0) * (selectedItem?.quantity ?? 0)).toLocaleString()}
+            </div>
           </div>
         </div>
 
@@ -66,15 +54,15 @@ const ReservationPage = () => {
           <div className={styles.infoWrapper}>
             <div>
               <span>이름 : </span>
-              <span>{userInfo?.name}</span>
+              <span>{userRes?.data?.data?.name}</span>
             </div>
             <div>
               <span>전화번호 : </span>
-              <span>{userInfo?.phone_number && normalizePhoneNumber(userInfo?.phone_number)}</span>
+              <span>{userRes?.data?.data?.phoneNumber}</span>
             </div>
             <div>
               <span>이메일 주소 : </span>
-              <span>{userInfo?.email}</span>
+              <span>{userRes?.data?.data?.email}</span>
             </div>
           </div>
 
