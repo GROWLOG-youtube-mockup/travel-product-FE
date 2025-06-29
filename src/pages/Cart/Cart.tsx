@@ -85,7 +85,15 @@ const CartPage = () => {
   };
 
   const handleDeleteClick = (cartItemId: number) => {
-    deleteCart.mutate({ itemIds: [cartItemId] });
+    // deleteCart.mutate({ itemIds: [cartItemId] });
+    deleteCart.mutate(
+      { itemIds: [cartItemId] },
+      {
+        onSuccess: () => {
+          cartRes.refetch();
+        }
+      }
+    );
   };
 
   return (
