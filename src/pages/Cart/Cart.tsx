@@ -6,10 +6,10 @@ import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import type { Carts } from '@/types/api/Carts.type';
 
-import Button from '../../components/atoms/Button/Button';
-import Checkbox from '../../components/atoms/Checkbox/Checkbox';
-import CartItemCard from '../../components/Cards/CartItemCard';
-import { useCartStore } from '../../store/CartStore';
+import Button from '@/components/atoms/Button/Button';
+import Checkbox from '@/components/atoms/Checkbox/Checkbox';
+import CartItemCard from '@/components/Cards/CartItemCard';
+import { useCartStore } from '@/store/CartStore';
 
 import styles from './Cart.module.scss';
 
