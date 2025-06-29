@@ -17,6 +17,7 @@ export type EmailSendRes = ApiResponse<{ sent: boolean }>;
 export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
 export type FindEmailRes = ApiResponse<string>;
 export type PhoneChangeRes = ApiResponse<string>;
+export type ResetPasswordRes = ApiResponse<string>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -31,4 +32,5 @@ export interface EndpointResponseMap {
   '/auth/email/verify': EmailVerifyRes;
   '/auth/find-email': FindEmailRes;
   '/users/me/phone': PhoneChangeRes;
+  '/auth/reset-password': ResetPasswordRes;
 }

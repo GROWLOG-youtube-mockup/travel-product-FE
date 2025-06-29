@@ -2,13 +2,13 @@ import { useState } from 'react';
 
 import { usePostApi } from '@/hooks/usePostAPI';
 import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+import { normalizePhoneNumber } from '@/utils/phone';
 
-import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
 interface ResetPasswordFormProps {
-  onResult: (title: string, message: string) => void;
+  onResult: (title: string, message: string, guide?: string) => void;
   styles: { [key: string]: string };
 }
 
