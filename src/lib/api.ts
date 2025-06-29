@@ -22,6 +22,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+//  응답 인터셉터: 상태코드별 에러 페이지 이동
 api.interceptors.response.use(
   (res) => res,
   (error) => {
