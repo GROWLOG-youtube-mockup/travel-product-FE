@@ -7,14 +7,13 @@ import dayjs from 'dayjs';
 
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
+import ImageGallery from '@/components/ImageGallery/ImageGallery';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
+import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
-
-import ImageGallery from '@/components/ImageGallery/ImageGallery';
-import { useGetApi } from '../../hooks/useGetAPI';
 
 import styles from './ProductDetail.module.scss';
 
@@ -31,7 +30,7 @@ const ProductDetailPage = () => {
   const usePostCart = useAddCart();
   const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
-  const { mutate: createOrder, isPending } = usePostApi('/orders');
+  const { mutate: createOrder } = usePostApi('/orders');
 
   const handleSelectedCount = (num: number) => {
     setSelectedData((prev) => {
