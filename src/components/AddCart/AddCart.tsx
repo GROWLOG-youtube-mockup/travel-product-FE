@@ -68,7 +68,9 @@ const AddCart = ({
         <span className={styles.line}></span>
 
         <div>
-          <span className={styles.price}>₩{data.price.toLocaleString()}</span>
+          <span className={styles.price}>
+            ₩{(data.price * selectedData.count || data.price).toLocaleString()}
+          </span>
         </div>
       </div>
 

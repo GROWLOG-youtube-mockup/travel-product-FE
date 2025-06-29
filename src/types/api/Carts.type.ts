@@ -7,4 +7,5 @@ export interface Carts {
   startDate: string;
   price: number;
   totalPrice: number;
+  productImage: string;
 }

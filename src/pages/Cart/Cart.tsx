@@ -1,33 +1,69 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useCart } from '@/hooks/useCart';
-
-import Button from '../../components/atoms/Button/Button';
-import Checkbox from '../../components/atoms/Checkbox/Checkbox';
-import CartItemCard from '../../components/Cards/CartItemCard';
-import { useCartStore } from '../../store/CartStore';
-import type { CartItem, CartItems } from '../../types/cart';
+import Button from '@/components/atoms/Button/Button';
+import Checkbox from '@/components/atoms/Checkbox/Checkbox';
+import CartItemCard from '@/components/Cards/CartItemCard';
+import { useDeleteCartItems } from '@/hooks/useDeleteCart';
+import { useGetApi } from '@/hooks/useGetAPI';
+import { usePostApi } from '@/hooks/usePostAPI';
+import { useCartStore } from '@/store/CartStore';
+import type { Carts } from '@/types/api/Carts.type';
 
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
-  const { data: cartItems, isLoading, isError, error, isFetching } = useCart();
-  const [items, setItems] = useState<CartItems>(cartItems?.data || []);
+  const cartRes = useGetApi('/carts');
+  const userRes = useGetApi('/users/me');
+  const { mutate: createOrder, isPending } = usePostApi('/orders');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const navigate = useNavigate();
+  const deleteCart = useDeleteCartItems();
 
-  const handlePaymentClick = (item: CartItem) => {
-    setSelectedItem(item);
-    navigate('/reservation');
+  const handlePaymentClick = (item: Carts) => {
+    createOrder(
+      {
+        params: { email: userRes.data?.data?.email ?? '' },
+        items: [
+          {
+            peopleCount: item.quantity,
+            product_id: Number(item.productId),
+            start_date: item.startDate
+          }
+        ]
+      },
+      {
+        onSuccess: () => {
+          setSelectedItem({
+            cartItemId: item.cartItemId,
+            productId: Number(item.productId),
+            productName: item.productName,
+            price: item.price,
+            quantity: item.quantity,
+            startDate: item.startDate,
+            stockQuantity: item.stockQuantity,
+            totalPrice: item.totalPrice,
+            productImage: item.productImage
+          });
+          navigate('/reservation');
+        },
+        onError: () => {
+          throw new Error('주문 생성 실패');
+        }
+      }
+    );
+  };
+
+  const handleMoveProductPage = (productId: number) => {
+    navigate(`/product/${productId}`);
   };
 
   const handleAllSelectChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const checked = e.target.checked;
 
     const newChecked: { [id: number]: boolean } = {};
-    items.forEach((item) => {
+    cartRes?.data?.data.forEach((item) => {
       newChecked[item.cartItemId] = checked;
     });
     setCheckedItems(newChecked);
@@ -37,20 +73,19 @@ const CartPage = () => {
     setCheckedItems((prev) => ({ ...prev, [id]: checked }));
   };
 
-  const handleDeleteClick = async () => {
-    for (const id in checkedItems) {
-      if (checkedItems[id]) {
-        try {
-          const res = await fetch(`/cart/${id}`, {
-            method: 'DELETE'
-          });
-          if (!res.ok) throw new Error('삭제 실패');
-        } catch (err: any) {
-          console.error(err);
-          return;
-        }
-      }
+  const handleDeleteChecked = () => {
+    const items: number[] = [];
+
+    for (const [key, value] of Object.entries(checkedItems)) {
+      if (value) items.push(Number(key));
+      else continue;
     }
+
+    if (items.length > 0) deleteCart.mutate({ itemIds: items });
+  };
+
+  const handleDeleteClick = (cartItemId: number) => {
+    deleteCart.mutate({ itemIds: [cartItemId] });
   };
 
   return (
@@ -62,19 +97,21 @@ const CartPage = () => {
           variant="xs"
           color="white"
           className={styles.deleteButton}
-          onClick={handleDeleteClick}
+          onClick={handleDeleteChecked}
         >
           <span>선택한 상품 삭제</span>
         </Button>
       </div>
 
-      {cartItems?.data?.map((item) => (
+      {cartRes?.data?.data?.map((item) => (
         <CartItemCard
           key={item.cartItemId}
           item={item}
           checked={!!checkedItems[item.cartItemId]}
           handlePaymentClick={handlePaymentClick}
           onCheckChange={(checked) => handleItemCheck(item.cartItemId, checked)}
+          handleDeleteClick={handleDeleteClick}
+          handleMoveProductPage={handleMoveProductPage}
         />
       ))}
     </div>
