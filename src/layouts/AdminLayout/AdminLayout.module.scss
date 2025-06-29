@@ -8,4 +8,10 @@
     width: 100%;
     height: calc(100vh - 4rem);
   }
+
+  .content {
+    flex: 1; // 사이드바를 제외한 남은 공간 모두 사용
+    min-width: 0; // flexbox overflow 방지
+    overflow-x: auto; // 필요시 가로 스크롤
+  }
 }
