@@ -1,24 +1,84 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import type { AdminTableProps, TableColumn } from '@/types/adminTable.types';
+import type { ExtendedAdminTableProps, TableColumn } from '@/types/adminTable.types';
 
 import styles from './AdminTable.module.scss';
 
 function AdminTable<T extends Record<string, unknown>>({
-  columns,
+  columns: detailedColumns,
+  simpleColumns,
   data,
   pagination,
   loading = false,
   onPageChange,
+  onPageSizeChange,
+  pageSizeOptions = [5, 10, 20, 50],
+  showPaginationAlways = false,
   emptyMessage = '데이터가 없습니다.',
-  className = ''
-}: AdminTableProps<T>) {
+  className = '',
+  fullWidth = false,
+  currentPageSize,
+
+  // 새로운 범용 기능들
+  filters = [],
+  onFiltersChange,
+  showFilterBar = false,
+  error = null,
+  onRetry,
+  errorMessage = '데이터를 불러오는 중 오류가 발생했습니다.',
+  title,
+  summary
+}: ExtendedAdminTableProps<T>) {
+  const [pageSize, setPageSize] = useState(currentPageSize || pageSizeOptions[1] || 10);
+  const [isCustomInput, setIsCustomInput] = useState(false);
+  const [customPageSize, setCustomPageSize] = useState('');
+  const [filterValues, setFilterValues] = useState<Record<string, string>>({});
+
+  // 현재 pageSize가 변경될 때마다 내부 상태도 업데이트
+  React.useEffect(() => {
+    if (currentPageSize && currentPageSize !== pageSize) {
+      setPageSize(currentPageSize);
+    }
+  }, [currentPageSize, pageSize]);
+
+  // 드롭다운 옵션 생성
+  const sortedPageSizeOptions = React.useMemo(() => {
+    const allOptions = [...pageSizeOptions];
+
+    if (!pageSizeOptions.includes(pageSize)) {
+      allOptions.push(pageSize);
+    }
+
+    allOptions.sort((a, b) => a - b);
+
+    return allOptions.map((size) => ({
+      value: size,
+      label: `${size}개${!pageSizeOptions.includes(size) ? ' (사용자 설정)' : ''}`
+    }));
+  }, [pageSize, pageSizeOptions]);
+
+  // 간단한 컬럼을 상세 컬럼으로 변환
+  const processedColumns: TableColumn[] = React.useMemo(() => {
+    if (detailedColumns) return detailedColumns;
+
+    if (simpleColumns) {
+      return simpleColumns.map((col, index) => ({
+        key: col.key,
+        label: col.label,
+        render: col.render,
+        width: index === 0 ? '120px' : index === simpleColumns.length - 1 ? '180px' : '150px',
+        align: 'center' // 모든 항목을 중앙 정렬로 변경
+      }));
+    }
+
+    return [];
+  }, [detailedColumns, simpleColumns]);
+
   const renderCell = (column: TableColumn, row: T): React.ReactNode => {
     if (column.render) {
       return column.render(row[column.key], row);
     }
     const value = row[column.key];
-    // unknown 타입을 ReactNode로 안전하게 변환
     if (value === null || value === undefined) {
       return '';
     }
@@ -28,16 +88,64 @@ function AdminTable<T extends Record<string, unknown>>({
     return String(value);
   };
 
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setIsCustomInput(false);
+    if (onPageSizeChange) {
+      onPageSizeChange(newSize);
+    }
+  };
+
+  const handleCustomPageSizeSubmit = () => {
+    const customSize = parseInt(customPageSize, 10);
+    if (customSize > 0 && customSize <= 1000) {
+      setPageSize(customSize);
+      setIsCustomInput(false);
+      setCustomPageSize('');
+      if (onPageSizeChange) {
+        onPageSizeChange(customSize);
+      }
+    } else {
+      alert('1~1000 사이의 숫자를 입력해주세요.');
+    }
+  };
+
+  const handleCustomInputKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleCustomPageSizeSubmit();
+    } else if (e.key === 'Escape') {
+      setIsCustomInput(false);
+      setCustomPageSize('');
+    }
+  };
+
+  const handleFilterChange = (key: string, value: string) => {
+    const newFilters = { ...filterValues, [key]: value };
+    setFilterValues(newFilters);
+    if (onFiltersChange) {
+      onFiltersChange(newFilters);
+    }
+  };
+
+  const handleResetFilters = () => {
+    const resetFilters: Record<string, string> = {};
+    filters.forEach((filter) => {
+      resetFilters[filter.key] = '';
+    });
+    setFilterValues(resetFilters);
+    if (onFiltersChange) {
+      onFiltersChange(resetFilters);
+    }
+  };
+
   const renderPagination = () => {
     const { currentPage, totalPages } = pagination;
     const pages = [];
     const maxVisiblePages = 5;
 
-    // 시작과 끝 페이지 계산
     let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
     const endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
 
-    // 끝 페이지가 총 페이지보다 작을 때 시작 페이지 조정
     if (endPage - startPage + 1 < maxVisiblePages) {
       startPage = Math.max(0, endPage - maxVisiblePages + 1);
     }
@@ -132,20 +240,90 @@ function AdminTable<T extends Record<string, unknown>>({
     return pages;
   };
 
-  if (loading) {
+  // 에러 처리
+  if (error) {
     return (
-      <div className={`${styles.tableContainer} ${className}`}>
-        <div className={styles.loading}>로딩 중...</div>
+      <div className={`${styles.tableContainer} ${fullWidth ? styles.fullWidth : ''} ${className}`}>
+        {title && (
+          <div className={styles.header}>
+            <h1>{title}</h1>
+          </div>
+        )}
+        <div className={styles.errorContainer}>
+          <p>{errorMessage}</p>
+          {onRetry && (
+            <button onClick={onRetry} className={styles.retryButton}>
+              다시 시도
+            </button>
+          )}
+        </div>
       </div>
     );
   }
 
+  const showPagination = showPaginationAlways || pagination.totalPages > 1;
+
   return (
-    <div className={`${styles.tableContainer} ${className}`}>
+    <div className={`${styles.tableContainer} ${fullWidth ? styles.fullWidth : ''} ${className}`}>
+      {/* 헤더 영역 */}
+      {(title || summary) && (
+        <div className={styles.header}>
+          {title && <h1>{title}</h1>}
+          {summary && <div className={styles.summary}>{summary}</div>}
+        </div>
+      )}
+
+      {/* 필터 영역 */}
+      {showFilterBar && filters.length > 0 && (
+        <div className={styles.filterContainer}>
+          {filters.map((filter) => (
+            <div key={filter.key} className={styles.filterGroup}>
+              <label htmlFor={filter.key}>{filter.label}:</label>
+              {filter.type === 'select' ? (
+                <select
+                  id={filter.key}
+                  value={filterValues[filter.key] || ''}
+                  onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                  className={styles.filterSelect}
+                >
+                  {filter.options?.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <input
+                  id={filter.key}
+                  type={filter.type}
+                  value={filterValues[filter.key] || ''}
+                  onChange={(e) => handleFilterChange(filter.key, e.target.value)}
+                  placeholder={filter.placeholder}
+                  className={styles.filterInput}
+                />
+              )}
+            </div>
+          ))}
+          <button onClick={handleResetFilters} className={styles.resetButton}>
+            필터 초기화
+          </button>
+        </div>
+      )}
+
+      {/* 로딩 오버레이 */}
+      {loading && (
+        <div className={styles.loadingOverlay}>
+          <div className={styles.loadingSpinner}>
+            <div className={styles.spinner}></div>
+            <span>데이터를 불러오는 중...</span>
+          </div>
+        </div>
+      )}
+
       <table className={styles.table}>
         <thead>
           <tr>
-            {columns.map((column) => (
+            {processedColumns.map((column) => (
               <th
                 key={column.key}
                 className={column.align ? styles[column.align] : ''}
@@ -159,14 +337,14 @@ function AdminTable<T extends Record<string, unknown>>({
         <tbody>
           {data.length === 0 ? (
             <tr>
-              <td colSpan={columns.length} className={styles.empty}>
+              <td colSpan={processedColumns.length} className={styles.empty}>
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             data.map((row, index) => (
               <tr key={index}>
-                {columns.map((column) => (
+                {processedColumns.map((column) => (
                   <td key={column.key} className={column.align ? styles[column.align] : ''}>
                     {renderCell(column, row)}
                   </td>
@@ -177,12 +355,67 @@ function AdminTable<T extends Record<string, unknown>>({
         </tbody>
       </table>
 
-      {pagination.totalPages > 1 && (
+      {showPagination && (
         <div className={styles.paginationContainer}>
-          {renderPagination()}
+          <div className={styles.paginationControls}>{renderPagination()}</div>
+
           <div className={styles.paginationInfo}>
-            총 {pagination.totalElements}개 중 {pagination.currentPage + 1} /{' '}
-            {pagination.totalPages} 페이지
+            <div className={styles.pageSize}>
+              <span>페이지당 </span>
+              {isCustomInput ? (
+                <div className={styles.customPageSize}>
+                  <input
+                    type="number"
+                    value={customPageSize}
+                    onChange={(e) => setCustomPageSize(e.target.value)}
+                    onKeyDown={handleCustomInputKeyPress}
+                    placeholder="직접 입력"
+                    className={styles.customInput}
+                    min="1"
+                    max="1000"
+                    autoFocus
+                  />
+                  <button onClick={handleCustomPageSizeSubmit} className={styles.customSubmitBtn}>
+                    ✓
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsCustomInput(false);
+                      setCustomPageSize('');
+                    }}
+                    className={styles.customCancelBtn}
+                  >
+                    ✕
+                  </button>
+                </div>
+              ) : (
+                <div className={styles.pageSizeSelector}>
+                  <select
+                    value={pageSize}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value === 'custom') {
+                        setIsCustomInput(true);
+                      } else {
+                        handlePageSizeChange(Number(value));
+                      }
+                    }}
+                    className={styles.pageSizeSelect}
+                  >
+                    {sortedPageSizeOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                    <option value="custom">직접 입력...</option>
+                  </select>
+                </div>
+              )}
+            </div>
+            <div className={styles.pageInfo}>
+              총 {pagination.totalElements}개 중 {pagination.currentPage + 1} /{' '}
+              {pagination.totalPages} 페이지
+            </div>
           </div>
         </div>
       )}
