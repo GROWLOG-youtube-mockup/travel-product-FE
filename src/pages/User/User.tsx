@@ -1,7 +1,8 @@
+import type { Trip } from '@/types/api/trip.type';
+
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
 import UserInfo from '../../components/UserInfo/UserInfo';
-import type { Trip } from '../../types/trip';
 
 import styles from './User.module.scss';
 

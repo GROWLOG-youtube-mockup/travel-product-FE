@@ -1,15 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import UserBanner from '@/components/Banner/UserBanner/UserBanner';
+import Footer from '@/components/Footer/Footer';
+import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 import { useGetApi } from '@/hooks/useGetAPI';
-import type { Trip } from '@/types/api/trip.type';
+import UserPage from '@/pages/User/User';
+import type { TripDto } from '@/types/api/trip.type';
 import type { User } from '@/types/api/User.type';
 import { toFETripArray } from '@/utils/trip';
-
-import UserBanner from '../../components/Banner/UserBanner/UserBanner';
-import Footer from '../../components/Footer/Footer';
-import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
-import UserPage from '../../pages/User/User';
 
 import styles from './UserLayout.module.scss';
 
@@ -32,16 +31,16 @@ const UserLayout = () => {
   } = useGetApi('/users/me');
 
   // 명세 기반 데이터 추출
-  const tripsData: Trip[] = tripsResponse?.data ?? [];
+  const tripsData: TripDto[] = tripsResponse?.data ?? [];
   const userInfoData: User | null = userInfoResponse?.data ?? null;
 
   // 데이터 가공
   const today = new Date();
   const upcoming = Array.isArray(tripsData)
-    ? toFETripArray(tripsData.filter((trip) => new Date(trip.end_date) >= today))
+    ? toFETripArray(tripsData.filter((trip) => new Date(trip.endDate) >= today))
     : [];
   const past = Array.isArray(tripsData)
-    ? toFETripArray(tripsData.filter((trip) => new Date(trip.end_date) < today))
+    ? toFETripArray(tripsData.filter((trip) => new Date(trip.endDate) < today))
     : [];
   const userInfo = userInfoData
     ? {
@@ -58,7 +57,7 @@ const UserLayout = () => {
     }
   }, [tripsError, userInfoError, navigate]);
 
-  // 로딩 처리(예시)
+  // 로딩 처리
   if (tripsLoading || userInfoLoading) {
     return <div>로딩 중...</div>;
   }
