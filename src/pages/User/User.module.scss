@@ -4,7 +4,16 @@
   background: #ffffff;
 }
 
+.userContentWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 1280px;
+  min-width: 1160px;
+  margin: 0 auto;
+}
+
 .sectionTitle {
+  margin-top: 32px; // UserBanner와의 간격 조정
   font-size: 2rem;
   font-weight: bold;
   text-align: left;
