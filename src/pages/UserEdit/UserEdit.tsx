@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/atoms/Button/Button';
@@ -23,17 +23,19 @@ const UserEditPage = () => {
   const [isPasswordModalOpen, setPasswordModalOpen] = useState(false);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await api.get<EndpointResponseMap['/users/me']>('/users/me');
-        setUser(res.data.data);
-      } catch {
-        navigate('/error');
-      }
-    };
-    fetchUser();
+  // fetchUser를 useCallback으로 분리
+  const fetchUser = useCallback(async () => {
+    try {
+      const res = await api.get<EndpointResponseMap['/users/me']>('/users/me');
+      setUser(res.data.data);
+    } catch {
+      navigate('/error');
+    }
   }, [navigate]);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
     <div className={styles.container}>
@@ -101,19 +103,28 @@ const UserEditPage = () => {
       <NameChangeModal
         open={isNameModalOpen}
         onClose={() => setNameModalOpen(false)}
-        onSuccess={() => setNameModalOpen(false)}
+        onSuccess={() => {
+          setNameModalOpen(false);
+          fetchUser();
+        }}
         currentName={user?.name ?? ''}
       />
       <PhoneChangeModal
         open={isPhoneModalOpen}
         onClose={() => setPhoneModalOpen(false)}
-        onSuccess={() => setPhoneModalOpen(false)}
+        onSuccess={() => {
+          setPhoneModalOpen(false);
+          fetchUser();
+        }}
         currentPhone={user?.phoneNumber ?? ''}
       />
       <PasswordChangeModal
         open={isPasswordModalOpen}
         onClose={() => setPasswordModalOpen(false)}
-        onSuccess={() => setPasswordModalOpen(false)}
+        onSuccess={() => {
+          setPasswordModalOpen(false);
+          fetchUser();
+        }}
       />
       <DeleteAccountModal
         open={isDeleteModalOpen}
