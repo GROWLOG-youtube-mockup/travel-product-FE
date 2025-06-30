@@ -3,6 +3,7 @@ import type { Orders } from './Orders.type';
 import type { Product } from './Product.type';
 import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
+import type { Trip } from './trip.type';
 import type { User } from './User.type';
 
 export type CartRes = ApiResponse<Carts[]>;
@@ -18,6 +19,7 @@ export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
 export type FindEmailRes = ApiResponse<string>;
 export type PhoneChangeRes = ApiResponse<string>;
 export type ResetPasswordRes = ApiResponse<string>;
+export type TripsRes = ApiResponse<Trip[]>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -26,6 +28,7 @@ export interface EndpointResponseMap {
   '/orders': OrdersRes;
   [k: `/orders/${string}`]: OrderDetailRes;
   '/users/me': UserRes;
+  '/users/me/trips': TripsRes;
   '/auth/login': LoginRes;
   '/users/verify-password': PasswordVerifyRes;
   '/auth/email/send': EmailSendRes;
