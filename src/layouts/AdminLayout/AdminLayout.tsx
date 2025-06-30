@@ -3,13 +3,13 @@ import { Outlet } from 'react-router-dom';
 import RequireAdminAccess from '@/components/Auth/RequireAdminAccess';
 import AdminHeader from '@/components/Header/AdminHeader/AdminHeader';
 import AdminSidebar from '@/components/Sidebar/AdminSidebar/AdminSidebar';
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import styles from './AdminLayout.module.scss';
 
 const AdminLayout = () => {
-  const { isAdminLoggedIn, roleCode } = useAdminAuthStore();
-  const isAuthorizedAdmin = isAdminLoggedIn && (roleCode === 1 || roleCode === 2);
+  const { isLoggedIn, roleCode } = useAuthStore();
+  const isAuthorizedAdmin = isLoggedIn && (roleCode === 1 || roleCode === 2);
 
   return (
     <RequireAdminAccess>

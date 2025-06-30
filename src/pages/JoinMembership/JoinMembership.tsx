@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 import { usePostApi } from '@/hooks/usePostAPI';
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import SignupForm from '../../components/SignupForm/SignupForm';
 import type { SignupValues } from '../../types/signupForm.types';
@@ -30,13 +30,21 @@ const JoinMembershipPage = () => {
         email: form.email,
         password: form.password
       });
-      let accessToken: string | undefined = undefined;
-      if ('data' in loginRes && loginRes.data && 'accessToken' in loginRes.data) {
-        accessToken = (loginRes.data as { accessToken?: string }).accessToken;
+
+      // 로그인 응답에서 필요한 데이터 추출
+      if ('data' in loginRes && loginRes.data) {
+        const { accessToken, name, userId, roleCode } = loginRes.data as {
+          accessToken?: string;
+          name?: string;
+          userId?: number;
+          roleCode?: number;
+        };
+
+        if (accessToken && name && userId != null && roleCode != null) {
+          login(accessToken, name, userId, roleCode);
+        }
       }
-      if (accessToken) {
-        login(accessToken);
-      }
+
       alert('회원가입이 완료되었습니다!');
       navigate('/');
     } catch (e: unknown) {

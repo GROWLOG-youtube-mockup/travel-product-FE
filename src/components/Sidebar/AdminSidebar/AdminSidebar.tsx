@@ -1,12 +1,12 @@
 import { NavLink, useLocation } from 'react-router-dom';
 
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import styles from './AdminSidebar.module.scss';
 
 const AdminSidebar = () => {
   const location = useLocation();
-  const { roleCode } = useAdminAuthStore();
+  const { roleCode } = useAuthStore();
 
   const sidebarItems = [
     { name: '상품 관리', icon: '📦', path: '/admin/products' },

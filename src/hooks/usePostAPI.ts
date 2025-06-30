@@ -24,13 +24,11 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
     EndpointRequestMap[K] | (EndpointRequestMap[K] & { params?: PostApiParams })
   >({
     mutationFn: async (body) => {
-      let processedBody = body;
-
       // body 중첩 방지: { body: {...} } 형태면 한 번 풀어서 전달
-      if (hasNestedBody(body)) {
-        processedBody = body.body as EndpointRequestMap[K];
-      }
-      const { params, ...data } = body as EndpointRequestMap[K] & { params?: PostApiParams };
+      const finalBody = hasNestedBody(body) ? (body.body as EndpointRequestMap[K]) : body;
+
+      const { params, ...data } = finalBody as EndpointRequestMap[K] & { params?: PostApiParams };
+
       try {
         const { data: res } = await api.post<EndpointResponseMap[K]>(
           url,
@@ -38,9 +36,13 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
           params ? { params } : undefined
         );
         return res;
-      } catch (error: any) {
-        if (error.response && error.response.data) {
-          return error.response.data;
+      } catch (error: unknown) {
+        // error 타입을 unknown으로 받아서 안전하게 처리
+        if (error && typeof error === 'object' && 'response' in error) {
+          const axiosError = error as { response?: { data?: unknown } };
+          if (axiosError.response && axiosError.response.data) {
+            return axiosError.response.data as EndpointResponseMap[K];
+          }
         }
         throw error;
       }

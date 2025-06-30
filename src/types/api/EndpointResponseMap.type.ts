@@ -5,7 +5,7 @@ import type { PaginatedResponse } from './Pagination.type';
 import type { Product } from './Product.type';
 import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
-import type { Trip } from './trip.type';
+import type { Trip } from './Trip.type';
 import type { User } from './User.type';
 
 export type CartRes = ApiResponse<Carts[]>;

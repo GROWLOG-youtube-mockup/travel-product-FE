@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { getAuthAccessToken } from '@/store/AuthStore';
+
 export const api = axios.create({
   baseURL: '/api',
   withCredentials: true,
@@ -12,7 +14,7 @@ export const api = axios.create({
 
 // 요청 인터셉터에서 accessToken이 있을 때만 Authorization 헤더 추가
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
+  const token = getAuthAccessToken();
   if (token) {
     config.headers = config.headers || {};
     config.headers['Authorization'] = `Bearer ${token}`;
@@ -22,7 +24,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-//  응답 인터셉터: 상태코드별 에러 페이지 이동
+// 응답 인터셉터: 상태코드별 에러 페이지 이동
 api.interceptors.response.use(
   (res) => res,
   (error) => {
