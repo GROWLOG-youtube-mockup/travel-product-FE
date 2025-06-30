@@ -7,6 +7,7 @@ import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
+import { denormalizePhoneNumber } from '@/utils/phone';
 
 import styles from './PaymentProcess.module.scss';
 
@@ -24,7 +25,7 @@ const PaymentProcessPage = () => {
   const { selectedItem } = useCartStore((state) => state);
   const [amount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: selectedItem?.price || 0
+    value: selectedItem?.price ?? 0
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
@@ -32,18 +33,16 @@ const PaymentProcessPage = () => {
   const { mutate: approveApi } = usePostApi('/payments/approve');
 
   useEffect(() => {
-    async function fetchPaymentWidgets() {
+    const fetchPaymentWidgets = async () => {
       // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
       // 회원 결제
       const paymentWidgets = tossPayments.widgets({
         customerKey
       });
-      // 비회원 결제
-      // const paymentWidgets = tossPayments.widgets({ customerKey: ANONYMOUS });
 
       setWidgets(paymentWidgets);
-    }
+    };
 
     fetchPaymentWidgets();
   }, []);
@@ -128,25 +127,22 @@ const PaymentProcessPage = () => {
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                     await widgets
                       .requestPayment({
-                        orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
-                        orderName: '토스 티셔츠 외 2건',
+                        orderId: selectedItem?.order_id,
+                        orderName: selectedItem?.productName,
                         successUrl: window.location.origin + '/payment-complete',
                         failUrl: window.location.origin + '/payment-process',
                         customerEmail: userRes?.data?.data.email,
                         customerName: userRes?.data?.data.name,
-                        customerMobilePhone: userRes?.data?.data.phoneNumber
+                        customerMobilePhone: denormalizePhoneNumber(
+                          userRes?.data?.data.phoneNumber ?? ''
+                        )
                       })
                       .then((res: any) => {
-                        console.warn(res);
                         handlePaymentApprove();
-                      })
-                      .then(() => {})
-                      .catch((error: any) => {
-                        navigate(`/error/${error?.error?.code}`);
                       });
-                  } catch (error) {
+                  } catch (error: any) {
                     // 에러 처리하기
-                    console.error(error);
+                    navigate(`/error/${error?.error?.data}`);
                   }
                 }}
               >
