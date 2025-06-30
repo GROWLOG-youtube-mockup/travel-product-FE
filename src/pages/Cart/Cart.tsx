@@ -13,12 +13,12 @@ import type { Carts } from '@/types/api/Carts.type';
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const cartRes = useGetApi('/carts');
   const userRes = useGetApi('/users/me');
   const { mutate: createOrder, isPending } = usePostApi('/orders');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
-  const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
 
   const handlePaymentClick = (item: Carts) => {
@@ -49,8 +49,8 @@ const CartPage = () => {
           });
           navigate('/reservation');
         },
-        onError: () => {
-          throw new Error('주문 생성 실패');
+        onError: (error: any) => {
+          navigate(`/error/${error?.error?.code}`);
         }
       }
     );
