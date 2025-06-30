@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
+import LoginForm from '@/components/LoginForm/LoginForm';
+import { useLogin } from '@/hooks/useLogin';
+import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
-
-import LoginForm from '../../components/LoginForm/LoginForm';
-import { useLogin } from '../../hooks/useLogin';
-import type { UserInformation } from '../../types/login';
+import type { UserInformation } from '@/types/login';
 
 import styles from './Login.module.scss';
 
@@ -22,10 +22,10 @@ const LoginPage = () => {
       navigate('/');
     },
     onError: (error) => {
-      const apiError = (error as { response?: { data?: { error?: { message?: string } } } })
-        ?.response?.data?.error?.message;
-      alert(apiError || '아이디 또는 비밀번호가 올바르지 않습니다.');
-      setAuthError(null);
+      handleApiError(error, navigate, '/login', {
+        useToast: true,
+        defaultMessage: '아이디 또는 비밀번호가 올바르지 않습니다.'
+      });
     }
   });
   const { mutate: loginMutate, isPending } = loginMutation;
