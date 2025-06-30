@@ -31,7 +31,7 @@ const DefaultHeader = () => {
   };
 
   const handleMyPage = () => {
-    navigate('/mypage');
+    navigate('/user');
   };
 
   return (
