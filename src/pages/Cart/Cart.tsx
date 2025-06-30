@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
@@ -20,6 +20,10 @@ const CartPage = () => {
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const deleteCart = useDeleteCartItems();
+
+  useEffect(() => {
+    cartRes.refetch();
+  }, []);
 
   const handlePaymentClick = (item: Carts) => {
     createOrder(
