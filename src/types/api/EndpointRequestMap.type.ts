@@ -25,6 +25,7 @@ export interface EndpointRequestMap {
     payment_gateway: string;
     transaction_id?: string;
   };
+  '/payments/success': object;
   '/orders': {
     items: OrderItem[];
   };
