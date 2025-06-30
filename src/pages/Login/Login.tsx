@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
 import LoginForm from '@/components/LoginForm/LoginForm';
@@ -15,13 +16,22 @@ const LoginPage = () => {
   const login = useAuthStore((state) => state.login);
   const loginMutation = useLogin({
     onSuccess: (res) => {
+      // 로딩 토스트 제거
+      toast.dismiss('login-loading');
+
       // zustand 전역 상태 갱신
       const { accessToken, name, userId, roleCode } = res.data;
       login(accessToken ?? '', name ?? '', userId ?? 0, roleCode ?? 0);
       setAuthError(null);
+
+      // 성공 토스트 표시
+      toast.success('환영합니다!');
       navigate('/');
     },
     onError: (error) => {
+      // 로딩 토스트 제거
+      toast.dismiss('login-loading');
+
       handleApiError(error, navigate, '/login', {
         useToast: true,
         defaultMessage: '아이디 또는 비밀번호가 올바르지 않습니다.'
@@ -34,6 +44,12 @@ const LoginPage = () => {
   const onSubmit = (payload: UserInformation) => {
     if (isPending) return; // 중복 클릭 방지
     setAuthError(null);
+
+    // 로딩 토스트 표시
+    toast.loading('로그인 중...', {
+      id: 'login-loading' // 동일한 ID로 나중에 dismiss 가능
+    });
+
     loginMutate(payload);
   };
 
