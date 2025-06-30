@@ -26,6 +26,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState<'verify' | 'change'>('verify');
   const [isVerified, setIsVerified] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const verifyPasswordMutation = usePostApi('/users/verify-password');
   const changePasswordMutation = usePatchApi('/users/me/password');
@@ -39,6 +40,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
 
   const handleVerifyPassword = async () => {
     setError('');
+    setIsPending(true);
     try {
       const data = await verifyPasswordMutation.mutateAsync({
         password: currentPassword
@@ -51,6 +53,8 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -60,6 +64,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
       return;
     }
     setError('');
+    setIsPending(true);
     try {
       const data = await changePasswordMutation.mutateAsync({
         currentPassword,
@@ -81,6 +86,8 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -126,9 +133,9 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             onClick={handleVerifyPassword}
             className={styles.button}
             style={{ width: '520px' }}
-            disabled={!currentPassword}
+            disabled={!currentPassword || isPending}
           >
-            인증하기
+            {isPending ? '인증 중...' : '인증하기'}
           </Button>
         </div>
       ) : (
@@ -167,10 +174,14 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             className={styles.button}
             style={{ width: '520px' }}
             disabled={
-              !isVerified || !newPassword || !newPasswordCheck || newPassword !== newPasswordCheck
+              isPending ||
+              !isVerified ||
+              !newPassword ||
+              !newPasswordCheck ||
+              newPassword !== newPasswordCheck
             }
           >
-            비밀번호 변경
+            {isPending ? '변경 중...' : '비밀번호 변경'}
           </Button>
         </div>
       )}

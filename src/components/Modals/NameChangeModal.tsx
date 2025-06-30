@@ -20,11 +20,13 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const nameChangeMutation = usePatchApi('/users/me/name');
 
   const handleChange = async () => {
     setError('');
+    setIsPending(true);
     try {
       const data = await nameChangeMutation.mutateAsync({ name });
       if (data.success) {
@@ -38,6 +40,8 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -73,8 +77,9 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
             onClick={handleChange}
             className={styles.button}
             style={{ width: '520px' }}
+            disabled={isPending}
           >
-            이름 변경
+            {isPending ? '변경 중...' : '이름 변경'}
           </Button>
         </div>
       )}

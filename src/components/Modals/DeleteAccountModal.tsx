@@ -20,9 +20,11 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [confirm, setConfirm] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const handleDelete = async () => {
     setError('');
+    setIsPending(true);
     try {
       const res = await api.delete<EndpointResponseMap['/users/me']>('/users/me', {
         data: { password }
@@ -38,11 +40,14 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
   const handlePasswordCheck = async () => {
     setError('');
+    setIsPending(true);
     try {
       const res = await api.post<EndpointResponseMap['/users/verify-password']>(
         '/users/verify-password',
@@ -55,6 +60,8 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
       }
     } catch {
       setError('비밀번호 확인 중 오류가 발생했습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -84,6 +91,7 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
               onClick={onClose}
               className={styles.button}
               style={{ width: '220px' }}
+              disabled={isPending}
             >
               취소하기
             </Button>
@@ -93,8 +101,9 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
               onClick={handleDelete}
               className={styles.button}
               color="gray"
+              disabled={isPending}
             >
-              탈퇴하기
+              {isPending ? '탈퇴 중...' : '탈퇴하기'}
             </Button>
           </div>
         </div>
@@ -120,9 +129,9 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
             onClick={handlePasswordCheck}
             className={styles.button}
             style={{ width: '520px' }}
-            disabled={!password}
+            disabled={!password || isPending}
           >
-            회원 탈퇴
+            {isPending ? '확인 중...' : '회원 탈퇴'}
           </Button>
         </div>
       )}

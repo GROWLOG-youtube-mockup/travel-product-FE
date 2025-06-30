@@ -21,12 +21,14 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   // PATCH 훅 사용
   const { mutateAsync: patchPhone } = usePatchApi('/users/me/phone');
 
   const handleChange = async () => {
     setError('');
+    setIsPending(true);
     try {
       // 입력값 유효성 검사
       try {
@@ -44,14 +46,14 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
           setSuccess(false);
         }, 5000);
       } else {
-        // 에러 객체/문자열 모두 대응
         const errorMsg = typeof res.error === 'string' ? res.error : res.error?.message;
         setError(errorMsg || '서버 오류로 실패하였습니다.');
       }
     } catch (e) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const errorMsg = (e as any)?.response?.data?.error?.message || '서버 오류로 실패하였습니다.';
       setError(errorMsg);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -93,8 +95,9 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
             onClick={handleChange}
             className={styles.button}
             style={{ width: '520px' }}
+            disabled={isPending}
           >
-            전화번호 변경
+            {isPending ? '변경 중...' : '전화번호 변경'}
           </Button>
         </div>
       )}
