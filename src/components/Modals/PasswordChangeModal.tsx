@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
-import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -42,17 +42,24 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
     setError('');
     setIsPending(true);
     try {
-      const data = await verifyPasswordMutation.mutateAsync({
+      const data = (await verifyPasswordMutation.mutateAsync({
         password: currentPassword
-      } as EndpointRequestMap['/users/verify-password']);
+      })) as EndpointResponseMap['/users/verify-password'];
       if (data.success && data.data.verified) {
         setStep('change');
         setIsVerified(true);
       } else {
         setError('비밀번호가 일치하지 않습니다.');
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      let errorMsg = '서버 오류로 실패하였습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
     } finally {
       setIsPending(false);
     }
@@ -66,10 +73,10 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
     setError('');
     setIsPending(true);
     try {
-      const data = await changePasswordMutation.mutateAsync({
+      const data = (await changePasswordMutation.mutateAsync({
         currentPassword,
         newPassword
-      });
+      })) as EndpointResponseMap['/users/me/password'];
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {
@@ -82,10 +89,21 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
           setIsVerified(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        const errorMsg =
+          typeof data.error?.message === 'string'
+            ? data.error.message
+            : '서버 오류로 실패하였습니다.';
+        setError(errorMsg);
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      let errorMsg = '서버 오류로 실패하였습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
     } finally {
       setIsPending(false);
     }
@@ -148,7 +166,6 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
               value={newPassword}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
               placeholder="새 비밀번호를 입력하세요"
-              variant="long"
             />
           </div>
           <div className={styles.input}>
@@ -159,7 +176,6 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
               value={newPasswordCheck}
               onChange={(e) => setNewPasswordCheck(e.target.value)}
               placeholder="새 비밀번호를 다시 입력하세요"
-              variant="long"
               disabled={!newPassword}
             />
             {newPassword && newPasswordCheck && newPassword !== newPasswordCheck && (

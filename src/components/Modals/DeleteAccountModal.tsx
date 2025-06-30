@@ -36,10 +36,21 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
           setSuccess(false);
         }, 5000);
       } else {
-        setError(res.data.error?.message || '서버 오류로 실패하였습니다.');
+        const errorMsg =
+          typeof res.data.error?.message === 'string'
+            ? res.data.error.message
+            : '서버 오류로 실패했습니다.';
+        setError(errorMsg);
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      let errorMsg = '서버 오류로 실패했습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
     } finally {
       setIsPending(false);
     }
@@ -58,8 +69,15 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
       } else {
         setError('비밀번호가 올바르지 않습니다.');
       }
-    } catch {
-      setError('비밀번호 확인 중 오류가 발생했습니다.');
+    } catch (e) {
+      let errorMsg = '비밀번호 확인 중 오류가 발생했습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
     } finally {
       setIsPending(false);
     }
@@ -117,7 +135,6 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="비밀번호를 입력하세요"
-              variant="long"
             />
             {error && <div className={styles.error}>{error}</div>}
           </div>

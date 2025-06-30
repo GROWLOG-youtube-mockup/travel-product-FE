@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { usePatchApi } from '@/hooks/usePatchAPI';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -28,7 +29,9 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
     setError('');
     setIsPending(true);
     try {
-      const data = await nameChangeMutation.mutateAsync({ name });
+      const data = (await nameChangeMutation.mutateAsync({
+        name
+      })) as EndpointResponseMap['/users/me/name'];
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {
@@ -36,7 +39,7 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
           setSuccess(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        setError(data.error?.message || '서버 오류로 실패하였습니다.');
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
@@ -57,7 +60,7 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
         <div className={styles.modalWrapper}>
           <div className={styles.input}>
             <label htmlFor="current-name">이전 이름</label>
-            <Input id="current-name" type="text" value={currentName} disabled variant="long" />
+            <Input id="current-name" type="text" value={currentName} disabled />
           </div>
           <div className={styles.input}>
             <label htmlFor="name-change">새 이름</label>
@@ -67,7 +70,6 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="새 이름을 입력하세요"
-              variant="long"
             />
           </div>
           {error && <div className={styles.error}>{error}</div>}

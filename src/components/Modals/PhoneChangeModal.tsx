@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import { usePatchApi } from '@/hooks/usePatchAPI';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
@@ -35,10 +36,13 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
         normalizePhoneNumber(phone.replace(/-/g, ''));
       } catch (e) {
         setError(e instanceof Error ? e.message : '유효하지 않은 전화번호입니다.');
+        setIsPending(false);
         return;
       }
       // PATCH 요청
-      const res = await patchPhone({ phoneNumber: phone });
+      const res = (await patchPhone({
+        phoneNumber: phone
+      })) as EndpointResponseMap['/users/me/phone'];
       if (res.success) {
         setSuccess(true);
         setTimeout(() => {
@@ -46,11 +50,20 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
           setSuccess(false);
         }, 5000);
       } else {
-        const errorMsg = typeof res.error === 'string' ? res.error : res.error?.message;
-        setError(errorMsg || '서버 오류로 실패하였습니다.');
+        // 타입 가드로 에러 메시지 안전하게 처리
+        const errorMsg =
+          typeof res.error?.message === 'string' ? res.error.message : '서버 오류로 실패했습니다.';
+        setError(errorMsg);
       }
     } catch (e) {
-      const errorMsg = (e as any)?.response?.data?.error?.message || '서버 오류로 실패하였습니다.';
+      // 네트워크/서버 에러 처리
+      let errorMsg = '서버 오류로 실패했습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
       setError(errorMsg);
     } finally {
       setIsPending(false);
@@ -74,7 +87,7 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
         <div className={styles.modalWrapper}>
           <div className={styles.input}>
             <label htmlFor="current-phone">이전 전화번호</label>
-            <Input id="current-phone" type="text" value={currentPhone} disabled variant="long" />
+            <Input id="current-phone" type="text" value={currentPhone} disabled />
           </div>
           <div className={styles.input}>
             <label htmlFor="phone-change">새 전화번호</label>
@@ -84,7 +97,6 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="새 전화번호를 입력하세요"
-              variant="long"
             />
             {error && <div className={styles.error}>{error}</div>}
           </div>
