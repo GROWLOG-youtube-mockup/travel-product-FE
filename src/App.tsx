@@ -13,7 +13,9 @@ function App() {
         reverseOrder={false}
         gutter={8}
         containerClassName=""
-        containerStyle={{}}
+        containerStyle={{
+          top: '70px' // 헤더 높이(58px) + 여백(12px)
+        }}
         toastOptions={{
           duration: 4000,
           style: {
