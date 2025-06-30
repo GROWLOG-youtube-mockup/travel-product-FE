@@ -2,12 +2,11 @@ import { useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@/components/atoms/Button/Button';
+import MyTripCard from '@/components/Cards/MyTripCard';
+import UserInfo from '@/components/UserInfo/UserInfo';
 import { useAuthStore } from '@/store/AuthStore';
 import type { Trip } from '@/types/api/Trip.type';
-
-import Button from '../../components/atoms/Button/Button';
-import MyTripCard from '../../components/Cards/MyTripCard';
-import UserInfo from '../../components/UserInfo/UserInfo';
 
 import styles from './User.module.scss';
 
