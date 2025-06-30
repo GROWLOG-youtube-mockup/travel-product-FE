@@ -1,13 +1,9 @@
 import { http, HttpResponse } from 'msw';
 
-import { admins } from '../data/admins';
+import { AdminUsersData } from '../data/admin/AdminUsersData';
 import { users } from '../data/users';
 
 export const adminHandlers = [
-  http.get('/admin/dashboard', () => {
-    return HttpResponse.json({ total_users: 152, total_products: 48, total_orders: 103 });
-  }),
-
   http.get('/admin/users', () => {
     return HttpResponse.json({
       content: users,
@@ -26,7 +22,7 @@ export const adminHandlers = [
   }),
 
   http.get('/admin/admins', () => {
-    return HttpResponse.json({ content: admins, totalElements: 3, currentPage: 1 });
+    return HttpResponse.json({ content: AdminUsersData, totalElements: 3, currentPage: 1 });
   }),
 
   http.post('/admin/admins', () => {
