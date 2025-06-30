@@ -21,7 +21,7 @@ const RequireUserAccess = ({ children }: Props) => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      toast.error('로그인이 필요한 페이지입니다.');
+      toast.error('로그인이 필요한 페이지입니다.', { id: 'require-login' });
       // 비로그인 상태면 로그인 페이지로 이동 (이동 전 경로 state로 전달)
       navigate('/login', { replace: true, state: { from: location.pathname } });
       return;

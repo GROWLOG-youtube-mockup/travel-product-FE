@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '@/store/AuthStore';
@@ -20,6 +21,7 @@ const RequireGuestAccess = ({ children }: Props) => {
 
   useEffect(() => {
     if (isLoggedIn === true && location.pathname !== '/') {
+      toast.error('이미 로그인된 상태입니다.', { id: 'already-logged-in' });
       navigate('/', { replace: true });
     }
     // 비로그인 상태면 children 노출(redirect 없음)
