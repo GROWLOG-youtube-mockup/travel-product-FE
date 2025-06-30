@@ -208,13 +208,13 @@
 // 로딩 오버레이
 .loadingOverlay {
   position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgb(255 255 255 / 80%);
   border-radius: 8px;
   z-index: 10;
+  inset: 0;
 
   .loadingSpinner {
     display: flex;
