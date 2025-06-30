@@ -1,4 +1,4 @@
-import type { Trip, TripDto } from '@/types/api/trip.type';
+import type { Trip, TripDto } from '@/types/api/Trip.type';
 
 /**
  * 서버 TripDto[] → FE Trip[] 변환 (필요 필드만, 스네이크케이스)

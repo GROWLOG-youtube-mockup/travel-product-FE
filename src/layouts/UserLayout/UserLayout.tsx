@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import UserBanner from '@/components/Banner/UserBanner/UserBanner';
@@ -6,7 +6,7 @@ import Footer from '@/components/Footer/Footer';
 import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 import { useGetApi } from '@/hooks/useGetAPI';
 import UserPage from '@/pages/User/User';
-import type { Trip } from '@/types/api/trip.type';
+import type { Trip } from '@/types/api/Trip.type';
 import type { User } from '@/types/api/User.type';
 
 import styles from './UserLayout.module.scss';
@@ -48,18 +48,6 @@ const UserLayout = () => {
         email: userInfoData.email
       }
     : null;
-
-  // 에러 처리
-  useEffect(() => {
-    if (tripsError || userInfoError) {
-      navigate('/error');
-    }
-  }, [tripsError, userInfoError, navigate]);
-
-  // 로딩 처리
-  if (tripsLoading || userInfoLoading) {
-    return <div>로딩 중...</div>;
-  }
 
   return (
     <>
