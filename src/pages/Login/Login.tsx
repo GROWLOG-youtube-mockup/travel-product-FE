@@ -22,7 +22,8 @@ const LoginPage = () => {
       navigate('/');
     },
     onError: (error) => {
-      const apiError = (error as any)?.response?.data?.error?.message;
+      const apiError = (error as { response?: { data?: { error?: { message?: string } } } })
+        ?.response?.data?.error?.message;
       alert(apiError || '아이디 또는 비밀번호가 올바르지 않습니다.');
       setAuthError(null);
     }
