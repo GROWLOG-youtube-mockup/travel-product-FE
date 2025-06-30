@@ -1,11 +1,11 @@
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 const PathTracker = () => {
   const location = useLocation();
-  const { isAdminLoggedIn, roleCode } = useAdminAuthStore();
+  const { isLoggedIn, roleCode } = useAuthStore();
 
   useEffect(() => {
     const pathname = location.pathname;
@@ -16,7 +16,7 @@ const PathTracker = () => {
     // 일반 사용자 (roleCode === 0), 미로그인자 등 모든 경우에 대한 금지 페이지 설정
     const isRestrictedForRole = (role: number | null) => {
       // 미로그인 또는 일반 사용자
-      if (!isAdminLoggedIn || role === null || role === 0) return pathname.startsWith('/admin');
+      if (!isLoggedIn || role === null || role === 0) return pathname.startsWith('/admin');
       // 일반 관리자
       if (role === 1) return pathname === '/admin/logs';
       // 최고 관리자는 제한 없음
@@ -28,7 +28,7 @@ const PathTracker = () => {
     if (!shouldSkip) {
       sessionStorage.setItem('lastSafePath', pathname);
     }
-  }, [location, isAdminLoggedIn, roleCode]);
+  }, [location, isLoggedIn, roleCode]);
 
   return null;
 };

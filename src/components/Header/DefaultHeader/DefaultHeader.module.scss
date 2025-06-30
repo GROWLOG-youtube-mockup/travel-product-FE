@@ -1,7 +1,10 @@
 .headerWrapper {
   position: relative;
   width: 100%;
-  border-bottom: 1px solid #ededed;
+  background: rgb(255 255 255 / 95%);
+  box-shadow: 0 1px 12px rgb(0 0 0 / 4%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
 }
 
 .header {
@@ -11,7 +14,7 @@
   justify-content: space-between;
   width: 100%;
   max-width: 1440px;
-  height: 58px;
+  height: 64px;
   margin: 0 auto;
   padding: 0 32px;
   box-sizing: border-box;
@@ -22,11 +25,17 @@
 .logoArea {
   display: flex;
   align-items: center;
-  height: 40px;
-  object-fit: contain;
+  height: 44px;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.02);
+  }
 
   img {
     height: 100%;
+    filter: drop-shadow(0 2px 4px rgb(0 0 0 / 10%));
   }
 }
 
@@ -38,5 +47,32 @@
 .menuArea {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 24px;
+
+  label {
+    position: relative;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #374151;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      color: #111827;
+      background: rgb(0 0 0 / 4%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #30bcdf;
+  }
 }
