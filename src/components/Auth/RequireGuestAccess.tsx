@@ -1,7 +1,9 @@
+// 외부 라이브러리 import
 import { useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+// 내부 모듈 import
 import { useAuthStore } from '@/store/AuthStore';
 
 interface Props {
@@ -20,11 +22,12 @@ const RequireGuestAccess = ({ children }: Props) => {
   const { isLoggedIn } = useAuthStore();
 
   useEffect(() => {
-    if (isLoggedIn === true && location.pathname !== '/' && location.pathname !== '/login') {
-      toast.error('이미 로그인된 상태입니다.', { id: 'already-logged-in' });
+    if (isLoggedIn === true) {
+      if (location.pathname !== '/' && location.pathname !== '/login') {
+        toast.error('로그아웃 후에 이용해주세요', { id: 'already-logged-in' });
+      }
       navigate('/', { replace: true });
-    } else if (isLoggedIn === true && location.pathname === '/login') {
-      navigate('/', { replace: true });
+      return;
     }
     // 비로그인 상태면 children 노출(redirect 없음)
   }, [isLoggedIn, navigate, location.pathname]);
