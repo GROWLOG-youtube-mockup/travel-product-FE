@@ -20,8 +20,10 @@ const RequireGuestAccess = ({ children }: Props) => {
   const { isLoggedIn } = useAuthStore();
 
   useEffect(() => {
-    if (isLoggedIn === true && location.pathname !== '/') {
+    if (isLoggedIn === true && location.pathname !== '/' && location.pathname !== '/login') {
       toast.error('이미 로그인된 상태입니다.', { id: 'already-logged-in' });
+      navigate('/', { replace: true });
+    } else if (isLoggedIn === true && location.pathname === '/login') {
       navigate('/', { replace: true });
     }
     // 비로그인 상태면 children 노출(redirect 없음)
