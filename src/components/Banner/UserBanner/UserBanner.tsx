@@ -11,9 +11,10 @@ interface UserBannerProps {
   setTab: (tab: TripTab) => void;
   upcomingCount: number;
   pastCount: number;
+  userName: string;
 }
 
-const UserBanner = ({ tab, setTab, upcomingCount, pastCount }: UserBannerProps) => {
+const UserBanner = ({ tab, setTab, upcomingCount, pastCount, userName }: UserBannerProps) => {
   const navigate = useNavigate();
   const tabList = [
     { label: '예정된 여행', tab: 'upcoming', count: upcomingCount },
@@ -24,7 +25,7 @@ const UserBanner = ({ tab, setTab, upcomingCount, pastCount }: UserBannerProps) 
     <div className={styles.banner}>
       <div className={styles.header}>
         <div className={styles.profile}>
-          <div className={styles.name}>홍길동</div>
+          <div className={styles.name}>{userName}</div>
           <div className={styles.desc}>
             반갑습니다! 여기에 회원님의 정보를 확인하실 수 있습니다.
           </div>

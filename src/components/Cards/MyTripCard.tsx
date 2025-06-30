@@ -1,4 +1,4 @@
-import type { Trip } from '../../types/trip';
+import type { Trip } from '@/types/api/trip.type';
 
 import styles from './MyTripCard.module.scss';
 

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
-import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -25,8 +26,10 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
   const [success, setSuccess] = useState(false);
   const [step, setStep] = useState<'verify' | 'change'>('verify');
   const [isVerified, setIsVerified] = useState(false);
+  const [isPending, setIsPending] = useState(false);
 
   const verifyPasswordMutation = usePostApi('/users/verify-password');
+  const changePasswordMutation = usePatchApi('/users/me/password');
 
   // 새 비밀번호가 비워지면 확인란도 자동 초기화
   useEffect(() => {
@@ -37,18 +40,28 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
 
   const handleVerifyPassword = async () => {
     setError('');
+    setIsPending(true);
     try {
-      const data = await verifyPasswordMutation.mutateAsync({
+      const data = (await verifyPasswordMutation.mutateAsync({
         password: currentPassword
-      } as EndpointRequestMap['/users/verify-password']);
+      })) as EndpointResponseMap['/users/verify-password'];
       if (data.success && data.data.verified) {
         setStep('change');
         setIsVerified(true);
       } else {
         setError('비밀번호가 일치하지 않습니다.');
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      let errorMsg = '서버 오류로 실패하였습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -58,13 +71,12 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
       return;
     }
     setError('');
+    setIsPending(true);
     try {
-      const res = await fetch('/users/me/password', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ current_password: currentPassword, new_password: newPassword })
-      });
-      const data = await res.json();
+      const data = (await changePasswordMutation.mutateAsync({
+        currentPassword,
+        newPassword
+      })) as EndpointResponseMap['/users/me/password'];
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {
@@ -77,10 +89,23 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
           setIsVerified(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        const errorMsg =
+          typeof data.error?.message === 'string'
+            ? data.error.message
+            : '서버 오류로 실패하였습니다.';
+        setError(errorMsg);
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      let errorMsg = '서버 오류로 실패하였습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -126,9 +151,9 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             onClick={handleVerifyPassword}
             className={styles.button}
             style={{ width: '520px' }}
-            disabled={!currentPassword}
+            disabled={!currentPassword || isPending}
           >
-            인증하기
+            {isPending ? '인증 중...' : '인증하기'}
           </Button>
         </div>
       ) : (
@@ -141,7 +166,6 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
               value={newPassword}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewPassword(e.target.value)}
               placeholder="새 비밀번호를 입력하세요"
-              variant="long"
             />
           </div>
           <div className={styles.input}>
@@ -152,7 +176,6 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
               value={newPasswordCheck}
               onChange={(e) => setNewPasswordCheck(e.target.value)}
               placeholder="새 비밀번호를 다시 입력하세요"
-              variant="long"
               disabled={!newPassword}
             />
             {newPassword && newPasswordCheck && newPassword !== newPasswordCheck && (
@@ -167,10 +190,14 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             className={styles.button}
             style={{ width: '520px' }}
             disabled={
-              !isVerified || !newPassword || !newPasswordCheck || newPassword !== newPasswordCheck
+              isPending ||
+              !isVerified ||
+              !newPassword ||
+              !newPasswordCheck ||
+              newPassword !== newPasswordCheck
             }
           >
-            비밀번호 변경
+            {isPending ? '변경 중...' : '비밀번호 변경'}
           </Button>
         </div>
       )}

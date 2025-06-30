@@ -1,15 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useMutation } from '@tanstack/react-query';
-import type { AxiosError } from 'axios';
-
 import AdminHeader from '@/components/Header/AdminHeader/AdminHeader';
 import LoginForm from '@/components/LoginForm/LoginForm';
-import { api } from '@/lib/api';
+import { usePostApi } from '@/hooks/usePostAPI';
 import { handleApiError } from '@/lib/handleApiError';
 import { useAdminAuthStore } from '@/store/AdminAuthStore';
-import type { AdminLoginResponse } from '@/types/api/Auth.type';
 import type { UserInformation } from '@/types/login';
 
 import styles from './AdminLogin.module.scss';
@@ -25,11 +21,7 @@ const AdminLoginPage = () => {
     logout(); // store에 정의된 함수
   }, [logout]);
 
-  const loginMutation = useMutation({
-    mutationFn: async ({ email, password }: UserInformation): Promise<AdminLoginResponse> => {
-      const response = await api.post<AdminLoginResponse>('/auth/login', { email, password });
-      return response.data;
-    },
+  const loginMutation = usePostApi('/auth/login', {
     onSuccess: (data) => {
       if (data.success && data.data?.accessToken) {
         const { accessToken, name, userId, roleCode } = data.data;
@@ -48,7 +40,7 @@ const AdminLoginPage = () => {
         );
       }
     },
-    onError: (error: AxiosError) => {
+    onError: (error: Error) => {
       handleApiError(error, navigate, location.pathname);
     }
   });

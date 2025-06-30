@@ -6,6 +6,11 @@ import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
 type PostApiParams = Record<string, unknown>;
 
+// body 중첩을 체크하기 위한 타입 가드
+function hasNestedBody<T>(obj: T): obj is T & { body: unknown } {
+  return obj !== null && typeof obj === 'object' && 'body' in obj && Object.keys(obj).length === 1;
+}
+
 export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointRequestMap>(
   url: K,
   options?: Omit<
@@ -19,18 +24,26 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
     EndpointRequestMap[K] | (EndpointRequestMap[K] & { params?: PostApiParams })
   >({
     mutationFn: async (body) => {
-      // body에 params가 있으면 분리, 없으면 그대로 전달
-      if (body && typeof body === 'object' && 'body' in body && Object.keys(body).length === 1) {
-        // body 중첩 방지: { body: {...} } 형태면 한 번 풀어서 전달
-        body = (body as any).body;
+      let processedBody = body;
+
+      // body 중첩 방지: { body: {...} } 형태면 한 번 풀어서 전달
+      if (hasNestedBody(body)) {
+        processedBody = body.body as EndpointRequestMap[K];
       }
       const { params, ...data } = body as EndpointRequestMap[K] & { params?: PostApiParams };
-      const { data: res } = await api.post<EndpointResponseMap[K]>(
-        url,
-        data,
-        params ? { params } : undefined
-      );
-      return res;
+      try {
+        const { data: res } = await api.post<EndpointResponseMap[K]>(
+          url,
+          data,
+          params ? { params } : undefined
+        );
+        return res;
+      } catch (error: any) {
+        if (error.response && error.response.data) {
+          return error.response.data;
+        }
+        throw error;
+      }
     },
     ...options
   });

@@ -20,9 +20,10 @@ const LoginPage = () => {
       setAuthError(null);
       navigate('/');
     },
-    onError: () => {
-      alert('잘못된 이메일 또는 비밀번호입니다');
-      setAuthError('아이디 또는 비밀번호가 올바르지 않습니다.');
+    onError: (error) => {
+      const apiError = (error as any)?.response?.data?.error?.message;
+      alert(apiError || '아이디 또는 비밀번호가 올바르지 않습니다.');
+      setAuthError(null);
     }
   });
   const { mutate: loginMutate, isPending } = loginMutation;
@@ -43,7 +44,7 @@ const LoginPage = () => {
         <div className={styles.subtitle}>
           <span>정보를 입력해주세요</span>
         </div>
-        <LoginForm onSubmit={onSubmit} authError={authError} />
+        <LoginForm onSubmit={onSubmit} authError={authError ?? undefined} />
       </div>
       <div className={styles.footer}>
         <span>
