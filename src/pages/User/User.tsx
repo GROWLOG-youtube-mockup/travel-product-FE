@@ -1,4 +1,9 @@
-import type { Trip } from '@/types/api/trip.type';
+import { useEffect } from 'react';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
+
+import { useAuthStore } from '@/store/AuthStore';
+import type { Trip } from '@/types/api/Trip.type';
 
 import Button from '../../components/atoms/Button/Button';
 import MyTripCard from '../../components/Cards/MyTripCard';
@@ -25,8 +30,29 @@ const tabInfo = {
 } as const;
 
 const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
+  const navigate = useNavigate();
+  const { isLoggedIn } = useAuthStore();
+
+  // 인증 체크
+  useEffect(() => {
+    if (!isLoggedIn) {
+      toast.error('로그인이 필요한 페이지입니다.');
+      navigate('/login', { replace: true });
+    }
+  }, [isLoggedIn, navigate]);
+
+  // 로그인되지 않은 경우 렌더링하지 않음
+  if (!isLoggedIn) {
+    return null;
+  }
+
   const { title, emptyMsg } = tabInfo[tab];
   const trips = tab === 'upcoming' ? upcoming : past;
+
+  const handleProductPageNavigation = (productId: number) => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <>
       <div className={styles.sectionTitle}>{title}</div>
@@ -48,9 +74,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                   variant="sm"
                   color="gray"
                   style={{ margin: '16px 0 0 0' }}
-                  onClick={() => {
-                    window.location.href = `/product/${trip.productId}`;
-                  }}
+                  onClick={() => handleProductPageNavigation(trip.productId)}
                 >
                   해당 상품 페이지로
                 </Button>
