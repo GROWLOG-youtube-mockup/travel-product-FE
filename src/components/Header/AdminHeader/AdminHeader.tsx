@@ -1,3 +1,4 @@
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '@/store/AuthStore';
@@ -9,6 +10,7 @@ const AdminHeader = () => {
   const { isLoggedIn, name } = useAuthStore();
 
   const handleLogout = () => {
+    toast.success('로그아웃되었습니다.');
     navigate('/admin/login', { replace: true });
   };
 
@@ -17,23 +19,25 @@ const AdminHeader = () => {
   };
 
   return (
-    <header className={styles['header']}>
-      <h1 className={styles['headerTitle']}>관리자 대시보드</h1>
-      <div className={styles['userInfo']}>
-        {isLoggedIn ? (
-          <>
-            <span>안녕하세요 관리자 {name ?? '관리자'}님!</span>
-            <button className={styles['logoutButton']} onClick={handleLogout}>
-              로그아웃
+    <div className={styles.headerWrapper}>
+      <header className={styles['header']}>
+        <h1 className={styles['headerTitle']}>관리자 대시보드</h1>
+        <div className={styles['userInfo']}>
+          {isLoggedIn ? (
+            <>
+              <span>안녕하세요 관리자 {name ?? '관리자'}님!</span>
+              <button className={styles['logoutButton']} onClick={handleLogout}>
+                로그아웃
+              </button>
+            </>
+          ) : (
+            <button className={styles['loginButton']} onClick={handleLogin}>
+              로그인
             </button>
-          </>
-        ) : (
-          <button className={styles['logoutButton']} onClick={handleLogin}>
-            로그인
-          </button>
-        )}
-      </div>
-    </header>
+          )}
+        </div>
+      </header>
+    </div>
   );
 };
 
