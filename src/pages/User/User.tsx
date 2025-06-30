@@ -6,8 +6,9 @@ import UserBanner from '@/components/Banner/UserBanner/UserBanner';
 import MyTripCard from '@/components/Cards/MyTripCard';
 import UserInfo from '@/components/UserInfo/UserInfo';
 import { useGetApi } from '@/hooks/useGetAPI';
-import type { Trip } from '@/types/api/Trip.type';
+import type { Trip, TripDto } from '@/types/api/Trip.type';
 import type { User } from '@/types/api/User.type';
+import { toFETripArray } from '@/utils/trip';
 
 import styles from './User.module.scss';
 
@@ -41,7 +42,7 @@ const UserPage = () => {
   } = useGetApi('/users/me');
 
   // 데이터 가공
-  const tripsData: Trip[] = tripsResponse?.data ?? [];
+  const tripsData: Trip[] = toFETripArray((tripsResponse?.data ?? []) as unknown as TripDto[]);
   const userInfoData: User | null = userInfoResponse?.data ?? null;
   const today = new Date();
   const upcoming = Array.isArray(tripsData)

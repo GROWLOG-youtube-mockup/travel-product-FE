@@ -13,13 +13,21 @@ const getTripDays = (start: string, end: string) => {
     return '-';
   }
 
-  return Math.round((endTime - endTime) / (1000 * 60 * 60 * 24)) + 1;
+  return Math.round((endTime - startTime) / (1000 * 60 * 60 * 24)) + 1;
 };
 
 const MyTripCard = ({ trip }: { trip: Trip }) => {
   return (
     <div className={styles.wrapper}>
-      <div className={styles.image} />
+      {trip.thumbnailUrl ? (
+        <div
+          className={styles.image}
+          style={{ backgroundImage: `url(${trip.thumbnailUrl})` }}
+          aria-label={trip.title}
+        />
+      ) : (
+        <div className={styles.image} />
+      )}
       <div className={styles.card}>
         <div className={styles.details}>
           <div className={styles.title}>{trip.title}</div>

@@ -18,4 +18,5 @@ export interface Trip {
   start_date: string;
   end_date: string;
   price: number;
+  thumbnailUrl?: string;
 }

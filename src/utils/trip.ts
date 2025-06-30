@@ -10,7 +10,8 @@ export function toFETripArray(trips: TripDto[] = []): Trip[] {
         title: trip.title,
         start_date: trip.startDate,
         end_date: trip.endDate,
-        price: trip.price
+        price: trip.price,
+        thumbnailUrl: trip.thumbnailUrl
       }))
     : [];
 }
