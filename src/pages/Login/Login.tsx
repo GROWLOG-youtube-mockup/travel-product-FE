@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-import { useAuthStore } from '@/store/authStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import LoginForm from '../../components/LoginForm/LoginForm';
 import { useLogin } from '../../hooks/useLogin';
@@ -16,7 +16,8 @@ const LoginPage = () => {
   const loginMutation = useLogin({
     onSuccess: (res) => {
       // zustand 전역 상태 갱신
-      login(res.data?.accessToken ?? '');
+      const { accessToken, name, userId, roleCode } = res.data;
+      login(accessToken ?? '', name ?? '', userId ?? 0, roleCode ?? 0);
       setAuthError(null);
       navigate('/');
     },

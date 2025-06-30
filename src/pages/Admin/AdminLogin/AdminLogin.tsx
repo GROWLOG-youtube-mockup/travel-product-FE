@@ -5,7 +5,7 @@ import AdminHeader from '@/components/Header/AdminHeader/AdminHeader';
 import LoginForm from '@/components/LoginForm/LoginForm';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { handleApiError } from '@/lib/handleApiError';
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 import type { UserInformation } from '@/types/login';
 
 import styles from './AdminLogin.module.scss';
@@ -14,7 +14,7 @@ const AdminLoginPage = () => {
   const [loginError, setLoginError] = useState<string>('');
   const navigate = useNavigate();
   const location = useLocation();
-  const { login, logout } = useAdminAuthStore();
+  const { login, logout } = useAuthStore();
 
   useEffect(() => {
     // 로그인 상태로 로그인 페이지 접근 시 기존 인증 정보 제거

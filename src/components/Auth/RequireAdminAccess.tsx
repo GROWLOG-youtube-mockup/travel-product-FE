@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 interface Props {
   children: React.ReactNode;
@@ -17,7 +17,7 @@ interface Props {
 const RequireAdminAccess = ({ children, requireSuperAdmin = false }: Props) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAdminLoggedIn, roleCode } = useAdminAuthStore();
+  const { isLoggedIn, roleCode } = useAuthStore();
 
   const [checked, setChecked] = useState(false);
 
@@ -25,7 +25,7 @@ const RequireAdminAccess = ({ children, requireSuperAdmin = false }: Props) => {
     const currentPath = location.pathname;
 
     // 로그인 안 된 경우 → 에러 페이지로 이동 (리디렉션 경로 포함)
-    if (!isAdminLoggedIn) {
+    if (!isLoggedIn) {
       navigate(
         `/error/401?message=${encodeURIComponent(
           '로그인이 필요합니다.'
@@ -59,7 +59,7 @@ const RequireAdminAccess = ({ children, requireSuperAdmin = false }: Props) => {
 
     // 권한 확인 완료 → 렌더링 허용
     setChecked(true);
-  }, [isAdminLoggedIn, roleCode, navigate, requireSuperAdmin, location]);
+  }, [isLoggedIn, roleCode, navigate, requireSuperAdmin, location]);
 
   if (!checked) {
     return <div style={{ padding: '2rem', textAlign: 'center' }}>접근 권한 확인 중...</div>;

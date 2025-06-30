@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import errorMessages from '@/constants/errorMessages';
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import styles from './Error.module.scss';
 
@@ -46,7 +46,7 @@ export default function ErrorPage() {
   const isAdmin403 = code === 403 && isAdminPath;
   const showLoginButton = code === 401 || isAdmin403;
   const lastSafePath = sessionStorage.getItem(STORAGE_KEYS.LAST_SAFE_PATH);
-  const { roleCode, isAdminLoggedIn } = useAdminAuthStore();
+  const { roleCode, isLoggedIn } = useAuthStore();
 
   useEffect(() => {
     const prevTitle = document.title;
@@ -69,7 +69,7 @@ export default function ErrorPage() {
     // 관리자 경로는 권한이 있을 때만 이동
     const canAccessAdminPath = (path: string) => {
       if (!path.startsWith('/admin')) return true;
-      if (!isAdminLoggedIn || roleCode === null || roleCode === 0) return false;
+      if (!isLoggedIn || roleCode === null || roleCode === 0) return false;
       if (roleCode === 1 && path === '/admin/logs') return false;
       return true;
     };

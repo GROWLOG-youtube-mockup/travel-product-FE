@@ -1,12 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 
-import { useAdminAuthStore } from '@/store/AdminAuthStore';
+import { useAuthStore } from '@/store/AuthStore';
 
 import styles from './AdminHeader.module.scss';
 
 const AdminHeader = () => {
   const navigate = useNavigate();
-  const { isAdminLoggedIn, name } = useAdminAuthStore();
+  const { isLoggedIn, name } = useAuthStore();
 
   const handleLogout = () => {
     navigate('/admin/login', { replace: true });
@@ -20,7 +20,7 @@ const AdminHeader = () => {
     <header className={styles['header']}>
       <h1 className={styles['headerTitle']}>관리자 대시보드</h1>
       <div className={styles['userInfo']}>
-        {isAdminLoggedIn ? (
+        {isLoggedIn ? (
           <>
             <span>안녕하세요 관리자 {name ?? '관리자'}님!</span>
             <button className={styles['logoutButton']} onClick={handleLogout}>
