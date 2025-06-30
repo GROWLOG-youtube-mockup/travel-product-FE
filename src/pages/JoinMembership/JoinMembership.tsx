@@ -40,7 +40,7 @@ const JoinMembershipPage = () => {
           roleCode?: number;
         };
 
-        if (accessToken && name && userId && roleCode) {
+        if (accessToken && name && userId != null && roleCode != null) {
           login(accessToken, name, userId, roleCode);
         }
       }
