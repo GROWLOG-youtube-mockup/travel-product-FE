@@ -1,7 +1,10 @@
 .headerWrapper {
   position: relative;
   width: 100%;
-  border-bottom: 1px solid #ededed;
+  background: rgb(255 255 255 / 95%);
+  box-shadow: 0 1px 12px rgb(0 0 0 / 4%);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
 }
 
 .header {
@@ -11,7 +14,7 @@
   justify-content: space-between;
   width: 100%;
   max-width: 1440px;
-  height: 58px;
+  height: 64px;
   margin: 0 auto;
   padding: 0 32px;
   box-sizing: border-box;
@@ -22,32 +25,44 @@
     margin: 0;
     font-size: 1.5rem;
     font-weight: 700;
-    color: #000000;
+    color: #111827;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
   }
 
   .userInfo {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
 
     span {
       font-size: 14px;
-      color: #333333;
+      font-weight: 500;
+      color: #942aff;
     }
 
-    .logoutButton,
-    .loginButton {
-      padding: 8px 12px;
+    .logoutButton {
+      position: relative;
+      padding: 8px 16px;
       border: 0;
       font-size: 14px;
-      color: #000000;
+      font-weight: 500;
+      color: #513737;
       background-color: transparent;
-      border-radius: 4px;
-      transition: background-color 0.2s ease;
+      border-radius: 8px;
+      transition: all 0.2s ease;
       cursor: pointer;
 
       &:hover {
-        background-color: #f5f5f5;
+        color: #111827;
+        background: rgb(0 0 0 / 4%);
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
       }
     }
   }

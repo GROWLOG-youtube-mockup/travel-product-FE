@@ -13,11 +13,6 @@ const AdminHeader = () => {
     toast.success('로그아웃되었습니다.');
     navigate('/admin/login', { replace: true });
   };
-
-  const handleLogin = () => {
-    navigate('/admin/login');
-  };
-
   return (
     <div className={styles.headerWrapper}>
       <header className={styles['header']}>
@@ -25,15 +20,13 @@ const AdminHeader = () => {
         <div className={styles['userInfo']}>
           {isLoggedIn ? (
             <>
-              <span>안녕하세요 관리자 {name ?? '관리자'}님!</span>
+              <span>안녕하세요, 관리자 {name}님!</span>
               <button className={styles['logoutButton']} onClick={handleLogout}>
                 로그아웃
               </button>
             </>
           ) : (
-            <button className={styles['loginButton']} onClick={handleLogin}>
-              로그인
-            </button>
+            ''
           )}
         </div>
       </header>

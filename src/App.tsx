@@ -14,7 +14,7 @@ function App() {
         gutter={8}
         containerClassName=""
         containerStyle={{
-          top: '70px' // 헤더 높이(58px) + 여백(12px)
+          top: '76px' // 헤더 높이(64px) + 여백(12px)
         }}
         toastOptions={{
           duration: 4000,
