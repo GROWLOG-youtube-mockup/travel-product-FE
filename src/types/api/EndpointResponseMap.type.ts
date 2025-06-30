@@ -19,6 +19,8 @@ export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
 export type FindEmailRes = ApiResponse<string>;
 export type PhoneChangeRes = ApiResponse<string>;
 export type ResetPasswordRes = ApiResponse<string>;
+export type PasswordChangeRes = ApiResponse<string>;
+export type NameChangeRes = ApiResponse<string>;
 export type TripsRes = ApiResponse<Trip[]>;
 
 export interface EndpointResponseMap {
@@ -29,11 +31,13 @@ export interface EndpointResponseMap {
   [k: `/orders/${string}`]: OrderDetailRes;
   '/users/me': UserRes;
   '/users/me/trips': TripsRes;
-  '/auth/login': LoginRes;
+  '/users/me/phone': PhoneChangeRes;
+  '/users/me/password': PasswordChangeRes;
+  '/users/me/name': NameChangeRes;
   '/users/verify-password': PasswordVerifyRes;
+  '/auth/login': LoginRes;
   '/auth/email/send': EmailSendRes;
   '/auth/email/verify': EmailVerifyRes;
   '/auth/find-email': FindEmailRes;
-  '/users/me/phone': PhoneChangeRes;
   '/auth/reset-password': ResetPasswordRes;
 }
