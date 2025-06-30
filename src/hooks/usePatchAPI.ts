@@ -4,7 +4,9 @@ import { api } from '@/lib/api';
 import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
 import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
 
-export function usePatchApi<K extends keyof EndpointResponseMap & keyof EndpointRequestMap>(
+type CommonKeys = keyof EndpointRequestMap & keyof EndpointResponseMap;
+
+export function usePatchApi<K extends CommonKeys>(
   url: K,
   options?: Omit<
     UseMutationOptions<EndpointResponseMap[K], Error, EndpointRequestMap[K]>,
