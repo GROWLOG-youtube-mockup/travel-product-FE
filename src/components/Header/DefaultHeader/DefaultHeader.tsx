@@ -1,8 +1,8 @@
+import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
+import logo from '@/assets/GrowLog.svg';
 import { useAuthStore } from '@/store/AuthStore';
-
-import logo from '../../../assets/GrowLog.svg';
 
 import styles from './DefaultHeader.module.scss';
 
@@ -14,6 +14,7 @@ const DefaultHeader = () => {
 
   const handleLogout = () => {
     logout();
+    toast.success('로그아웃되었습니다.');
     navigate('/', { replace: true });
   };
 
