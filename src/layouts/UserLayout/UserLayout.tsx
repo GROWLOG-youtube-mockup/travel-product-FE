@@ -6,9 +6,8 @@ import Footer from '@/components/Footer/Footer';
 import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 import { useGetApi } from '@/hooks/useGetAPI';
 import UserPage from '@/pages/User/User';
-import type { TripDto } from '@/types/api/trip.type';
+import type { Trip } from '@/types/api/trip.type';
 import type { User } from '@/types/api/User.type';
-import { toFETripArray } from '@/utils/trip';
 
 import styles from './UserLayout.module.scss';
 
@@ -31,16 +30,16 @@ const UserLayout = () => {
   } = useGetApi('/users/me');
 
   // 명세 기반 데이터 추출
-  const tripsData: TripDto[] = tripsResponse?.data ?? [];
+  const tripsData: Trip[] = tripsResponse?.data ?? [];
   const userInfoData: User | null = userInfoResponse?.data ?? null;
 
   // 데이터 가공
   const today = new Date();
   const upcoming = Array.isArray(tripsData)
-    ? toFETripArray(tripsData.filter((trip) => new Date(trip.endDate) >= today))
+    ? tripsData.filter((trip) => new Date(trip.end_date) >= today)
     : [];
   const past = Array.isArray(tripsData)
-    ? toFETripArray(tripsData.filter((trip) => new Date(trip.endDate) < today))
+    ? tripsData.filter((trip) => new Date(trip.end_date) < today)
     : [];
   const userInfo = userInfoData
     ? {
