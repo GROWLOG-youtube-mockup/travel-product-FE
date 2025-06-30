@@ -30,16 +30,21 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
       if (hasNestedBody(body)) {
         processedBody = body.body as EndpointRequestMap[K];
       }
+      const { params, ...data } = body as EndpointRequestMap[K] & { params?: PostApiParams };
+      try {
+        const { data: res } = await api.post<EndpointResponseMap[K]>(
+          url,
+          data,
+          params ? { params } : undefined
+        );
+        return res;
+      } catch (error: any) {
+        if (error.response && error.response.data) {
+          return error.response.data;
+        }
+        throw error;
+      }
 
-      const { params, ...data } = processedBody as EndpointRequestMap[K] & {
-        params?: PostApiParams;
-      };
-      const { data: res } = await api.post<EndpointResponseMap[K]>(
-        url,
-        data,
-        params ? { params } : undefined
-      );
-      return res;
     },
     ...options
   });

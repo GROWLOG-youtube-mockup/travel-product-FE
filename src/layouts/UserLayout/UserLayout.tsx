@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
-
-import UserBanner from '../../components/Banner/UserBanner/UserBanner';
-import Footer from '../../components/Footer/Footer';
-import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
-import UserPage from '../../pages/User/User';
-import type { Trip } from '../../types/trip';
+import UserBanner from '@/components/Banner/UserBanner/UserBanner';
+import Footer from '@/components/Footer/Footer';
+import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
+import { useGetApi } from '@/hooks/useGetAPI';
+import UserPage from '@/pages/User/User';
+import type { Trip } from '@/types/api/trip.type';
+import type { User } from '@/types/api/User.type';
 
 import styles from './UserLayout.module.scss';
 
@@ -15,39 +15,51 @@ type TripTab = 'upcoming' | 'past';
 
 const UserLayout = () => {
   const navigate = useNavigate();
-  const [upcoming, setUpcoming] = useState<Trip[]>([]);
-  const [past, setPast] = useState<Trip[]>([]);
   const [tab, setTab] = useState<TripTab>('upcoming');
-  const [error, setError] = useState(false);
-  const [userInfo, setUserInfo] = useState<{ name: string; phone: string; email: string } | null>(
-    null
-  );
 
-  useEffect(() => {
-    axios
-      .get('/users/me/trips')
-      .then((res) => {
-        const data = Array.isArray(res.data) ? res.data : [];
-        const today = new Date();
-        setUpcoming(data.filter((trip) => new Date(trip.end_date) >= today));
-        setPast(data.filter((trip) => new Date(trip.end_date) < today));
-      })
-      .catch(() => setError(true));
-    // 사용자 정보 fetch
-    axios.get('/users/me').then(({ data }) => {
-      setUserInfo({
-        name: data.name,
-        phone: data.phone_number,
-        email: data.email
-      });
-    });
-  }, []);
+  // 공통 커스텀 훅으로 데이터 패칭
+  const {
+    data: tripsResponse,
+    isLoading: tripsLoading,
+    isError: tripsError
+  } = useGetApi('/users/me/trips');
+  const {
+    data: userInfoResponse,
+    isLoading: userInfoLoading,
+    isError: userInfoError
+  } = useGetApi('/users/me');
 
+  // 명세 기반 데이터 추출
+  const tripsData: Trip[] = tripsResponse?.data ?? [];
+  const userInfoData: User | null = userInfoResponse?.data ?? null;
+
+  // 데이터 가공
+  const today = new Date();
+  const upcoming = Array.isArray(tripsData)
+    ? tripsData.filter((trip) => new Date(trip.end_date) >= today)
+    : [];
+  const past = Array.isArray(tripsData)
+    ? tripsData.filter((trip) => new Date(trip.end_date) < today)
+    : [];
+  const userInfo = userInfoData
+    ? {
+        name: userInfoData.name,
+        phone: userInfoData.phoneNumber,
+        email: userInfoData.email
+      }
+    : null;
+
+  // 에러 처리
   useEffect(() => {
-    if (error) {
+    if (tripsError || userInfoError) {
       navigate('/error');
     }
-  }, [error, navigate]);
+  }, [tripsError, userInfoError, navigate]);
+
+  // 로딩 처리
+  if (tripsLoading || userInfoLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <>
@@ -57,6 +69,7 @@ const UserLayout = () => {
         setTab={setTab}
         upcomingCount={upcoming.length}
         pastCount={past.length}
+        userName={userInfo?.name || ''}
       />
       <main className={styles.baseForm}>
         <UserPage tab={tab} upcoming={upcoming} past={past} userInfo={userInfo} />

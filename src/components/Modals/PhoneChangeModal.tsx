@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
+
 import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -19,34 +22,51 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
   const [phone, setPhone] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+
+  // PATCH 훅 사용
+  const { mutateAsync: patchPhone } = usePatchApi('/users/me/phone');
 
   const handleChange = async () => {
     setError('');
+    setIsPending(true);
     try {
       // 입력값 유효성 검사
       try {
         normalizePhoneNumber(phone.replace(/-/g, ''));
-      } catch (e: any) {
-        setError(e.message);
+      } catch (e) {
+        setError(e instanceof Error ? e.message : '유효하지 않은 전화번호입니다.');
+        setIsPending(false);
         return;
       }
-      const res = await fetch('/users/me/phone', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ phone_number: phone })
-      });
-      const data = await res.json();
-      if (data.success) {
+      // PATCH 요청
+      const res = (await patchPhone({
+        phoneNumber: phone
+      })) as EndpointResponseMap['/users/me/phone'];
+      if (res.success) {
         setSuccess(true);
         setTimeout(() => {
           onSuccess();
           setSuccess(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        // 타입 가드로 에러 메시지 안전하게 처리
+        const errorMsg =
+          typeof res.error?.message === 'string' ? res.error.message : '서버 오류로 실패했습니다.';
+        setError(errorMsg);
       }
-    } catch {
-      setError('서버 오류로 실패하였습니다.');
+    } catch (e) {
+      // 네트워크/서버 에러 처리
+      let errorMsg = '서버 오류로 실패했습니다.';
+      if (typeof e === 'object' && e && 'response' in e) {
+        const err = e as { response?: { data?: { error?: { message?: string } } } };
+        if (typeof err.response?.data?.error?.message === 'string') {
+          errorMsg = err.response.data.error.message;
+        }
+      }
+      setError(errorMsg);
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -67,7 +87,7 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
         <div className={styles.modalWrapper}>
           <div className={styles.input}>
             <label htmlFor="current-phone">이전 전화번호</label>
-            <Input id="current-phone" type="text" value={currentPhone} disabled variant="long" />
+            <Input id="current-phone" type="text" value={currentPhone} disabled />
           </div>
           <div className={styles.input}>
             <label htmlFor="phone-change">새 전화번호</label>
@@ -77,7 +97,6 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="새 전화번호를 입력하세요"
-              variant="long"
             />
             {error && <div className={styles.error}>{error}</div>}
           </div>
@@ -88,8 +107,9 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
             onClick={handleChange}
             className={styles.button}
             style={{ width: '520px' }}
+            disabled={isPending}
           >
-            전화번호 변경
+            {isPending ? '변경 중...' : '전화번호 변경'}
           </Button>
         </div>
       )}

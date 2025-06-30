@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { usePostApi } from '@/hooks/usePostAPI';
+import { maskEmail } from '@/utils/email';
+
 import { normalizePhoneNumber } from '../../utils/phone';
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
@@ -13,6 +16,7 @@ const FindEmailForm = ({ onResult, styles }: FindEmailFormProps) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [error, setError] = useState<{ name?: string; phone?: string }>({});
+  const findEmailMutation = usePostApi('/auth/find-email');
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPhone(e.target.value.replace(/[^0-9]/g, ''));
@@ -33,14 +37,12 @@ const FindEmailForm = ({ onResult, styles }: FindEmailFormProps) => {
     setError(err);
     if (Object.keys(err).length > 0) return;
     try {
-      const res = await fetch('/auth/find-email', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phoneNumber: phone })
+      const data = await findEmailMutation.mutateAsync({
+        name,
+        phoneNumber: phone
       });
-      const data = await res.json();
       if (data.success) {
-        onResult('이메일 찾기 결과', `가입된 이메일: ${data.data}`);
+        onResult('이메일 찾기 결과', `가입된 이메일: ${maskEmail(data.data)}`);
       } else {
         onResult('이메일 찾기 실패', data.error?.message || '이메일을 찾을 수 없습니다.');
       }

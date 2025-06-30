@@ -10,10 +10,12 @@ const FindAccountPage = () => {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalMessage, setModalMessage] = useState('');
+  const [modalGuide, setModalGuide] = useState('');
 
-  const handleResult = (title: string, message: string) => {
+  const handleResult = (title: string, message: string, guide?: string) => {
     setModalTitle(title);
     setModalMessage(message);
+    setModalGuide(guide || '');
     setModalOpen(true);
   };
 
@@ -39,6 +41,9 @@ const FindAccountPage = () => {
 
       <GenericModal open={modalOpen} onClose={() => setModalOpen(false)} title={modalTitle}>
         <div>{modalMessage}</div>
+        {modalGuide && (
+          <div style={{ color: '#888', fontSize: '14px', marginTop: '8px' }}>{modalGuide}</div>
+        )}
       </GenericModal>
     </div>
   );

@@ -1,5 +1,8 @@
 import { useState } from 'react';
 
+import { usePatchApi } from '@/hooks/usePatchAPI';
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
+
 import Button from '../atoms/Button/Button';
 import Input from '../atoms/Input/Input';
 
@@ -18,16 +21,17 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
   const [name, setName] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
+  const [isPending, setIsPending] = useState(false);
+
+  const nameChangeMutation = usePatchApi('/users/me/name');
 
   const handleChange = async () => {
     setError('');
+    setIsPending(true);
     try {
-      const res = await fetch('/users/me/name', {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name })
-      });
-      const data = await res.json();
+      const data = (await nameChangeMutation.mutateAsync({
+        name
+      })) as EndpointResponseMap['/users/me/name'];
       if (data.success) {
         setSuccess(true);
         setTimeout(() => {
@@ -35,10 +39,12 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
           setSuccess(false);
         }, 5000);
       } else {
-        setError(data.error || '서버 오류로 실패하였습니다.');
+        setError(data.error?.message || '서버 오류로 실패하였습니다.');
       }
     } catch {
       setError('서버 오류로 실패하였습니다.');
+    } finally {
+      setIsPending(false);
     }
   };
 
@@ -54,7 +60,7 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
         <div className={styles.modalWrapper}>
           <div className={styles.input}>
             <label htmlFor="current-name">이전 이름</label>
-            <Input id="current-name" type="text" value={currentName} disabled variant="long" />
+            <Input id="current-name" type="text" value={currentName} disabled />
           </div>
           <div className={styles.input}>
             <label htmlFor="name-change">새 이름</label>
@@ -64,7 +70,6 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="새 이름을 입력하세요"
-              variant="long"
             />
           </div>
           {error && <div className={styles.error}>{error}</div>}
@@ -74,8 +79,9 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
             onClick={handleChange}
             className={styles.button}
             style={{ width: '520px' }}
+            disabled={isPending}
           >
-            이름 변경
+            {isPending ? '변경 중...' : '이름 변경'}
           </Button>
         </div>
       )}
