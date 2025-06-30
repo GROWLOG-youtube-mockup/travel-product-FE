@@ -49,7 +49,7 @@ const PaymentCompletePage = () => {
         <div className={styles.orderContent}>
           <dl className={styles.orderInfo}>
             <div className={styles.infoRow}>
-              <dd>{selectedItem?.product.name} 결제가 완료되었습니다.</dd>
+              <dd>{selectedItem?.productName} 결제가 완료되었습니다.</dd>
             </div>
             <div className={styles.infoRow}>
               <dt>주문번호</dt>

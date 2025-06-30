@@ -34,7 +34,7 @@ const CartPage = () => {
         ]
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setSelectedItem({
             cartItemId: item.cartItemId,
             productId: Number(item.productId),
@@ -44,7 +44,8 @@ const CartPage = () => {
             startDate: item.startDate,
             stockQuantity: item.stockQuantity,
             totalPrice: item.totalPrice,
-            productImage: item.productImage
+            productImage: item.productImage,
+            ...data?.data
           });
           navigate('/reservation');
         },

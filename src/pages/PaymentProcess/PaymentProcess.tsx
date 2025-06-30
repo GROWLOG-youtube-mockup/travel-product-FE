@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
-import Button from '../../components/atoms/Button/Button';
-import { useCartStore } from '../../store/CartStore';
-import type { User } from '../../types/user';
+import Button from '@/components/atoms/Button/Button';
+import { usePostApi } from '@/hooks/usePostAPI';
+import { useCartStore } from '@/store/CartStore';
+import type { User } from '@/types/api/User.type';
 
 import styles from './PaymentProcess.module.scss';
 
@@ -20,14 +21,15 @@ const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
-  const { selectedItem } = useCartStore((state) => state);
+  const { selectedItem, clearSelectedItem } = useCartStore((state) => state);
   const [amount, setAmount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: selectedItem?.product.price || 0
+    value: selectedItem?.price || 0
   });
   const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
+  const { mutate: approveApi } = usePostApi('/payments/approve');
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -104,6 +106,13 @@ const PaymentProcessPage = () => {
       })
       .then((data) => {
         console.log('주문 생성:', data);
+        approveApi({
+          amount: selectedItem?.price ?? 0,
+          payment_key: selectedItem?.order_id?.toString() ?? '',
+          order_id: selectedItem?.order_id ?? 0,
+          payment_gateway: 'toss',
+          transaction_id: 'tx-001'
+        });
       })
       .catch((err) => {
         console.error(err);

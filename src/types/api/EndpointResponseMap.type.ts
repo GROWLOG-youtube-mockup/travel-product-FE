@@ -13,6 +13,14 @@ export type OrderDetailRes = ApiResponse<Orders>;
 export type UserRes = ApiResponse<User>;
 export type LoginRes = ApiResponse<{ accessToken: string; name: string; userId: number }>;
 export type PasswordVerifyRes = ApiResponse<{ verified: boolean }>;
+export type PaymentApprove = ApiResponse<{
+  status: string;
+  method: string;
+  payment_id: number;
+  paid_at: string;
+}>;
+export type PaymentCancel = ApiResponse<string>;
+export type PaymentSuccess = string;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -23,4 +31,7 @@ export interface EndpointResponseMap {
   '/users/me': UserRes;
   '/auth/login': LoginRes;
   '/users/verify-password': PasswordVerifyRes;
+  '/payments/approve': PaymentApprove;
+  '/payments/cancel': PaymentCancel;
+  '/payments/success': PaymentSuccess;
 }
