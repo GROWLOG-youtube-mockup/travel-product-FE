@@ -4,9 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
 import Button from '@/components/atoms/Button/Button';
+import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { useCartStore } from '@/store/CartStore';
-import type { User } from '@/types/api/User.type';
 
 import styles from './PaymentProcess.module.scss';
 
@@ -21,30 +21,15 @@ const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
-  const { selectedItem, clearSelectedItem } = useCartStore((state) => state);
-  const [amount, setAmount] = useState<{ currency: string; value: number }>({
+  const { selectedItem } = useCartStore((state) => state);
+  const [amount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
     value: selectedItem?.price || 0
   });
-  const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
+  const userRes = useGetApi('/users/me');
   const { mutate: approveApi } = usePostApi('/payments/approve');
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/users/me');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setUserInfo(data);
-      } catch (err: any) {
-        navigate('/error');
-      }
-    };
-
-    fetchUser();
-  }, []);
 
   useEffect(() => {
     async function fetchPaymentWidgets() {
@@ -95,28 +80,14 @@ const PaymentProcessPage = () => {
     widgets.setAmount(amount);
   }, [widgets, amount]);
 
-  const handleCreateOrder = () => {
-    fetch('/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('주문 실패');
-        return res.json();
-      })
-      .then((data) => {
-        console.log('주문 생성:', data);
-        approveApi({
-          amount: selectedItem?.price ?? 0,
-          payment_key: selectedItem?.order_id?.toString() ?? '',
-          order_id: selectedItem?.order_id ?? 0,
-          payment_gateway: 'toss',
-          transaction_id: 'tx-001'
-        });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const handlePaymentApprove = () => {
+    approveApi({
+      amount: selectedItem?.price ?? 0,
+      payment_key: selectedItem?.order_id?.toString() ?? '',
+      order_id: selectedItem?.order_id ?? 0,
+      payment_gateway: 'toss',
+      transaction_id: 'tx-001'
+    });
   };
 
   return (
@@ -153,17 +124,26 @@ const PaymentProcessPage = () => {
                   try {
                     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-                    handleCreateOrder();
+
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-                    await widgets.requestPayment({
-                      orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
-                      orderName: '토스 티셔츠 외 2건',
-                      successUrl: window.location.origin + '/payment-complete',
-                      failUrl: window.location.origin + '/payment-process',
-                      customerEmail: userInfo?.email,
-                      customerName: userInfo?.name,
-                      customerMobilePhone: userInfo?.phone_number
-                    });
+                    await widgets
+                      .requestPayment({
+                        orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
+                        orderName: '토스 티셔츠 외 2건',
+                        successUrl: window.location.origin + '/payment-complete',
+                        failUrl: window.location.origin + '/payment-process',
+                        customerEmail: userRes?.data?.data.email,
+                        customerName: userRes?.data?.data.name,
+                        customerMobilePhone: userRes?.data?.data.phoneNumber
+                      })
+                      .then((res: any) => {
+                        console.warn(res);
+                        handlePaymentApprove();
+                      })
+                      .then(() => {})
+                      .catch((error: any) => {
+                        navigate(`/error/${error?.error?.code}`);
+                      });
                   } catch (error) {
                     // 에러 처리하기
                     console.error(error);
