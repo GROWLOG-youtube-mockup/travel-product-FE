@@ -1,37 +1,17 @@
-import { useEffect, useMemo, useState } from 'react';
+import 'dayjs/locale/ko';
+
 import { useNavigate } from 'react-router-dom';
 
-import Button from '../../components/atoms/Button/Button';
-import { useCartStore } from '../../store/CartStore';
-import type { Order } from '../../types/order';
+import dayjs from 'dayjs';
+
+import Button from '@/components/atoms/Button/Button';
+import { useCartStore } from '@/store/CartStore';
 
 import styles from './PaymentComplete.module.scss';
 
 const PaymentCompletePage = () => {
   const navigate = useNavigate();
-  const [order, setOrder] = useState<Order | null>(null);
   const { selectedItem, clearSelectedItem } = useCartStore();
-
-  useEffect(() => {
-    fetch('/orders')
-      .then((response) => {
-        if (!response.ok) throw new Error('주문 실패');
-
-        return response.json();
-      })
-      .then((data) => {
-        const getOrder = data[0];
-        setOrder(getOrder);
-      })
-      .catch((error) => {
-        console.error('Error fetching orders:', error);
-      });
-  }, []);
-
-  const processedOrders = useMemo(() => {
-    if (!order) return null;
-    return { ...order, order_date: new Date(order.order_date).toLocaleString() };
-  }, [order]);
 
   const handleMainButtonClick = () => {
     navigate('/main');
@@ -53,18 +33,18 @@ const PaymentCompletePage = () => {
             </div>
             <div className={styles.infoRow}>
               <dt>주문번호</dt>
-              <dd>#{order?.order_id}</dd>
+              <dd>#{selectedItem?.order_id}</dd>
             </div>
             <div className={styles.infoRow}>
               <span className={styles.line}></span>
             </div>
             <div className={styles.infoRow}>
               <dt>주문일시</dt>
-              <dd>{processedOrders?.order_date}</dd>
+              <dd>{dayjs(selectedItem?.order_date).format('YYYY-MM-DD HH:MM:ss')}</dd>
             </div>
             <div className={styles.infoRow}>
               <dt>결제금액</dt>
-              <dd>₩{processedOrders?.total_price.toLocaleString()}</dd>
+              <dd>₩{selectedItem?.totalPrice.toLocaleString()}</dd>
             </div>
           </dl>
         </div>
