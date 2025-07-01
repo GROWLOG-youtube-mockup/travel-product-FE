@@ -130,7 +130,7 @@ const routes: AppRouteObject[] = [
             // requiredRole: 'USER'
           },
           {
-            path: 'CancelConfirm',
+            path: 'CancelConfirm/:id',
             element: <CancelConfirmPage />
             // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
             // requiredRole: 'USER'
