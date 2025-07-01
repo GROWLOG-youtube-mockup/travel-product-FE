@@ -1,9 +1,11 @@
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
+import SignupForm from '@/components/SignupForm/SignupForm';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 
-import SignupForm from '../../components/SignupForm/SignupForm';
 import type { SignupValues } from '../../types/signupForm.types';
 
 import styles from './JoinMembership.module.scss';
@@ -31,30 +33,20 @@ const JoinMembershipPage = () => {
         password: form.password
       });
 
-      // 로그인 응답에서 필요한 데이터 추출
-      if ('data' in loginRes && loginRes.data) {
-        const { accessToken, name, userId, roleCode } = loginRes.data as {
-          accessToken?: string;
-          name?: string;
-          userId?: number;
-          roleCode?: number;
-        };
+      const { accessToken, name, userId, roleCode } = loginRes.data ?? {};
 
-        if (accessToken && name && userId != null && roleCode != null) {
-          login(accessToken, name, userId, roleCode);
-        }
+      if (!accessToken || !name || userId == null || roleCode == null) {
+        throw new Error('로그인에 실패했습니다.');
       }
 
-      alert('회원가입이 완료되었습니다!');
+      login(accessToken, name, userId, roleCode);
+      toast.success('회원가입이 완료되었습니다!');
       navigate('/');
-    } catch (e: unknown) {
-      let message = '회원가입에 실패했습니다.';
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      if (typeof e === 'object' && e && (e as any).response?.data?.error?.message) {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        message = (e as any).response.data.error.message || message;
-      }
-      alert(message);
+    } catch (error: unknown) {
+      handleApiError(error, navigate, location.pathname, {
+        useToast: true,
+        defaultMessage: '회원가입에 실패했습니다.'
+      });
     }
   };
 
