@@ -60,19 +60,27 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
       setFormData(initialData);
       setIsEditing(false);
-      setHasChanges(false);
+      setHasChanges(false); // 명시적으로 false 설정
       setErrors({});
     }
   }, [isOpen, fields]);
 
   // 데이터 변경 감지
   useEffect(() => {
-    if (fields.length === 0 || Object.keys(formData).length === 0) return;
+    if (fields.length === 0 || Object.keys(formData).length === 0) {
+      setHasChanges(false);
+      return;
+    }
 
     const hasAnyChanges = fields.some((field) => {
       const currentValue = formData[field.key];
       const originalValue = field.value;
-      return currentValue !== originalValue;
+
+      // 타입 통일하여 비교 (문자열로 변환)
+      const currentStr = String(currentValue ?? '');
+      const originalStr = String(originalValue ?? '');
+
+      return currentStr !== originalStr;
     });
 
     setHasChanges(hasAnyChanges);
@@ -121,6 +129,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     setIsEditing(newEditingState);
     if (!newEditingState) {
       setErrors({});
+      setHasChanges(false); // 편집 모드 종료 시 변경사항도 초기화
     }
   };
 
@@ -292,7 +301,11 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
             <div className={styles.rightActions}>
               {isEditing ? (
-                <Button onClick={handleSave} disabled={loading} color="blue">
+                <Button
+                  onClick={handleSave}
+                  disabled={loading || !hasChanges} // 로딩 중이거나 변경사항이 없을 때 비활성화
+                  color="blue"
+                >
                   {loading ? '저장 중...' : saveButtonText}
                 </Button>
               ) : (
