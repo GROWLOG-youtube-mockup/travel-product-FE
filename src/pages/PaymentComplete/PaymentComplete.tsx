@@ -1,17 +1,24 @@
 import 'dayjs/locale/ko';
 
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
 import Button from '@/components/atoms/Button/Button';
+import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 import { useCartStore } from '@/store/CartStore';
 
 import styles from './PaymentComplete.module.scss';
 
 const PaymentCompletePage = () => {
   const navigate = useNavigate();
+  const deleteCart = useDeleteCartItems();
   const { selectedItem, clearSelectedItem } = useCartStore();
+
+  useEffect(() => {
+    deleteCart.mutate({ itemIds: [selectedItem?.cartItemId ?? 0] });
+  }, []);
 
   const handleMainButtonClick = () => {
     navigate('/main');
