@@ -62,36 +62,42 @@ const AdminUsersPage = () => {
   const { data, isLoading, error, refetch } = useGetApi('/admin/users', finalApiParams);
 
   // PATCH API 훅
-  const patchUserMutation = usePatchApi(`/admin/users/${selectedUser?.userId}`, {
-    onSuccess: () => {
-      toast.success('사용자 정보가 성공적으로 수정되었습니다.');
-      setEditModalOpen(false);
-      setSelectedUser(null);
-      refetch();
-    },
-    onError: (error) => {
-      handleApiError(error, navigate, '/admin/users', {
-        useToast: true,
-        defaultMessage: '사용자 정보 수정 중 오류가 발생했습니다.'
-      });
+  const patchUserMutation = usePatchApi(
+    selectedUser ? `/admin/users/${selectedUser.userId}` : '/admin/users/0',
+    {
+      onSuccess: () => {
+        toast.success('사용자 정보가 성공적으로 수정되었습니다.');
+        setEditModalOpen(false);
+        setSelectedUser(null);
+        refetch();
+      },
+      onError: (error) => {
+        handleApiError(error, navigate, '/admin/users', {
+          useToast: true,
+          defaultMessage: '사용자 정보 수정 중 오류가 발생했습니다.'
+        });
+      }
     }
-  });
+  );
 
   // DELETE API 훅
-  const deleteUserMutation = useDeleteApi(`/admin/users/${selectedUser?.userId}`, {
-    onSuccess: () => {
-      toast.success('사용자가 성공적으로 삭제되었습니다.');
-      setDeleteModalOpen(false);
-      setSelectedUser(null);
-      refetch();
-    },
-    onError: (error) => {
-      handleApiError(error, navigate, '/admin/users', {
-        useToast: true,
-        defaultMessage: '사용자 삭제 중 오류가 발생했습니다.'
-      });
+  const deleteUserMutation = useDeleteApi(
+    selectedUser ? `/admin/users/${selectedUser.userId}` : '/admin/users/0',
+    {
+      onSuccess: () => {
+        toast.success('사용자가 성공적으로 삭제되었습니다.');
+        setDeleteModalOpen(false);
+        setSelectedUser(null);
+        refetch();
+      },
+      onError: (error) => {
+        handleApiError(error, navigate, '/admin/users', {
+          useToast: true,
+          defaultMessage: '사용자 삭제 중 오류가 발생했습니다.'
+        });
+      }
     }
-  });
+  );
 
   // API 응답 시 페이지네이션 업데이트
   useEffect(() => {
@@ -143,9 +149,13 @@ const AdminUsersPage = () => {
   const handleDeleteConfirm = async (isConfirm: boolean) => {
     if (isConfirm && selectedUser) {
       await deleteUserMutation.mutateAsync();
+      // 성공 시 모달 닫기는 mutation의 onSuccess에서 처리됨
+      // 에러 시 처리는 mutation의 onError에서 처리됨
+    } else {
+      // 취소 시에만 여기서 모달 닫기
+      setDeleteModalOpen(false);
+      setSelectedUser(null);
     }
-    setDeleteModalOpen(false);
-    setSelectedUser(null);
   };
 
   // 사용자 정보 저장 핸들러
@@ -159,7 +169,7 @@ const AdminUsersPage = () => {
     }
 
     // roleCode는 숫자로 변환
-    if (saveData.roleCode) {
+    if (saveData.roleCode !== undefined) {
       saveData.roleCode = Number(saveData.roleCode);
     }
 
@@ -183,11 +193,8 @@ const AdminUsersPage = () => {
         { value: '1', label: '일반 관리자' },
         { value: '2', label: '최고 관리자' }
       ];
-    } else if (currentUserRole === 1) {
-      // 일반 관리자는 일반 사용자만 조회 가능 (필터 옵션 없음)
-      return [];
     }
-
+    // 일반 관리자는 필터 옵션 없음
     return [];
   };
 
