@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
 import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
 import GenericModal from '@/components/Modals/GenericModal';
+import { handleApiError } from '@/lib/handleApiError';
 
 import styles from './AdminEditModal.module.scss';
 
@@ -15,8 +17,8 @@ export interface EditField {
   required?: boolean;
   disabled?: boolean;
   placeholder?: string;
-  options?: { value: string | number; label: string }[]; // select용
-  validation?: (value: string | number) => string | null; // 커스텀 유효성 검사
+  options?: { value: string | number; label: string }[];
+  validation?: (value: string | number) => string | null;
 }
 
 export interface AdminEditModalProps {
@@ -40,6 +42,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
   saveButtonText = '수정 완료',
   cancelButtonText = '닫기'
 }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<Record<string, string | number>>({});
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isEditing, setIsEditing] = useState(false);
@@ -49,11 +52,12 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 모달이 열릴 때 초기 데이터 설정
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && fields.length > 0) {
       const initialData: Record<string, string | number> = {};
       fields.forEach((field) => {
         initialData[field.key] = field.value;
       });
+
       setFormData(initialData);
       setIsEditing(false);
       setHasChanges(false);
@@ -63,7 +67,14 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 데이터 변경 감지
   useEffect(() => {
-    const hasAnyChanges = fields.some((field) => formData[field.key] !== field.value);
+    if (fields.length === 0 || Object.keys(formData).length === 0) return;
+
+    const hasAnyChanges = fields.some((field) => {
+      const currentValue = formData[field.key];
+      const originalValue = field.value;
+      return currentValue !== originalValue;
+    });
+
     setHasChanges(hasAnyChanges);
   }, [formData, fields]);
 
@@ -76,17 +87,11 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     }
   };
 
-  // 닫기 확인
-  const handleCloseConfirm = async (isConfirm: boolean) => {
-    setShowCloseConfirm(false);
-    if (isConfirm) {
-      onClose();
-    }
-  };
-
   // 입력값 변경
   const handleInputChange = (key: string, value: string | number) => {
-    if (!isEditing) return;
+    if (!isEditing) {
+      return;
+    }
 
     setFormData((prev) => ({
       ...prev,
@@ -112,27 +117,9 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 수정 모드 토글
   const handleEditToggle = () => {
-    if (isEditing && hasChanges) {
-      setShowCancelConfirm(true);
-    } else {
-      setIsEditing(!isEditing);
-      if (!isEditing) {
-        setErrors({});
-      }
-    }
-  };
-
-  // 편집 취소 확인
-  const handleCancelConfirm = async (isConfirm: boolean) => {
-    setShowCancelConfirm(false);
-    if (isConfirm) {
-      // 원래 데이터로 복원
-      const originalData: Record<string, string | number> = {};
-      fields.forEach((field) => {
-        originalData[field.key] = field.value;
-      });
-      setFormData(originalData);
-      setIsEditing(false);
+    const newEditingState = !isEditing;
+    setIsEditing(newEditingState);
+    if (!newEditingState) {
       setErrors({});
     }
   };
@@ -146,13 +133,16 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     fields.forEach((field) => {
       const value = formData[field.key];
 
-      // 필수 필드 검사
+      // disabled 필드는 유효성 검사에서 제외
+      if (field.disabled) {
+        return;
+      }
+
       if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
         newErrors[field.key] = `${field.label}은(는) 필수 입력 항목입니다.`;
         hasValidationErrors = true;
       }
 
-      // 커스텀 유효성 검사
       if (field.validation && value) {
         const error = field.validation(value);
         if (error) {
@@ -172,15 +162,44 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       // 변경된 데이터만 추출
       const changedData: Record<string, string | number> = {};
       fields.forEach((field) => {
-        if (formData[field.key] !== field.value) {
+        if (formData[field.key] !== field.value && !field.disabled) {
           changedData[field.key] = formData[field.key];
         }
       });
 
-      await onSave(changedData);
+      if (Object.keys(changedData).length > 0) {
+        await onSave(changedData);
+      }
+
       setIsEditing(false);
     } catch (error) {
-      console.error('Save failed:', error);
+      handleApiError(error, navigate, undefined, {
+        useToast: true,
+        defaultMessage: '저장 중 오류가 발생했습니다.'
+      });
+    }
+  };
+
+  // 닫기 확인 처리
+  const handleCloseConfirm = async (isConfirm: boolean) => {
+    setShowCloseConfirm(false);
+    if (isConfirm) {
+      onClose();
+    }
+  };
+
+  // 편집 취소 확인 처리
+  const handleCancelConfirm = async (isConfirm: boolean) => {
+    setShowCancelConfirm(false);
+    if (isConfirm) {
+      // 원래 데이터로 복원
+      const originalData: Record<string, string | number> = {};
+      fields.forEach((field) => {
+        originalData[field.key] = field.value;
+      });
+      setFormData(originalData);
+      setIsEditing(false);
+      setErrors({});
     }
   };
 
@@ -199,7 +218,9 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
           </label>
           <select
             value={value}
-            onChange={(e) => handleInputChange(field.key, e.target.value)}
+            onChange={(e) => {
+              handleInputChange(field.key, e.target.value);
+            }}
             disabled={isFieldDisabled}
             className={`${styles.select} ${error ? styles.error : ''} ${isFieldDisabled ? styles.disabled : ''}`}
           >
@@ -231,7 +252,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
           }
           disabled={isFieldDisabled}
           placeholder={field.placeholder}
-          className={`${error ? styles.inputError : ''}`}
+          className={`${error ? styles.inputError : ''} ${isFieldDisabled ? styles.inputDisabled : ''}`}
         />
         {error && <span className={styles.errorMessage}>{error}</span>}
       </div>
@@ -260,7 +281,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
           </div>
 
           {/* 푸터 */}
-          <div className={styles.footer}>
+          <div className={`${styles.footer} ${isEditing ? styles.editMode : ''}`}>
             <div className={styles.leftActions}>
               {!isEditing && (
                 <Button onClick={handleEditToggle} disabled={loading} color="blue">
@@ -271,18 +292,9 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
             <div className={styles.rightActions}>
               {isEditing ? (
-                <>
-                  <Button onClick={handleEditToggle} disabled={loading} color="white">
-                    취소
-                  </Button>
-                  <Button
-                    onClick={handleSave}
-                    disabled={loading || !hasChanges || Object.keys(errors).length > 0}
-                    color="blue"
-                  >
-                    {loading ? '저장 중...' : saveButtonText}
-                  </Button>
-                </>
+                <Button onClick={handleSave} disabled={loading} color="blue">
+                  {loading ? '저장 중...' : saveButtonText}
+                </Button>
               ) : (
                 <Button onClick={handleClose} disabled={loading} color="white">
                   {cancelButtonText}
@@ -300,7 +312,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
         contents="변경사항이 있습니다. 정말로 닫으시겠습니까?"
         confirmText="닫기"
         cancelText="계속 편집"
-        variant="warning"
+        variant="danger" // X 버튼 클릭 시 danger variant 적용
         handleConfirm={handleCloseConfirm}
         onClose={() => setShowCloseConfirm(false)}
       />
@@ -312,7 +324,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
         contents="변경사항이 저장되지 않았습니다. 편집을 취소하시겠습니까?"
         confirmText="취소하기"
         cancelText="계속 편집"
-        variant="warning"
+        variant="danger" // X 버튼 클릭 시 danger variant 적용
         handleConfirm={handleCancelConfirm}
         onClose={() => setShowCancelConfirm(false)}
       />
