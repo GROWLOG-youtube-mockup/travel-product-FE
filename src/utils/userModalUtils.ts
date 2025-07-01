@@ -61,7 +61,8 @@ export const createUserEditFields = (
       label: '사용자 ID',
       type: 'number',
       value: user.userId,
-      disabled: true // 항상 수정 불가
+      disabled: true, // 항상 수정 불가
+      required: false // disabled 필드는 필수 아님
     },
     {
       key: 'name',
@@ -78,7 +79,7 @@ export const createUserEditFields = (
       label: '이메일',
       type: 'email',
       value: user.email,
-      required: true,
+      required: false, // disabled 필드는 필수 아님으로 변경
       placeholder: 'example@email.com',
       validation: validateEmail,
       disabled: true // 이메일은 수정 불가 (요구사항에 따라)
@@ -98,7 +99,8 @@ export const createUserEditFields = (
       label: '생성일',
       type: 'text',
       value: formatDateTime(user.createAt),
-      disabled: true // 항상 수정 불가
+      disabled: true, // 항상 수정 불가
+      required: false // disabled 필드는 필수 아님
     }
   ];
 
@@ -110,7 +112,7 @@ export const createUserEditFields = (
       label: '권한',
       type: 'select',
       value: user.roleCode,
-      required: true,
+      required: false, // 필수 아님으로 변경
       disabled: false,
       options: [
         { value: 0, label: '일반 사용자' },
