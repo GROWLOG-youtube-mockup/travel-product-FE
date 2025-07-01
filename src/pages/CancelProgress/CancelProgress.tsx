@@ -28,8 +28,7 @@ const CancelProgressPage = () => {
         },
         onError: (err) => {
           // 1) 에러 로그
-          console.error('결제 취소 실패:', err);
-          // toast.error('결제 취소에 실패했습니다. 잠시 후 다시 시도해주세요.');
+          navigate(`/error/${err.status}`);
         }
       }
     );
