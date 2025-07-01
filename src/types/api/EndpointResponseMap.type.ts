@@ -27,7 +27,7 @@ export type PaymentApprove = ApiResponse<{
   payment_id: number;
   paid_at: string;
 }>;
-export type PaymentCancel = ApiResponse<string>;
+export type PaymentCancel = ApiResponse<number>;
 export type PaymentSuccess = string;
 export type EmailSendRes = ApiResponse<{ sent: boolean }>;
 export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
