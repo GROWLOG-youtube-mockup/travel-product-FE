@@ -1,13 +1,19 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
 
 import styles from './CancelConfirm.module.scss';
 
 const CancelConfirmPage = () => {
+  const { pathname } = useLocation();
+  const orderId = pathname.split('/').pop();
+  const navigate = useNavigate();
   const { data: userRes } = useGetApi('/users/me');
+  const { data: orderRes } = useGetApi(`/orders/${orderId}`);
 
   const onClickNextStep = () => {
-    console.log('다음으로 버튼 클릭');
+    navigate(`/CancelProgress/${orderId}`);
   };
 
   return (
@@ -26,14 +32,14 @@ const CancelConfirmPage = () => {
           <h1 className={styles.title}>결제 취소 상품</h1>
           <div className={styles.itemWrapper}>
             <div className={styles.itemImage}>
-              {/* <img src={selectedItem?.product.thumbnail_image_url} alt="" /> */}
+              {/* <img src={orderRes?.data?.items[0]?.} alt="" /> */}
             </div>
             <div className={styles.itemInfoWrapper}>
-              <div className={styles.itemName}>상품명</div>
-              <div>2025년 00월 00일</div>
-              <div>인원 00명</div>
+              <div className={styles.itemName}>{orderRes?.data?.items[0]?.productName}</div>
+              <div>{orderRes?.data?.order_date}</div>
+              <div>{orderRes?.data?.items[0]?.peopleCount}</div>
             </div>
-            <div className={styles.price}>₩0원</div>
+            <div className={styles.price}>₩{orderRes?.data?.total_price?.toLocaleString()}</div>
           </div>
         </div>
 
