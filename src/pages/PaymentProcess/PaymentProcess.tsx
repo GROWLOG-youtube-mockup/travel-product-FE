@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
@@ -18,7 +18,6 @@ declare global {
 }
 
 const clientKey = import.meta.env.VITE_CLIENT_KEY;
-const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
@@ -31,6 +30,12 @@ const PaymentProcessPage = () => {
   const [widgets, setWidgets] = useState<any>(null);
   const userRes = useGetApi('/users/me');
   const { mutate: approveApi } = usePostApi('/payments/approve');
+  // const customerKey = userRes.data?.data.email || 'guest-' + crypto.randomUUID(); // e-mail or 비회원 대체값
+
+  const customerKey = useMemo(
+    () => userRes.data?.data.email || 'guest-' + crypto.randomUUID(),
+    [userRes.data?.data]
+  );
 
   useEffect(() => {
     const fetchPaymentWidgets = async () => {
@@ -127,7 +132,7 @@ const PaymentProcessPage = () => {
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                     await widgets
                       .requestPayment({
-                        orderId: selectedItem?.order_id,
+                        orderId: `order_${selectedItem?.order_id}`,
                         orderName: selectedItem?.productName,
                         successUrl: window.location.origin + '/payment-complete',
                         failUrl: window.location.origin + '/payment-process',
