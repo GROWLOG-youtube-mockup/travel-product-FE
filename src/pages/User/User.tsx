@@ -52,8 +52,8 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
     navigate(`/product/${productId}`);
   };
 
-  const handleCancelConfirm = (order_id: number) => {
-    navigate(`/CancelConfirm/${order_id}`);
+  const handleCancelConfirm = (orderId: number) => {
+    navigate(`/CancelConfirm/${orderId}`);
   };
 
   return (
@@ -94,7 +94,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                 <Button
                   variant="sm"
                   style={{ margin: '16px 0 0 0' }}
-                  onClick={() => handleCancelConfirm(trip.order_id)}
+                  onClick={() => handleCancelConfirm(trip.orderId)}
                 >
                   결제 취소하기
                 </Button>
