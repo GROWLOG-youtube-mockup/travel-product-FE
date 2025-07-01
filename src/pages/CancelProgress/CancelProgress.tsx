@@ -24,7 +24,7 @@ const CancelProgressPage = () => {
       { orderId: Number(orderId ?? 0) },
       {
         onSuccess: (res) => {
-          navigate(`CancelComplete/${orderId}`);
+          navigate(`/CancelComplete/${orderId}`);
         },
         onError: (err) => {
           // 1) 에러 로그
