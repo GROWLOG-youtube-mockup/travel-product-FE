@@ -82,7 +82,7 @@ export const createUserEditFields = (
       required: false, // disabled 필드는 필수 아님으로 변경
       placeholder: 'example@email.com',
       validation: validateEmail,
-      disabled: true // 이메일은 수정 불가 (요구사항에 따라)
+      disabled: false
     },
     {
       key: 'phoneNumber',
