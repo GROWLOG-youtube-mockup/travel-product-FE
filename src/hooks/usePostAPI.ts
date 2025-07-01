@@ -1,4 +1,5 @@
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
+import axios from 'axios';
 
 import { api } from '@/lib/api';
 import type { EndpointRequestMap } from '@/types/api/EndpointRequestMap.type';
@@ -37,12 +38,10 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
         );
         return res;
       } catch (error: unknown) {
-        // error 타입을 unknown으로 받아서 안전하게 처리
-        if (error && typeof error === 'object' && 'response' in error) {
-          const axiosError = error as { response?: { data?: unknown } };
-          if (axiosError.response && axiosError.response.data) {
-            return axiosError.response.data as EndpointResponseMap[K];
-          }
+        if (axios.isAxiosError(error)) {
+          const message =
+            error.response?.data?.error?.message ?? `요청 실패: ${error.response?.status ?? ''}`;
+          throw new Error(message);
         }
         throw error;
       }
