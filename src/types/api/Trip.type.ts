@@ -1,6 +1,7 @@
 // 서버 응답 타입 (OpenAPI 명세 기반)
 export interface TripDto {
   orderItemId: number; // 주문 항목 ID
+  order_id: number;
   productId: number; // 상품 ID
   title: string; // 여행 상품 제목
   startDate: string; // 여행 시작일 (yyyy-MM-dd)
@@ -18,4 +19,5 @@ export interface Trip {
   start_date: string;
   end_date: string;
   price: number;
+  thumbnailUrl: string;
 }

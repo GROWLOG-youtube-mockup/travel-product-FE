@@ -94,7 +94,7 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                 <Button
                   variant="sm"
                   style={{ margin: '16px 0 0 0' }}
-                  onClick={() => handleCancelConfirm(trip.orderItemId)}
+                  onClick={() => handleCancelConfirm(trip.order_id)}
                 >
                   결제 취소하기
                 </Button>
