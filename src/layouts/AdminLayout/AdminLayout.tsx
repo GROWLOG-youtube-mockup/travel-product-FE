@@ -17,7 +17,9 @@ const AdminLayout = () => {
         <AdminHeader />
         <main className={styles.main}>
           {isAuthorizedAdmin && <AdminSidebar />}
-          <Outlet />
+          <div className={styles.content}>
+            <Outlet />
+          </div>
         </main>
       </div>
     </RequireAdminAccess>
