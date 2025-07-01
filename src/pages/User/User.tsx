@@ -52,8 +52,8 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
     navigate(`/product/${productId}`);
   };
 
-  const handleCancelConfirm = (productId: number) => {
-    navigate(`/CancelConfirm/${productId}`);
+  const handleCancelConfirm = (order_id: number) => {
+    navigate(`/CancelConfirm/${order_id}`);
   };
 
   return (
@@ -74,7 +74,8 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                   title: trip.title,
                   start_date: trip.startDate,
                   end_date: trip.endDate,
-                  price: trip.price
+                  price: trip.price,
+                  thumbnailUrl: trip.thumbnailUrl
                 }}
               />
               {userInfo && (
