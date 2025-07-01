@@ -79,7 +79,7 @@ const CancelProgressPage = () => {
             </span>
           </div>
           <div>
-            <span>취소 금액: {orderRes?.data?.total_price ?? 0}</span>
+            <span>취소 금액: {(orderRes?.data?.total_price ?? 0).toLocaleString()}</span>
           </div>
           <div className={styles.buttonWrapper}>
             <Button className={styles.nextButton} onClick={handleCancel} disabled={!isAgree}>
