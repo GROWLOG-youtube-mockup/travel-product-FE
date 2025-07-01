@@ -6,14 +6,14 @@ import Button from '@/components/atoms/Button/Button';
 import MyTripCard from '@/components/Cards/MyTripCard';
 import UserInfo from '@/components/UserInfo/UserInfo';
 import { useAuthStore } from '@/store/AuthStore';
-import type { Trip } from '@/types/api/Trip.type';
+import type { TripDto } from '@/types/api/Trip.type';
 
 import styles from './User.module.scss';
 
 interface UserPageProps {
   tab: 'upcoming' | 'past';
-  upcoming: Trip[];
-  past: Trip[];
+  upcoming: TripDto[];
+  past: TripDto[];
   userInfo: { name: string; phone: string; email: string } | null;
 }
 
@@ -52,6 +52,10 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
     navigate(`/product/${productId}`);
   };
 
+  const handleCancelConfirm = (productId: number) => {
+    navigate(`/CancelConfirm/${productId}`);
+  };
+
   return (
     <>
       <div className={styles.sectionTitle}>{title}</div>
@@ -61,10 +65,18 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
         ) : (
           trips.map((trip) => (
             <div
-              key={`${trip.productId}_${trip.start_date}_${trip.end_date}`}
+              key={`${trip.productId}_${trip.startDate}_${trip.endDate}`}
               className={styles.userTripWrapper}
             >
-              <MyTripCard trip={trip} />
+              <MyTripCard
+                trip={{
+                  productId: trip.productId,
+                  title: trip.title,
+                  start_date: trip.startDate,
+                  end_date: trip.endDate,
+                  price: trip.price
+                }}
+              />
               {userInfo && (
                 <UserInfo name={userInfo.name} phone={userInfo.phone} email={userInfo.email} />
               )}
@@ -76,6 +88,14 @@ const UserPage = ({ tab, upcoming, past, userInfo }: UserPageProps) => {
                   onClick={() => handleProductPageNavigation(trip.productId)}
                 >
                   해당 상품 페이지로
+                </Button>
+
+                <Button
+                  variant="sm"
+                  style={{ margin: '16px 0 0 0' }}
+                  onClick={() => handleCancelConfirm(trip.orderItemId)}
+                >
+                  결제 취소하기
                 </Button>
               </div>
             </div>

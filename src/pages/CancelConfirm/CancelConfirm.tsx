@@ -1,8 +1,11 @@
 import Button from '@/components/atoms/Button/Button';
+import { useGetApi } from '@/hooks/useGetAPI';
 
 import styles from './CancelConfirm.module.scss';
 
 const CancelConfirmPage = () => {
+  const { data: userRes } = useGetApi('/users/me');
+
   const onClickNextStep = () => {
     console.log('다음으로 버튼 클릭');
   };
@@ -39,15 +42,15 @@ const CancelConfirmPage = () => {
           <div className={styles.infoWrapper}>
             <div>
               <span>이름 : </span>
-              <span>테스터이름</span>
+              <span>{userRes?.data?.name}</span>
             </div>
             <div>
               <span>전화번호 : </span>
-              <span>010-1234-1234</span>
+              <span>{userRes?.data?.phoneNumber}</span>
             </div>
             <div>
               <span>이메일 주소 : </span>
-              <span>test@test.com</span>
+              <span>{userRes?.data?.email}</span>
             </div>
           </div>
 

@@ -5,7 +5,7 @@ import type { PaginatedResponse } from './Pagination.type';
 import type { Product } from './Product.type';
 import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
-import type { Trip } from './Trip.type';
+import type { TripDto } from './Trip.type';
 import type { User } from './User.type';
 
 export type CartRes = ApiResponse<Carts[]>;
@@ -36,7 +36,7 @@ export type PhoneChangeRes = ApiResponse<string>;
 export type ResetPasswordRes = ApiResponse<string>;
 export type PasswordChangeRes = ApiResponse<string>;
 export type NameChangeRes = ApiResponse<string>;
-export type TripsRes = ApiResponse<Trip[]>;
+export type TripsRes = ApiResponse<TripDto[]>;
 export type AdminLogsRes = ApiResponse<PaginatedResponse<AdminLog>>;
 
 export interface EndpointResponseMap {
