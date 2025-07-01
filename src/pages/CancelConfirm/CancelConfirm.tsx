@@ -1,5 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import dayjs from 'dayjs';
+
 import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
 
@@ -36,8 +38,8 @@ const CancelConfirmPage = () => {
             </div>
             <div className={styles.itemInfoWrapper}>
               <div className={styles.itemName}>{orderRes?.data?.items[0]?.productName}</div>
-              <div>{orderRes?.data?.order_date}</div>
-              <div>{orderRes?.data?.items[0]?.peopleCount}</div>
+              <div>{dayjs(orderRes?.data?.order_date).format('YYYY-MM-DD HH:MM:ss')}</div>
+              <div>인원 {orderRes?.data?.items[0]?.peopleCount}명</div>
             </div>
             <div className={styles.price}>₩{orderRes?.data?.total_price?.toLocaleString()}</div>
           </div>
