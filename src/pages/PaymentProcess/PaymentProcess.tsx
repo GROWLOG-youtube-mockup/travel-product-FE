@@ -30,7 +30,6 @@ const PaymentProcessPage = () => {
   const [widgets, setWidgets] = useState<any>(null);
   const userRes = useGetApi('/users/me');
   const { mutate: approveApi } = usePostApi('/payments/approve');
-  // const customerKey = userRes.data?.data.email || 'guest-' + crypto.randomUUID(); // e-mail or 비회원 대체값
 
   const customerKey = useMemo(
     () => userRes.data?.data.email || 'guest-' + crypto.randomUUID(),
@@ -128,23 +127,23 @@ const PaymentProcessPage = () => {
                   try {
                     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
+                    handlePaymentApprove();
 
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-                    await widgets
-                      .requestPayment({
-                        orderId: `order_${selectedItem?.order_id}`,
-                        orderName: selectedItem?.productName,
-                        successUrl: window.location.origin + '/payment-complete',
-                        failUrl: window.location.origin + '/payment-process',
-                        customerEmail: userRes?.data?.data.email,
-                        customerName: userRes?.data?.data.name,
-                        customerMobilePhone: denormalizePhoneNumber(
-                          userRes?.data?.data.phoneNumber ?? ''
-                        )
-                      })
-                      .then((res: any) => {
-                        handlePaymentApprove();
-                      });
+                    await widgets.requestPayment({
+                      orderId: `order_${selectedItem?.order_id}`,
+                      orderName: selectedItem?.productName,
+                      successUrl: window.location.origin + '/payment-complete',
+                      failUrl: window.location.origin + '/payment-process',
+                      customerEmail: userRes?.data?.data.email,
+                      customerName: userRes?.data?.data.name,
+                      customerMobilePhone: denormalizePhoneNumber(
+                        userRes?.data?.data.phoneNumber ?? ''
+                      )
+                    });
+                    // .then((res: any) => {
+                    //   handlePaymentApprove();
+                    // });
                   } catch (error: any) {
                     // 에러 처리하기
                     navigate(`/error/${error?.error?.data}`);
