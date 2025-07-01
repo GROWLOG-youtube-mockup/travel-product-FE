@@ -13,6 +13,7 @@ const CancelProgressPage = () => {
   const navigate = useNavigate();
   const [isTermsOpen, setTermsOpen] = useState(false);
   const [isRefundOpen, setRefundOpen] = useState(false);
+  const [isAgree, setIsAgree] = useState(false);
   const { pathname } = useLocation();
   const orderId = pathname.split('/').pop();
   const { data: orderRes } = useGetApi(`/orders/${orderId}`);
@@ -48,6 +49,9 @@ const CancelProgressPage = () => {
       <div className={styles.contentWrapper}>
         <div className={styles.item}>
           <Checkbox
+            onChange={() => {
+              setIsAgree(!isAgree);
+            }}
             label="본인은 이용약관 및 취소/환불 규정을 확인하였으며, 이에 동의하고 결제 취소를
               진행합니다."
           ></Checkbox>
@@ -79,7 +83,7 @@ const CancelProgressPage = () => {
             <span>취소 금액: {orderRes?.data?.total_price ?? 0}</span>
           </div>
           <div className={styles.buttonWrapper}>
-            <Button className={styles.nextButton} onClick={handleCancel}>
+            <Button className={styles.nextButton} onClick={handleCancel} disabled={!isAgree}>
               <span>결제취소</span>
             </Button>
           </div>
