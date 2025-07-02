@@ -6,6 +6,7 @@ import Checkbox from '@/components/atoms/Checkbox/Checkbox';
 import AgreementModal from '@/components/Modals/AgreementModal';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 
 import styles from './CancelProgress.module.scss';
 
@@ -28,7 +29,7 @@ const CancelProgressPage = () => {
         },
         onError: (err) => {
           // 1) 에러 로그
-          navigate(`/error/${err.status}`);
+          handleApiError(err, navigate, location.pathname);
         }
       }
     );

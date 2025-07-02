@@ -6,6 +6,7 @@ import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useCartStore } from '@/store/CartStore';
 import { denormalizePhoneNumber } from '@/utils/phone';
 
@@ -146,7 +147,16 @@ const PaymentProcessPage = () => {
                     // });
                   } catch (error: any) {
                     // 에러 처리하기
-                    navigate(`/error/${error?.error?.data}`);
+                    if (error?.code === 'USER_CANCEL') {
+                      // tossPayments가 주는 커스텀 에러 코드인 'USER_CANCEL'
+                      handleApiError(error, navigate, location.pathname, {
+                        useToast: true,
+                        defaultMessage: '결제가 취소되었습니다'
+                      });
+                    } else {
+                      // 예기치 못한 오류는 에러 페이지로 이동
+                      handleApiError(error, navigate, location.pathname);
+                    }
                   }
                 }}
               >

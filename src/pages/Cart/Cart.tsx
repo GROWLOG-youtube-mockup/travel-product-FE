@@ -7,6 +7,7 @@ import CartItemCard from '@/components/Cards/CartItemCard';
 import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useCartStore } from '@/store/CartStore';
 import type { Carts } from '@/types/api/Carts.type';
 
@@ -54,7 +55,7 @@ const CartPage = () => {
           navigate('/reservation');
         },
         onError: (error: any) => {
-          navigate(`/error/${error?.error?.code}`);
+          handleApiError(error, navigate, location.pathname);
         }
       }
     );
@@ -96,6 +97,12 @@ const CartPage = () => {
       {
         onSuccess: () => {
           cartRes.refetch();
+        },
+        onError: (error: any) => {
+          handleApiError(error, navigate, location.pathname, {
+            useToast: true,
+            defaultMessage: '장바구니에서 오류가 발생하였습니다.'
+          });
         }
       }
     );
