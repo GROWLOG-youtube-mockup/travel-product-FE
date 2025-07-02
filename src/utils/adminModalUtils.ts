@@ -1,5 +1,5 @@
 import type { EditField } from '@/components/Modals/AdminEditModal';
-import type { AdminOrder } from '@/types/api/AdminOrder.type';
+import type { AdminOrder, AdminOrderDetail } from '@/types/api/AdminOrder.type';
 import type { AdminUser } from '@/types/api/AdminUser.type';
 import { normalizePhoneNumber } from '@/utils/phone';
 
@@ -237,6 +237,200 @@ export const createOrderEditFields = (order: AdminOrder): EditField[] => {
       required: false
     }
   ];
+
+  return fields;
+};
+
+// 주문 상세 정보 편집 필드 생성 (상세 API 응답 데이터 기반)
+export const createOrderDetailEditFields = (orderDetail: AdminOrderDetail): EditField[] => {
+  const fields: EditField[] = [
+    // 주문 기본 정보
+    {
+      key: 'order_id',
+      label: '주문 ID',
+      type: 'number',
+      value: orderDetail.order_id,
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'status',
+      label: '주문 상태',
+      type: 'select',
+      value: orderDetail.status,
+      required: true,
+      disabled: false,
+      options: [
+        { value: 'PENDING', label: '대기중' },
+        { value: 'PAID', label: '결제완료' },
+        { value: 'CANCELLED', label: '취소됨' }
+      ]
+    },
+    {
+      key: 'order_date',
+      label: '주문일',
+      type: 'text',
+      value: formatDateTime(orderDetail.order_date),
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'cancel_date',
+      label: '취소일',
+      type: 'text',
+      value: formatDateTime(orderDetail.cancel_date),
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'updated_at',
+      label: '수정일',
+      type: 'text',
+      value: formatDateTime(orderDetail.updated_at),
+      disabled: true,
+      required: false
+    },
+
+    // 주문자 정보
+    {
+      key: 'user.name',
+      label: '주문자명',
+      type: 'text',
+      value: orderDetail.user.name,
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'user.email',
+      label: '주문자 이메일',
+      type: 'email',
+      value: orderDetail.user.email,
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'user.phone_number',
+      label: '주문자 전화번호',
+      type: 'tel',
+      value: orderDetail.user.phone_number,
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'user.user_id',
+      label: '주문자 ID',
+      type: 'number',
+      value: orderDetail.user.user_id,
+      disabled: true,
+      required: false
+    }
+  ];
+
+  // 결제 정보 (있는 경우에만 추가)
+  if (orderDetail.payment) {
+    fields.push(
+      {
+        key: 'payment.payment_id',
+        label: '결제 ID',
+        type: 'number',
+        value: orderDetail.payment.payment_id,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'payment.status',
+        label: '결제 상태',
+        type: 'text',
+        value: orderDetail.payment.status,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'payment.card_number',
+        label: '카드 번호',
+        type: 'text',
+        value: orderDetail.payment.card_number,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'payment.payment_datetime',
+        label: '결제일시',
+        type: 'text',
+        value: formatDateTime(orderDetail.payment.payment_datetime),
+        disabled: true,
+        required: false
+      }
+    );
+  }
+
+  // 주문 상품 정보
+  if (orderDetail.order_items && orderDetail.order_items.length > 0) {
+    orderDetail.order_items.forEach((item, index) => {
+      fields.push(
+        {
+          key: `order_items.${index}.product.name`,
+          label: `상품명 ${index + 1}`,
+          type: 'text',
+          value: item.product.name,
+          disabled: true,
+          required: false
+        },
+        {
+          key: `order_items.${index}.product.product_id`,
+          label: `상품 ID ${index + 1}`,
+          type: 'number',
+          value: item.product.product_id,
+          disabled: true,
+          required: false
+        },
+        {
+          key: `order_items.${index}.start_date`,
+          label: `여행 시작일 ${index + 1}`,
+          type: 'text',
+          value: item.start_date,
+          disabled: true,
+          required: false
+        },
+        {
+          key: `order_items.${index}.people_count`,
+          label: `인원수 ${index + 1}`,
+          type: 'number',
+          value: item.people_count,
+          disabled: true,
+          required: false
+        },
+        {
+          key: `order_items.${index}.price`,
+          label: `단가 ${index + 1}`,
+          type: 'text',
+          value: `${new Intl.NumberFormat('ko-KR').format(item.price)}원`,
+          disabled: true,
+          required: false
+        },
+        {
+          key: `order_items.${index}.total_price`,
+          label: `총액 ${index + 1}`,
+          type: 'text',
+          value: `${new Intl.NumberFormat('ko-KR').format(item.total_price)}원`,
+          disabled: true,
+          required: false
+        }
+      );
+    });
+  }
+
+  // 총 결제 금액 (있는 경우에만 추가)
+  if (orderDetail.total_price) {
+    fields.push({
+      key: 'total_price',
+      label: '총 결제 금액',
+      type: 'text',
+      value: `${new Intl.NumberFormat('ko-KR').format(orderDetail.total_price)}원`,
+      disabled: true,
+      required: false
+    });
+  }
 
   return fields;
 };

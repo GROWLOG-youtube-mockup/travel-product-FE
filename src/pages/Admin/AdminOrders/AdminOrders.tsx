@@ -8,10 +8,13 @@ import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import { handleApiError } from '@/lib/handleApiError';
-import { useAuthStore } from '@/store/AuthStore';
 import type { SimpleColumn } from '@/types/adminTable.types';
-import type { AdminOrder } from '@/types/api/AdminOrder.type';
-import { createOrderEditFields, getOrderStatusText } from '@/utils/adminModalUtils';
+import type { AdminOrder, AdminOrderDetail } from '@/types/api/AdminOrder.type';
+import {
+  createOrderDetailEditFields,
+  formatDateTime,
+  getOrderStatusText
+} from '@/utils/adminModalUtils';
 
 import styles from './AdminOrders.module.scss';
 
@@ -23,10 +26,9 @@ const STATUS_COLOR_MAP = {
 
 const AdminOrdersPage = () => {
   const navigate = useNavigate();
-  const { roleCode: currentUserRole } = useAuthStore();
   const [editModalOpen, setEditModalOpen] = useState(false);
-  const [viewDetailModal, setViewDetailModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
+  const [orderDetailData, setOrderDetailData] = useState<AdminOrderDetail | null>(null);
 
   const {
     apiParams,
@@ -69,6 +71,7 @@ const AdminOrdersPage = () => {
         toast.success('주문 상태가 성공적으로 수정되었습니다.');
         setEditModalOpen(false);
         setSelectedOrder(null);
+        setOrderDetailData(null);
         refetch();
       },
       onError: (error) => {
@@ -100,16 +103,6 @@ const AdminOrdersPage = () => {
     }
   }, [error, navigate]);
 
-  // 날짜 포맷팅 함수
-  const formatDate = (dateString: string | null): string => {
-    if (!dateString) return '-';
-    try {
-      return dateString.replace('T', ' ');
-    } catch {
-      return dateString;
-    }
-  };
-
   // 상태 변환 함수
   const getStatusText = getOrderStatusText;
 
@@ -121,30 +114,48 @@ const AdminOrdersPage = () => {
     return <span className={`${styles.statusBadge} ${colorClass}`}>{statusText}</span>;
   };
 
-  // 상세보기 버튼 클릭 핸들러 (AdminEditModal을 읽기 전용으로 사용)
-  const handleDetailClick = (order: AdminOrder) => {
+  // 수정 버튼 클릭 핸들러 (상세 정보 조회 후 모달 표시)
+  const handleEditClick = async (order: AdminOrder) => {
+    // 먼저 selectedOrder를 설정하고 약간의 지연을 줍니다
     setSelectedOrder(order);
-    setViewDetailModal(true);
-  };
 
-  // 수정 버튼 클릭 핸들러
-  const handleEditClick = (order: AdminOrder) => {
-    setSelectedOrder(order);
-    setEditModalOpen(true);
+    try {
+      // 직접 API 호출로 변경 (Hook의 dependency 문제 해결)
+      const { api } = await import('@/lib/api');
+      const response = await api.get(`/admin/orders/${order.orderId}`);
+
+      if (response.data?.success && response.data?.data) {
+        setOrderDetailData(response.data.data as AdminOrderDetail);
+        setEditModalOpen(true);
+      } else {
+        throw new Error('상세 정보를 불러올 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('주문 상세 조회 에러:', error);
+      handleApiError(error, navigate, '/admin/orders', {
+        useToast: true,
+        defaultMessage: '주문 상세 정보를 불러오는 중 오류가 발생했습니다.'
+      });
+      // 에러 발생 시 selectedOrder 초기화
+      setSelectedOrder(null);
+    }
   };
 
   // 주문 상태 저장 핸들러
   const handleOrderSave = async (changedData: Record<string, string | number>) => {
     if (!selectedOrder) return;
 
-    await patchOrderMutation.mutateAsync(changedData);
+    // status만 추출하고 타입 검증
+    const status = changedData.status as 'PENDING' | 'PAID' | 'CANCELLED';
+    const updateData = { status };
+    await patchOrderMutation.mutateAsync(updateData);
   };
 
   // 모달 닫기 핸들러
   const handleModalClose = () => {
     setEditModalOpen(false);
-    setViewDetailModal(false);
     setSelectedOrder(null);
+    setOrderDetailData(null);
   };
 
   // 간단한 컬럼 정의
@@ -174,12 +185,12 @@ const AdminOrdersPage = () => {
     {
       key: 'orderDate',
       label: '주문일',
-      render: (value) => formatDate(value as string)
+      render: (value) => formatDateTime(value as string)
     },
     {
       key: 'cancelDate',
       label: '취소일',
-      render: (value) => formatDate(value as string | null)
+      render: (value) => formatDateTime(value as string | null)
     },
     {
       key: 'actions',
@@ -189,14 +200,9 @@ const AdminOrdersPage = () => {
 
         return (
           <div className={styles.actionButtons}>
-            <button className={styles.detailButton} onClick={() => handleDetailClick(order)}>
-              상세보기
+            <button className={styles.editButton} onClick={() => handleEditClick(order)}>
+              수정하기
             </button>
-            {currentUserRole === 2 && (
-              <button className={styles.editButton} onClick={() => handleEditClick(order)}>
-                상태수정
-              </button>
-            )}
           </div>
         );
       }
@@ -250,29 +256,12 @@ const AdminOrdersPage = () => {
         onFiltersChange={handleFiltersChange}
       />
 
-      {/* 상세보기 모달 (읽기 전용 AdminEditModal) */}
-      {viewDetailModal && selectedOrder && (
-        <AdminEditModal
-          isOpen={viewDetailModal}
-          title={`주문 상세 정보 - 주문 ID: ${selectedOrder.orderId}`}
-          fields={createOrderEditFields(selectedOrder).map((field) => ({
-            ...field,
-            disabled: true
-          }))}
-          loading={false}
-          onClose={handleModalClose}
-          onSave={async () => {}} // 빈 함수 (실제로 호출되지 않음)
-          saveButtonText="닫기"
-          cancelButtonText=""
-        />
-      )}
-
-      {/* 수정 모달 (최고 관리자만) */}
-      {editModalOpen && selectedOrder && currentUserRole === 2 && (
+      {/* 주문 수정 모달 (상세 정보 포함) */}
+      {editModalOpen && selectedOrder && orderDetailData && (
         <AdminEditModal
           isOpen={editModalOpen}
-          title={`주문 상태 수정 - 주문 ID: ${selectedOrder.orderId}`}
-          fields={createOrderEditFields(selectedOrder)}
+          title={`주문 상세 정보 및 수정 - 주문 ID: ${selectedOrder.orderId}`}
+          fields={createOrderDetailEditFields(orderDetailData)}
           loading={patchOrderMutation.isPending}
           onClose={handleModalClose}
           onSave={handleOrderSave}

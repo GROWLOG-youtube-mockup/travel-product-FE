@@ -14,7 +14,6 @@
   gap: 8px;
 }
 
-.detailButton,
 .editButton {
   display: inline-flex;
   align-items: center;
@@ -26,41 +25,21 @@
   box-sizing: border-box;
   font-size: 12px;
   font-weight: 500;
+  color: white;
+  background: #3b82f6;
   border-radius: 4px;
   transition: all 0.2s ease;
   cursor: pointer;
   white-space: nowrap;
 
   &:hover {
+    background: #2563eb;
     box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
     transform: translateY(-1px);
   }
 
   &:active {
     transform: translateY(0);
-  }
-}
-
-.detailButton {
-  color: white;
-  background: #10b981;
-
-  &:hover {
-    background: #059669;
-  }
-
-  &:focus {
-    box-shadow: 0 0 0 2px rgb(16 185 129 / 30%);
-    outline: none;
-  }
-}
-
-.editButton {
-  color: white;
-  background: #3b82f6;
-
-  &:hover {
-    background: #2563eb;
   }
 
   &:focus {
