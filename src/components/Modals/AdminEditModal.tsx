@@ -296,13 +296,8 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       <Modal
         onClose={handleClose}
         boxStyle={{
-          width: 800,
-          maxWidth: '90vw',
-          maxHeight: '80vh', // 최대 높이 제한
-          minHeight: '400px', // 최소 높이 보장
-          overflow: 'hidden', // 모달 자체에서 overflow 처리
-          display: 'flex',
-          flexDirection: 'column'
+          width: 750,
+          maxWidth: '85vw'
         }}
       >
         <ModalHeader title={title}>
