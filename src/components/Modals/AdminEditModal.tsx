@@ -228,14 +228,20 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
   // 필드 렌더링
   const renderField = (field: EditField) => {
     const value = formData[field.key] || '';
+    const originalValue = field.value ?? '';
     const error = errors[field.key];
     const isFieldDisabled = field.disabled || !isEditing;
     const isEditable = !field.disabled && isEditing;
 
+    const isModified = isEditing && String(value) !== String(originalValue) && !isFieldDisabled;
     // 필드 그룹의 클래스명 결정
-    const fieldGroupClass = `${styles.fieldGroup} ${
-      isEditable ? styles.editable : styles.readonly
-    }`;
+    const fieldGroupClass = [
+      styles.fieldGroup,
+      isEditable ? styles.editable : '',
+      isModified ? styles.modified : ''
+    ]
+      .filter(Boolean)
+      .join(' ');
 
     if (field.type === 'select') {
       return (
