@@ -365,71 +365,58 @@ export const createOrderDetailEditFields = (orderDetail: AdminOrderDetail): Edit
   }
 
   // 주문 상품 정보
-  if (orderDetail.order_items && orderDetail.order_items.length > 0) {
-    orderDetail.order_items.forEach((item, index) => {
-      fields.push(
-        {
-          key: `order_items.${index}.product.name`,
-          label: `상품명 ${index + 1}`,
-          type: 'text',
-          value: item.product.name,
-          disabled: true,
-          required: false
-        },
-        {
-          key: `order_items.${index}.product.product_id`,
-          label: `상품 ID ${index + 1}`,
-          type: 'number',
-          value: item.product.product_id,
-          disabled: true,
-          required: false
-        },
-        {
-          key: `order_items.${index}.start_date`,
-          label: `여행 시작일 ${index + 1}`,
-          type: 'text',
-          value: item.start_date,
-          disabled: true,
-          required: false
-        },
-        {
-          key: `order_items.${index}.people_count`,
-          label: `인원수 ${index + 1}`,
-          type: 'number',
-          value: item.people_count,
-          disabled: true,
-          required: false
-        },
-        {
-          key: `order_items.${index}.price`,
-          label: `단가 ${index + 1}`,
-          type: 'text',
-          value: `${new Intl.NumberFormat('ko-KR').format(item.price)}원`,
-          disabled: true,
-          required: false
-        },
-        {
-          key: `order_items.${index}.total_price`,
-          label: `총액 ${index + 1}`,
-          type: 'text',
-          value: `${new Intl.NumberFormat('ko-KR').format(item.total_price)}원`,
-          disabled: true,
-          required: false
-        }
-      );
-    });
-  }
-
-  // 총 결제 금액 (있는 경우에만 추가)
-  if (orderDetail.total_price) {
-    fields.push({
-      key: 'total_price',
-      label: '총 결제 금액',
-      type: 'text',
-      value: `${new Intl.NumberFormat('ko-KR').format(orderDetail.total_price)}원`,
-      disabled: true,
-      required: false
-    });
+  const item = orderDetail.order_items?.[0];
+  if (item) {
+    fields.push(
+      {
+        key: 'product.name',
+        label: '상품명',
+        type: 'text',
+        value: item.product.name,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'product.product_id',
+        label: '상품 ID',
+        type: 'number',
+        value: item.product.product_id,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'start_date',
+        label: '여행 시작일',
+        type: 'text',
+        value: item.start_date,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'people_count',
+        label: '인원수',
+        type: 'number',
+        value: item.people_count,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'price',
+        label: '단가',
+        type: 'text',
+        value: `${new Intl.NumberFormat('ko-KR').format(item.price)}원`,
+        disabled: true,
+        required: false
+      },
+      {
+        key: 'total_price_item',
+        label: '총액',
+        type: 'text',
+        value: `${new Intl.NumberFormat('ko-KR').format(item.total_price)}원`,
+        disabled: true,
+        required: false
+      }
+    );
   }
 
   return fields;
