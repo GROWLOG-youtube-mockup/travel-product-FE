@@ -13,7 +13,7 @@ import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import type { SimpleColumn } from '@/types/adminTable.types';
 import type { AdminUser } from '@/types/api/AdminUser.type';
-import { createUserEditFields, normalizePhoneForSave } from '@/utils/userModalUtils';
+import { createUserEditFields, normalizePhoneForSave } from '@/utils/adminModalUtils';
 
 import styles from './AdminUsers.module.scss';
 
