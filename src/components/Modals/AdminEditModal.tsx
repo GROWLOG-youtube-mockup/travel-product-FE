@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
+import Modal from '@/components/Modal/Modal';
+import ModalCloseButton from '@/components/Modal/ModalCloseButton';
+import ModalHeader from '@/components/Modal/ModalHeader';
 import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import GenericModal from '@/components/Modals/GenericModal';
 import { handleApiError } from '@/lib/handleApiError';
 
 import styles from './AdminEditModal.module.scss';
@@ -133,6 +135,16 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     }
   };
 
+  // 편집 취소 (보기 모드로 돌아가기)
+  const handleCancelEdit = () => {
+    if (hasChanges) {
+      setShowCancelConfirm(true);
+    } else {
+      setIsEditing(false);
+      setErrors({});
+    }
+  };
+
   // 저장
   const handleSave = async () => {
     // 유효성 검사
@@ -209,6 +221,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       setFormData(originalData);
       setIsEditing(false);
       setErrors({});
+      setHasChanges(false);
     }
   };
 
@@ -217,13 +230,20 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     const value = formData[field.key] || '';
     const error = errors[field.key];
     const isFieldDisabled = field.disabled || !isEditing;
+    const isEditable = !field.disabled && isEditing;
+
+    // 필드 그룹의 클래스명 결정
+    const fieldGroupClass = `${styles.fieldGroup} ${
+      isEditable ? styles.editable : styles.readonly
+    }`;
 
     if (field.type === 'select') {
       return (
-        <div key={field.key} className={styles.fieldGroup}>
+        <div key={field.key} className={fieldGroupClass}>
           <label className={styles.label}>
             {field.label}
             {field.required && <span className={styles.required}>*</span>}
+            {isEditable && <span className={styles.editableIndicator}> (수정 가능)</span>}
           </label>
           <select
             value={value}
@@ -245,10 +265,11 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     }
 
     return (
-      <div key={field.key} className={styles.fieldGroup}>
+      <div key={field.key} className={fieldGroupClass}>
         <label className={styles.label}>
           {field.label}
           {field.required && <span className={styles.required}>*</span>}
+          {isEditable && <span className={styles.editableIndicator}> (수정 가능)</span>}
         </label>
         <Input
           type={field.type}
@@ -272,7 +293,21 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   return (
     <>
-      <GenericModal open={isOpen} onClose={handleClose} title={title}>
+      <Modal
+        onClose={handleClose}
+        boxStyle={{
+          width: 800,
+          maxWidth: '90vw',
+          maxHeight: '80vh', // 최대 높이 제한
+          minHeight: '400px', // 최소 높이 보장
+          overflow: 'hidden', // 모달 자체에서 overflow 처리
+          display: 'flex',
+          flexDirection: 'column'
+        }}
+      >
+        <ModalHeader title={title}>
+          <ModalCloseButton onClick={handleClose} />
+        </ModalHeader>
         <div className={styles.modalContent}>
           {/* 로딩 오버레이 */}
           {loading && (
@@ -292,9 +327,13 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
           {/* 푸터 */}
           <div className={`${styles.footer} ${isEditing ? styles.editMode : ''}`}>
             <div className={styles.leftActions}>
-              {!isEditing && (
+              {!isEditing ? (
                 <Button onClick={handleEditToggle} disabled={loading} color="blue">
                   수정하기
+                </Button>
+              ) : (
+                <Button onClick={handleCancelEdit} disabled={loading} color="white">
+                  ← 보기 모드로 돌아가기
                 </Button>
               )}
             </div>
@@ -316,7 +355,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
             </div>
           </div>
         </div>
-      </GenericModal>
+      </Modal>
 
       {/* 닫기 확인 모달 */}
       <AdminConfirmModal
@@ -334,10 +373,10 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       <AdminConfirmModal
         open={showCancelConfirm}
         title="편집 취소 확인"
-        contents="변경사항이 저장되지 않았습니다. 편집을 취소하시겠습니까?"
-        confirmText="취소하기"
+        contents="변경사항이 저장되지 않았습니다. 보기 모드로 돌아가시겠습니까?"
+        confirmText="돌아가기"
         cancelText="계속 편집"
-        variant="danger" // X 버튼 클릭 시 danger variant 적용
+        variant="warning"
         handleConfirm={handleCancelConfirm}
         onClose={() => setShowCancelConfirm(false)}
       />

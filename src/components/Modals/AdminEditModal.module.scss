@@ -5,22 +5,22 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  max-width: 600px;
-  max-height: 70vh;
-  min-height: 400px;
-  margin: 0 auto;
+  height: auto; // 자동 높이
+  min-height: 0; // 최소 높이 제거
+  // flex 아이템이 부모를 넘지 않도록
+  overflow: hidden;
 }
 
 // 로딩 오버레이 스타일 (누락된 클래스들)
 .loadingOverlay {
   position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgb(255 255 255 / 80%);
   border-radius: 6px;
   z-index: 1000;
+  inset: 0;
 }
 
 .loadingSpinner {
@@ -46,8 +46,12 @@
 
 .content {
   flex: 1;
-  padding: 24px;
-  overflow-y: auto;
+
+  // 스크롤 영역의 최대 높이를 화면 기준으로 동적 계산
+  max-height: calc(80vh - 200px); // 헤더+푸터+여백 제외
+  min-height: 0; // flex 아이템이 줄어들 수 있도록
+  padding: 16px 20px;
+  overflow: hidden auto;
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -71,33 +75,71 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 20px;
+  gap: 16px;
 }
 
 // Input 필드 기본 스타일 통일
 .fieldGroup {
+  position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 8px;
+  min-width: 0; // 플렉스 아이템이 부모를 넘지 않도록
+  padding: 10px; // 패딩 감소
+  border: 1px solid #e2e8f0;
+
+  // 읽기 전용 필드 스타일 (기본값)
+  background: #f8fafc;
+  border-radius: 6px; // 둥글기 감소
+  transition: all 0.2s ease;
+  gap: 6px; // 간격 감소
+
+  // 수정 가능한 필드 강조 표시
+  &.editable {
+    border: 2px solid #0ea5e9;
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    box-shadow: 0 1px 4px rgb(14 165 233 / 8%); // 그림자 감소
+
+    &::before {
+      position: absolute;
+      top: 6px; // 위치 조정
+      right: 10px;
+      font-size: 12px; // 크기 감소
+      opacity: 0.7;
+      content: '✏️';
+    }
+
+    // 수정 가능한 필드의 input/select 스타일
+    input:not(:disabled),
+    select:not(:disabled) {
+      border: 2px solid #0ea5e9;
+      font-weight: 500;
+      background: white;
+
+      &:focus {
+        border-color: #0284c7;
+        box-shadow: 0 0 0 3px rgb(2 132 199 / 15%); // 그림자 감소
+      }
+    }
+  }
 
   // 모든 input과 select의 기본 스타일 통일
   input,
   select {
-    width: 100% !important; // Input 컴포넌트의 고정 너비 오버라이드
-    height: 44px;
-    padding: 12px;
+    width: 100% !important;
+    height: 38px; // 높이 감소
+    padding: 8px 10px; // 패딩 감소
     border: 1px solid core.$admin-table-border;
     box-sizing: border-box;
-    font-size: 14px;
+    font-size: 13px; // 폰트 크기 감소
     color: core.$admin-table-text;
     background: white;
-    border-radius: 6px;
+    border-radius: 4px; // 둥글기 감소
     transition: all 0.2s ease;
 
     &:focus {
       border-color: core.$pagination-active-bg;
-      box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
+      box-shadow: 0 0 0 2px rgb(59 130 246 / 8%); // 그림자 감소
       outline: none;
     }
 
@@ -117,14 +159,23 @@
 }
 
 .label {
-  font-size: 14px;
+  font-size: 13px; // 폰트 크기 감소
   font-weight: 500;
+  line-height: 1.2; // 줄 높이 감소
   color: core.$admin-table-text;
   text-align: left;
 
   .required {
     margin-left: 4px;
     color: #ef4444;
+  }
+
+  .editableIndicator {
+    margin-left: 6px; // 간격 감소
+    font-size: 11px; // 폰트 크기 감소
+    font-weight: 400;
+    color: #0ea5e9;
+    font-style: italic;
   }
 }
 
@@ -193,34 +244,30 @@
   justify-content: space-between;
   width: 100%;
   margin-top: auto;
-  padding: 20px 24px;
+  padding: 16px 20px; // 패딩 감소
   box-sizing: border-box;
   border-top: 1px solid core.$admin-table-border;
 
   .leftActions {
     display: flex;
-    gap: 12px;
+    gap: 10px; // 간격 감소
   }
 
   .rightActions {
     display: flex;
-    gap: 12px;
+    gap: 10px; // 간격 감소
   }
 
-  // 편집 모드일 때만 버튼이 꽉 차도록
+  // 편집 모드일 때 버튼 배치 조정
   &.editMode {
     .leftActions {
-      display: none; // 편집 모드에서는 왼쪽 영역 숨김
+      display: flex; // 편집 모드에서는 뒤로가기 버튼 표시
     }
 
     .rightActions {
-      flex: 1;
+      display: flex;
 
       button {
-        flex: 1;
-        width: 100%;
-        max-width: 100%;
-
         // 비활성화 상태 스타일 강화
         &:disabled {
           border-color: #d1d5db !important;
@@ -252,25 +299,50 @@
 
 @media (width <= 768px) {
   .modalContent {
-    max-width: 95vw;
-    margin: 0;
+    height: auto;
+    max-height: none; // 모바일에서는 높이 제한 해제
   }
 
   .content {
-    padding: 16px;
+    max-height: calc(70vh - 150px); // 모바일에서 더 여유로운 공간
+    padding: 12px;
+  }
+
+  .form {
+    gap: 12px;
+  }
+
+  .fieldGroup {
+    padding: 8px;
+
+    input,
+    select {
+      height: 36px;
+      padding: 6px 8px;
+      font-size: 12px;
+    }
   }
 
   .footer {
     flex-direction: column;
     align-items: stretch;
-    padding: 16px;
-    gap: 12px;
+    padding: 12px;
+    flex-shrink: 0; // 모바일에서도 푸터 고정
+    gap: 10px;
 
     .leftActions,
     .rightActions {
       flex: none;
       justify-content: center;
       width: 100%;
+    }
+
+    // 모바일에서 편집 모드일 때도 세로 배열
+    &.editMode {
+      .leftActions,
+      .rightActions {
+        width: 100%;
+      }
     }
   }
 }
