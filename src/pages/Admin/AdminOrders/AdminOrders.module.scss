@@ -1,4 +1,103 @@
-.adminWrapper {
-  width: 100%;
-  height: 100%;
+@use '@/styles/core';
+
+.container {
+  max-width: 100%;
+  margin: 0;
+  padding: 24px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.detailButton,
+.editButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px;
+  height: 32px;
+  padding: 6px 12px;
+  border: none;
+  box-sizing: border-box;
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.detailButton {
+  color: white;
+  background: #10b981;
+
+  &:hover {
+    background: #059669;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(16 185 129 / 30%);
+    outline: none;
+  }
+}
+
+.editButton {
+  color: white;
+  background: #3b82f6;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 30%);
+    outline: none;
+  }
+}
+
+// 상태 배지 스타일
+.statusBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  height: 24px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.statusPending {
+  border: 1px solid #f3e8a8;
+  color: #d97706;
+  background: #fef3c7;
+}
+
+.statusPaid {
+  border: 1px solid #a7f3d0;
+  color: #059669;
+  background: #d1fae5;
+}
+
+.statusCancelled {
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  background: #fee2e2;
 }
