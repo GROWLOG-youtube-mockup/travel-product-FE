@@ -1,4 +1,5 @@
 import type { AdminLog } from './AdminLog.type';
+import type { AdminOrder, AdminOrderDetail } from './AdminOrder.type';
 import type { AdminUser } from './AdminUser.type';
 import type { Carts } from './Carts.type';
 import type { Orders } from './Orders.type';
@@ -8,7 +9,6 @@ import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
 import type { TripDto } from './Trip.type';
 import type { User } from './User.type';
-
 export type CartRes = ApiResponse<Carts[]>;
 export type ProductRes = ApiResponse<Product>;
 export type ProductDetailRes = ApiResponse<ProductDetail>;
@@ -42,6 +42,13 @@ export type AdminLogsRes = ApiResponse<PaginatedResponse<AdminLog>>;
 export type AdminUsersRes = ApiResponse<PaginatedResponse<AdminUser>>;
 export type UserUpdateRes = ApiResponse<{ updated_at: string; user_id: number }>;
 export type UserDeleteRes = ApiResponse<{ message: string }>;
+export type AdminOrdersRes = ApiResponse<PaginatedResponse<AdminOrder>>;
+export type AdminOrderDetailRes = ApiResponse<AdminOrderDetail>;
+export type AdminOrderUpdateRes = ApiResponse<{
+  updated_at: string;
+  status: string;
+  order_id: number;
+}>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -67,4 +74,6 @@ export interface EndpointResponseMap {
   '/admin/logs': AdminLogsRes;
   '/admin/users': AdminUsersRes;
   [k: `/admin/users/${string}`]: UserUpdateRes | UserDeleteRes;
+  '/admin/orders': AdminOrdersRes;
+  [k: `/admin/orders/${string}`]: AdminOrderDetailRes | AdminOrderUpdateRes;
 }

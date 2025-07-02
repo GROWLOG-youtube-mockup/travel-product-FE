@@ -95,5 +95,8 @@ export interface EndpointRequestMap {
     phoneNumber?: string;
     roleCode?: number;
   };
+  [k: `/admin/orders/${string}`]: {
+    status?: 'PENDING' | 'PAID' | 'CANCELLED';
+  };
   // 필요에 따라 추가 엔드포인트 정의
 }
