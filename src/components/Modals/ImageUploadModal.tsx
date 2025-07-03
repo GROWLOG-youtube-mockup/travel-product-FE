@@ -21,8 +21,8 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   onClose,
   onImageUploaded
 }) => {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [previews, setPreviews] = useState<string[]>([]);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string>('');
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,9 +31,9 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     onSuccess: (data: ImageUploadRes) => {
       toast.success('이미지가 성공적으로 업로드되었습니다.');
 
-      // ImageUploadRes는 string[] 타입
-      if (Array.isArray(data)) {
-        data.forEach((url) => onImageUploaded(url));
+      // ImageUploadRes는 string[] 타입이므로 첫 번째 URL 사용
+      if (Array.isArray(data) && data.length > 0) {
+        onImageUploaded(data[0]);
       }
 
       handleClose();
@@ -45,11 +45,10 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   });
 
   const handleClose = () => {
-    setSelectedFiles([]);
-    setPreviews([]);
+    setSelectedFile(null);
+    setPreview('');
     setIsDragOver(false);
 
-    // ref를 사용해서 파일 input 초기화
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -59,44 +58,35 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 
   const handleFileSelect = useCallback((files: FileList | File[]) => {
     const fileArray = Array.from(files);
-    const imageFiles = fileArray.filter((file) => file.type.startsWith('image/'));
+    const imageFile = fileArray.find((file) => file.type.startsWith('image/'));
 
-    if (imageFiles.length !== fileArray.length) {
+    if (!imageFile) {
       toast.error('이미지 파일만 업로드할 수 있습니다.');
+      return;
     }
 
-    if (imageFiles.length === 0) return;
-
     // 파일 크기 검사 (5MB 제한)
-    const oversizedFiles = imageFiles.filter((file) => file.size > 5 * 1024 * 1024);
-    if (oversizedFiles.length > 0) {
+    if (imageFile.size > 5 * 1024 * 1024) {
       toast.error('파일 크기는 5MB 이하로 제한됩니다.');
       return;
     }
 
-    setSelectedFiles(imageFiles);
+    setSelectedFile(imageFile);
 
     // 미리보기 생성
-    const newPreviews: string[] = [];
-    imageFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        if (e.target?.result) {
-          newPreviews.push(e.target.result as string);
-          if (newPreviews.length === imageFiles.length) {
-            setPreviews(newPreviews);
-          }
-        }
-      };
-      reader.readAsDataURL(file);
-    });
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setPreview(e.target.result as string);
+      }
+    };
+    reader.readAsDataURL(imageFile);
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      handleFileSelect(e.target.files);
+    if (e.target.files && e.target.files.length > 0) {
+      handleFileSelect([e.target.files[0]]); // 첫 번째 파일만 사용
     }
-    // 같은 파일을 다시 선택할 수 있도록 value 초기화
     e.target.value = '';
   };
 
@@ -114,38 +104,31 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     e.preventDefault();
     setIsDragOver(false);
 
-    if (e.dataTransfer.files) {
-      handleFileSelect(e.dataTransfer.files);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleFileSelect([e.dataTransfer.files[0]]); // 첫 번째 파일만 사용
     }
   };
 
   const handleUpload = async () => {
-    if (selectedFiles.length === 0) {
+    if (!selectedFile) {
       toast.error('업로드할 이미지를 선택해주세요.');
       return;
     }
 
     try {
-      // FormData 생성
       const formData = new FormData();
-      selectedFiles.forEach((file) => {
-        formData.append('files', file);
-      });
+      formData.append('files', selectedFile);
 
-      // API 호출 (FormData를 직접 전달)
       await uploadImageMutation.mutateAsync(formData as FormData);
     } catch (error) {
       console.error('업로드 실패:', error);
     }
   };
 
-  const removeFile = (index: number) => {
-    const newFiles = selectedFiles.filter((_, i) => i !== index);
-    const newPreviews = previews.filter((_, i) => i !== index);
-    setSelectedFiles(newFiles);
-    setPreviews(newPreviews);
+  const removeFile = () => {
+    setSelectedFile(null);
+    setPreview('');
 
-    // ref를 사용해서 파일 input 초기화
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
@@ -157,10 +140,8 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     <Modal
       onClose={handleClose}
       boxStyle={{
-        width: 700,
-        maxWidth: '95vw',
-        height: '85vh',
-        maxHeight: '85vh'
+        width: 500,
+        maxWidth: '90vw'
       }}
     >
       <ModalHeader title="이미지 업로드">
@@ -182,7 +163,6 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
             <input
               ref={fileInputRef}
               type="file"
-              multiple
               accept="image/*"
               onChange={handleInputChange}
               className={styles.fileInput}
@@ -194,33 +174,27 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
         </div>
 
         {/* 선택된 파일 미리보기 */}
-        {selectedFiles.length > 0 && (
+        {selectedFile && preview && (
           <div className={styles.previewSection}>
-            <h4>선택된 이미지 ({selectedFiles.length}개)</h4>
-            <div className={styles.previewGrid}>
-              {previews.map((preview, index) => (
-                <div key={index} className={styles.previewItem}>
-                  <img
-                    src={preview}
-                    alt={`미리보기 ${index + 1}`}
-                    className={styles.previewImage}
-                  />
-                  <div className={styles.fileInfo}>
-                    <span className={styles.fileName}>{selectedFiles[index]?.name}</span>
-                    <span className={styles.fileSize}>
-                      {(selectedFiles[index]?.size / 1024 / 1024).toFixed(2)} MB
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => removeFile(index)}
-                    className={styles.removeButton}
-                    disabled={uploadImageMutation.isPending}
-                  >
-                    ✕
-                  </button>
+            <h4>선택된 이미지</h4>
+            <div className={styles.singlePreview}>
+              <div className={styles.previewItem}>
+                <img src={preview} alt="미리보기" className={styles.previewImage} />
+                <div className={styles.fileInfo}>
+                  <span className={styles.fileName}>{selectedFile.name}</span>
+                  <span className={styles.fileSize}>
+                    {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                  </span>
                 </div>
-              ))}
+                <button
+                  type="button"
+                  onClick={removeFile}
+                  className={styles.removeButton}
+                  disabled={uploadImageMutation.isPending}
+                >
+                  ✕
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -233,9 +207,9 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
           <Button
             onClick={handleUpload}
             color="blue"
-            disabled={selectedFiles.length === 0 || uploadImageMutation.isPending}
+            disabled={!selectedFile || uploadImageMutation.isPending}
           >
-            {uploadImageMutation.isPending ? '업로드 중...' : `업로드 (${selectedFiles.length}개)`}
+            {uploadImageMutation.isPending ? '업로드 중...' : '업로드'}
           </Button>
         </div>
       </div>

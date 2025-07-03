@@ -4,12 +4,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
-  max-height: 90vh;
-  min-height: 500px;
   padding: 20px;
   gap: 20px;
-  overflow: hidden;
 }
 
 .dropZone {
@@ -17,11 +13,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  padding: 40px 20px;
+  min-height: 150px;
+  padding: 30px 20px;
   border: 2px dashed #d1d5db;
   background: #f9fafb;
-  border-radius: 12px;
+  border-radius: 8px;
   transition: all 0.3s ease;
   cursor: pointer;
 
@@ -47,20 +43,20 @@
 }
 
 .icon {
-  font-size: 48px;
+  font-size: 40px;
   opacity: 0.6;
 }
 
 .mainText {
   margin: 0;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 600;
   color: core.$admin-table-text;
 }
 
 .subText {
   margin: 0;
-  font-size: 14px;
+  font-size: 12px;
   color: core.$admin-table-text-secondary;
 }
 
@@ -80,51 +76,24 @@
 }
 
 .previewSection {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  min-height: 0;
-  overflow: hidden;
-
   h4 {
-    margin: 0 0 16px;
-    font-size: 16px;
+    margin: 0 0 12px;
+    font-size: 14px;
     font-weight: 600;
     color: core.$admin-table-header-text;
-    flex-shrink: 0;
   }
 }
 
-.previewGrid {
-  display: grid;
-  flex: 1;
-  padding-right: 8px;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: core.$pagination-bg;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: core.$admin-table-border;
-    border-radius: 3px;
-
-    &:hover {
-      background: core.$admin-table-text-secondary;
-    }
-  }
+.singlePreview {
+  display: flex;
+  justify-content: center;
 }
 
 .previewItem {
   position: relative;
   display: flex;
   flex-direction: column;
+  width: 200px;
   padding: 12px;
   border: 1px solid core.$admin-table-border;
   background: white;
@@ -154,6 +123,9 @@
   font-size: 12px;
   font-weight: 500;
   color: core.$admin-table-text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   word-break: break-all;
 }
 
@@ -197,7 +169,6 @@
   justify-content: flex-end;
   padding-top: 16px;
   border-top: 1px solid core.$admin-table-border;
-  flex-shrink: 0;
   gap: 12px;
 
   button {
@@ -211,31 +182,25 @@
 // 반응형 디자인
 @media (width <= 768px) {
   .modalContent {
-    min-height: 400px;
     padding: 16px;
     gap: 16px;
   }
 
   .dropZone {
-    min-height: 150px;
+    min-height: 120px;
     padding: 20px 16px;
   }
 
   .icon {
-    font-size: 36px;
+    font-size: 32px;
   }
 
   .mainText {
-    font-size: 14px;
-  }
-
-  .subText {
     font-size: 12px;
   }
 
-  .previewGrid {
-    gap: 12px;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  .subText {
+    font-size: 11px;
   }
 
   .previewImage {
