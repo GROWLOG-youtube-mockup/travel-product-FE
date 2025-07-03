@@ -91,6 +91,30 @@
   }
 }
 
+// 도움말 텍스트
+.helpText {
+  margin-top: 16px;
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  border-radius: 6px;
+
+  p {
+    margin: 0;
+    font-size: 12px;
+    line-height: 1.4;
+    color: core.$admin-table-text-secondary;
+  }
+}
+
+// 필수 표시
+.requiredIndicator {
+  margin-left: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: #ef4444;
+}
+
 // 섹션 헤더 (제목 + 버튼)
 .sectionHeader {
   display: flex;
@@ -252,6 +276,12 @@
   border: 1px solid #e5e7eb;
   background: #f9fafb;
   border-radius: 6px;
+
+  // 필수 섹션 강조
+  &:has(.requiredIndicator) {
+    border-color: #fbbf24;
+    background: #fefbf2;
+  }
 }
 
 .groupHeader {
@@ -520,20 +550,6 @@
   background: core.$pagination-bg;
   border-top: 1px solid core.$admin-table-border;
   gap: 12px;
-}
-
-.sectionTitleInput {
-  width: 100%;
-  padding: 8px 12px;
-  border: 1px solid core.$admin-table-border;
-  font-size: 14px;
-  border-radius: 4px;
-
-  &:focus {
-    border-color: core.$pagination-active-bg;
-    box-shadow: 0 0 0 2px rgb(59 130 246 / 10%);
-    outline: none;
-  }
 }
 
 .footer {
