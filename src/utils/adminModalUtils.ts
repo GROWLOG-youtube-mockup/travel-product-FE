@@ -111,7 +111,7 @@ export const createUserEditFields = (
       label: '이메일',
       type: 'email',
       value: user.email,
-      required: false, // disabled 필드는 필수 아님으로 변경
+      required: true, // 이메일은 필수로 변경
       placeholder: 'example@email.com',
       validation: validateEmail,
       disabled: false
@@ -144,7 +144,7 @@ export const createUserEditFields = (
       label: '권한',
       type: 'select',
       value: user.roleCode,
-      required: false, // 필수 아님으로 변경
+      required: true, // 수정 가능하므로 필수
       disabled: false,
       options: [
         { value: 0, label: '일반 사용자' },
@@ -153,13 +153,14 @@ export const createUserEditFields = (
       ]
     });
   } else {
-    // 일반 관리자는 roleCode 조회만 가능
+    // 일반 관리자는 roleCode 조회만 가능 - disabled이므로 required false
     fields.splice(-1, 0, {
       key: 'roleCode',
       label: '권한',
       type: 'text',
       value: getRoleText(user.roleCode),
-      disabled: true
+      disabled: true, // 조회만 가능
+      required: false // disabled 필드는 절대 필수 아님
     });
   }
 

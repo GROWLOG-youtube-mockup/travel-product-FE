@@ -69,7 +69,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 데이터 변경 감지
   useEffect(() => {
-    if (fields.length === 0 || Object.keys(formData).length === 0) {
+    if (fields.length === 0 || Object.keys(formData).length === 0 || !isEditing) {
       setHasChanges(false);
       return;
     }
@@ -78,15 +78,40 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       const currentValue = formData[field.key];
       const originalValue = field.value;
 
-      // 타입 통일하여 비교 (문자열로 변환)
-      const currentStr = String(currentValue ?? '');
-      const originalStr = String(originalValue ?? '');
+      // disabled 필드는 변경사항 검사에서 제외
+      if (field.disabled) {
+        return false;
+      }
 
-      return currentStr !== originalStr;
+      // 값이 둘 다 undefined/null인 경우 변경사항 없음
+      if (
+        (currentValue == null || currentValue === '') &&
+        (originalValue == null || originalValue === '')
+      ) {
+        return false;
+      }
+
+      // 타입별로 정확한 비교 수행
+      if (field.type === 'number') {
+        // 숫자형 필드는 숫자로 변환해서 비교
+        const currentNum = Number(currentValue ?? 0);
+        const originalNum = Number(originalValue ?? 0);
+        return currentNum !== originalNum;
+      } else if (field.type === 'select') {
+        // select 필드는 문자열로 엄격하게 비교
+        const currentStr = String(currentValue ?? '');
+        const originalStr = String(originalValue ?? '');
+        return currentStr !== originalStr;
+      } else {
+        // 일반 문자열 필드는 trim 후 비교
+        const currentStr = String(currentValue ?? '').trim();
+        const originalStr = String(originalValue ?? '').trim();
+        return currentStr !== originalStr;
+      }
     });
 
     setHasChanges(hasAnyChanges);
-  }, [formData, fields]);
+  }, [formData, fields, isEditing]); // isEditing을 의존성에 추가
 
   // 모달 닫기
   const handleClose = () => {
@@ -108,15 +133,16 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       [key]: value
     }));
 
-    // 실시간 유효성 검사
+    // 실시간 유효성 검사 (편집 모드이고 disabled가 아닌 필드만)
     const field = fields.find((f) => f.key === key);
-    if (field?.validation) {
+    if (field && !field.disabled && field.validation) {
       const error = field.validation(value);
       setErrors((prev) => ({
         ...prev,
         [key]: error || ''
       }));
     } else {
+      // 에러 제거 (disabled 필드이거나 validation이 없는 경우)
       setErrors((prev) => {
         const newErrors = { ...prev };
         delete newErrors[key];
@@ -130,8 +156,16 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     const newEditingState = !isEditing;
     setIsEditing(newEditingState);
     if (!newEditingState) {
+      // 편집 모드 종료 시 모든 에러와 변경사항 초기화
       setErrors({});
-      setHasChanges(false); // 편집 모드 종료 시 변경사항도 초기화
+      setHasChanges(false);
+
+      // 원래 데이터로 복원
+      const originalData: Record<string, string | number> = {};
+      fields.forEach((field) => {
+        originalData[field.key] = field.value;
+      });
+      setFormData(originalData);
     }
   };
 
@@ -147,6 +181,11 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 저장
   const handleSave = async () => {
+    // 편집 모드가 아니면 저장하지 않음
+    if (!isEditing) {
+      return;
+    }
+
     // 유효성 검사
     const newErrors: Record<string, string> = {};
     let hasValidationErrors = false;
@@ -154,17 +193,33 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
     fields.forEach((field) => {
       const value = formData[field.key];
 
-      // disabled 필드는 유효성 검사에서 제외
+      // disabled 필드는 유효성 검사에서 완전히 제외
       if (field.disabled) {
         return;
       }
 
-      if (field.required && (!value || (typeof value === 'string' && value.trim() === ''))) {
-        newErrors[field.key] = `${field.label}은(는) 필수 입력 항목입니다.`;
-        hasValidationErrors = true;
+      // 수정 가능한 필드 중에서만 required 검사
+      if (field.required && !field.disabled) {
+        // 값이 없거나 빈 문자열인 경우
+        if (
+          value === null ||
+          value === undefined ||
+          (typeof value === 'string' && value.trim() === '') ||
+          (typeof value === 'number' && isNaN(value))
+        ) {
+          newErrors[field.key] = `${field.label}은(는) 필수 입력 항목입니다.`;
+          hasValidationErrors = true;
+        }
       }
 
-      if (field.validation && value) {
+      // validation 함수가 있는 경우 (disabled가 아니고 값이 있는 경우만)
+      if (
+        field.validation &&
+        !field.disabled &&
+        value !== null &&
+        value !== undefined &&
+        value !== ''
+      ) {
         const error = field.validation(value);
         if (error) {
           newErrors[field.key] = error;
@@ -183,8 +238,29 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
       // 변경된 데이터만 추출
       const changedData: Record<string, string | number> = {};
       fields.forEach((field) => {
-        if (formData[field.key] !== field.value && !field.disabled) {
-          changedData[field.key] = formData[field.key];
+        // disabled 필드가 아니고 값이 변경된 경우만 추가
+        if (!field.disabled) {
+          const currentValue = formData[field.key];
+          const originalValue = field.value;
+
+          // 타입별로 정확한 비교
+          let hasChanged = false;
+
+          // 값이 둘 다 undefined/null/빈 문자열인 경우 변경사항 없음
+          if (
+            (currentValue == null || currentValue === '') &&
+            (originalValue == null || originalValue === '')
+          ) {
+            hasChanged = false;
+          } else if (field.type === 'select' || field.type === 'number') {
+            hasChanged = Number(currentValue ?? 0) !== Number(originalValue ?? 0);
+          } else {
+            hasChanged = String(currentValue ?? '').trim() !== String(originalValue ?? '').trim();
+          }
+
+          if (hasChanged) {
+            changedData[field.key] = currentValue;
+          }
         }
       });
 
@@ -227,13 +303,36 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
 
   // 필드 렌더링
   const renderField = (field: EditField) => {
-    const value = formData[field.key] || '';
-    const originalValue = field.value ?? '';
+    const value = formData[field.key];
+    const originalValue = field.value;
     const error = errors[field.key];
     const isFieldDisabled = field.disabled || !isEditing;
     const isEditable = !field.disabled && isEditing;
 
-    const isModified = isEditing && String(value) !== String(originalValue) && !isFieldDisabled;
+    // 수정 가능한 필드에서 실제 변경이 일어났는지 확인 (편집 모드일 때만)
+    let isModified = false;
+    if (isEditable && isEditing && !field.disabled) {
+      // 값이 둘 다 undefined/null/빈 문자열인 경우 변경사항 없음
+      if ((value == null || value === '') && (originalValue == null || originalValue === '')) {
+        isModified = false;
+      } else if (field.type === 'number') {
+        // 숫자형 필드는 숫자로 변환해서 비교
+        const currentNum = Number(value ?? 0);
+        const originalNum = Number(originalValue ?? 0);
+        isModified = currentNum !== originalNum;
+      } else if (field.type === 'select') {
+        // select 필드는 문자열로 엄격하게 비교
+        const currentStr = String(value ?? '');
+        const originalStr = String(originalValue ?? '');
+        isModified = currentStr !== originalStr;
+      } else {
+        // 일반 문자열 필드는 trim 후 비교
+        const currentStr = String(value ?? '').trim();
+        const originalStr = String(originalValue ?? '').trim();
+        isModified = currentStr !== originalStr;
+      }
+    }
+
     // 필드 그룹의 클래스명 결정
     const fieldGroupClass = [
       styles.fieldGroup,
@@ -252,7 +351,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
             {isEditable && <span className={styles.editableIndicator}> (수정 가능)</span>}
           </label>
           <select
-            value={value}
+            value={value ?? ''}
             onChange={(e) => {
               handleInputChange(field.key, e.target.value);
             }}
@@ -279,7 +378,7 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
         </label>
         <Input
           type={field.type}
-          value={String(value)}
+          value={String(value ?? '')}
           onChange={(e) =>
             handleInputChange(
               field.key,
