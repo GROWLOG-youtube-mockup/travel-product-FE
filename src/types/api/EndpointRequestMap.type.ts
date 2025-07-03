@@ -88,5 +88,11 @@ export interface EndpointRequestMap {
   '/users/me/phone': {
     phoneNumber: string;
   };
+  [k: `/admin/users/${string}`]: {
+    name?: string;
+    email?: string;
+    phoneNumber?: string;
+    roleCode?: number;
+  };
   // 필요에 따라 추가 엔드포인트 정의
 }

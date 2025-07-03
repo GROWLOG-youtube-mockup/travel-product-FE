@@ -107,6 +107,25 @@
   }
 }
 
+.tableScrollWrapper {
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  overflow-x: auto;
+
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgb(0 0 0 / 15%);
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
+
 .table {
   width: 100%;
   min-width: 800px; // 최소 너비 강제 설정

@@ -32,6 +32,7 @@ export const handleApiError = (
   let message = options?.defaultMessage || '알 수 없는 오류가 발생했습니다.';
   let code: string | undefined;
 
+  //  axios 에러인 경우
   if (axios.isAxiosError(error)) {
     const resData = error.response?.data as ApiErrorResponse;
     status = error.response?.status || 500;
@@ -39,7 +40,12 @@ export const handleApiError = (
     code = resData?.error?.code;
   }
 
-  // toast 표시 옵션이 true면 toast로 처리
+  //  일반 JS Error 인 경우
+  else if (error instanceof Error && error.message) {
+    message = error.message;
+  }
+
+  //  옵션이 useToast: true일 경우 → toast 처리 후 종료
   if (options?.useToast) {
     toast.error(message);
     return;

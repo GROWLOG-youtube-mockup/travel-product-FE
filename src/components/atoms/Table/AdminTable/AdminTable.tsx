@@ -320,40 +320,42 @@ function AdminTable<T extends Record<string, unknown>>({
         </div>
       )}
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            {processedColumns.map((column) => (
-              <th
-                key={column.key}
-                className={column.align ? styles[column.align] : ''}
-                style={{ width: column.width }}
-              >
-                {column.label}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {data.length === 0 ? (
+      <div className={styles.tableScrollWrapper}>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td colSpan={processedColumns.length} className={styles.empty}>
-                {emptyMessage}
-              </td>
+              {processedColumns.map((column) => (
+                <th
+                  key={column.key}
+                  className={column.align ? styles[column.align] : ''}
+                  style={{ width: column.width }}
+                >
+                  {column.label}
+                </th>
+              ))}
             </tr>
-          ) : (
-            data.map((row, index) => (
-              <tr key={index}>
-                {processedColumns.map((column) => (
-                  <td key={column.key} className={column.align ? styles[column.align] : ''}>
-                    {renderCell(column, row)}
-                  </td>
-                ))}
+          </thead>
+          <tbody>
+            {data.length === 0 ? (
+              <tr>
+                <td colSpan={processedColumns.length} className={styles.empty}>
+                  {emptyMessage}
+                </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+            ) : (
+              data.map((row, index) => (
+                <tr key={index}>
+                  {processedColumns.map((column) => (
+                    <td key={column.key} className={column.align ? styles[column.align] : ''}>
+                      {renderCell(column, row)}
+                    </td>
+                  ))}
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
 
       {showPagination && (
         <div className={styles.paginationContainer}>

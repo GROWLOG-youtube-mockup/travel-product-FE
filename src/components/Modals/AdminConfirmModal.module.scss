@@ -1,0 +1,41 @@
+// AdminConfirmModal 전용 스타일
+// variant별 확인 버튼 색상 오버라이드
+
+.confirm-danger {
+  color: white !important;
+  background-color: #dc2626 !important;
+
+  &:hover:not(:disabled) {
+    background-color: #b91c1c !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(220 38 38 / 30%) !important;
+  }
+}
+
+.confirm-warning {
+  color: white !important;
+  background-color: #d97706 !important;
+
+  &:hover:not(:disabled) {
+    background-color: #b45309 !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(217 119 6 / 30%) !important;
+  }
+}
+
+.confirm-info {
+  color: white !important;
+  background-color: #2563eb !important;
+
+  &:hover:not(:disabled) {
+    background-color: #1d4ed8 !important;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(37 99 235 / 30%) !important;
+  }
+}

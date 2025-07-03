@@ -1,4 +1,5 @@
 import type { AdminLog } from './AdminLog.type';
+import type { AdminUser } from './AdminUser.type';
 import type { Carts } from './Carts.type';
 import type { Orders } from './Orders.type';
 import type { PaginatedResponse } from './Pagination.type';
@@ -30,6 +31,9 @@ export type PasswordChangeRes = ApiResponse<string>;
 export type NameChangeRes = ApiResponse<string>;
 export type TripsRes = ApiResponse<Trip[]>;
 export type AdminLogsRes = ApiResponse<PaginatedResponse<AdminLog>>;
+export type AdminUsersRes = ApiResponse<PaginatedResponse<AdminUser>>;
+export type UserUpdateRes = ApiResponse<{ updated_at: string; user_id: number }>;
+export type UserDeleteRes = ApiResponse<{ message: string }>;
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -50,4 +54,6 @@ export interface EndpointResponseMap {
   '/auth/find-email': FindEmailRes;
   '/auth/reset-password': ResetPasswordRes;
   '/admin/logs': AdminLogsRes;
+  '/admin/users': AdminUsersRes;
+  [k: `/admin/users/${string}`]: UserUpdateRes | UserDeleteRes;
 }

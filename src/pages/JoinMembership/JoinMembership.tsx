@@ -1,10 +1,12 @@
+import toast from 'react-hot-toast';
 import { Link, useNavigate } from 'react-router-dom';
 
+import SignupForm from '@/components/SignupForm/SignupForm';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import type { UserRes } from '@/types/api/EndpointResponseMap.type';
 
-import SignupForm from '../../components/SignupForm/SignupForm';
 import type { SignupValues } from '../../types/signupForm.types';
 
 import styles from './JoinMembership.module.scss';
@@ -35,28 +37,22 @@ const JoinMembershipPage = () => {
         email: form.email,
         password: form.password
       });
-      if ('data' in loginRes && loginRes.data) {
-        const { accessToken, name, userId, roleCode } = loginRes.data as {
-          accessToken?: string;
-          name?: string;
-          userId?: number;
-          roleCode?: number;
-        };
-        if (accessToken && name && userId != null && roleCode != null) {
-          login(accessToken, name, userId, roleCode);
-        }
+
+      // 로그인 응답 구조 분해 및 검증
+      const { accessToken, name, userId, roleCode } = loginRes.data ?? {};
+
+      if (!accessToken || !name || userId == null || roleCode == null) {
+        throw new Error('로그인에 실패했습니다.');
       }
-      alert('회원가입이 완료되었습니다!');
+
+      login(accessToken, name, userId, roleCode);
+      toast.success('회원가입이 완료되었습니다!');
       navigate('/');
-    } catch (e) {
-      let message = '회원가입에 실패했습니다.';
-      if (typeof e === 'object' && e !== null) {
-        const err = e as { response?: { data?: { error?: { message?: string } } } };
-        if (err.response?.data?.error?.message) {
-          message = err.response.data.error.message;
-        }
-      }
-      alert(`** 오류 : ${message} **`);
+    } catch (error: unknown) {
+      handleApiError(error, navigate, location.pathname, {
+        useToast: true,
+        defaultMessage: '회원가입에 실패했습니다.'
+      });
     }
   };
 

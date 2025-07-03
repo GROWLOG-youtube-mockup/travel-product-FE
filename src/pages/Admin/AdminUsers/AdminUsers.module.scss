@@ -1,4 +1,83 @@
-.adminWrapper {
-  width: 100%;
-  height: 100%;
+@use '@/styles/core';
+
+.container {
+  max-width: 100%;
+  margin: 0;
+  padding: 24px;
+}
+
+.actionButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.editButton,
+.deleteButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px; /* 고정 너비 설정 */
+  height: 32px; /* 고정 높이 설정 */
+  padding: 6px 12px;
+  border: none;
+  box-sizing: border-box; /* 패딩 포함한 크기 계산 */
+  font-size: 12px;
+  font-weight: 500;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  white-space: nowrap;
+
+  &:hover {
+    box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.editButton {
+  color: white;
+  background: #3b82f6;
+
+  &:hover {
+    background: #2563eb;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 30%);
+    outline: none;
+  }
+}
+
+.deleteButton {
+  color: white;
+  background: #ef4444;
+
+  &:hover {
+    background: #dc2626;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(239 68 68 / 30%);
+    outline: none;
+  }
+}
+
+.noActionText {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 70px; /* 버튼과 동일한 너비 */
+  height: 32px; /* 버튼과 동일한 높이 */
+  padding: 6px 12px;
+  box-sizing: border-box;
+  font-size: 12px;
+  color: #6b7280;
+  font-style: italic;
 }
