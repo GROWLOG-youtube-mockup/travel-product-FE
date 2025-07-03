@@ -27,6 +27,17 @@
   background: core.$admin-table-bg;
   border-bottom: 1px solid core.$admin-table-border;
 
+  .headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+  }
+
   h1 {
     margin: 0;
     font-size: 28px;
@@ -38,6 +49,36 @@
     font-size: 16px;
     font-weight: 500;
     color: core.$admin-table-text-secondary;
+  }
+
+  .addButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: core.$button-primary-bg;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: core.$button-primary-hover;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 20%);
+      outline: none;
+    }
   }
 }
 

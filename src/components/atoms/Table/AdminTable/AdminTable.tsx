@@ -27,7 +27,12 @@ function AdminTable<T extends Record<string, unknown>>({
   onRetry,
   errorMessage = '데이터를 불러오는 중 오류가 발생했습니다.',
   title,
-  summary
+  summary,
+
+  // 추가 버튼 기능
+  showAddButton = false,
+  addButtonText = '추가',
+  onAddClick
 }: ExtendedAdminTableProps<T>) {
   const [pageSize, setPageSize] = useState(currentPageSize || pageSizeOptions[1] || 10);
   const [isCustomInput, setIsCustomInput] = useState(false);
@@ -266,10 +271,19 @@ function AdminTable<T extends Record<string, unknown>>({
   return (
     <div className={`${styles.tableContainer} ${fullWidth ? styles.fullWidth : ''} ${className}`}>
       {/* 헤더 영역 */}
-      {(title || summary) && (
+      {(title || summary || showAddButton) && (
         <div className={styles.header}>
-          {title && <h1>{title}</h1>}
-          {summary && <div className={styles.summary}>{summary}</div>}
+          <div className={styles.headerLeft}>
+            {title && <h1>{title}</h1>}
+            {summary && <div className={styles.summary}>{summary}</div>}
+          </div>
+          {showAddButton && onAddClick && (
+            <div className={styles.headerRight}>
+              <button onClick={onAddClick} className={styles.addButton}>
+                + {addButtonText}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
