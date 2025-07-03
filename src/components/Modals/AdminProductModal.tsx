@@ -81,7 +81,7 @@ const INITIAL_FORM_DATA: FormData = {
       items: [{ content: '', sortOrder: 1 }]
     }
   ],
-  tags: [] // 빈 배열로 시작
+  tags: []
 };
 
 const AdminProductModal: React.FC<AdminProductModalProps> = ({
@@ -98,6 +98,9 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasChanges, setHasChanges] = useState(false);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [showNewSectionModal, setShowNewSectionModal] = useState(false);
+  const [newSectionTitle, setNewSectionTitle] = useState('');
+  const [newSectionError, setNewSectionError] = useState('');
 
   // 초기 데이터 설정
   useEffect(() => {
@@ -165,27 +168,27 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   }, [formData, mode, productDetail]);
 
   // 기본 필드 변경 핸들러
-  const handleFieldChange = (field: keyof FormData, value: any) => {
+  const handleFieldChange = (field: keyof FormData, value: string | number | string[]) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     // 실시간 유효성 검사
     let error = '';
     switch (field) {
       case 'name':
-        error = validateProductName(value) || '';
+        error = validateProductName(value as string) || '';
         break;
       case 'price':
-        error = validatePrice(value) || '';
+        error = validatePrice(value as number) || '';
         break;
       case 'totalQuantity':
       case 'stockQuantity':
-        error = validateQuantity(value) || '';
+        error = validateQuantity(value as number) || '';
         break;
       case 'duration':
-        error = validateDuration(value) || '';
+        error = validateDuration(value as number) || '';
         break;
       case 'description':
-        error = validateDescription(value) || '';
+        error = validateDescription(value as string) || '';
         break;
     }
 
@@ -196,27 +199,36 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   const handleDescriptionItemChange = (groupIndex: number, itemIndex: number, content: string) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
-      newGroups[groupIndex].items[itemIndex].content = content;
+      if (newGroups[groupIndex] && newGroups[groupIndex].items[itemIndex]) {
+        newGroups[groupIndex].items[itemIndex].content = content;
+      }
       return { ...prev, descriptionGroups: newGroups };
     });
   };
 
-  // 설명 그룹 항목 추가
+  // 설명 그룹 항목 추가 (확실한 메커니즘)
   const addDescriptionItem = (groupIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
-      const newSortOrder = newGroups[groupIndex].items.length + 1;
-      newGroups[groupIndex].items.push({ content: '', sortOrder: newSortOrder });
+      if (newGroups[groupIndex]) {
+        const currentItems = newGroups[groupIndex].items;
+        const newSortOrder = currentItems.length + 1;
+        newGroups[groupIndex].items = [...currentItems, { content: '', sortOrder: newSortOrder }];
+      }
       return { ...prev, descriptionGroups: newGroups };
     });
   };
 
-  // 설명 그룹 항목 제거
+  // 설명 그룹 항목 제거 (확실한 메커니즘)
   const removeDescriptionItem = (groupIndex: number, itemIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
-      if (newGroups[groupIndex].items.length > 1) {
-        newGroups[groupIndex].items.splice(itemIndex, 1);
+      if (newGroups[groupIndex] && newGroups[groupIndex].items.length > 1) {
+        // 배열에서 해당 인덱스 제거
+        newGroups[groupIndex].items = newGroups[groupIndex].items.filter(
+          (_, index) => index !== itemIndex
+        );
+
         // sortOrder 재정렬
         newGroups[groupIndex].items.forEach((item, idx) => {
           item.sortOrder = idx + 1;
@@ -226,13 +238,90 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 태그 변경
-  const handleTagChange = (index: number, content: string) => {
+  // 새 섹션 추가
+  const addNewSection = () => {
+    if (!newSectionTitle.trim()) {
+      setNewSectionError('섹션 이름을 입력해주세요.');
+      return;
+    }
+
+    // 중복 체크
+    const isDuplicate = formData.descriptionGroups.some(
+      (group) => group.title.toLowerCase() === newSectionTitle.trim().toLowerCase()
+    );
+
+    if (isDuplicate) {
+      setNewSectionError('이미 존재하는 섹션명입니다.');
+      return;
+    }
+
     setFormData((prev) => {
-      const newTags = [...prev.tags];
-      newTags[index].content = content;
-      return { ...prev, tags: newTags };
+      const newSortOrder = prev.descriptionGroups.length + 1;
+      const newGroup: DescriptionGroup = {
+        title: newSectionTitle.trim(),
+        type: 2, // 기타 타입
+        sortOrder: newSortOrder,
+        items: [{ content: '', sortOrder: 1 }]
+      };
+
+      return {
+        ...prev,
+        descriptionGroups: [...prev.descriptionGroups, newGroup]
+      };
     });
+
+    setNewSectionTitle('');
+    setNewSectionError('');
+    setShowNewSectionModal(false);
+    toast.success('새 섹션이 추가되었습니다.');
+  };
+
+  // 새 섹션 모달 관련 핸들러
+  const handleNewSectionModalConfirm = (isConfirm: boolean) => {
+    if (isConfirm) {
+      addNewSection();
+    } else {
+      setShowNewSectionModal(false);
+      setNewSectionTitle('');
+      setNewSectionError('');
+    }
+  };
+
+  const handleNewSectionModalClose = () => {
+    setShowNewSectionModal(false);
+    setNewSectionTitle('');
+    setNewSectionError('');
+  };
+
+  const handleNewSectionTitleChange = (value: string) => {
+    setNewSectionTitle(value);
+    if (newSectionError) {
+      setNewSectionError('');
+    }
+  };
+
+  // 섹션 삭제
+  const removeSection = (groupIndex: number) => {
+    const group = formData.descriptionGroups[groupIndex];
+
+    // 기본 섹션(포함사항, 불포함사항)은 삭제 불가
+    if (group && (group.type === 0 || group.type === 1)) {
+      toast.error('기본 섹션은 삭제할 수 없습니다.');
+      return;
+    }
+
+    setFormData((prev) => {
+      const newGroups = prev.descriptionGroups.filter((_, index) => index !== groupIndex);
+
+      // sortOrder 재정렬
+      newGroups.forEach((group, idx) => {
+        group.sortOrder = idx + 1;
+      });
+
+      return { ...prev, descriptionGroups: newGroups };
+    });
+
+    toast.success('섹션이 삭제되었습니다.');
   };
 
   // 태그 추가
@@ -252,15 +341,16 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 태그 제거
+  // 태그 제거 (확실한 메커니즘)
   const removeTag = (index: number) => {
     setFormData((prev) => {
-      const newTags = [...prev.tags];
-      newTags.splice(index, 1);
+      const newTags = prev.tags.filter((_, idx) => idx !== index);
+
       // sortOrder 재정렬
       newTags.forEach((tag, idx) => {
         tag.sortOrder = idx + 1;
       });
+
       return { ...prev, tags: newTags };
     });
   };
@@ -282,13 +372,12 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     }));
   };
 
-  // 이미지 URL 제거
+  // 이미지 URL 제거 (확실한 메커니즘)
   const removeImageUrl = (index: number) => {
-    setFormData((prev) => {
-      const newUrls = [...prev.imageUrls];
-      newUrls.splice(index, 1);
-      return { ...prev, imageUrls: newUrls };
-    });
+    setFormData((prev) => ({
+      ...prev,
+      imageUrls: prev.imageUrls.filter((_, idx) => idx !== index)
+    }));
   };
 
   // 유효성 검사
@@ -571,68 +660,99 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
             {/* 이미지 URL 섹션 */}
             <section className={styles.section}>
               <h3>이미지 URL</h3>
-              {formData.imageUrls.map((url, index) => (
-                <div key={index} className={styles.listItem}>
-                  <Input
-                    type="url"
-                    value={url}
-                    onChange={(e) => handleImageUrlChange(index, e.target.value)}
-                    placeholder="이미지 URL을 입력하세요"
-                    className={styles.flexInput}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeImageUrl(index)}
-                    className={styles.removeButton}
-                  >
-                    삭제
-                  </button>
-                </div>
-              ))}
-              <button type="button" onClick={addImageUrl} className={styles.addButton}>
-                + 이미지 URL 추가
-              </button>
+              <div className={styles.listContainer}>
+                {formData.imageUrls.map((url, index) => (
+                  <div key={index} className={styles.listItem}>
+                    <Input
+                      type="url"
+                      value={url}
+                      onChange={(e) => handleImageUrlChange(index, e.target.value)}
+                      placeholder="이미지 URL을 입력하세요"
+                      className={styles.flexInput}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeImageUrl(index)}
+                      className={styles.removeButton}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                ))}
+                <button type="button" onClick={addImageUrl} className={styles.addButton}>
+                  + 이미지 URL 추가
+                </button>
+              </div>
             </section>
 
             {/* 설명 그룹 섹션 */}
             <section className={styles.section}>
-              <h3>상품 상세 정보</h3>
-              {formData.descriptionGroups.map((group, groupIndex) => (
-                <div key={groupIndex} className={styles.descriptionGroup}>
-                  <h4>{group.title}</h4>
-                  {group.items.map((item, itemIndex) => (
-                    <div key={itemIndex} className={styles.listItem}>
-                      <Input
-                        type="text"
-                        value={item.content}
-                        onChange={(e) =>
-                          handleDescriptionItemChange(groupIndex, itemIndex, e.target.value)
-                        }
-                        placeholder={`${group.title} 항목을 입력하세요`}
-                        className={styles.flexInput}
-                      />
+              <div className={styles.sectionHeader}>
+                <h3>상품 상세 정보</h3>
+                <button
+                  type="button"
+                  onClick={() => setShowNewSectionModal(true)}
+                  className={styles.addSectionButton}
+                >
+                  + 섹션 추가
+                </button>
+              </div>
+
+              <div className={styles.groupsContainer}>
+                {formData.descriptionGroups.map((group, groupIndex) => (
+                  <div key={groupIndex} className={styles.descriptionGroup}>
+                    <div className={styles.groupHeader}>
+                      <h4>{group.title}</h4>
+                      {group.type === 2 && (
+                        <button
+                          type="button"
+                          onClick={() => removeSection(groupIndex)}
+                          className={styles.removeSectionButton}
+                        >
+                          섹션 삭제
+                        </button>
+                      )}
+                    </div>
+
+                    <div className={styles.itemsContainer}>
+                      {group.items.map((item, itemIndex) => (
+                        <div key={itemIndex} className={styles.listItem}>
+                          <Input
+                            type="text"
+                            value={item.content}
+                            onChange={(e) =>
+                              handleDescriptionItemChange(groupIndex, itemIndex, e.target.value)
+                            }
+                            placeholder={`${group.title} 항목을 입력하세요`}
+                            className={styles.flexInput}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => removeDescriptionItem(groupIndex, itemIndex)}
+                            className={styles.removeButton}
+                            disabled={group.items.length === 1}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      ))}
                       <button
                         type="button"
-                        onClick={() => removeDescriptionItem(groupIndex, itemIndex)}
-                        className={styles.removeButton}
-                        disabled={group.items.length === 1}
+                        onClick={() => addDescriptionItem(groupIndex)}
+                        className={styles.addButton}
                       >
-                        삭제
+                        + {group.title} 항목 추가
                       </button>
                     </div>
-                  ))}
-                  <button
-                    type="button"
-                    onClick={() => addDescriptionItem(groupIndex)}
-                    className={styles.addButton}
-                  >
-                    + {group.title} 추가
-                  </button>
-                  {errors[`descGroup_${groupIndex}`] && (
-                    <span className={styles.errorMessage}>{errors[`descGroup_${groupIndex}`]}</span>
-                  )}
-                </div>
-              ))}
+
+                    {errors[`descGroup_${groupIndex}`] && (
+                      <span className={styles.errorMessage}>
+                        {errors[`descGroup_${groupIndex}`]}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </section>
 
             {/* 태그 섹션 */}
@@ -698,6 +818,45 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
           </div>
         </div>
       </Modal>
+
+      {/* 섹션 추가 모달 */}
+      {showNewSectionModal && (
+        <Modal
+          onClose={handleNewSectionModalClose}
+          boxStyle={{
+            width: 400,
+            maxWidth: '90vw'
+          }}
+        >
+          <ModalHeader title="새 섹션 추가">
+            <ModalCloseButton onClick={handleNewSectionModalClose} />
+          </ModalHeader>
+          <div className={styles.newSectionModal}>
+            <div className={styles.modalBody}>
+              <div className={styles.fieldGroup}>
+                <label htmlFor="sectionTitle">섹션 이름</label>
+                <Input
+                  id="sectionTitle"
+                  type="text"
+                  value={newSectionTitle}
+                  onChange={(e) => handleNewSectionTitleChange(e.target.value)}
+                  placeholder="섹션 이름을 입력하세요"
+                  className={newSectionError ? styles.error : ''}
+                />
+                {newSectionError && <span className={styles.errorMessage}>{newSectionError}</span>}
+              </div>
+            </div>
+            <div className={styles.modalFooter}>
+              <Button onClick={handleNewSectionModalClose} color="white">
+                취소
+              </Button>
+              <Button onClick={() => handleNewSectionModalConfirm(true)} color="blue">
+                추가
+              </Button>
+            </div>
+          </div>
+        </Modal>
+      )}
 
       {/* 닫기 확인 모달 */}
       <AdminConfirmModal
