@@ -14,6 +14,7 @@ export interface TripDto {
 
 // FE에서 사용하는 Trip 타입 (실제 사용 구조, 스네이크케이스)
 export interface Trip {
+  orderItemId: number;
   productId: number;
   title: string;
   start_date: string;

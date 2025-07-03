@@ -6,6 +6,7 @@ import type { Trip, TripDto } from '@/types/api/Trip.type';
 export function toFETripArray(trips: TripDto[] = []): Trip[] {
   return Array.isArray(trips)
     ? trips.map((trip) => ({
+        orderItemId: trip.orderItemId,
         productId: trip.productId,
         title: trip.title,
         start_date: trip.startDate,

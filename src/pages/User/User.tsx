@@ -93,10 +93,7 @@ const UserPage = () => {
             <div className={styles.emptyMsg}>{emptyMsg}</div>
           ) : (
             trips.map((trip) => (
-              <div
-                key={`${trip.productId}_${trip.start_date}_${trip.end_date}`}
-                className={styles.userTripWrapper}
-              >
+              <div key={trip.orderItemId} className={styles.userTripWrapper}>
                 <MyTripCard trip={trip} />
                 {userInfo && (
                   <UserInfo name={userInfo.name} phone={userInfo.phone} email={userInfo.email} />
