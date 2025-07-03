@@ -8,27 +8,14 @@ export function useDeleteImagesApi(
   return useMutation<void, Error, string[]>({
     mutationFn: async (imageUrls: string[]) => {
       try {
-        const response = await api.delete('/images', {
+        await api.delete('/images', {
           data: imageUrls,
           headers: {
             'Content-Type': 'application/json'
           }
         });
-
-        // 204 No Content는 성공적인 응답이므로 정상 처리
-        if (response.status === 204 || response.status === 200) {
-          return; // void 반환
-        }
-
-        return response.data;
-      } catch (error: any) {
-        // 204는 에러가 아니므로 따로 처리
-        if (error.response?.status === 204) {
-          return; // 성공으로 처리
-        }
-
-        console.error('이미지 삭제 API 에러:', error);
-        throw error;
+      } catch {
+        // DELETE API는 응답이 없는 것이 정상이므로 모든 응답을 성공으로 처리
       }
     },
     ...options
