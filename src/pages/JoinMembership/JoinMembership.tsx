@@ -5,6 +5,7 @@ import SignupForm from '@/components/SignupForm/SignupForm';
 import { usePostApi } from '@/hooks/usePostAPI';
 import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
+import type { UserRes } from '@/types/api/EndpointResponseMap.type';
 
 import type { SignupValues } from '../../types/signupForm.types';
 
@@ -18,7 +19,6 @@ const JoinMembershipPage = () => {
 
   // 회원가입 폼 제출 핸들러
   const handleSubmit = async (form: SignupValues) => {
-    // 서버에 제출할 데이터만 추출
     const payload = {
       username: form.name, // name → username으로 변경
       phoneNumber: form.phone,
@@ -26,13 +26,19 @@ const JoinMembershipPage = () => {
       password: form.password
     };
     try {
-      await mutateAsync(payload); // 회원가입만 진행
-      // 회원가입 성공 시 무조건 /auth/login 호출
+      // UserRes 타입 적용
+      const signupRes: UserRes = await mutateAsync(payload);
+      if (!signupRes.success) {
+        alert(`** 오류 : ${signupRes.error?.message || '회원가입에 실패했습니다.'} **`);
+        return;
+      }
+      // 회원가입 성공 시에만 로그인 시도
       const loginRes = await loginMutateAsync({
         email: form.email,
         password: form.password
       });
 
+      // 로그인 응답 구조 분해 및 검증
       const { accessToken, name, userId, roleCode } = loginRes.data ?? {};
 
       if (!accessToken || !name || userId == null || roleCode == null) {
