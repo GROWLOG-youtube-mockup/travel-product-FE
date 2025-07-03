@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Button from '@/components/atoms/Button/Button';
@@ -24,6 +24,7 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [previews, setPreviews] = useState<string[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 이미지 업로드 API 훅
   const uploadImageMutation = usePostApi('/images', {
@@ -47,6 +48,12 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     setSelectedFiles([]);
     setPreviews([]);
     setIsDragOver(false);
+
+    // ref를 사용해서 파일 input 초기화
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
     onClose();
   };
 
@@ -89,6 +96,8 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     if (e.target.files) {
       handleFileSelect(e.target.files);
     }
+    // 같은 파일을 다시 선택할 수 있도록 value 초기화
+    e.target.value = '';
   };
 
   const handleDragOver = (e: React.DragEvent) => {
@@ -135,6 +144,11 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     const newPreviews = previews.filter((_, i) => i !== index);
     setSelectedFiles(newFiles);
     setPreviews(newPreviews);
+
+    // ref를 사용해서 파일 input 초기화
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   if (!isOpen) return null;
@@ -143,9 +157,10 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     <Modal
       onClose={handleClose}
       boxStyle={{
-        width: 600,
-        maxWidth: '90vw',
-        minHeight: 400
+        width: 700,
+        maxWidth: '95vw',
+        height: '85vh',
+        maxHeight: '85vh'
       }}
     >
       <ModalHeader title="이미지 업로드">
@@ -165,6 +180,7 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
             <p className={styles.mainText}>이미지를 여기에 드래그하거나 클릭하여 선택하세요</p>
             <p className={styles.subText}>JPG, PNG, GIF 파일 지원 (최대 5MB)</p>
             <input
+              ref={fileInputRef}
               type="file"
               multiple
               accept="image/*"

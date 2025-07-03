@@ -173,18 +173,75 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       // 편집 모드에서는 원본 데이터와 비교
       const originalTags =
         productDetail.descriptionGroups.find((g) => g.title === 'tags')?.items || [];
+
+      // 설명 그룹 비교 (tags 제외) - 더 정확한 비교
+      const originalDescGroups = productDetail.descriptionGroups.filter((g) => g.title !== 'tags');
+      const currentDescGroups = formData.descriptionGroups;
+
+      // 각 그룹의 내용을 정규화해서 비교
+      const normalizeGroup = (group: DescriptionGroup) => ({
+        title: group.title.trim(),
+        type: group.type,
+        items: group.items
+          .filter((item) => item.content.trim() !== '') // 빈 항목 제거
+          .map((item) => item.content.trim())
+          .sort() // 순서에 관계없이 비교하기 위해 정렬
+      });
+
+      const originalNormalized = originalDescGroups
+        .map(normalizeGroup)
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+      const currentNormalized = currentDescGroups
+        .map(normalizeGroup)
+        .sort((a, b) => a.title.localeCompare(b.title));
+
+      const descGroupsChanged =
+        JSON.stringify(originalNormalized) !== JSON.stringify(currentNormalized);
+
+      // 태그 변경 감지
+      const tagsChanged =
+        JSON.stringify(
+          formData.tags
+            .map((t) => t.content.trim())
+            .filter((t) => t !== '')
+            .sort()
+        ) !==
+        JSON.stringify(
+          originalTags
+            .map((t) => t.content.trim())
+            .filter((t) => t !== '')
+            .sort()
+        );
+
+      // 이미지 변경 감지 (순서에 관계없이)
+      const imageUrlsChanged =
+        JSON.stringify([...formData.imageUrls].sort()) !==
+        JSON.stringify([...productDetail.imageUrls].sort());
+
       const changed =
-        formData.name !== productDetail.name ||
+        formData.name.trim() !== productDetail.name.trim() ||
         formData.price !== productDetail.price ||
         formData.totalQuantity !== productDetail.totalQuantity ||
         formData.stockQuantity !== productDetail.stockQuantity ||
-        formData.description !== productDetail.description ||
+        formData.description.trim() !== productDetail.description.trim() ||
         formData.saleStatus !== productDetail.saleStatus ||
         formData.type !== productDetail.type ||
         formData.duration !== productDetail.duration ||
         formData.regionId !== productDetail.region.regionId ||
-        JSON.stringify(formData.imageUrls) !== JSON.stringify(productDetail.imageUrls) ||
-        JSON.stringify(formData.tags) !== JSON.stringify(originalTags);
+        imageUrlsChanged ||
+        tagsChanged ||
+        descGroupsChanged;
+
+      console.log('Change detection:', {
+        nameChanged: formData.name.trim() !== productDetail.name.trim(),
+        priceChanged: formData.price !== productDetail.price,
+        descriptionChanged: formData.description.trim() !== productDetail.description.trim(),
+        descGroupsChanged,
+        tagsChanged,
+        imageUrlsChanged,
+        finalChanged: changed
+      });
 
       setHasChanges(changed);
     }
@@ -198,20 +255,43 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     let error = '';
     switch (field) {
       case 'name':
-        error = validateProductName(value as string) || '';
+        if (String(value).trim() === '') {
+          error = '상품명은 필수입니다.';
+        } else {
+          error = validateProductName(value as string) || '';
+        }
         break;
       case 'price':
-        error = validatePrice(value as number) || '';
+        if (Number(value) <= 0) {
+          error = '가격은 0보다 커야 합니다.';
+        } else {
+          error = validatePrice(value as number) || '';
+        }
         break;
       case 'totalQuantity':
       case 'stockQuantity':
-        error = validateQuantity(value as number) || '';
+        if (Number(value) < 0) {
+          error =
+            field === 'totalQuantity'
+              ? '총 수량은 0 이상이어야 합니다.'
+              : '재고는 0 이상이어야 합니다.';
+        } else {
+          error = validateQuantity(value as number) || '';
+        }
         break;
       case 'duration':
-        error = validateDuration(value as number) || '';
+        if (Number(value) <= 0) {
+          error = '여행기간은 1일 이상이어야 합니다.';
+        } else {
+          error = validateDuration(value as number) || '';
+        }
         break;
       case 'description':
-        error = validateDescription(value as string) || '';
+        if (String(value).trim() === '') {
+          error = '상품 설명은 필수입니다.';
+        } else {
+          error = validateDescription(value as string) || '';
+        }
         break;
     }
 
