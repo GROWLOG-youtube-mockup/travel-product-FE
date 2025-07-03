@@ -46,6 +46,7 @@ export interface EndpointResponseMap {
   '/orders': OrdersRes;
   [k: `/orders/${string}`]: OrderDetailRes;
   '/users/me': UserRes;
+  '/users/signup': UserRes;
   '/users/me/trips': TripsRes;
   '/users/me/phone': PhoneChangeRes;
   '/users/me/password': PasswordChangeRes;

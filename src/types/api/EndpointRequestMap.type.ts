@@ -8,12 +8,10 @@ export type OrderItem = {
 
 export interface EndpointRequestMap {
   '/users/signup': {
-    userId?: number;
-    name: string;
+    username: string;
+    phoneNumber: string;
     email: string;
     password: string;
-    phoneNumber: string;
-    roleCode?: number;
   };
   '/payments/cancel': {
     orderId: number;

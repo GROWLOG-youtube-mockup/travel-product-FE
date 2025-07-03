@@ -1,8 +1,5 @@
 .baseForm {
-  width: 70vw;
-  max-width: 1280px;
   min-width: 1160px;
-  min-height: calc(100vh - 64px - 58px - 245px - 80px); // 헤더 64px, 풋터 58px 기준
+  min-height: calc(100vh - 64px - 58px); // 헤더 64px, 풋터 58px 기준
   margin: 0 auto;
-  padding: 40px;
 }

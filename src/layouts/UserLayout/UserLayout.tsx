@@ -1,7 +1,6 @@
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
-import UserBanner from '@/components/Banner/UserBanner/UserBanner';
 import Footer from '@/components/Footer/Footer';
 import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 import { useGetApi } from '@/hooks/useGetAPI';
@@ -64,15 +63,8 @@ const UserLayout = () => {
   return (
     <>
       <DefaultHeader />
-      <UserBanner
-        tab={tab}
-        setTab={setTab}
-        upcomingCount={upcoming.length}
-        pastCount={past.length}
-        userName={userInfo?.name || ''}
-      />
       <main className={styles.baseForm}>
-        <UserPage tab={tab} upcoming={upcoming} past={past} userInfo={userInfo} />
+        <Outlet />
       </main>
       <Footer />
     </>

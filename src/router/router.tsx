@@ -2,6 +2,8 @@ import type { RouteObject } from 'react-router-dom';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import RequireAdminAccess from '@/components/Auth/RequireAdminAccess';
+import RequireGuestAccess from '@/components/Auth/RequireGuestAccess';
+import RequireUserAccess from '@/components/Auth/RequireUserAccess';
 
 import App from '../App';
 import Authorization from '../components/Authorization';
@@ -155,9 +157,11 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'user',
-            element: <UserPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'USER'
+            element: (
+              <RequireUserAccess>
+                <UserPage />
+              </RequireUserAccess>
+            )
           }
         ]
       },
@@ -166,9 +170,11 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'user-edit',
-            element: <UserEditPage />
-            // 레이아웃 설정을 위한 requiredRole 임시 주석 처리
-            // requiredRole: 'USER'
+            element: (
+              <RequireUserAccess>
+                <UserEditPage />
+              </RequireUserAccess>
+            )
           }
         ]
       },
@@ -211,11 +217,19 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'login',
-            element: <LoginPage />
+            element: (
+              <RequireGuestAccess>
+                <LoginPage />
+              </RequireGuestAccess>
+            )
           },
           {
             path: 'Join',
-            element: <JoinMembershipPage />
+            element: (
+              <RequireGuestAccess>
+                <JoinMembershipPage />
+              </RequireGuestAccess>
+            )
           }
         ]
       },
@@ -224,7 +238,11 @@ const routes: AppRouteObject[] = [
         children: [
           {
             path: 'find-account',
-            element: <FindAccountPage />
+            element: (
+              <RequireGuestAccess>
+                <FindAccountPage />
+              </RequireGuestAccess>
+            )
           }
         ]
       },
