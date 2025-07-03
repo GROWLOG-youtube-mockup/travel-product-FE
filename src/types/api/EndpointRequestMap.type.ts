@@ -1,5 +1,7 @@
 // 각 POST 엔드포인트별 요청 타입 정의 (OpenAPI 명세 기반)
 
+import type { AdminProductCreateRequest, AdminProductUpdateRequest } from './AdminProduct.type';
+
 export type OrderItem = {
   peopleCount: number;
   product_id: number;
@@ -56,26 +58,7 @@ export interface EndpointRequestMap {
   '/auth/email/send': {
     email: string;
   };
-  '/admin/products': {
-    name: string;
-    price: number;
-    totalQuantity: number;
-    description: string;
-    saleStatus: number;
-    type: number;
-    duration: number;
-    regionId: number;
-    imageUrls: string[];
-    descriptionGroups: Array<{
-      title: string;
-      type: number;
-      sortOrder: number;
-      items: Array<{
-        title: string;
-        description: string;
-      }>;
-    }>;
-  };
+  '/admin/products': AdminProductCreateRequest;
   '/users/verify-password': {
     password: string;
   };
@@ -98,5 +81,6 @@ export interface EndpointRequestMap {
   [k: `/admin/orders/${string}`]: {
     status?: 'PENDING' | 'PAID' | 'CANCELLED';
   };
+  [k: `/admin/products/${string}`]: AdminProductUpdateRequest;
   // 필요에 따라 추가 엔드포인트 정의
 }

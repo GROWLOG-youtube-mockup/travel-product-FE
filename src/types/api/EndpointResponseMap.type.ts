@@ -1,5 +1,13 @@
 import type { AdminLog } from './AdminLog.type';
 import type { AdminOrder, AdminOrderDetail } from './AdminOrder.type';
+import type {
+  AdminProduct,
+  AdminProductCreateResponse,
+  AdminProductDeleteResponse,
+  AdminProductDetail,
+  AdminProductUpdateResponse,
+  ImageUploadResponse
+} from './AdminProduct.type';
 import type { AdminUser } from './AdminUser.type';
 import type { Carts } from './Carts.type';
 import type { Orders } from './Orders.type';
@@ -9,6 +17,7 @@ import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
 import type { TripDto } from './Trip.type';
 import type { User } from './User.type';
+
 export type CartRes = ApiResponse<Carts[]>;
 export type ProductRes = ApiResponse<Product>;
 export type ProductDetailRes = ApiResponse<ProductDetail>;
@@ -50,6 +59,14 @@ export type AdminOrderUpdateRes = ApiResponse<{
   order_id: number;
 }>;
 
+// 상품 관리 관련 응답 타입
+export type AdminProductsRes = ApiResponse<PaginatedResponse<AdminProduct>>;
+export type AdminProductDetailRes = ApiResponse<AdminProductDetail>;
+export type AdminProductCreateRes = ApiResponse<AdminProductCreateResponse>;
+export type AdminProductUpdateRes = ApiResponse<AdminProductUpdateResponse>;
+export type AdminProductDeleteRes = ApiResponse<AdminProductDeleteResponse>;
+export type ImageUploadRes = ImageUploadResponse; // 직접 배열 반환
+
 export interface EndpointResponseMap {
   '/carts': CartRes;
   '/products': ProductRes;
@@ -76,4 +93,8 @@ export interface EndpointResponseMap {
   [k: `/admin/users/${string}`]: UserUpdateRes | UserDeleteRes;
   '/admin/orders': AdminOrdersRes;
   [k: `/admin/orders/${string}`]: AdminOrderDetailRes | AdminOrderUpdateRes;
+  '/admin/products': AdminProductsRes;
+  [k: `/admin/products/${string}`]: AdminProductDetailRes;
+  '/images': ImageUploadRes;
+  [k: `/images/${string}`]: void;
 }
