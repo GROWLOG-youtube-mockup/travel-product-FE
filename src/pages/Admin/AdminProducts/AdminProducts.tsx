@@ -6,18 +6,23 @@ import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
 import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import AdminEditModal from '@/components/Modals/AdminEditModal';
+import AdminProductModal from '@/components/Modals/AdminProductModal';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useDeleteApi } from '@/hooks/useDeleteAPI';
 import { useGetApi } from '@/hooks/useGetAPI';
+import { usePostApi } from '@/hooks/usePostAPI';
 import { usePutApi } from '@/hooks/usePutAPI';
 import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import type { SimpleColumn } from '@/types/adminTable.types';
-import type { AdminProduct, AdminProductDetail, Region } from '@/types/api/AdminProduct.type';
+import type {
+  AdminProduct,
+  AdminProductCreateRequest,
+  AdminProductDetail,
+  AdminProductUpdateRequest,
+  Region
+} from '@/types/api/AdminProduct.type';
 import {
-  convertToProductUpdateRequest,
-  createProductEditFields,
   formatPrice,
   getProductTypeText,
   getSaleStatusText,
@@ -68,7 +73,8 @@ const REGIONS: Region[] = [
 const AdminProductsPage = () => {
   const navigate = useNavigate();
   const { roleCode: currentUserRole } = useAuthStore();
-  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [productModalOpen, setProductModalOpen] = useState(false);
+  const [productModalMode, setProductModalMode] = useState<'create' | 'edit'>('create');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
   const [productDetailData, setProductDetailData] = useState<AdminProductDetail | null>(null);
@@ -99,13 +105,30 @@ const AdminProductsPage = () => {
   // 상품 목록 조회 API
   const { data, isLoading, error, refetch } = useGetApi('/admin/products', finalApiParams);
 
+  // POST API 훅 (상품 생성)
+  const createProductMutation = usePostApi('/admin/products', {
+    onSuccess: () => {
+      toast.success('상품이 성공적으로 추가되었습니다.');
+      setProductModalOpen(false);
+      setSelectedProduct(null);
+      setProductDetailData(null);
+      refetch();
+    },
+    onError: (error) => {
+      handleApiError(error, navigate, '/admin/products', {
+        useToast: true,
+        defaultMessage: '상품 추가 중 오류가 발생했습니다.'
+      });
+    }
+  });
+
   // PUT API 훅 (상품 수정)
-  const putProductMutation = usePutApi(
+  const updateProductMutation = usePutApi(
     selectedProduct ? `/admin/products/${selectedProduct.productId}` : '/admin/products/0',
     {
       onSuccess: () => {
         toast.success('상품 정보가 성공적으로 수정되었습니다.');
-        setEditModalOpen(false);
+        setProductModalOpen(false);
         setSelectedProduct(null);
         setProductDetailData(null);
         refetch();
@@ -149,13 +172,6 @@ const AdminProductsPage = () => {
     }
   }, [error, navigate]);
 
-  // 디버깅용 로그
-  useEffect(() => {
-    console.log('AdminProducts - Data:', data);
-    console.log('AdminProducts - Loading:', isLoading);
-    console.log('AdminProducts - Error:', error);
-  }, [data, isLoading, error]);
-
   // 데이터 추출 함수
   const getTableData = (): AdminProduct[] => {
     if (!data) return [];
@@ -184,13 +200,13 @@ const AdminProductsPage = () => {
     return [];
   };
 
-  // 페이지네이션 정보 추출 (currentPage 사용하지 않는 버전)
+  // 페이지네이션 정보 추출
   const getPaginationInfo = () => {
     if (data && typeof data === 'object' && data !== null) {
       // 직접 응답 형태 처리
       if ('totalPages' in data && 'totalElements' in data) {
         return {
-          currentPage: Math.max(0, (apiParams.page as number) - 1), // API 파라미터에서 가져오기
+          currentPage: Math.max(0, (apiParams.page as number) - 1),
           totalPages: Number(data.totalPages || 0),
           totalElements: Number(data.totalElements || 0)
         };
@@ -214,6 +230,14 @@ const AdminProductsPage = () => {
     };
   };
 
+  // 상품 추가 버튼 클릭 핸들러
+  const handleAddClick = () => {
+    setProductModalMode('create');
+    setSelectedProduct(null);
+    setProductDetailData(null);
+    setProductModalOpen(true);
+  };
+
   // 수정 버튼 클릭 핸들러 (상세 정보 조회 후 모달 표시)
   const handleEditClick = async (product: AdminProduct) => {
     setSelectedProduct(product);
@@ -225,7 +249,8 @@ const AdminProductsPage = () => {
 
       if (response.data?.success && response.data?.data) {
         setProductDetailData(response.data.data as AdminProductDetail);
-        setEditModalOpen(true);
+        setProductModalMode('edit');
+        setProductModalOpen(true);
       } else {
         throw new Error('상세 정보를 불러올 수 없습니다.');
       }
@@ -255,17 +280,19 @@ const AdminProductsPage = () => {
     }
   };
 
-  // 상품 정보 저장 핸들러
-  const handleProductSave = async (changedData: Record<string, string | number>) => {
-    if (!productDetailData) return;
+  // 상품 생성 핸들러
+  const handleProductCreate = async (data: AdminProductCreateRequest) => {
+    await createProductMutation.mutateAsync(data);
+  };
 
-    const saveData = convertToProductUpdateRequest(productDetailData, changedData);
-    await putProductMutation.mutateAsync(saveData);
+  // 상품 수정 핸들러
+  const handleProductUpdate = async (data: AdminProductUpdateRequest) => {
+    await updateProductMutation.mutateAsync(data);
   };
 
   // 모달 닫기 핸들러
   const handleModalClose = () => {
-    setEditModalOpen(false);
+    setProductModalOpen(false);
     setDeleteModalOpen(false);
     setSelectedProduct(null);
     setProductDetailData(null);
@@ -411,6 +438,10 @@ const AdminProductsPage = () => {
         showPaginationAlways={true}
         emptyMessage="상품이 없습니다."
         fullWidth={true}
+        // 상품 추가 버튼
+        showAddButton={true}
+        addButtonText="상품 추가"
+        onAddClick={handleAddClick}
         // 필터 기능
         showFilterBar={true}
         filters={[
@@ -424,19 +455,21 @@ const AdminProductsPage = () => {
         onFiltersChange={handleFiltersChange}
       />
 
-      {/* 수정 모달 */}
-      {editModalOpen && selectedProduct && productDetailData && (
-        <AdminEditModal
-          isOpen={editModalOpen}
-          title={`상품 정보 수정 - ${productDetailData.name}`}
-          fields={createProductEditFields(productDetailData, REGIONS)}
-          loading={putProductMutation.isPending}
-          onClose={handleModalClose}
-          onSave={handleProductSave}
-          saveButtonText="수정 완료"
-          cancelButtonText="닫기"
-        />
-      )}
+      {/* 상품 추가/수정 모달 */}
+      <AdminProductModal
+        isOpen={productModalOpen}
+        mode={productModalMode}
+        productDetail={productDetailData || undefined}
+        regions={REGIONS}
+        loading={
+          productModalMode === 'create'
+            ? createProductMutation.isPending
+            : updateProductMutation.isPending
+        }
+        onClose={handleModalClose}
+        onCreate={handleProductCreate}
+        onUpdate={handleProductUpdate}
+      />
 
       {/* 삭제 확인 모달 */}
       <AdminConfirmModal
