@@ -1,10 +1,8 @@
-// src/components/Modals/AdminProductTagSection.tsx
-
 import React from 'react';
 
 import type { DescriptionItem } from '@/types/api/AdminProduct.type';
 
-import styles from './AdminProductModal.module.scss';
+import styles from './AdminProductTagSection.module.scss';
 
 interface AdminProductTagSectionProps {
   tags: DescriptionItem[];

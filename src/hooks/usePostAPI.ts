@@ -28,6 +28,28 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
       // body 중첩 방지: { body: {...} } 형태면 한 번 풀어서 전달
       const finalBody = hasNestedBody(body) ? (body.body as EndpointRequestMap[K]) : body;
 
+      // FormData 처리
+      if (finalBody instanceof FormData) {
+        try {
+          const { data: res } = await api.post<EndpointResponseMap[K]>(url, finalBody, {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          });
+          return res;
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            const message =
+              error.response?.data?.error?.message ??
+              error.response?.data?.message ??
+              `요청 실패: ${error.response?.status ?? ''}`;
+            throw new Error(message);
+          }
+          throw error;
+        }
+      }
+
+      // 일반 데이터 처리
       const { params, ...data } = finalBody as EndpointRequestMap[K] & { params?: PostApiParams };
 
       try {
@@ -40,7 +62,9 @@ export function usePostApi<K extends keyof EndpointResponseMap & keyof EndpointR
       } catch (error: unknown) {
         if (axios.isAxiosError(error)) {
           const message =
-            error.response?.data?.error?.message ?? `요청 실패: ${error.response?.status ?? ''}`;
+            error.response?.data?.error?.message ??
+            error.response?.data?.message ??
+            `요청 실패: ${error.response?.status ?? ''}`;
           throw new Error(message);
         }
         throw error;

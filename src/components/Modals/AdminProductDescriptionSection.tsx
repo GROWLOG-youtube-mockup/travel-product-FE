@@ -1,5 +1,3 @@
-// src/components/Modals/AdminProductDescriptionSection.tsx
-
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -10,7 +8,7 @@ import ModalCloseButton from '@/components/Modal/ModalCloseButton';
 import ModalHeader from '@/components/Modal/ModalHeader';
 import type { DescriptionGroup } from '@/types/api/AdminProduct.type';
 
-import styles from './AdminProductModal.module.scss';
+import styles from './AdminProductDescriptionSection.module.scss';
 
 interface AdminProductDescriptionSectionProps {
   descriptionGroups: DescriptionGroup[];
@@ -84,6 +82,16 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
     toast.success('섹션이 삭제되었습니다.');
   };
 
+  // 항목 추가 핸들러 - 중복 실행 방지
+  const handleAddDescriptionItem = (groupIndex: number) => {
+    onAddDescriptionItem(groupIndex);
+  };
+
+  // 항목 제거 핸들러 - 중복 실행 방지
+  const handleRemoveDescriptionItem = (groupIndex: number, itemIndex: number) => {
+    onRemoveDescriptionItem(groupIndex, itemIndex);
+  };
+
   return (
     <>
       <section className={styles.section}>
@@ -100,7 +108,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
 
         <div className={styles.groupsContainer}>
           {descriptionGroups.map((group, groupIndex) => (
-            <div key={groupIndex} className={styles.descriptionGroup}>
+            <div key={`group-${groupIndex}-${group.title}`} className={styles.descriptionGroup}>
               <div className={styles.groupHeader}>
                 <h4>
                   {group.title}
@@ -121,7 +129,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
 
               <div className={styles.itemsContainer}>
                 {group.items.map((item, itemIndex) => (
-                  <div key={itemIndex} className={styles.listItem}>
+                  <div key={`item-${groupIndex}-${itemIndex}`} className={styles.listItem}>
                     <Input
                       type="text"
                       value={item.content}
@@ -133,7 +141,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
                     />
                     <button
                       type="button"
-                      onClick={() => onRemoveDescriptionItem(groupIndex, itemIndex)}
+                      onClick={() => handleRemoveDescriptionItem(groupIndex, itemIndex)}
                       className={styles.removeButton}
                       disabled={group.items.length === 1}
                     >
@@ -143,7 +151,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
                 ))}
                 <button
                   type="button"
-                  onClick={() => onAddDescriptionItem(groupIndex)}
+                  onClick={() => handleAddDescriptionItem(groupIndex)}
                   className={styles.addButton}
                 >
                   + {group.title} 항목 추가
@@ -160,6 +168,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
         {/* 필수 섹션 안내 */}
         <div className={styles.helpText}>
           <p>* 포함사항과 불포함사항은 필수 섹션이며, 각각 최소 1개의 항목이 필요합니다.</p>
+          <p>* 포함사항 (type: 0), 불포함사항 (type: 1), 기타 섹션 (type: 2)로 구분됩니다.</p>
         </div>
       </section>
 

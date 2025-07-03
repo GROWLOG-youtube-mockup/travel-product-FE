@@ -1,0 +1,137 @@
+@use '@/styles/core';
+
+// 태그 관련 스타일
+.tagContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  @media (width >= 768px) {
+    flex-direction: row;
+    gap: 32px;
+  }
+}
+
+.availableTags,
+.selectedTags {
+  flex: 1;
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: core.$admin-table-text;
+  }
+}
+
+.tagGrid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+}
+
+.tagOption {
+  padding: 8px 12px;
+  border: 1px solid core.$pagination-active-bg;
+  font-size: 12px;
+  font-weight: 500;
+  color: core.$pagination-active-bg;
+  text-align: center;
+  background: white;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: white;
+    background: core.$pagination-active-bg;
+  }
+
+  &:disabled,
+  &.disabled {
+    border-color: #d1d5db;
+    color: #9ca3af;
+    background: #f3f4f6;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(59 130 246 / 20%);
+    outline: none;
+  }
+}
+
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.selectedTag {
+  display: flex;
+  align-items: center;
+  padding: 6px 10px;
+  border: 1px solid #10b981;
+  font-size: 12px;
+  font-weight: 500;
+  color: #10b981;
+  background: #d1fae5;
+  border-radius: 6px;
+  gap: 6px;
+
+  span {
+    flex: 1;
+  }
+}
+
+.removeTagButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border: none;
+  font-size: 10px;
+  font-weight: bold;
+  color: #ef4444;
+  background: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: white;
+    background: #ef4444;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgb(239 68 68 / 20%);
+    outline: none;
+  }
+}
+
+.noTags {
+  margin: 0;
+  padding: 16px;
+  border: 1px dashed #d1d5db;
+  font-size: 12px;
+  color: core.$admin-table-text-secondary;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: 4px;
+}
+
+.errorMessage {
+  margin-top: 8px;
+  font-size: 12px;
+  color: #ef4444;
+}
+
+// 반응형 디자인
+@media (width <= 768px) {
+  .tagContainer {
+    flex-direction: column;
+    gap: 16px;
+  }
+}

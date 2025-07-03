@@ -1,11 +1,9 @@
-// src/components/Modals/AdminProductFormSection.tsx
-
 import React from 'react';
 
 import Input from '@/components/atoms/Input/Input';
 import type { Region } from '@/types/api/AdminProduct.type';
 
-import styles from './AdminProductModal.module.scss';
+import styles from './AdminProductFormSection.module.scss';
 
 interface AdminProductFormSectionProps {
   formData: {

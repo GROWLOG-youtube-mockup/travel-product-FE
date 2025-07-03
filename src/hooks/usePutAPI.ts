@@ -1,5 +1,3 @@
-// src/hooks/usePutAPI.ts
-
 import { useMutation, type UseMutationOptions } from '@tanstack/react-query';
 
 import { api } from '@/lib/api';

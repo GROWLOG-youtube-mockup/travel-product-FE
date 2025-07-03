@@ -1,0 +1,223 @@
+@use '@/styles/core';
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 400px;
+  padding: 20px;
+  gap: 20px;
+}
+
+.dropZone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  padding: 40px 20px;
+  border: 2px dashed #d1d5db;
+  background: #f9fafb;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
+
+  &.dragOver {
+    border-color: core.$pagination-active-bg;
+    background: #dbeafe;
+    transform: scale(1.02);
+  }
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  pointer-events: none;
+  gap: 12px;
+}
+
+.icon {
+  font-size: 48px;
+  opacity: 0.6;
+}
+
+.mainText {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: core.$admin-table-text;
+}
+
+.subText {
+  margin: 0;
+  font-size: 14px;
+  color: core.$admin-table-text-secondary;
+}
+
+.fileInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 0;
+  inset: 0;
+}
+
+.selectButton {
+  margin-top: 8px;
+  pointer-events: all;
+}
+
+.previewSection {
+  flex: 1;
+
+  h4 {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: core.$admin-table-header-text;
+  }
+}
+
+.previewGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.previewItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  border: 1px solid core.$admin-table-border;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  }
+}
+
+.previewImage {
+  width: 100%;
+  height: 120px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.fileInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.fileName {
+  font-size: 12px;
+  font-weight: 500;
+  color: core.$admin-table-text;
+  word-break: break-all;
+}
+
+.fileSize {
+  font-size: 11px;
+  color: core.$admin-table-text-secondary;
+}
+
+.removeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background: rgb(0 0 0 / 60%);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #ef4444;
+    transform: scale(1.1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: 16px;
+  border-top: 1px solid core.$admin-table-border;
+  gap: 12px;
+
+  button {
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
+
+// 반응형 디자인
+@media (width <= 768px) {
+  .modalContent {
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .dropZone {
+    min-height: 150px;
+    padding: 20px 16px;
+  }
+
+  .icon {
+    font-size: 36px;
+  }
+
+  .mainText {
+    font-size: 14px;
+  }
+
+  .subText {
+    font-size: 12px;
+  }
+
+  .previewGrid {
+    gap: 12px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .previewImage {
+    height: 100px;
+  }
+
+  .footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+
+    button {
+      width: 100%;
+    }
+  }
+}

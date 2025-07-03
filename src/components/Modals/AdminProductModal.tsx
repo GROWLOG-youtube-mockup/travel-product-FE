@@ -1,5 +1,3 @@
-// src/components/Modals/AdminProductModal.tsx
-
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -56,17 +54,17 @@ interface FormData {
   tags: DescriptionItem[];
 }
 
-// 기본 필수 섹션 (포함사항, 불포함사항)
+// 기본 필수 섹션 (포함사항, 불포함사항) - type 0, 1로 정확히 설정
 const getDefaultSections = (): DescriptionGroup[] => [
   {
     title: '포함사항',
-    type: 0,
+    type: 0, // 포함사항
     sortOrder: 1,
     items: [{ content: '', sortOrder: 1 }]
   },
   {
     title: '불포함사항',
-    type: 1,
+    type: 1, // 불포함사항
     sortOrder: 2,
     items: [{ content: '', sortOrder: 1 }]
   }
@@ -113,9 +111,9 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
         );
 
         // 기본 섹션이 없으면 추가
-        const finalGroups = otherGroups.length > 0 ? otherGroups : [];
+        const finalGroups = [...otherGroups];
 
-        // 포함사항 섹션 확인 및 추가
+        // 포함사항 섹션 확인 및 추가 (type: 0)
         const hasIncludeSection = finalGroups.some((group) => group.type === 0);
         if (!hasIncludeSection) {
           finalGroups.unshift({
@@ -126,7 +124,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
           });
         }
 
-        // 불포함사항 섹션 확인 및 추가
+        // 불포함사항 섹션 확인 및 추가 (type: 1)
         const hasExcludeSection = finalGroups.some((group) => group.type === 1);
         if (!hasExcludeSection) {
           const insertIndex = hasIncludeSection ? 1 : 1;
@@ -225,44 +223,56 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
       if (newGroups[groupIndex] && newGroups[groupIndex].items[itemIndex]) {
-        newGroups[groupIndex].items[itemIndex].content = content;
+        newGroups[groupIndex] = {
+          ...newGroups[groupIndex],
+          items: newGroups[groupIndex].items.map((item, idx) =>
+            idx === itemIndex ? { ...item, content } : item
+          )
+        };
       }
       return { ...prev, descriptionGroups: newGroups };
     });
   };
 
-  // 설명 그룹 항목 추가
+  // 설명 그룹 항목 추가 - 중복 실행 방지를 위한 개선
   const handleAddDescriptionItem = (groupIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
       if (newGroups[groupIndex]) {
         const currentItems = newGroups[groupIndex].items;
         const newSortOrder = currentItems.length + 1;
-        newGroups[groupIndex].items = [...currentItems, { content: '', sortOrder: newSortOrder }];
+        newGroups[groupIndex] = {
+          ...newGroups[groupIndex],
+          items: [...currentItems, { content: '', sortOrder: newSortOrder }]
+        };
       }
       return { ...prev, descriptionGroups: newGroups };
     });
   };
 
-  // 설명 그룹 항목 제거
+  // 설명 그룹 항목 제거 - 중복 실행 방지를 위한 개선
   const handleRemoveDescriptionItem = (groupIndex: number, itemIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
       if (newGroups[groupIndex] && newGroups[groupIndex].items.length > 1) {
-        newGroups[groupIndex].items = newGroups[groupIndex].items.filter(
-          (_, index) => index !== itemIndex
-        );
+        const newItems = newGroups[groupIndex].items.filter((_, index) => index !== itemIndex);
 
         // sortOrder 재정렬
-        newGroups[groupIndex].items.forEach((item, idx) => {
-          item.sortOrder = idx + 1;
-        });
+        const reorderedItems = newItems.map((item, idx) => ({
+          ...item,
+          sortOrder: idx + 1
+        }));
+
+        newGroups[groupIndex] = {
+          ...newGroups[groupIndex],
+          items: reorderedItems
+        };
       }
       return { ...prev, descriptionGroups: newGroups };
     });
   };
 
-  // 새 섹션 추가
+  // 새 섹션 추가 핸들러 - 기타 타입(2)으로 설정
   const handleAddNewSection = (title: string) => {
     setFormData((prev) => {
       const newSortOrder = prev.descriptionGroups.length + 1;
@@ -325,28 +335,11 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 이미지 URL 변경
-  const handleImageUrlChange = (index: number, url: string) => {
-    setFormData((prev) => {
-      const newUrls = [...prev.imageUrls];
-      newUrls[index] = url;
-      return { ...prev, imageUrls: newUrls };
-    });
-  };
-
-  // 이미지 URL 추가
-  const handleAddImageUrl = () => {
+  // 이미지 URL 전체 변경
+  const handleImageUrlsChange = (urls: string[]) => {
     setFormData((prev) => ({
       ...prev,
-      imageUrls: [...prev.imageUrls, '']
-    }));
-  };
-
-  // 이미지 URL 제거
-  const handleRemoveImageUrl = (index: number) => {
-    setFormData((prev) => ({
-      ...prev,
-      imageUrls: prev.imageUrls.filter((_, idx) => idx !== index)
+      imageUrls: urls
     }));
   };
 
@@ -364,7 +357,13 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     if (formData.duration <= 0) newErrors.duration = '여행기간은 1일 이상이어야 합니다.';
     if (formData.regionId <= 0) newErrors.regionId = '지역을 선택해주세요.';
 
-    // 필수 섹션 검사 (포함사항, 불포함사항)
+    // 이미지 필수 검사
+    const validImageUrls = formData.imageUrls.filter((url) => url.trim() !== '');
+    if (validImageUrls.length === 0) {
+      newErrors.imageUrls = '상품 이미지는 최소 1개 이상 필요합니다.';
+    }
+
+    // 필수 섹션 검사 (포함사항: type 0, 불포함사항: type 1)
     const includeSection = formData.descriptionGroups.find((group) => group.type === 0);
     const excludeSection = formData.descriptionGroups.find((group) => group.type === 1);
 
@@ -386,8 +385,6 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
         }
       }
     });
-
-    // 태그는 선택사항이므로 검사하지 않음
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -513,12 +510,11 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
               onFieldChange={handleFieldChange}
             />
 
-            {/* 이미지 URL 섹션 */}
+            {/* 이미지 관리 섹션 */}
             <AdminProductImageSection
               imageUrls={formData.imageUrls}
-              onImageUrlChange={handleImageUrlChange}
-              onAddImageUrl={handleAddImageUrl}
-              onRemoveImageUrl={handleRemoveImageUrl}
+              errors={errors}
+              onImageUrlsChange={handleImageUrlsChange}
             />
 
             {/* 설명 그룹 섹션 */}

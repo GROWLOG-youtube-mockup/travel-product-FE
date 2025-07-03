@@ -1,5 +1,3 @@
-// 각 POST 엔드포인트별 요청 타입 정의 (OpenAPI 명세 기반)
-
 import type { AdminProductCreateRequest, AdminProductUpdateRequest } from './AdminProduct.type';
 
 export type OrderItem = {
@@ -29,9 +27,7 @@ export interface EndpointRequestMap {
   '/orders': {
     items: OrderItem[];
   };
-  '/images': {
-    files: File[];
-  };
+  '/images': FormData | string[];
   '/carts': {
     productId: number;
     quantity: number;
@@ -82,5 +78,4 @@ export interface EndpointRequestMap {
     status?: 'PENDING' | 'PAID' | 'CANCELLED';
   };
   [k: `/admin/products/${string}`]: AdminProductUpdateRequest;
-  // 필요에 따라 추가 엔드포인트 정의
 }
