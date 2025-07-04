@@ -14,13 +14,13 @@
 // 로딩 오버레이 스타일 (누락된 클래스들)
 .loadingOverlay {
   position: absolute;
-  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgb(255 255 255 / 80%);
   border-radius: 6px;
   z-index: 1000;
+  inset: 0;
 }
 
 .loadingSpinner {
