@@ -7,13 +7,13 @@ import styles from './AdminProductFormSection.module.scss';
 interface AdminProductFormSectionProps {
   formData: {
     name: string;
-    price: number;
-    totalQuantity: number;
-    stockQuantity: number;
+    price: number | string;
+    totalQuantity: number | string;
+    stockQuantity: number | string;
     description: string;
     saleStatus: number;
     type: number;
-    duration: number;
+    duration: number | string;
     regionId: number;
   };
   errors: Record<string, string>;
@@ -58,7 +58,7 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <input
             type="number"
             value={formData.price}
-            onChange={(e) => onFieldChange('price', Number(e.target.value))}
+            onChange={(e) => onFieldChange('price', e.target.value)}
             placeholder="가격을 입력하세요"
             className={`${styles.input} ${errors.price ? styles.error : ''}`}
           />
@@ -74,7 +74,7 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <input
             type="number"
             value={formData.totalQuantity}
-            onChange={(e) => onFieldChange('totalQuantity', Number(e.target.value))}
+            onChange={(e) => onFieldChange('totalQuantity', e.target.value)}
             placeholder="총 수량을 입력하세요"
             className={`${styles.input} ${errors.totalQuantity ? styles.error : ''}`}
           />
@@ -93,7 +93,7 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
             <input
               type="number"
               value={formData.stockQuantity}
-              onChange={(e) => onFieldChange('stockQuantity', Number(e.target.value))}
+              onChange={(e) => onFieldChange('stockQuantity', e.target.value)}
               placeholder="재고 수량을 입력하세요"
               className={`${styles.input} ${errors.stockQuantity ? styles.error : ''}`}
             />
@@ -112,7 +112,7 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <input
             type="number"
             value={formData.duration}
-            onChange={(e) => onFieldChange('duration', Number(e.target.value))}
+            onChange={(e) => onFieldChange('duration', e.target.value)}
             placeholder="여행기간을 입력하세요"
             className={`${styles.input} ${errors.duration ? styles.error : ''}`}
           />

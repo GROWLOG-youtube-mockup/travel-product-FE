@@ -43,13 +43,13 @@ interface AdminProductModalProps {
 
 interface FormData {
   name: string;
-  price: number;
-  totalQuantity: number;
-  stockQuantity: number;
+  price: number | string;
+  totalQuantity: number | string;
+  stockQuantity: number | string;
   description: string;
   saleStatus: number;
   type: number;
-  duration: number;
+  duration: number | string;
   regionId: number;
   imageUrls: string[];
   descriptionGroups: DescriptionGroup[];
@@ -74,13 +74,13 @@ const getDefaultSections = (): DescriptionGroup[] => [
 
 const INITIAL_FORM_DATA: FormData = {
   name: '',
-  price: 0,
-  totalQuantity: 0,
-  stockQuantity: 0,
+  price: '',
+  totalQuantity: '',
+  stockQuantity: '',
   description: '',
   saleStatus: 0,
   type: 0,
-  duration: 1,
+  duration: '',
   regionId: 0,
   imageUrls: [],
   descriptionGroups: getDefaultSections(),
@@ -182,8 +182,8 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       // 생성 모드에서는 필수 필드가 채워져 있으면 변경사항 있음으로 간주
       const hasRequiredFields =
         formData.name.trim() !== '' ||
-        formData.price > 0 ||
-        formData.totalQuantity > 0 ||
+        (formData.price !== '' && Number(formData.price) > 0) ||
+        (formData.totalQuantity !== '' && Number(formData.totalQuantity) > 0) ||
         formData.description.trim() !== '';
       hasAnyChanges = hasRequiredFields;
     } else if (mode === 'edit') {
@@ -206,6 +206,19 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
 
         if (field === 'name' || field === 'description') {
           if (String(currentValue).trim() !== String(originalValue).trim()) {
+            newChangedFields.add(field);
+            hasAnyChanges = true;
+          }
+        } else if (
+          field === 'price' ||
+          field === 'totalQuantity' ||
+          field === 'stockQuantity' ||
+          field === 'duration'
+        ) {
+          // 숫자 필드는 숫자로 변환해서 비교
+          const currentNum = Number(currentValue) || 0;
+          const originalNum = Number(originalValue) || 0;
+          if (currentNum !== originalNum) {
             newChangedFields.add(field);
             hasAnyChanges = true;
           }
@@ -302,45 +315,53 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     // 실시간 유효성 검사
     let error = '';
     switch (field) {
-      case 'name':
+      case 'name': {
         if (String(value).trim() === '') {
           error = '상품명은 필수입니다.';
         } else {
           error = validateProductName(value as string) || '';
         }
         break;
-      case 'price':
-        if (Number(value) <= 0) {
+      }
+      case 'price': {
+        const priceValue = Number(value);
+        if (value === '' || isNaN(priceValue) || priceValue <= 0) {
           error = '가격은 0보다 커야 합니다.';
         } else {
-          error = validatePrice(value as number) || '';
+          error = validatePrice(priceValue) || '';
         }
         break;
+      }
       case 'totalQuantity':
-      case 'stockQuantity':
-        if (Number(value) < 0) {
+      case 'stockQuantity': {
+        const quantityValue = Number(value);
+        if (value === '' || isNaN(quantityValue) || quantityValue < 0) {
           error =
             field === 'totalQuantity'
               ? '총 수량은 0 이상이어야 합니다.'
               : '재고는 0 이상이어야 합니다.';
         } else {
-          error = validateQuantity(value as number) || '';
+          error = validateQuantity(quantityValue) || '';
         }
         break;
-      case 'duration':
-        if (Number(value) <= 0) {
+      }
+      case 'duration': {
+        const durationValue = Number(value);
+        if (value === '' || isNaN(durationValue) || durationValue <= 0) {
           error = '여행기간은 1일 이상이어야 합니다.';
         } else {
-          error = validateDuration(value as number) || '';
+          error = validateDuration(durationValue) || '';
         }
         break;
-      case 'description':
+      }
+      case 'description': {
         if (String(value).trim() === '') {
           error = '상품 설명은 필수입니다.';
         } else {
           error = validateDescription(value as string) || '';
         }
         break;
+      }
     }
 
     setErrors((prev) => ({ ...prev, [field]: error }));
@@ -477,12 +498,31 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
 
     // 필수 필드 검사
     if (!formData.name.trim()) newErrors.name = '상품명은 필수입니다.';
-    if (formData.price <= 0) newErrors.price = '가격은 0보다 커야 합니다.';
-    if (formData.totalQuantity <= 0) newErrors.totalQuantity = '총 수량은 0보다 커야 합니다.';
-    if (mode === 'edit' && formData.stockQuantity < 0)
-      newErrors.stockQuantity = '재고는 0 이상이어야 합니다.';
+
+    const priceValue = Number(formData.price);
+    if (formData.price === '' || isNaN(priceValue) || priceValue <= 0) {
+      newErrors.price = '가격은 0보다 커야 합니다.';
+    }
+
+    const totalQuantityValue = Number(formData.totalQuantity);
+    if (formData.totalQuantity === '' || isNaN(totalQuantityValue) || totalQuantityValue <= 0) {
+      newErrors.totalQuantity = '총 수량은 0보다 커야 합니다.';
+    }
+
+    if (mode === 'edit') {
+      const stockQuantityValue = Number(formData.stockQuantity);
+      if (formData.stockQuantity === '' || isNaN(stockQuantityValue) || stockQuantityValue < 0) {
+        newErrors.stockQuantity = '재고는 0 이상이어야 합니다.';
+      }
+    }
+
     if (!formData.description.trim()) newErrors.description = '상품 설명은 필수입니다.';
-    if (formData.duration <= 0) newErrors.duration = '여행기간은 1일 이상이어야 합니다.';
+
+    const durationValue = Number(formData.duration);
+    if (formData.duration === '' || isNaN(durationValue) || durationValue <= 0) {
+      newErrors.duration = '여행기간은 1일 이상이어야 합니다.';
+    }
+
     if (formData.regionId <= 0) newErrors.regionId = '지역을 선택해주세요.';
 
     // 이미지 필수 검사
@@ -552,12 +592,12 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       if (mode === 'create' && onCreate) {
         const createData: AdminProductCreateRequest = {
           name: formData.name.trim(),
-          price: formData.price,
-          totalQuantity: formData.totalQuantity,
+          price: Number(formData.price),
+          totalQuantity: Number(formData.totalQuantity),
           description: formData.description.trim(),
           saleStatus: formData.saleStatus,
           type: formData.type,
-          duration: formData.duration,
+          duration: Number(formData.duration),
           regionId: formData.regionId,
           imageUrls: cleanedImageUrls,
           descriptionGroups: cleanedDescriptionGroups
@@ -566,13 +606,13 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       } else if (mode === 'edit' && onUpdate) {
         const updateData: AdminProductUpdateRequest = {
           name: formData.name.trim(),
-          price: formData.price,
-          totalQuantity: formData.totalQuantity,
-          stockQuantity: formData.stockQuantity,
+          price: Number(formData.price),
+          totalQuantity: Number(formData.totalQuantity),
+          stockQuantity: Number(formData.stockQuantity),
           description: formData.description.trim(),
           saleStatus: formData.saleStatus,
           type: formData.type,
-          duration: formData.duration,
+          duration: Number(formData.duration),
           regionId: formData.regionId,
           imageUrls: cleanedImageUrls,
           descriptionGroups: cleanedDescriptionGroups
