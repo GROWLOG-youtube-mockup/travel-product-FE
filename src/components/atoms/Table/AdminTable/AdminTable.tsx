@@ -300,8 +300,8 @@ function AdminTable<T extends Record<string, unknown>>({
                   onChange={(e) => handleFilterChange(filter.key, e.target.value)}
                   className={styles.filterSelect}
                 >
-                  {filter.options?.map((option) => (
-                    <option key={option.value} value={option.value}>
+                  {filter.options?.map((option, index) => (
+                    <option key={option.value || `empty-${index}`} value={option.value}>
                       {option.label}
                     </option>
                   ))}
