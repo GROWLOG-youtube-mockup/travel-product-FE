@@ -324,28 +324,128 @@ const AdminProductsPage = () => {
    * constants/regions.ts 데이터를 기반으로 계층 구조 반영
    */
   const getRegionFilterOptions = () => {
-    const options = [{ value: '', label: '전체' }];
+    const options = [{ value: '', label: '🌍 전체 지역' }];
 
-    // 1단계 지역 (시/도)
-    const level1Regions = Regions.filter((region) => region.parent_id === 1);
-    level1Regions.forEach((region) => {
-      options.push({
-        value: region.region_id.toString(),
-        label: region.name
+    // 광역시/도 구분을 위한 ID 배열
+    const metropolitanCities = [2, 3, 4, 5, 6, 7, 8, 9]; // 서울~세종
+    const provinces = [10, 11, 12, 13, 14, 15, 16, 17, 18]; // 경기~제주
+
+    // 광역시/특별시 섹션
+    const metros = Regions.filter((region) => metropolitanCities.includes(region.region_id));
+    if (metros.length > 0) {
+      // 구분선 추가 (선택 불가)
+      options.push({ value: 'separator1', label: '━━━ 🏢 광역시/특별시 ━━━' });
+
+      metros.forEach((region) => {
+        let emoji = '🏙️';
+        // 특별시/광역시별 구분
+        switch (region.name) {
+          case '서울':
+            emoji = '🏛️';
+            break;
+          case '부산':
+            emoji = '🌊';
+            break;
+          case '대구':
+            emoji = '🍎';
+            break;
+          case '인천':
+            emoji = '✈️';
+            break;
+          case '광주':
+            emoji = '🌸';
+            break;
+          case '대전':
+            emoji = '🚄';
+            break;
+          case '울산':
+            emoji = '🏭';
+            break;
+          case '세종':
+            emoji = '🏛️';
+            break;
+          default:
+            emoji = '🏙️';
+        }
+
+        options.push({
+          value: region.region_id.toString(),
+          label: `${emoji} ${region.name}`
+        });
       });
-    });
+    }
 
-    // 2단계 지역 (시/군/구) - 들여쓰기로 표시
-    const level2Regions = Regions.filter((region) => region.parent_id && region.parent_id > 1);
-    level2Regions.forEach((region) => {
-      const parentRegion = Regions.find((r) => r.region_id === region.parent_id);
-      options.push({
-        value: region.region_id.toString(),
-        label: `  ㄴ ${region.name} (${parentRegion?.name || ''})`
+    // 도 단위 섹션
+    const provincesData = Regions.filter((region) => provinces.includes(region.region_id));
+    if (provincesData.length > 0) {
+      // 구분선 추가
+      options.push({ value: 'separator2', label: '━━━ 🏞️ 도 단위 ━━━' });
+
+      provincesData.forEach((province) => {
+        // 도별 이모지 설정
+        let emoji = '🌄';
+        switch (province.name) {
+          case '경기':
+            emoji = '🏘️';
+            break;
+          case '강원':
+            emoji = '⛰️';
+            break;
+          case '충북':
+            emoji = '🏔️';
+            break;
+          case '충남':
+            emoji = '🌾';
+            break;
+          case '전북':
+            emoji = '🌿';
+            break;
+          case '전남':
+            emoji = '🌊';
+            break;
+          case '경북':
+            emoji = '🍃';
+            break;
+          case '경남':
+            emoji = '🌺';
+            break;
+          case '제주':
+            emoji = '🏝️';
+            break;
+          default:
+            emoji = '🌄';
+        }
+
+        options.push({
+          value: province.region_id.toString(),
+          label: `${emoji} ${province.name}`
+        });
+
+        // 해당 도의 시/군 추가
+        const cities = Regions.filter((region) => region.parent_id === province.region_id);
+        cities.forEach((city, index) => {
+          const isLast = index === cities.length - 1;
+          const treeSymbol = isLast ? '└' : '├';
+
+          options.push({
+            value: city.region_id.toString(),
+            label: `${treeSymbol}─ 📍 ${city.name}`
+          });
+        });
       });
-    });
+    }
 
-    return options;
+    return options.map((option) => {
+      // 구분선 옵션들은 선택 불가하게 처리
+      if (option.value.startsWith('separator')) {
+        return {
+          ...option,
+          value: '', // 빈 값으로 설정하여 선택 불가
+          disabled: true
+        };
+      }
+      return option;
+    });
   };
 
   /**
