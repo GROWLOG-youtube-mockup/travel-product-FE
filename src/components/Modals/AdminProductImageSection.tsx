@@ -11,12 +11,14 @@ import styles from './AdminProductImageSection.module.scss';
 interface AdminProductImageSectionProps {
   imageUrls: string[];
   errors: Record<string, string>;
+  isChanged?: boolean;
   onImageUrlsChange: (urls: string[]) => void;
 }
 
 const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
   imageUrls,
   errors,
+  isChanged = false,
   onImageUrlsChange
 }) => {
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -80,9 +82,11 @@ const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
 
   return (
     <>
-      <section className={styles.section}>
+      <section className={`${styles.section} ${isChanged ? styles.sectionModified : ''}`}>
         <h3>
-          이미지 관리 *<span className={styles.requiredIndicator}> (최소 1개 필수)</span>
+          이미지 관리 <span className={styles.required}>*</span>
+          <span className={styles.requiredIndicator}> (최소 1개 필수)</span>
+          {isChanged && <span className={styles.changedIndicator}> ✅ 변경됨</span>}
         </h3>
 
         <div className={styles.imageManagementContainer}>
@@ -151,7 +155,6 @@ const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
         {/* 도움말 */}
         <div className={styles.helpText}>
           <p>* 상품 이미지는 필수입니다. 첫 번째 이미지가 썸네일로 사용됩니다.</p>
-          <p>* 이미지는 드래그로 순서를 변경할 수 있습니다.</p>
         </div>
       </section>
 

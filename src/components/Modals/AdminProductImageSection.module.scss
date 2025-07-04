@@ -1,10 +1,79 @@
 @use '@/styles/core';
 
+// 섹션 변경 표시
+.section {
+  margin-bottom: 32px;
+  padding: 24px;
+  border: 2px solid #e2e8f0;
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
+  }
+
+  h3 {
+    margin: 0 0 24px;
+    padding-bottom: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #1e293b;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-clip: text;
+    border-bottom: 2px solid #e2e8f0;
+    -webkit-text-fill-color: transparent;
+  }
+
+  // 변경된 섹션 강조
+  &.sectionModified {
+    border: 2px solid #22c55e;
+    background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    box-shadow: 0 4px 16px rgb(34 197 94 / 15%);
+
+    h3 {
+      border-bottom-color: #22c55e;
+    }
+  }
+}
+
+.required {
+  color: #ef4444;
+}
+
+.requiredIndicator {
+  margin-left: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ef4444;
+}
+
+.changedIndicator {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #22c55e;
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
 // 이미지 관리 컨테이너
 .imageManagementContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 // 업로드 버튼 영역
@@ -12,11 +81,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 16px;
-  border: 2px dashed core.$admin-table-border;
-  background: #f9fafb;
-  border-radius: 8px;
-  gap: 8px;
+  padding: 24px;
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  gap: 12px;
+
+  &:hover {
+    border-color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
 
   .uploadButton {
     margin-bottom: 8px;
@@ -24,7 +99,7 @@
 
   .uploadHelp {
     margin: 0;
-    font-size: 12px;
+    font-size: 13px;
     color: core.$admin-table-text-secondary;
     text-align: center;
   }
@@ -33,22 +108,24 @@
 // 이미지 그리드
 .imageGrid {
   display: grid;
-  gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
 }
 
 // 개별 이미지 아이템
 .imageItem {
   display: flex;
   flex-direction: column;
-  border: 1px solid core.$admin-table-border;
+  border: 2px solid #e2e8f0;
   background: white;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   overflow: hidden;
 
   &:hover {
-    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+    transform: translateY(-2px);
 
     .imageOverlay {
       opacity: 1;
@@ -60,18 +137,18 @@
 .imageContainer {
   position: relative;
   width: 100%;
-  height: 120px;
+  height: 140px;
   background: #f8fafc;
   overflow: hidden;
 
   .productImage {
     width: 100%;
     height: 100%;
-    transition: transform 0.2s ease;
+    transition: transform 0.3s ease;
     object-fit: cover;
 
     &:hover {
-      transform: scale(1.02);
+      transform: scale(1.05);
     }
   }
 }
@@ -79,19 +156,14 @@
 // 이미지 오버레이 (호버 시 나타나는 삭제 버튼)
 .imageOverlay {
   position: absolute;
-  inset: 0;
   display: flex;
   align-items: flex-start;
   justify-content: flex-end;
-  padding: 8px;
-  background: transparent;
-  transition: all 0.2s ease;
+  padding: 12px;
+  background: linear-gradient(135deg, transparent 0%, rgb(0 0 0 / 20%) 100%);
+  transition: all 0.3s ease;
   opacity: 0;
-
-  &:hover {
-    background: rgb(0 0 0 / 20%);
-    opacity: 1;
-  }
+  inset: 0;
 }
 
 // 삭제 버튼
@@ -99,21 +171,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: none;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: bold;
   color: white;
   background: rgb(239 68 68 / 90%);
   border-radius: 50%;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
   cursor: pointer;
   backdrop-filter: blur(4px);
 
   &:hover:not(:disabled) {
     background: #dc2626;
-    transform: scale(1.1);
+    transform: scale(1.15);
   }
 
   &:disabled {
@@ -123,7 +195,7 @@
   }
 
   &:focus {
-    box-shadow: 0 0 0 2px rgb(239 68 68 / 40%);
+    box-shadow: 0 0 0 3px rgb(239 68 68 / 40%);
     outline: none;
   }
 }
@@ -132,11 +204,11 @@
 .imageInfo {
   display: flex;
   flex-direction: column;
-  padding: 12px;
-  gap: 4px;
+  padding: 16px;
+  gap: 6px;
 
   .imageName {
-    font-size: 12px;
+    font-size: 13px;
     font-weight: 500;
     color: core.$admin-table-text;
     overflow: hidden;
@@ -146,7 +218,7 @@
   }
 
   .imageIndex {
-    font-size: 11px;
+    font-size: 12px;
     color: core.$admin-table-text-secondary;
   }
 }
@@ -157,23 +229,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 200px;
-  padding: 40px 20px;
+  min-height: 240px;
+  padding: 48px 24px;
   border: 2px dashed #d1d5db;
   text-align: center;
   background: #f9fafb;
-  border-radius: 8px;
+  border-radius: 12px;
 
   .emptyIcon {
-    margin-bottom: 16px;
-    font-size: 48px;
+    margin-bottom: 20px;
+    font-size: 64px;
     opacity: 0.6;
   }
 
   .emptyText {
     margin: 0 0 8px;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 18px;
+    font-weight: 600;
     color: core.$admin-table-text;
   }
 
@@ -186,27 +258,36 @@
 
 // 에러 메시지
 .errorMessage {
-  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  margin-top: 12px;
   font-size: 12px;
-  color: #ef4444;
+  font-weight: 500;
+  color: #dc2626;
+  gap: 4px;
+
+  &::before {
+    font-size: 12px;
+    content: '⚠️';
+  }
 }
 
 // 도움말 텍스트
 .helpText {
-  margin-top: 16px;
-  padding: 12px;
+  margin-top: 20px;
+  padding: 16px;
   border: 1px solid #e5e7eb;
   background: #f9fafb;
-  border-radius: 6px;
+  border-radius: 8px;
 
   p {
     margin: 0;
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.5;
     color: core.$admin-table-text-secondary;
 
     &:not(:last-child) {
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
   }
 }
@@ -214,43 +295,43 @@
 // 반응형 디자인
 @media (width <= 768px) {
   .imageGrid {
-    gap: 12px;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 
   .imageContainer {
-    height: 100px;
+    height: 120px;
   }
 
   .uploadButtonContainer {
-    padding: 12px;
+    padding: 20px;
 
     .uploadHelp {
-      font-size: 11px;
-    }
-  }
-
-  .emptyImageState {
-    min-height: 150px;
-    padding: 30px 16px;
-
-    .emptyIcon {
-      margin-bottom: 12px;
-      font-size: 36px;
-    }
-
-    .emptyText {
-      font-size: 14px;
-    }
-
-    .emptySubText {
       font-size: 12px;
     }
   }
 
+  .emptyImageState {
+    min-height: 200px;
+    padding: 32px 20px;
+
+    .emptyIcon {
+      margin-bottom: 16px;
+      font-size: 48px;
+    }
+
+    .emptyText {
+      font-size: 16px;
+    }
+
+    .emptySubText {
+      font-size: 13px;
+    }
+  }
+
   .deleteImageButton {
-    width: 24px;
-    height: 24px;
-    font-size: 12px;
+    width: 28px;
+    height: 28px;
+    font-size: 14px;
   }
 }

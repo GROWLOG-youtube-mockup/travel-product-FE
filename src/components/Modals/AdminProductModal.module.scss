@@ -45,7 +45,7 @@
 .content {
   flex: 1;
   padding: 20px;
-  overflow-y: auto;
+  overflow: hidden auto; // 가로 스크롤 방지
 
   &::-webkit-scrollbar {
     width: 6px;
@@ -66,20 +66,21 @@
 }
 
 .section {
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   padding: 24px;
-  border: 1px solid #e2e8f0;
+  border: 2px solid #e2e8f0;
   background: #ffffff;
-  box-shadow: 0 1px 3px rgb(0 0 0 / 8%);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 6%);
   border-radius: 12px;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 4px 12px rgb(0 0 0 / 12%);
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 10%);
   }
 
   h3 {
-    margin: 0 0 20px;
+    margin: 0 0 24px;
     padding-bottom: 12px;
     font-size: 20px;
     font-weight: 700;
@@ -98,6 +99,120 @@
   }
 }
 
+// 변경사항 시각적 피드백 (AdminEditModal 스타일 참고)
+.fieldGroup {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  gap: 8px;
+  overflow: hidden; // 내용 넘침 방지
+  word-wrap: break-word; // 긴 단어 자동 줄바꿈
+
+  // 변경된 필드 강조 표시
+  &.modified {
+    border: 2px solid #22c55e;
+    background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+    box-shadow: 0 2px 8px rgb(34 197 94 / 15%);
+
+    &::before {
+      position: absolute;
+      top: 8px;
+      right: 12px;
+      font-size: 12px;
+      opacity: 0.8;
+      content: '✅';
+    }
+
+    input:not(:disabled),
+    select:not(:disabled),
+    textarea:not(:disabled) {
+      border: 2px solid #22c55e;
+      background: white;
+
+      &:focus {
+        border-color: #16a34a;
+        box-shadow: 0 0 0 3px rgb(34 197 94 / 20%);
+      }
+    }
+  }
+
+  label {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    .required {
+      margin-left: 4px;
+      color: #ef4444;
+    }
+  }
+
+  // 모든 input, select, textarea 기본 스타일 통일
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-width: 0; // flexbox 내에서 축소 허용
+    padding: 12px 16px;
+    border: 2px solid #e5e7eb;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 14px;
+    color: #1f2937;
+    background: white;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word; // 긴 단어 자동 줄바꿈
+
+    &:focus {
+      border-color: #3b82f6;
+      background: #fefefe;
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
+      outline: none;
+    }
+
+    &:hover:not(:focus) {
+      border-color: #d1d5db;
+    }
+
+    &::placeholder {
+      font-weight: 400;
+      color: #9ca3af;
+    }
+  }
+
+  textarea {
+    min-height: 100px;
+    line-height: 1.5;
+    overflow-wrap: break-word;
+    resize: vertical;
+  }
+
+  .error {
+    border-color: #ef4444 !important;
+    background: #fef2f2;
+
+    &:focus {
+      border-color: #ef4444 !important;
+      background: white;
+      box-shadow: 0 0 0 3px rgb(239 68 68 / 10%);
+    }
+  }
+}
+
 // 필수 표시
 .requiredIndicator {
   margin-left: 4px;
@@ -108,28 +223,255 @@
 
 // 에러 메시지
 .errorMessage {
+  display: flex;
+  align-items: center;
   margin-top: 8px;
   font-size: 12px;
-  color: #ef4444;
+  font-weight: 500;
+  color: #dc2626;
+  gap: 4px;
+
+  &::before {
+    font-size: 10px;
+    content: '⚠️';
+  }
 }
 
 // 도움말 텍스트
 .helpText {
-  margin-top: 16px;
-  padding: 12px;
+  margin-top: 20px;
+  padding: 16px;
   border: 1px solid #e5e7eb;
   background: #f9fafb;
-  border-radius: 6px;
+  border-radius: 8px;
 
   p {
     margin: 0;
     font-size: 12px;
-    line-height: 1.4;
+    line-height: 1.5;
     color: core.$admin-table-text-secondary;
 
     &:not(:last-child) {
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
+  }
+}
+
+// 섹션별 특화 스타일
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  h3 {
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+}
+
+.addSectionButton {
+  padding: 10px 20px;
+  border: 2px dashed core.$pagination-active-bg;
+  font-size: 13px;
+  font-weight: 600;
+  color: core.$pagination-active-bg;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+
+  &:hover {
+    border-style: solid;
+    color: white;
+    background: core.$pagination-active-bg;
+    box-shadow: 0 4px 12px rgb(59 130 246 / 25%);
+    transform: translateY(-1px);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 20%);
+    outline: none;
+  }
+}
+
+// 이미지 관리 컨테이너
+.imageManagementContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.uploadButtonContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 24px;
+  border: 2px dashed #cbd5e1;
+  background: #f8fafc;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  gap: 12px;
+
+  &:hover {
+    border-color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
+
+  .uploadButton {
+    margin-bottom: 8px;
+  }
+
+  .uploadHelp {
+    margin: 0;
+    font-size: 13px;
+    color: core.$admin-table-text-secondary;
+    text-align: center;
+  }
+}
+
+.imageGrid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+.imageItem {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #e2e8f0;
+  background: white;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  overflow: hidden;
+
+  &:hover {
+    border-color: #cbd5e1;
+    box-shadow: 0 6px 20px rgb(0 0 0 / 15%);
+    transform: translateY(-2px);
+
+    .imageOverlay {
+      opacity: 1;
+    }
+  }
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  height: 140px;
+  background: #f8fafc;
+  overflow: hidden;
+
+  .productImage {
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s ease;
+    object-fit: cover;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.imageOverlay {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  padding: 12px;
+  background: linear-gradient(135deg, transparent 0%, rgb(0 0 0 / 20%) 100%);
+  transition: all 0.3s ease;
+  opacity: 0;
+  inset: 0;
+}
+
+.deleteImageButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: white;
+  background: rgb(239 68 68 / 90%);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+
+  &:hover:not(:disabled) {
+    background: #dc2626;
+    transform: scale(1.15);
+  }
+
+  &:disabled {
+    background: rgb(156 163 175 / 90%);
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgb(239 68 68 / 40%);
+    outline: none;
+  }
+}
+
+.imageInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  gap: 6px;
+
+  .imageName {
+    font-size: 13px;
+    font-weight: 500;
+    color: core.$admin-table-text;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: break-all;
+  }
+
+  .imageIndex {
+    font-size: 12px;
+    color: core.$admin-table-text-secondary;
+  }
+}
+
+.emptyImageState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 240px;
+  padding: 48px 24px;
+  border: 2px dashed #d1d5db;
+  text-align: center;
+  background: #f9fafb;
+  border-radius: 12px;
+
+  .emptyIcon {
+    margin-bottom: 20px;
+    font-size: 64px;
+    opacity: 0.6;
+  }
+
+  .emptyText {
+    margin: 0 0 8px;
+    font-size: 18px;
+    font-weight: 600;
+    color: core.$admin-table-text;
+  }
+
+  .emptySubText {
+    margin: 0;
+    font-size: 14px;
+    color: core.$admin-table-text-secondary;
   }
 }
 
@@ -137,16 +479,28 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 16px 20px;
-  background: core.$pagination-bg;
-  border-top: 1px solid core.$admin-table-border;
+  padding: 20px 24px;
+  background: linear-gradient(180deg, transparent 0%, #f8fafc 100%);
+  border-top: 2px solid #e2e8f0;
   flex-shrink: 0;
-  gap: 12px;
+  gap: 16px;
 
   button {
+    min-width: 120px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+
     &:disabled {
       cursor: not-allowed;
       opacity: 0.6;
+      transform: none;
+    }
+
+    &:not(:disabled):hover {
+      box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+      transform: translateY(-1px);
     }
   }
 }
@@ -169,16 +523,64 @@
 
   .section {
     margin-bottom: 24px;
-    padding: 16px;
+    padding: 20px;
+
+    h3 {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+  }
+
+  .imageGrid {
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  }
+
+  .imageContainer {
+    height: 120px;
+  }
+
+  .emptyImageState {
+    min-height: 200px;
+    padding: 32px 20px;
+
+    .emptyIcon {
+      margin-bottom: 16px;
+      font-size: 48px;
+    }
+
+    .emptyText {
+      font-size: 16px;
+    }
+
+    .emptySubText {
+      font-size: 13px;
+    }
   }
 
   .footer {
     flex-direction: column-reverse;
-    padding: 12px 16px;
-    gap: 8px;
+    padding: 16px 20px;
+    gap: 12px;
 
     button {
       width: 100%;
+      min-width: auto;
+    }
+  }
+
+  .fieldGroup {
+    padding: 10px;
+
+    input,
+    select,
+    textarea {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+
+    textarea {
+      min-height: 80px;
     }
   }
 }

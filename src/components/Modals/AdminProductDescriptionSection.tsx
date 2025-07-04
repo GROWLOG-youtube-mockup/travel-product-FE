@@ -13,6 +13,8 @@ import styles from './AdminProductDescriptionSection.module.scss';
 interface AdminProductDescriptionSectionProps {
   descriptionGroups: DescriptionGroup[];
   errors: Record<string, string>;
+  isChanged?: boolean;
+  changedGroups?: Set<number>;
   onDescriptionItemChange: (groupIndex: number, itemIndex: number, content: string) => void;
   onAddDescriptionItem: (groupIndex: number) => void;
   onRemoveDescriptionItem: (groupIndex: number, itemIndex: number) => void;
@@ -23,6 +25,8 @@ interface AdminProductDescriptionSectionProps {
 const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionProps> = ({
   descriptionGroups,
   errors,
+  isChanged = false,
+  changedGroups = new Set(),
   onDescriptionItemChange,
   onAddDescriptionItem,
   onRemoveDescriptionItem,
@@ -94,9 +98,12 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
 
   return (
     <>
-      <section className={styles.section}>
+      <section className={`${styles.section} ${isChanged ? styles.sectionModified : ''}`}>
         <div className={styles.sectionHeader}>
-          <h3>상품 상세 정보</h3>
+          <h3>
+            상품 상세 정보
+            {isChanged && <span className={styles.changedIndicator}> ✅ 변경됨</span>}
+          </h3>
           <button
             type="button"
             onClick={() => setShowNewSectionModal(true)}
@@ -108,12 +115,18 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
 
         <div className={styles.groupsContainer}>
           {descriptionGroups.map((group, groupIndex) => (
-            <div key={`group-${groupIndex}-${group.title}`} className={styles.descriptionGroup}>
+            <div
+              key={`group-${groupIndex}-${group.title}`}
+              className={`${styles.descriptionGroup} ${changedGroups.has(groupIndex) ? styles.groupModified : ''}`}
+            >
               <div className={styles.groupHeader}>
                 <h4>
                   {group.title}
                   {(group.type === 0 || group.type === 1) && (
                     <span className={styles.requiredIndicator}> (필수)</span>
+                  )}
+                  {changedGroups.has(groupIndex) && (
+                    <span className={styles.groupChangedIndicator}> ✅ 변경됨</span>
                   )}
                 </h4>
                 {group.type === 2 && (

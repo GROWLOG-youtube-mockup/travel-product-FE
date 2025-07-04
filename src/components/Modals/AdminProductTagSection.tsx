@@ -7,6 +7,7 @@ import styles from './AdminProductTagSection.module.scss';
 interface AdminProductTagSectionProps {
   tags: DescriptionItem[];
   errors: Record<string, string>;
+  isChanged?: boolean;
   onAddTag: (tagContent: string) => void;
   onRemoveTag: (index: number) => void;
 }
@@ -17,12 +18,16 @@ const PREDEFINED_TAGS = ['Best 추천 👍', '예약폭주 🎉', '좋아요 �
 const AdminProductTagSection: React.FC<AdminProductTagSectionProps> = ({
   tags,
   errors,
+  isChanged = false,
   onAddTag,
   onRemoveTag
 }) => {
   return (
-    <section className={styles.section}>
-      <h3>태그 선택</h3>
+    <section className={`${styles.section} ${isChanged ? styles.sectionModified : ''}`}>
+      <h3>
+        태그 선택
+        {isChanged && <span className={styles.changedIndicator}> ✅ 변경됨</span>}
+      </h3>
       <div className={styles.tagContainer}>
         <div className={styles.availableTags}>
           <h4>사용 가능한 태그</h4>

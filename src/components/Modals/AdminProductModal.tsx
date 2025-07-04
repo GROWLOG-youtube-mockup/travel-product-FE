@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import Modal from '@/components/Modal/Modal';
@@ -10,6 +11,7 @@ import AdminProductDescriptionSection from '@/components/Modals/AdminProductDesc
 import AdminProductFormSection from '@/components/Modals/AdminProductFormSection';
 import AdminProductImageSection from '@/components/Modals/AdminProductImageSection';
 import AdminProductTagSection from '@/components/Modals/AdminProductTagSection';
+import { handleApiError } from '@/lib/handleApiError';
 import type {
   AdminProductCreateRequest,
   AdminProductDetail,
@@ -95,14 +97,20 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   onCreate,
   onUpdate
 }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
+  const [originalData, setOriginalData] = useState<FormData>(INITIAL_FORM_DATA);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [hasChanges, setHasChanges] = useState(false);
   const [showCloseConfirm, setShowCloseConfirm] = useState(false);
+  const [changedFields, setChangedFields] = useState<Set<string>>(new Set());
+  const [changedGroups, setChangedGroups] = useState<Set<number>>(new Set());
 
   // 초기 데이터 설정
   useEffect(() => {
     if (isOpen) {
+      let initialData: FormData;
+
       if (mode === 'edit' && productDetail) {
         // 편집 모드: 기존 데이터로 초기화
         const tagsGroup = productDetail.descriptionGroups.find((group) => group.title === 'tags');
@@ -136,7 +144,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
           });
         }
 
-        setFormData({
+        initialData = {
           name: productDetail.name,
           price: productDetail.price,
           totalQuantity: productDetail.totalQuantity,
@@ -149,18 +157,27 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
           imageUrls: [...productDetail.imageUrls],
           descriptionGroups: finalGroups,
           tags: tagsGroup?.items || []
-        });
+        };
       } else {
         // 생성 모드: 빈 폼으로 초기화
-        setFormData(INITIAL_FORM_DATA);
+        initialData = INITIAL_FORM_DATA;
       }
+
+      setFormData(initialData);
+      setOriginalData(initialData);
       setErrors({});
       setHasChanges(false);
+      setChangedFields(new Set());
+      setChangedGroups(new Set());
     }
   }, [isOpen, mode, productDetail]);
 
-  // 변경사항 감지
+  // 변경사항 감지 및 변경된 필드 추적
   useEffect(() => {
+    const newChangedFields = new Set<string>();
+    const newChangedGroups = new Set<number>();
+    let hasAnyChanges = false;
+
     if (mode === 'create') {
       // 생성 모드에서는 필수 필드가 채워져 있으면 변경사항 있음으로 간주
       const hasRequiredFields =
@@ -168,36 +185,45 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
         formData.price > 0 ||
         formData.totalQuantity > 0 ||
         formData.description.trim() !== '';
-      setHasChanges(hasRequiredFields);
-    } else if (mode === 'edit' && productDetail) {
+      hasAnyChanges = hasRequiredFields;
+    } else if (mode === 'edit') {
       // 편집 모드에서는 원본 데이터와 비교
-      const originalTags =
-        productDetail.descriptionGroups.find((g) => g.title === 'tags')?.items || [];
+      const fieldsToCheck = [
+        'name',
+        'price',
+        'totalQuantity',
+        'stockQuantity',
+        'description',
+        'saleStatus',
+        'type',
+        'duration',
+        'regionId'
+      ];
 
-      // 설명 그룹 비교 (tags 제외) - 더 정확한 비교
-      const originalDescGroups = productDetail.descriptionGroups.filter((g) => g.title !== 'tags');
-      const currentDescGroups = formData.descriptionGroups;
+      fieldsToCheck.forEach((field) => {
+        const currentValue = formData[field as keyof FormData];
+        const originalValue = originalData[field as keyof FormData];
 
-      // 각 그룹의 내용을 정규화해서 비교
-      const normalizeGroup = (group: DescriptionGroup) => ({
-        title: group.title.trim(),
-        type: group.type,
-        items: group.items
-          .filter((item) => item.content.trim() !== '') // 빈 항목 제거
-          .map((item) => item.content.trim())
-          .sort() // 순서에 관계없이 비교하기 위해 정렬
+        if (field === 'name' || field === 'description') {
+          if (String(currentValue).trim() !== String(originalValue).trim()) {
+            newChangedFields.add(field);
+            hasAnyChanges = true;
+          }
+        } else if (currentValue !== originalValue) {
+          newChangedFields.add(field);
+          hasAnyChanges = true;
+        }
       });
 
-      const originalNormalized = originalDescGroups
-        .map(normalizeGroup)
-        .sort((a, b) => a.title.localeCompare(b.title));
+      // 이미지 변경 감지
+      const imageUrlsChanged =
+        JSON.stringify([...formData.imageUrls].sort()) !==
+        JSON.stringify([...originalData.imageUrls].sort());
 
-      const currentNormalized = currentDescGroups
-        .map(normalizeGroup)
-        .sort((a, b) => a.title.localeCompare(b.title));
-
-      const descGroupsChanged =
-        JSON.stringify(originalNormalized) !== JSON.stringify(currentNormalized);
+      if (imageUrlsChanged) {
+        newChangedFields.add('imageUrls');
+        hasAnyChanges = true;
+      }
 
       // 태그 변경 감지
       const tagsChanged =
@@ -208,44 +234,66 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
             .sort()
         ) !==
         JSON.stringify(
-          originalTags
+          originalData.tags
             .map((t) => t.content.trim())
             .filter((t) => t !== '')
             .sort()
         );
 
-      // 이미지 변경 감지 (순서에 관계없이)
-      const imageUrlsChanged =
-        JSON.stringify([...formData.imageUrls].sort()) !==
-        JSON.stringify([...productDetail.imageUrls].sort());
+      if (tagsChanged) {
+        newChangedFields.add('tags');
+        hasAnyChanges = true;
+      }
 
-      const changed =
-        formData.name.trim() !== productDetail.name.trim() ||
-        formData.price !== productDetail.price ||
-        formData.totalQuantity !== productDetail.totalQuantity ||
-        formData.stockQuantity !== productDetail.stockQuantity ||
-        formData.description.trim() !== productDetail.description.trim() ||
-        formData.saleStatus !== productDetail.saleStatus ||
-        formData.type !== productDetail.type ||
-        formData.duration !== productDetail.duration ||
-        formData.regionId !== productDetail.region.regionId ||
-        imageUrlsChanged ||
-        tagsChanged ||
-        descGroupsChanged;
+      // 설명 그룹 변경 감지 - 각 그룹별로 개별 체크
+      formData.descriptionGroups.forEach((currentGroup, groupIndex) => {
+        const originalGroup = originalData.descriptionGroups[groupIndex];
 
-      console.log('Change detection:', {
-        nameChanged: formData.name.trim() !== productDetail.name.trim(),
-        priceChanged: formData.price !== productDetail.price,
-        descriptionChanged: formData.description.trim() !== productDetail.description.trim(),
-        descGroupsChanged,
-        tagsChanged,
-        imageUrlsChanged,
-        finalChanged: changed
+        if (!originalGroup) {
+          // 새로 추가된 그룹
+          newChangedGroups.add(groupIndex);
+          newChangedFields.add('descriptionGroups');
+          hasAnyChanges = true;
+          return;
+        }
+
+        // 그룹 제목 변경 체크
+        if (currentGroup.title.trim() !== originalGroup.title.trim()) {
+          newChangedGroups.add(groupIndex);
+          newChangedFields.add('descriptionGroups');
+          hasAnyChanges = true;
+          return;
+        }
+
+        // 아이템 변경 체크
+        const currentItems = currentGroup.items
+          .filter((item) => item.content.trim() !== '')
+          .map((item) => item.content.trim())
+          .sort();
+
+        const originalItems = originalGroup.items
+          .filter((item) => item.content.trim() !== '')
+          .map((item) => item.content.trim())
+          .sort();
+
+        if (JSON.stringify(currentItems) !== JSON.stringify(originalItems)) {
+          newChangedGroups.add(groupIndex);
+          newChangedFields.add('descriptionGroups');
+          hasAnyChanges = true;
+        }
       });
 
-      setHasChanges(changed);
+      // 삭제된 그룹 체크
+      if (originalData.descriptionGroups.length > formData.descriptionGroups.length) {
+        newChangedFields.add('descriptionGroups');
+        hasAnyChanges = true;
+      }
     }
-  }, [formData, mode, productDetail]);
+
+    setChangedFields(newChangedFields);
+    setChangedGroups(newChangedGroups);
+    setHasChanges(hasAnyChanges);
+  }, [formData, originalData, mode]);
 
   // 기본 필드 변경 핸들러
   const handleFieldChange = (field: string, value: string | number | string[]) => {
@@ -314,7 +362,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 설명 그룹 항목 추가 - 중복 실행 방지를 위한 개선
+  // 설명 그룹 항목 추가
   const handleAddDescriptionItem = (groupIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
@@ -330,7 +378,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 설명 그룹 항목 제거 - 중복 실행 방지를 위한 개선
+  // 설명 그룹 항목 제거
   const handleRemoveDescriptionItem = (groupIndex: number, itemIndex: number) => {
     setFormData((prev) => {
       const newGroups = [...prev.descriptionGroups];
@@ -352,7 +400,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     });
   };
 
-  // 새 섹션 추가 핸들러 - 기타 타입(2)으로 설정
+  // 새 섹션 추가 핸들러
   const handleAddNewSection = (title: string) => {
     setFormData((prev) => {
       const newSortOrder = prev.descriptionGroups.length + 1;
@@ -423,7 +471,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
     }));
   };
 
-  // 유효성 검사 (개선된 버전)
+  // 유효성 검사
   const validateForm = (): boolean => {
     const newErrors: Record<string, string> = {};
 
@@ -443,7 +491,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       newErrors.imageUrls = '상품 이미지는 최소 1개 이상 필요합니다.';
     }
 
-    // 필수 섹션 검사 (포함사항: type 0, 불포함사항: type 1)
+    // 필수 섹션 검사
     const includeSection = formData.descriptionGroups.find((group) => group.type === 0);
     const excludeSection = formData.descriptionGroups.find((group) => group.type === 1);
 
@@ -455,10 +503,9 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
       newErrors.excludeSection = '불포함사항에 최소 1개 항목이 필요합니다.';
     }
 
-    // 기타 섹션들도 내용이 있는지 검사 (있다면 최소 1개 항목 필요)
+    // 기타 섹션들도 내용이 있는지 검사
     formData.descriptionGroups.forEach((group, groupIndex) => {
       if (group.type === 2) {
-        // 기타 섹션
         const hasValidItem = group.items.some((item) => item.content.trim() !== '');
         if (!hasValidItem) {
           newErrors[`descGroup_${groupIndex}`] = `${group.title}에 최소 1개 항목이 필요합니다.`;
@@ -533,7 +580,10 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
         await onUpdate(updateData);
       }
     } catch (error) {
-      console.error('저장 중 오류:', error);
+      handleApiError(error, navigate, '/admin/products', {
+        useToast: true,
+        defaultMessage: '상품 저장 중 오류가 발생했습니다.'
+      });
     }
   };
 
@@ -587,6 +637,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
               errors={errors}
               regions={regions}
               mode={mode}
+              changedFields={changedFields}
               onFieldChange={handleFieldChange}
             />
 
@@ -594,6 +645,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
             <AdminProductImageSection
               imageUrls={formData.imageUrls}
               errors={errors}
+              isChanged={changedFields.has('imageUrls')}
               onImageUrlsChange={handleImageUrlsChange}
             />
 
@@ -601,6 +653,8 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
             <AdminProductDescriptionSection
               descriptionGroups={formData.descriptionGroups}
               errors={errors}
+              isChanged={changedFields.has('descriptionGroups')}
+              changedGroups={changedGroups}
               onDescriptionItemChange={handleDescriptionItemChange}
               onAddDescriptionItem={handleAddDescriptionItem}
               onRemoveDescriptionItem={handleRemoveDescriptionItem}
@@ -612,6 +666,7 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
             <AdminProductTagSection
               tags={formData.tags}
               errors={errors}
+              isChanged={changedFields.has('tags')}
               onAddTag={handleAddTag}
               onRemoveTag={handleRemoveTag}
             />

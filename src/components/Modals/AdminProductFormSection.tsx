@@ -20,6 +20,7 @@ interface AdminProductFormSectionProps {
   errors: Record<string, string>;
   regions: Region[];
   mode: 'create' | 'edit';
+  changedFields: Set<string>;
   onFieldChange: (field: string, value: string | number) => void;
 }
 
@@ -28,14 +29,17 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
   errors,
   regions,
   mode,
+  changedFields,
   onFieldChange
 }) => {
   return (
     <section className={styles.section}>
       <h3>기본 정보</h3>
       <div className={styles.fieldGrid}>
-        <div className={styles.fieldGroup}>
-          <label>상품명 *</label>
+        <div className={`${styles.fieldGroup} ${changedFields.has('name') ? styles.modified : ''}`}>
+          <label>
+            상품명 <span className={styles.required}>*</span>
+          </label>
           <Input
             type="text"
             value={formData.name}
@@ -46,8 +50,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>가격 *</label>
+        <div
+          className={`${styles.fieldGroup} ${changedFields.has('price') ? styles.modified : ''}`}
+        >
+          <label>
+            가격 <span className={styles.required}>*</span>
+          </label>
           <Input
             type="number"
             value={formData.price}
@@ -58,8 +66,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           {errors.price && <span className={styles.errorMessage}>{errors.price}</span>}
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>총 수량 *</label>
+        <div
+          className={`${styles.fieldGroup} ${changedFields.has('totalQuantity') ? styles.modified : ''}`}
+        >
+          <label>
+            총 수량 <span className={styles.required}>*</span>
+          </label>
           <Input
             type="number"
             value={formData.totalQuantity}
@@ -73,8 +85,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
         </div>
 
         {mode === 'edit' && (
-          <div className={styles.fieldGroup}>
-            <label>재고 수량 *</label>
+          <div
+            className={`${styles.fieldGroup} ${changedFields.has('stockQuantity') ? styles.modified : ''}`}
+          >
+            <label>
+              재고 수량 <span className={styles.required}>*</span>
+            </label>
             <Input
               type="number"
               value={formData.stockQuantity}
@@ -88,8 +104,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           </div>
         )}
 
-        <div className={styles.fieldGroup}>
-          <label>여행기간(일) *</label>
+        <div
+          className={`${styles.fieldGroup} ${changedFields.has('duration') ? styles.modified : ''}`}
+        >
+          <label>
+            여행기간(일) <span className={styles.required}>*</span>
+          </label>
           <Input
             type="number"
             value={formData.duration}
@@ -100,8 +120,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           {errors.duration && <span className={styles.errorMessage}>{errors.duration}</span>}
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>지역 *</label>
+        <div
+          className={`${styles.fieldGroup} ${changedFields.has('regionId') ? styles.modified : ''}`}
+        >
+          <label>
+            지역 <span className={styles.required}>*</span>
+          </label>
           <select
             value={formData.regionId}
             onChange={(e) => onFieldChange('regionId', Number(e.target.value))}
@@ -117,8 +141,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           {errors.regionId && <span className={styles.errorMessage}>{errors.regionId}</span>}
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>판매 상태 *</label>
+        <div
+          className={`${styles.fieldGroup} ${changedFields.has('saleStatus') ? styles.modified : ''}`}
+        >
+          <label>
+            판매 상태 <span className={styles.required}>*</span>
+          </label>
           <select
             value={formData.saleStatus}
             onChange={(e) => onFieldChange('saleStatus', Number(e.target.value))}
@@ -130,8 +158,10 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           </select>
         </div>
 
-        <div className={styles.fieldGroup}>
-          <label>상품 타입 *</label>
+        <div className={`${styles.fieldGroup} ${changedFields.has('type') ? styles.modified : ''}`}>
+          <label>
+            상품 타입 <span className={styles.required}>*</span>
+          </label>
           <select
             value={formData.type}
             onChange={(e) => onFieldChange('type', Number(e.target.value))}
@@ -146,8 +176,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
         </div>
       </div>
 
-      <div className={styles.fieldGroup}>
-        <label>상품 설명 *</label>
+      <div
+        className={`${styles.fieldGroup} ${changedFields.has('description') ? styles.modified : ''}`}
+      >
+        <label>
+          상품 설명 <span className={styles.required}>*</span>
+        </label>
         <textarea
           value={formData.description}
           onChange={(e) => onFieldChange('description', e.target.value)}
