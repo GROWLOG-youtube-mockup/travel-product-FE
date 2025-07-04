@@ -140,8 +140,11 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
     <Modal
       onClose={handleClose}
       boxStyle={{
-        width: 500,
-        maxWidth: '90vw'
+        width: '90vw',
+        maxWidth: 600,
+        minWidth: 400,
+        height: 'auto',
+        maxHeight: '85vh'
       }}
     >
       <ModalHeader title="이미지 업로드">
