@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Input from '@/components/atoms/Input/Input';
 import type { Region } from '@/types/api/AdminProduct.type';
 
 import styles from './AdminProductFormSection.module.scss';
@@ -40,12 +39,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <label>
             상품명 <span className={styles.required}>*</span>
           </label>
-          <Input
+          <input
             type="text"
             value={formData.name}
             onChange={(e) => onFieldChange('name', e.target.value)}
             placeholder="상품명을 입력하세요"
-            className={errors.name ? styles.error : ''}
+            className={`${styles.input} ${errors.name ? styles.error : ''}`}
           />
           {errors.name && <span className={styles.errorMessage}>{errors.name}</span>}
         </div>
@@ -56,12 +55,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <label>
             가격 <span className={styles.required}>*</span>
           </label>
-          <Input
+          <input
             type="number"
             value={formData.price}
             onChange={(e) => onFieldChange('price', Number(e.target.value))}
             placeholder="가격을 입력하세요"
-            className={errors.price ? styles.error : ''}
+            className={`${styles.input} ${errors.price ? styles.error : ''}`}
           />
           {errors.price && <span className={styles.errorMessage}>{errors.price}</span>}
         </div>
@@ -72,12 +71,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <label>
             총 수량 <span className={styles.required}>*</span>
           </label>
-          <Input
+          <input
             type="number"
             value={formData.totalQuantity}
             onChange={(e) => onFieldChange('totalQuantity', Number(e.target.value))}
             placeholder="총 수량을 입력하세요"
-            className={errors.totalQuantity ? styles.error : ''}
+            className={`${styles.input} ${errors.totalQuantity ? styles.error : ''}`}
           />
           {errors.totalQuantity && (
             <span className={styles.errorMessage}>{errors.totalQuantity}</span>
@@ -91,12 +90,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
             <label>
               재고 수량 <span className={styles.required}>*</span>
             </label>
-            <Input
+            <input
               type="number"
               value={formData.stockQuantity}
               onChange={(e) => onFieldChange('stockQuantity', Number(e.target.value))}
               placeholder="재고 수량을 입력하세요"
-              className={errors.stockQuantity ? styles.error : ''}
+              className={`${styles.input} ${errors.stockQuantity ? styles.error : ''}`}
             />
             {errors.stockQuantity && (
               <span className={styles.errorMessage}>{errors.stockQuantity}</span>
@@ -110,12 +109,12 @@ const AdminProductFormSection: React.FC<AdminProductFormSectionProps> = ({
           <label>
             여행기간(일) <span className={styles.required}>*</span>
           </label>
-          <Input
+          <input
             type="number"
             value={formData.duration}
             onChange={(e) => onFieldChange('duration', Number(e.target.value))}
             placeholder="여행기간을 입력하세요"
-            className={errors.duration ? styles.error : ''}
+            className={`${styles.input} ${errors.duration ? styles.error : ''}`}
           />
           {errors.duration && <span className={styles.errorMessage}>{errors.duration}</span>}
         </div>

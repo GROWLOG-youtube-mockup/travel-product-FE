@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Button from '@/components/atoms/Button/Button';
-import Input from '@/components/atoms/Input/Input';
 import Modal from '@/components/Modal/Modal';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
 import ModalHeader from '@/components/Modal/ModalHeader';
@@ -143,7 +142,7 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
               <div className={styles.itemsContainer}>
                 {group.items.map((item, itemIndex) => (
                   <div key={`item-${groupIndex}-${itemIndex}`} className={styles.listItem}>
-                    <Input
+                    <input
                       type="text"
                       value={item.content}
                       onChange={(e) =>
@@ -201,13 +200,13 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
             <div className={styles.modalBody}>
               <div className={styles.fieldGroup}>
                 <label htmlFor="sectionTitle">섹션 이름</label>
-                <Input
+                <input
                   id="sectionTitle"
                   type="text"
                   value={newSectionTitle}
                   onChange={(e) => handleNewSectionTitleChange(e.target.value)}
                   placeholder="섹션 이름을 입력하세요"
-                  className={newSectionError ? styles.error : ''}
+                  className={`${styles.input} ${newSectionError ? styles.error : ''}`}
                 />
                 {newSectionError && <span className={styles.errorMessage}>{newSectionError}</span>}
               </div>
