@@ -6,7 +6,7 @@ import type { PaginatedResponse } from './Pagination.type';
 import type { Product } from './Product.type';
 import type { ProductDetail } from './ProductDetail.type';
 import type { ApiResponse } from './response.type';
-import type { Trip } from './Trip.type';
+import type { TripDto } from './Trip.type';
 import type { User } from './User.type';
 
 export type CartRes = ApiResponse<Carts[]>;
@@ -22,6 +22,14 @@ export type LoginRes = ApiResponse<{
   roleCode: number;
 }>;
 export type PasswordVerifyRes = ApiResponse<{ verified: boolean }>;
+export type PaymentApprove = ApiResponse<{
+  status: string;
+  method: string;
+  payment_id: number;
+  paid_at: string;
+}>;
+export type PaymentCancel = ApiResponse<number>;
+export type PaymentSuccess = string;
 export type EmailSendRes = ApiResponse<{ sent: boolean }>;
 export type EmailVerifyRes = ApiResponse<{ verified: boolean }>;
 export type FindEmailRes = ApiResponse<string>;
@@ -29,7 +37,7 @@ export type PhoneChangeRes = ApiResponse<string>;
 export type ResetPasswordRes = ApiResponse<string>;
 export type PasswordChangeRes = ApiResponse<string>;
 export type NameChangeRes = ApiResponse<string>;
-export type TripsRes = ApiResponse<Trip[]>;
+export type TripsRes = ApiResponse<TripDto[]>;
 export type AdminLogsRes = ApiResponse<PaginatedResponse<AdminLog>>;
 export type AdminUsersRes = ApiResponse<PaginatedResponse<AdminUser>>;
 export type UserUpdateRes = ApiResponse<{ updated_at: string; user_id: number }>;
@@ -48,6 +56,9 @@ export interface EndpointResponseMap {
   '/users/me/password': PasswordChangeRes;
   '/users/me/name': NameChangeRes;
   '/users/verify-password': PasswordVerifyRes;
+  '/payments/approve': PaymentApprove;
+  '/payments/cancel': PaymentCancel;
+  '/payments/success': PaymentSuccess;
   '/auth/login': LoginRes;
   '/auth/email/send': EmailSendRes;
   '/auth/email/verify': EmailVerifyRes;

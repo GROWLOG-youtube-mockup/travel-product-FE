@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
@@ -7,19 +7,24 @@ import CartItemCard from '@/components/Cards/CartItemCard';
 import { useDeleteCartItems } from '@/hooks/useDeleteCart';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useCartStore } from '@/store/CartStore';
 import type { Carts } from '@/types/api/Carts.type';
 
 import styles from './Cart.module.scss';
 
 const CartPage = () => {
+  const navigate = useNavigate();
   const cartRes = useGetApi('/carts');
   const userRes = useGetApi('/users/me');
   const { mutate: createOrder, isPending } = usePostApi('/orders');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
-  const navigate = useNavigate();
   const deleteCart = useDeleteCartItems();
+
+  useEffect(() => {
+    cartRes.refetch();
+  }, []);
 
   const handlePaymentClick = (item: Carts) => {
     createOrder(
@@ -34,7 +39,7 @@ const CartPage = () => {
         ]
       },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           setSelectedItem({
             cartItemId: item.cartItemId,
             productId: Number(item.productId),
@@ -44,12 +49,13 @@ const CartPage = () => {
             startDate: item.startDate,
             stockQuantity: item.stockQuantity,
             totalPrice: item.totalPrice,
-            productImage: item.productImage
+            productImage: item.productImage,
+            ...data?.data
           });
           navigate('/reservation');
         },
-        onError: () => {
-          throw new Error('주문 생성 실패');
+        onError: (error: any) => {
+          handleApiError(error, navigate, location.pathname);
         }
       }
     );
@@ -85,7 +91,21 @@ const CartPage = () => {
   };
 
   const handleDeleteClick = (cartItemId: number) => {
-    deleteCart.mutate({ itemIds: [cartItemId] });
+    // deleteCart.mutate({ itemIds: [cartItemId] });
+    deleteCart.mutate(
+      { itemIds: [cartItemId] },
+      {
+        onSuccess: () => {
+          cartRes.refetch();
+        },
+        onError: (error: any) => {
+          handleApiError(error, navigate, location.pathname, {
+            useToast: true,
+            defaultMessage: '장바구니에서 오류가 발생하였습니다.'
+          });
+        }
+      }
+    );
   };
 
   return (

@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { loadTossPayments } from '@tosspayments/tosspayments-sdk';
 
-import Button from '../../components/atoms/Button/Button';
-import { useCartStore } from '../../store/CartStore';
-import type { User } from '../../types/user';
+import Button from '@/components/atoms/Button/Button';
+import { useGetApi } from '@/hooks/useGetAPI';
+import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
+import { useCartStore } from '@/store/CartStore';
+import { denormalizePhoneNumber } from '@/utils/phone';
 
 import styles from './PaymentProcess.module.scss';
 
@@ -16,47 +19,35 @@ declare global {
 }
 
 const clientKey = import.meta.env.VITE_CLIENT_KEY;
-const customerKey = import.meta.env.VITE_CUSTOMER_KEY;
 
 const PaymentProcessPage = () => {
   const navigate = useNavigate();
   const { selectedItem } = useCartStore((state) => state);
-  const [amount, setAmount] = useState<{ currency: string; value: number }>({
+  const [amount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: selectedItem?.product.price || 0
+    value: selectedItem?.price ?? 0
   });
-  const [userInfo, setUserInfo] = useState<User | null>(null);
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
+  const userRes = useGetApi('/users/me');
+  const { mutate: approveApi } = usePostApi('/payments/approve');
+
+  const customerKey = useMemo(
+    () => userRes.data?.data.email || 'guest-' + crypto.randomUUID(),
+    [userRes.data?.data]
+  );
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const res = await fetch('/users/me');
-        if (!res.ok) throw new Error('네트워크 오류');
-        const data = await res.json();
-        setUserInfo(data);
-      } catch (err: any) {
-        navigate('/error');
-      }
-    };
-
-    fetchUser();
-  }, []);
-
-  useEffect(() => {
-    async function fetchPaymentWidgets() {
+    const fetchPaymentWidgets = async () => {
       // ------  결제위젯 초기화 ------
       const tossPayments = await loadTossPayments(clientKey);
       // 회원 결제
       const paymentWidgets = tossPayments.widgets({
         customerKey
       });
-      // 비회원 결제
-      // const paymentWidgets = tossPayments.widgets({ customerKey: ANONYMOUS });
 
       setWidgets(paymentWidgets);
-    }
+    };
 
     fetchPaymentWidgets();
   }, []);
@@ -93,21 +84,14 @@ const PaymentProcessPage = () => {
     widgets.setAmount(amount);
   }, [widgets, amount]);
 
-  const handleCreateOrder = () => {
-    fetch('/orders', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' }
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('주문 실패');
-        return res.json();
-      })
-      .then((data) => {
-        console.log('주문 생성:', data);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+  const handlePaymentApprove = () => {
+    approveApi({
+      amount: selectedItem?.price ?? 0,
+      payment_key: selectedItem?.order_id?.toString() ?? '',
+      order_id: selectedItem?.order_id ?? 0,
+      payment_gateway: 'toss',
+      transaction_id: 'tx-001'
+    });
   };
 
   return (
@@ -144,20 +128,35 @@ const PaymentProcessPage = () => {
                   try {
                     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
                     // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-                    handleCreateOrder();
+                    handlePaymentApprove();
+
                     // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
                     await widgets.requestPayment({
-                      orderId: 'GAlnHSE76Dt6YBp5M8Jcj',
-                      orderName: '토스 티셔츠 외 2건',
+                      orderId: `order_${selectedItem?.order_id}`,
+                      orderName: selectedItem?.productName,
                       successUrl: window.location.origin + '/payment-complete',
                       failUrl: window.location.origin + '/payment-process',
-                      customerEmail: userInfo?.email,
-                      customerName: userInfo?.name,
-                      customerMobilePhone: userInfo?.phone_number
+                      customerEmail: userRes?.data?.data.email,
+                      customerName: userRes?.data?.data.name,
+                      customerMobilePhone: denormalizePhoneNumber(
+                        userRes?.data?.data.phoneNumber ?? ''
+                      )
                     });
-                  } catch (error) {
+                    // .then((res: any) => {
+                    //   handlePaymentApprove();
+                    // });
+                  } catch (error: any) {
                     // 에러 처리하기
-                    console.error(error);
+                    if (error?.code === 'USER_CANCEL') {
+                      // tossPayments가 주는 커스텀 에러 코드인 'USER_CANCEL'
+                      handleApiError(error, navigate, location.pathname, {
+                        useToast: true,
+                        defaultMessage: '결제가 취소되었습니다'
+                      });
+                    } else {
+                      // 예기치 못한 오류는 에러 페이지로 이동
+                      handleApiError(error, navigate, location.pathname);
+                    }
                   }
                 }}
               >

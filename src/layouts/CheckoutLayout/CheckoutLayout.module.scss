@@ -5,7 +5,7 @@
   flex-direction: column;
   width: 100%;
   min-width: core.$default-min-width;
-  height: 100vh;
+  min-height: 100vh;
   background-color: #f4f4f4;
 
   .baseForm {

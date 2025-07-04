@@ -19,15 +19,11 @@ const getTripDays = (start: string, end: string) => {
 const MyTripCard = ({ trip }: { trip: Trip }) => {
   return (
     <div className={styles.wrapper}>
-      {trip.thumbnailUrl ? (
-        <div
-          className={styles.image}
-          style={{ backgroundImage: `url(${trip.thumbnailUrl})` }}
-          aria-label={trip.title}
-        />
-      ) : (
-        <div className={styles.image} />
-      )}
+      <div className={styles.image}>
+        {trip.thumbnailUrl && (
+          <img src={trip.thumbnailUrl} alt={trip.title} />
+        )}
+      </div>
       <div className={styles.card}>
         <div className={styles.details}>
           <div className={styles.title}>{trip.title}</div>

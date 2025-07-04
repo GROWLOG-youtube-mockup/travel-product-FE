@@ -41,7 +41,7 @@ const UserPage = () => {
     isError: userInfoError
   } = useGetApi('/users/me');
 
-  // 데이터 가공
+  // 데이터 가공 : **toFETripArray에서 thumbnailUrl이 반드시 string이어야 함**
   const tripsData: Trip[] = toFETripArray((tripsResponse?.data ?? []) as unknown as TripDto[]);
   const userInfoData: User | null = userInfoResponse?.data ?? null;
   const today = new Date();
@@ -64,6 +64,10 @@ const UserPage = () => {
 
   const handleProductPageNavigation = (productId: number) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleCancelConfirm = (orderId: number) => {
+    navigate(`/CancelConfirm/${orderId}`);
   };
 
   if (tripsLoading || userInfoLoading) {
@@ -89,10 +93,7 @@ const UserPage = () => {
             <div className={styles.emptyMsg}>{emptyMsg}</div>
           ) : (
             trips.map((trip) => (
-              <div
-                key={`${trip.productId}_${trip.start_date}_${trip.end_date}`}
-                className={styles.userTripWrapper}
-              >
+              <div key={trip.orderItemId} className={styles.userTripWrapper}>
                 <MyTripCard trip={trip} />
                 {userInfo && (
                   <UserInfo name={userInfo.name} phone={userInfo.phone} email={userInfo.email} />
@@ -105,6 +106,13 @@ const UserPage = () => {
                     onClick={() => handleProductPageNavigation(trip.productId)}
                   >
                     해당 상품 페이지로
+                  </Button>
+                  <Button
+                    variant="sm"
+                    style={{ margin: '16px 0 0 0' }}
+                    onClick={() => handleCancelConfirm(trip.orderId)}
+                  >
+                    결제 취소하기
                   </Button>
                 </div>
               </div>
