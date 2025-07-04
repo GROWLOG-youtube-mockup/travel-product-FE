@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
 import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
 import AdminProductModal from '@/components/Modals/AdminProductModal';
+import Regions from '@/constants/regions';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useDeleteApi } from '@/hooks/useDeleteAPI';
 import { useGetApi } from '@/hooks/useGetAPI';
@@ -22,78 +23,66 @@ import type {
   AdminProductUpdateRequest,
   Region
 } from '@/types/api/AdminProduct.type';
-import {
-  formatPrice,
-  getProductTypeText,
-  getSaleStatusText,
-  getThumbnailUrl
-} from '@/utils/adminModalUtils';
+import { formatPrice, getProductTypeText, getSaleStatusText } from '@/utils/adminModalUtils';
 
 import styles from './AdminProducts.module.scss';
 
-// 실제 데이터베이스 기반 지역 데이터
-const REGIONS: Region[] = [
-  { regionId: 1, name: '대한민국', parentId: 0 },
-  { regionId: 2, name: '서울', parentId: 1 },
-  { regionId: 3, name: '부산', parentId: 1 },
-  { regionId: 4, name: '대구', parentId: 1 },
-  { regionId: 5, name: '인천', parentId: 1 },
-  { regionId: 6, name: '광주', parentId: 1 },
-  { regionId: 7, name: '대전', parentId: 1 },
-  { regionId: 8, name: '울산', parentId: 1 },
-  { regionId: 9, name: '세종', parentId: 1 },
-  { regionId: 10, name: '경기', parentId: 1 },
-  { regionId: 11, name: '강원', parentId: 1 },
-  { regionId: 12, name: '충북', parentId: 1 },
-  { regionId: 13, name: '충남', parentId: 1 },
-  { regionId: 14, name: '전북', parentId: 1 },
-  { regionId: 15, name: '전남', parentId: 1 },
-  { regionId: 16, name: '경북', parentId: 1 },
-  { regionId: 17, name: '경남', parentId: 1 },
-  { regionId: 18, name: '제주', parentId: 1 },
-  { regionId: 19, name: '수원', parentId: 10 },
-  { regionId: 20, name: '성남', parentId: 10 },
-  { regionId: 21, name: '용인', parentId: 10 },
-  { regionId: 22, name: '부천', parentId: 11 },
-  { regionId: 23, name: '원주', parentId: 11 },
-  { regionId: 24, name: '강릉', parentId: 11 },
-  { regionId: 25, name: '동해', parentId: 11 },
-  { regionId: 26, name: '태백', parentId: 11 },
-  { regionId: 27, name: '속초', parentId: 11 },
-  { regionId: 28, name: '삼척', parentId: 11 },
-  { regionId: 29, name: '청주', parentId: 12 },
-  { regionId: 30, name: '충주', parentId: 12 },
-  { regionId: 31, name: '제천', parentId: 12 },
-  { regionId: 32, name: '천안', parentId: 13 },
-  { regionId: 33, name: '공주', parentId: 13 },
-  { regionId: 34, name: '보령', parentId: 13 },
-  { regionId: 35, name: '아산', parentId: 13 }
-];
+/**
+ * API 응답 데이터 타입 정의
+ */
+interface ApiResponseData {
+  content?: AdminProduct[];
+  totalPages?: number;
+  totalElements?: number;
+  data?: {
+    content?: AdminProduct[];
+    totalPages?: number;
+    totalElements?: number;
+  };
+}
 
+/**
+ * constants/regions.ts 데이터를 AdminProduct.type.ts의 Region 타입으로 변환
+ */
+const REGIONS: Region[] = Regions.map((region) => ({
+  regionId: region.region_id,
+  name: region.name,
+  parentId: region.parent_id || 0
+}));
+
+/**
+ * 관리자 상품 관리 페이지 컴포넌트
+ */
 const AdminProductsPage = () => {
   const navigate = useNavigate();
   const { roleCode: currentUserRole } = useAuthStore();
+
+  // 모달 상태 관리
   const [productModalOpen, setProductModalOpen] = useState(false);
   const [productModalMode, setProductModalMode] = useState<'create' | 'edit'>('create');
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<AdminProduct | null>(null);
   const [productDetailData, setProductDetailData] = useState<AdminProductDetail | null>(null);
 
+  // 페이지네이션 및 필터 관리
   const {
     apiParams,
+    pagination,
     handlePageChange,
     handlePageSizeChange,
     handleFiltersChange,
-    getFilterValues
+    getFilterValues,
+    updatePagination
   } = useAdminPagination({
     defaultPageSize: 10,
     pageSizeOptions: [5, 10, 20, 50]
   });
 
-  // 현재 필터 값들
   const filterValues = getFilterValues();
 
-  // API 호출 파라미터에 필터 추가 (useMemo로 최적화)
+  /**
+   * API 호출 파라미터에 필터 조건 추가
+   */
   const finalApiParams = useMemo(() => {
     const params: Record<string, unknown> = { ...apiParams };
     if (filterValues.regionId) {
@@ -102,10 +91,51 @@ const AdminProductsPage = () => {
     return params;
   }, [apiParams, filterValues.regionId]);
 
-  // 상품 목록 조회 API
+  // API 훅들
   const { data, isLoading, error, refetch } = useGetApi('/admin/products', finalApiParams);
 
-  // POST API 훅 (상품 생성)
+  /**
+   * API 응답에서 페이지네이션 정보 추출 및 업데이트
+   */
+  useEffect(() => {
+    if (data) {
+      const paginationData = extractPaginationFromResponse(data as ApiResponseData);
+      if (paginationData) {
+        updatePagination({
+          totalPages: paginationData.totalPages,
+          totalElements: paginationData.totalElements
+        });
+      }
+    }
+  }, [data, updatePagination]);
+
+  /**
+   * API 응답에서 페이지네이션 정보 추출
+   */
+  const extractPaginationFromResponse = (data: ApiResponseData) => {
+    if (data && typeof data === 'object' && data !== null) {
+      if ('totalPages' in data && 'totalElements' in data) {
+        return {
+          totalPages: Number(data.totalPages || 0),
+          totalElements: Number(data.totalElements || 0)
+        };
+      }
+      if ('data' in data && data.data && typeof data.data === 'object' && data.data !== null) {
+        const nestedData = data.data;
+        if ('totalPages' in nestedData && 'totalElements' in nestedData) {
+          return {
+            totalPages: Number(nestedData.totalPages || 0),
+            totalElements: Number(nestedData.totalElements || 0)
+          };
+        }
+      }
+    }
+    return null;
+  };
+
+  /**
+   * 상품 생성 API 훅
+   */
   const createProductMutation = usePostApi('/admin/products', {
     onSuccess: () => {
       toast.success('상품이 성공적으로 추가되었습니다.');
@@ -122,9 +152,11 @@ const AdminProductsPage = () => {
     }
   });
 
-  // PUT API 훅 (상품 수정)
+  /**
+   * 상품 수정 API 훅
+   */
   const updateProductMutation = usePutApi(
-    selectedProduct ? `/admin/products/${selectedProduct.productId}` : '/admin/products/0',
+    selectedProduct ? `/admin/products/${selectedProduct.productId}` : `/admin/products/0`,
     {
       onSuccess: () => {
         toast.success('상품 정보가 성공적으로 수정되었습니다.');
@@ -142,7 +174,9 @@ const AdminProductsPage = () => {
     }
   );
 
-  // DELETE API 훅 (상품 삭제)
+  /**
+   * 상품 삭제 API 훅
+   */
   const deleteProductMutation = useDeleteApi(
     selectedProduct ? `/admin/products/${selectedProduct.productId}` : '/admin/products/0',
     {
@@ -162,7 +196,9 @@ const AdminProductsPage = () => {
     }
   );
 
-  // 에러 처리
+  /**
+   * API 에러 처리
+   */
   useEffect(() => {
     if (error) {
       handleApiError(error, navigate, '/admin/products', {
@@ -172,65 +208,39 @@ const AdminProductsPage = () => {
     }
   }, [error, navigate]);
 
-  // 데이터 추출 함수
+  /**
+   * API 응답에서 테이블 데이터 추출
+   */
   const getTableData = (): AdminProduct[] => {
     if (!data) return [];
 
-    // API 응답이 직접 {content: [], totalElements: ...} 형태인 경우
+    const responseData = data as ApiResponseData;
+
     if (
-      typeof data === 'object' &&
-      data !== null &&
-      'content' in data &&
-      Array.isArray(data.content)
+      typeof responseData === 'object' &&
+      responseData !== null &&
+      'content' in responseData &&
+      Array.isArray(responseData.content)
     ) {
-      return data.content as AdminProduct[];
+      return responseData.content;
     }
 
-    // 기존 방식: data.data.content
     if (
-      data.data &&
-      typeof data.data === 'object' &&
-      data.data !== null &&
-      'content' in data.data &&
-      Array.isArray(data.data.content)
+      responseData.data &&
+      typeof responseData.data === 'object' &&
+      responseData.data !== null &&
+      'content' in responseData.data &&
+      Array.isArray(responseData.data.content)
     ) {
-      return data.data.content as AdminProduct[];
+      return responseData.data.content;
     }
 
     return [];
   };
 
-  // 페이지네이션 정보 추출
-  const getPaginationInfo = () => {
-    if (data && typeof data === 'object' && data !== null) {
-      // 직접 응답 형태 처리
-      if ('totalPages' in data && 'totalElements' in data) {
-        return {
-          currentPage: Math.max(0, (apiParams.page as number) - 1),
-          totalPages: Number(data.totalPages || 0),
-          totalElements: Number(data.totalElements || 0)
-        };
-      }
-      // 중첩된 data 형태 처리
-      if ('data' in data && data.data && typeof data.data === 'object' && data.data !== null) {
-        const nestedData = data.data as any;
-        if ('totalPages' in nestedData && 'totalElements' in nestedData) {
-          return {
-            currentPage: Math.max(0, (apiParams.page as number) - 1),
-            totalPages: Number(nestedData.totalPages || 0),
-            totalElements: Number(nestedData.totalElements || 0)
-          };
-        }
-      }
-    }
-    return {
-      currentPage: Math.max(0, (apiParams.page as number) - 1),
-      totalPages: 0,
-      totalElements: 0
-    };
-  };
-
-  // 상품 추가 버튼 클릭 핸들러
+  /**
+   * 상품 추가 버튼 클릭 핸들러
+   */
   const handleAddClick = () => {
     setProductModalMode('create');
     setSelectedProduct(null);
@@ -238,12 +248,14 @@ const AdminProductsPage = () => {
     setProductModalOpen(true);
   };
 
-  // 수정 버튼 클릭 핸들러 (상세 정보 조회 후 모달 표시)
+  /**
+   * 상품 수정 버튼 클릭 핸들러
+   * 상품 상세 정보를 조회한 후 수정 모달을 표시
+   */
   const handleEditClick = async (product: AdminProduct) => {
     setSelectedProduct(product);
 
     try {
-      // 직접 API 호출로 변경
       const { api } = await import('@/lib/api');
       const response = await api.get(`/admin/products/${product.productId}`);
 
@@ -255,7 +267,6 @@ const AdminProductsPage = () => {
         throw new Error('상세 정보를 불러올 수 없습니다.');
       }
     } catch (error) {
-      console.error('상품 상세 조회 에러:', error);
       handleApiError(error, navigate, '/admin/products', {
         useToast: true,
         defaultMessage: '상품 상세 정보를 불러오는 중 오류가 발생했습니다.'
@@ -264,13 +275,17 @@ const AdminProductsPage = () => {
     }
   };
 
-  // 삭제 버튼 클릭 핸들러
+  /**
+   * 상품 삭제 버튼 클릭 핸들러
+   */
   const handleDeleteClick = (product: AdminProduct) => {
     setSelectedProduct(product);
     setDeleteModalOpen(true);
   };
 
-  // 삭제 확인 핸들러
+  /**
+   * 삭제 확인 모달 핸들러
+   */
   const handleDeleteConfirm = async (isConfirm: boolean) => {
     if (isConfirm && selectedProduct) {
       await deleteProductMutation.mutateAsync();
@@ -280,17 +295,23 @@ const AdminProductsPage = () => {
     }
   };
 
-  // 상품 생성 핸들러
+  /**
+   * 상품 생성 처리
+   */
   const handleProductCreate = async (data: AdminProductCreateRequest) => {
     await createProductMutation.mutateAsync(data);
   };
 
-  // 상품 수정 핸들러
+  /**
+   * 상품 수정 처리
+   */
   const handleProductUpdate = async (data: AdminProductUpdateRequest) => {
     await updateProductMutation.mutateAsync(data);
   };
 
-  // 모달 닫기 핸들러
+  /**
+   * 모달 닫기 핸들러
+   */
   const handleModalClose = () => {
     setProductModalOpen(false);
     setDeleteModalOpen(false);
@@ -298,25 +319,28 @@ const AdminProductsPage = () => {
     setProductDetailData(null);
   };
 
-  // 지역 필터 옵션 생성 (계층 구조 고려)
+  /**
+   * 지역 필터 옵션 생성
+   * constants/regions.ts 데이터를 기반으로 계층 구조 반영
+   */
   const getRegionFilterOptions = () => {
     const options = [{ value: '', label: '전체' }];
 
-    // level 1 지역들 (시/도)
-    const level1Regions = REGIONS.filter((region) => region.parentId === 1);
+    // 1단계 지역 (시/도)
+    const level1Regions = Regions.filter((region) => region.parent_id === 1);
     level1Regions.forEach((region) => {
       options.push({
-        value: region.regionId.toString(),
+        value: region.region_id.toString(),
         label: region.name
       });
     });
 
-    // level 2 지역들 (시/군/구)은 들여쓰기로 표시
-    const level2Regions = REGIONS.filter((region) => region.parentId && region.parentId > 1);
+    // 2단계 지역 (시/군/구) - 들여쓰기로 표시
+    const level2Regions = Regions.filter((region) => region.parent_id && region.parent_id > 1);
     level2Regions.forEach((region) => {
-      const parentRegion = REGIONS.find((r) => r.regionId === region.parentId);
+      const parentRegion = Regions.find((r) => r.region_id === region.parent_id);
       options.push({
-        value: region.regionId.toString(),
+        value: region.region_id.toString(),
         label: `  ㄴ ${region.name} (${parentRegion?.name || ''})`
       });
     });
@@ -324,27 +348,41 @@ const AdminProductsPage = () => {
     return options;
   };
 
-  // 썸네일 렌더링
+  /**
+   * 썸네일 이미지 렌더링 (떨림 방지)
+   */
   const renderThumbnail = (_: unknown, row: Record<string, unknown>) => {
     const product = row as unknown as AdminProduct;
-    const thumbnailUrl = getThumbnailUrl(product);
+
+    // 기본 이미지 URL (public 폴더에 배치)
+    const DEFAULT_IMAGE = '/Happy_Camel.jpg';
+
+    // 썸네일이 있으면 사용, 없으면 기본 이미지
+    const imageUrl =
+      product.thumbnail && product.thumbnail.trim() !== '' ? product.thumbnail : DEFAULT_IMAGE;
 
     return (
       <div className={styles.thumbnailContainer}>
         <img
-          src={thumbnailUrl}
+          src={imageUrl}
           alt={product.name}
           className={styles.thumbnail}
           onError={(e) => {
+            // 에러 발생 시 기본 이미지로 변경
             const target = e.target as HTMLImageElement;
-            target.src = '/default-product-image.jpg';
+            if (target.src !== DEFAULT_IMAGE) {
+              target.src = DEFAULT_IMAGE;
+            }
           }}
+          loading="lazy"
         />
       </div>
     );
   };
 
-  // 간단한 컬럼 정의
+  /**
+   * 테이블 컬럼 정의
+   */
   const simpleColumns: SimpleColumn[] = [
     {
       key: 'productId',
@@ -419,16 +457,15 @@ const AdminProductsPage = () => {
   ];
 
   const tableData = getTableData();
-  const paginationInfo = getPaginationInfo();
 
   return (
     <div className={styles.container}>
       <AdminTable<AdminProduct>
         title="상품 관리"
-        summary={`총 ${paginationInfo.totalElements}개의 상품`}
+        summary={`총 ${pagination.totalElements}개의 상품`}
         simpleColumns={simpleColumns}
         data={tableData}
-        pagination={paginationInfo}
+        pagination={pagination}
         loading={isLoading}
         onRetry={() => refetch()}
         onPageChange={handlePageChange}
@@ -438,11 +475,9 @@ const AdminProductsPage = () => {
         showPaginationAlways={true}
         emptyMessage="상품이 없습니다."
         fullWidth={true}
-        // 상품 추가 버튼
         showAddButton={true}
         addButtonText="상품 추가"
         onAddClick={handleAddClick}
-        // 필터 기능
         showFilterBar={true}
         filters={[
           {
