@@ -1,6 +1,7 @@
 import 'dayjs/locale/ko';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import dayjs from 'dayjs';
@@ -13,6 +14,7 @@ import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { useAuthStore } from '@/store/AuthStore';
 import { useCartStore } from '@/store/CartStore';
 
 import styles from './ProductDetail.module.scss';
@@ -27,6 +29,7 @@ const ProductDetailPage = () => {
   });
   const [isRefundOpen, setRefundOpen] = useState(false);
   const { setSelectedItem } = useCartStore();
+  const { isLoggedIn } = useAuthStore();
   const usePostCart = useAddCart();
   const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
@@ -50,7 +53,8 @@ const ProductDetailPage = () => {
   };
 
   const openModal = () => {
-    setRefundOpen(true);
+    if (!isLoggedIn) toast.error('로그인 후에 이용해주세요.');
+    else setRefundOpen(true);
   };
 
   const handleCart = async (isMove: boolean) => {
@@ -73,38 +77,40 @@ const ProductDetailPage = () => {
   };
 
   const handleReservation = async () => {
-    createOrder(
-      {
-        params: { email: userRes.data?.data?.email ?? '' },
-        items: [
-          {
-            peopleCount: selectedData.count,
-            product_id: Number(productId),
-            start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
-          }
-        ]
-      },
-      {
-        onSuccess: (res) => {
-          setSelectedItem({
-            productId: Number(productId),
-            cartItemId: 0,
-            productName: data?.data?.name ?? '',
-            price: data?.data?.price ?? 0,
-            quantity: selectedData.count,
-            startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
-            stockQuantity: data?.data?.stockQuantity ?? 0,
-            totalPrice: (data?.data?.price ?? 0) * selectedData.count,
-            productImage: data?.data?.imageUrls[0] ?? '',
-            ...res.data
-          });
-          navigate('/reservation');
+    if (!isLoggedIn) toast.error('로그인 후에 이용해주세요.');
+    else
+      createOrder(
+        {
+          params: { email: userRes.data?.data?.email ?? '' },
+          items: [
+            {
+              peopleCount: selectedData.count,
+              product_id: Number(productId),
+              start_date: dayjs(selectedData.date).format('YYYY-MM-DD')
+            }
+          ]
         },
-        onError: () => {
-          throw new Error('주문 생성 실패');
+        {
+          onSuccess: (res) => {
+            setSelectedItem({
+              productId: Number(productId),
+              cartItemId: 0,
+              productName: data?.data?.name ?? '',
+              price: data?.data?.price ?? 0,
+              quantity: selectedData.count,
+              startDate: dayjs(selectedData.date).format('YYYY-MM-DD'),
+              stockQuantity: data?.data?.stockQuantity ?? 0,
+              totalPrice: (data?.data?.price ?? 0) * selectedData.count,
+              productImage: data?.data?.imageUrls[0] ?? '',
+              ...res.data
+            });
+            navigate('/reservation');
+          },
+          onError: () => {
+            throw new Error('주문 생성 실패');
+          }
         }
-      }
-    );
+      );
   };
 
   return (
