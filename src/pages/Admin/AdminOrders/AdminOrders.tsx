@@ -18,6 +18,7 @@ const AdminOrdersPage = () => {
   const navigate = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
+  const [dateValidationError, setDateValidationError] = useState<string>('');
 
   const {
     apiParams,
@@ -35,18 +36,55 @@ const AdminOrdersPage = () => {
   // 현재 필터 값들
   const filterValues = getFilterValues();
 
+  // 날짜 유효성 검사
+  const validateDateRange = (startDate: string, endDate: string): string => {
+    if (!startDate && !endDate) {
+      return ''; // 둘 다 비어있으면 유효함
+    }
+
+    if (!startDate && endDate) {
+      return '종료일을 설정하려면 시작일을 먼저 선택해주세요.';
+    }
+
+    // 둘 다 있을 때 날짜 비교
+    if (startDate && endDate) {
+      const start = new Date(startDate);
+      const end = new Date(endDate);
+
+      if (end < start) {
+        return '종료일은 시작일보다 늦어야 합니다.';
+      }
+    }
+
+    return ''; // 시작일만 있거나, 둘 다 있고 유효한 경우
+  };
+
+  // 날짜 필터 변경 시 유효성 검사
+  useEffect(() => {
+    const error = validateDateRange(filterValues.startDate || '', filterValues.endDate || '');
+    setDateValidationError(error);
+
+    if (error) {
+      toast.error(error);
+    }
+  }, [filterValues.startDate, filterValues.endDate]);
+
   // API 호출 파라미터에 필터 추가
   const finalApiParams: Record<string, unknown> = { ...apiParams };
 
-  // 필터 적용
+  // 상태 필터는 항상 적용
   if (filterValues.status) {
     finalApiParams.status = filterValues.status;
   }
-  if (filterValues.startDate) {
-    finalApiParams.startDate = filterValues.startDate;
-  }
-  if (filterValues.endDate) {
-    finalApiParams.endDate = filterValues.endDate;
+
+  // 날짜 필터는 유효성 검사 통과한 경우에만 적용
+  if (!dateValidationError) {
+    if (filterValues.startDate) {
+      finalApiParams.startDate = filterValues.startDate;
+    }
+    if (filterValues.endDate) {
+      finalApiParams.endDate = filterValues.endDate;
+    }
   }
 
   // useGetApi 사용. API 호출
@@ -177,6 +215,28 @@ const AdminOrdersPage = () => {
 
   return (
     <div className={styles.container}>
+      {/* 날짜 필터 안내 메시지 */}
+      {(filterValues.startDate || filterValues.endDate) && (
+        <div
+          className={`${styles.dateFilterInfo} ${dateValidationError ? styles.error : styles.info}`}
+        >
+          {dateValidationError ? (
+            <span className={styles.errorText}>⚠️ {dateValidationError}</span>
+          ) : (
+            <span className={styles.infoText}>
+              📅{' '}
+              {filterValues.startDate && !filterValues.endDate
+                ? `${filterValues.startDate} 날짜의 주문만 표시됩니다.`
+                : filterValues.startDate && filterValues.endDate
+                  ? `${filterValues.startDate} ~ ${filterValues.endDate} 기간의 주문을 표시합니다.`
+                  : filterValues.endDate && !filterValues.startDate
+                    ? '⚠️ 시작일을 먼저 선택해주세요.'
+                    : '날짜 필터가 설정되었습니다.'}
+            </span>
+          )}
+        </div>
+      )}
+
       <AdminTable<AdminOrder>
         title="주문 관리"
         summary={`총 ${pagination.totalElements}개의 주문`}
@@ -210,13 +270,13 @@ const AdminOrdersPage = () => {
             key: 'startDate',
             label: '시작일',
             type: 'date',
-            placeholder: '시작일 선택'
+            placeholder: '시작일만 선택하면 해당 날짜만 검색'
           },
           {
             key: 'endDate',
             label: '종료일',
             type: 'date',
-            placeholder: '종료일 선택'
+            placeholder: '시작일 선택 후 종료일 설정 가능'
           }
         ]}
         onFiltersChange={handleFiltersChange}
