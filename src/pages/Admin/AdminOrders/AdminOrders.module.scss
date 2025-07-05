@@ -64,19 +64,40 @@
 }
 
 .statusPending {
-  border: 1px solid #f3e8a8;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #f59e0b;
+  font-size: 12px;
+  font-weight: 500;
   color: #d97706;
   background: #fef3c7;
+  border-radius: 4px;
 }
 
 .statusPaid {
-  border: 1px solid #a7f3d0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #10b981;
+  font-size: 12px;
+  font-weight: 500;
   color: #059669;
   background: #d1fae5;
+  border-radius: 4px;
 }
 
 .statusCancelled {
-  border: 1px solid #fecaca;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #ef4444;
+  font-size: 12px;
+  font-weight: 500;
   color: #dc2626;
   background: #fee2e2;
+  border-radius: 4px;
 }
