@@ -24,6 +24,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const calendarRef = useRef<HTMLDivElement>(null);
+  const [isInitialClick, setIsInitialClick] = useState(false);
 
   // 달력 위치 계산 함수
   const calculateCalendarPosition = () => {
@@ -32,23 +33,20 @@ const DatePicker: React.FC<DatePickerProps> = ({
     const inputRect = inputRef.current.getBoundingClientRect();
     const viewportHeight = window.innerHeight;
     const viewportWidth = window.innerWidth;
-    const calendarHeight = 380; // 대략적인 달력 높이
+    const calendarHeight = 380;
     const calendarWidth = 280;
 
     let top = inputRect.bottom + 4;
     let left = inputRect.left;
 
-    // 화면 아래쪽으로 넘어가는 경우 위쪽에 표시
     if (top + calendarHeight > viewportHeight) {
       top = inputRect.top - calendarHeight - 4;
     }
 
-    // 화면 오른쪽으로 넘어가는 경우 왼쪽으로 이동
     if (left + calendarWidth > viewportWidth) {
       left = viewportWidth - calendarWidth - 16;
     }
 
-    // 화면 왼쪽으로 넘어가는 경우 최소값 설정
     if (left < 16) {
       left = 16;
     }
@@ -56,34 +54,53 @@ const DatePicker: React.FC<DatePickerProps> = ({
     setCalendarPosition({ top, left });
   };
 
-  // 달력 열기/닫기 시 위치 계산
-  const toggleCalendar = () => {
-    if (!disabled) {
-      if (!isOpen) {
-        calculateCalendarPosition();
-      }
-      setIsOpen(!isOpen);
-    }
-  };
+  // 달력 열기 함수 (이벤트 전파 방지 추가)
+  const openCalendar = (e: React.MouseEvent | React.FocusEvent) => {
+    if (disabled) return;
 
-  const openCalendar = () => {
-    if (!disabled) {
+    // 이벤트 전파 방지
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!isOpen) {
+      setIsInitialClick(true);
       calculateCalendarPosition();
       setIsOpen(true);
+
+      // 다음 프레임에서 초기 클릭 플래그 제거
+      setTimeout(() => setIsInitialClick(false), 100);
     }
   };
 
-  // 외부 클릭 감지
+  // 달력 토글 함수
+  const toggleCalendar = (e: React.MouseEvent) => {
+    if (disabled) return;
+
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (isOpen) {
+      setIsOpen(false);
+    } else {
+      openCalendar(e);
+    }
+  };
+
+  // 외부 클릭 감지 (수정됨)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        containerRef.current &&
-        !containerRef.current.contains(event.target as Node) &&
-        calendarRef.current &&
-        !calendarRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
+      // 초기 클릭 중에는 외부 클릭 무시
+      if (isInitialClick) return;
+
+      const target = event.target as Node;
+
+      // DatePicker 컨테이너나 달력 내부 클릭인지 확인
+      if (containerRef.current?.contains(target) || calendarRef.current?.contains(target)) {
+        return;
       }
+
+      // 외부 클릭으로 판단되면 닫기
+      setIsOpen(false);
     };
 
     const handleScroll = () => {
@@ -98,16 +115,23 @@ const DatePicker: React.FC<DatePickerProps> = ({
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    window.addEventListener('scroll', handleScroll, true);
-    window.addEventListener('resize', handleResize);
+    // 이벤트 리스너 등록 시 capture 옵션 사용
+    if (isOpen) {
+      // 짧은 지연 후 이벤트 리스너 등록 (초기 클릭 이벤트와 분리)
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside, true);
+        window.addEventListener('scroll', handleScroll, true);
+        window.addEventListener('resize', handleResize);
+      }, 50);
 
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-      window.removeEventListener('scroll', handleScroll, true);
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [isOpen]);
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener('mousedown', handleClickOutside, true);
+        window.removeEventListener('scroll', handleScroll, true);
+        window.removeEventListener('resize', handleResize);
+      };
+    }
+  }, [isOpen, isInitialClick]);
 
   // value prop 변경 감지
   useEffect(() => {
@@ -135,7 +159,8 @@ const DatePicker: React.FC<DatePickerProps> = ({
     setIsOpen(false);
   };
 
-  const handleClear = () => {
+  const handleClear = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setSelectedDate(null);
     onChange('');
     setIsOpen(false);
@@ -237,12 +262,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
           ref={inputRef}
           type="text"
           value={value}
-          onClick={toggleCalendar}
+          onClick={openCalendar}
           onFocus={openCalendar}
           placeholder={placeholder}
           disabled={disabled}
           className={`${styles.input} ${disabled ? styles.disabled : ''}`}
-          readOnly={true} // 직접 입력 방지
+          readOnly={true}
         />
         <div className={styles.iconContainer}>
           {value && !disabled && (
@@ -275,6 +300,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
             top: `${calendarPosition.top}px`,
             left: `${calendarPosition.left}px`
           }}
+          onClick={(e) => e.stopPropagation()} // 달력 내부 클릭 시 이벤트 전파 방지
         >
           {/* 헤더 */}
           <div className={styles.calendarHeader}>
@@ -359,7 +385,16 @@ const DatePicker: React.FC<DatePickerProps> = ({
             >
               오늘
             </button>
-            <button type="button" onClick={handleClear} className={styles.clearButtonFooter}>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedDate(null);
+                onChange('');
+                setIsOpen(false);
+              }}
+              className={styles.clearButtonFooter}
+            >
               지우기
             </button>
           </div>
