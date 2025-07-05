@@ -9,26 +9,15 @@ import { useGetApi } from '@/hooks/useGetAPI';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import { handleApiError } from '@/lib/handleApiError';
 import type { SimpleColumn } from '@/types/adminTable.types';
-import type { AdminOrder, AdminOrderDetail } from '@/types/api/AdminOrder.type';
-import {
-  createOrderDetailEditFields,
-  formatDateTime,
-  getOrderStatusText
-} from '@/utils/adminModalUtils';
+import type { AdminOrder } from '@/types/api/AdminOrder.type';
+import { createOrderEditFields, getOrderStatusText } from '@/utils/adminModalUtils';
 
 import styles from './AdminOrders.module.scss';
-
-const STATUS_COLOR_MAP = {
-  PENDING: styles.statusPending,
-  PAID: styles.statusPaid,
-  CANCELLED: styles.statusCancelled
-} as const;
 
 const AdminOrdersPage = () => {
   const navigate = useNavigate();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
-  const [orderDetailData, setOrderDetailData] = useState<AdminOrderDetail | null>(null);
 
   const {
     apiParams,
@@ -68,16 +57,15 @@ const AdminOrdersPage = () => {
     selectedOrder ? `/admin/orders/${selectedOrder.orderId}` : '/admin/orders/0',
     {
       onSuccess: () => {
-        toast.success('주문 상태가 성공적으로 수정되었습니다.');
+        toast.success('주문 정보가 성공적으로 수정되었습니다.');
         setEditModalOpen(false);
         setSelectedOrder(null);
-        setOrderDetailData(null);
         refetch();
       },
       onError: (error) => {
         handleApiError(error, navigate, '/admin/orders', {
           useToast: true,
-          defaultMessage: '주문 상태 수정 중 오류가 발생했습니다.'
+          defaultMessage: '주문 정보 수정 중 오류가 발생했습니다.'
         });
       }
     }
@@ -103,59 +91,33 @@ const AdminOrdersPage = () => {
     }
   }, [error, navigate]);
 
-  // 상태 변환 함수
-  const getStatusText = getOrderStatusText;
-
-  // 상태 렌더링 함수
-  const renderStatus = (status: string): React.ReactNode => {
-    const statusText = getStatusText(status);
-    const colorClass = STATUS_COLOR_MAP[status as keyof typeof STATUS_COLOR_MAP] || '';
-
-    return <span className={`${styles.statusBadge} ${colorClass}`}>{statusText}</span>;
-  };
-
-  // 수정 버튼 클릭 핸들러 (상세 정보 조회 후 모달 표시)
-  const handleEditClick = async (order: AdminOrder) => {
-    // 먼저 selectedOrder를 설정하고 약간의 지연을 줍니다
-    setSelectedOrder(order);
-
+  // 날짜 포맷팅 함수
+  const formatDate = (dateString: string | null): string => {
+    if (!dateString) return '-';
     try {
-      // 직접 API 호출로 변경 (Hook의 dependency 문제 해결)
-      const { api } = await import('@/lib/api');
-      const response = await api.get(`/admin/orders/${order.orderId}`);
-
-      if (response.data?.success && response.data?.data) {
-        setOrderDetailData(response.data.data as AdminOrderDetail);
-        setEditModalOpen(true);
-      } else {
-        throw new Error('상세 정보를 불러올 수 없습니다.');
-      }
-    } catch (error) {
-      console.error('주문 상세 조회 에러:', error);
-      handleApiError(error, navigate, '/admin/orders', {
-        useToast: true,
-        defaultMessage: '주문 상세 정보를 불러오는 중 오류가 발생했습니다.'
-      });
-      // 에러 발생 시 selectedOrder 초기화
-      setSelectedOrder(null);
+      return dateString.replace('T', ' ');
+    } catch {
+      return dateString;
     }
   };
 
-  // 주문 상태 저장 핸들러
+  // 수정 버튼 클릭 핸들러
+  const handleEditClick = (order: AdminOrder) => {
+    setSelectedOrder(order);
+    setEditModalOpen(true);
+  };
+
+  // 주문 정보 저장 핸들러
   const handleOrderSave = async (changedData: Record<string, string | number>) => {
     if (!selectedOrder) return;
 
-    // status만 추출하고 타입 검증
-    const status = changedData.status as 'PENDING' | 'PAID' | 'CANCELLED';
-    const updateData = { status };
-    await patchOrderMutation.mutateAsync(updateData);
+    await patchOrderMutation.mutateAsync(changedData);
   };
 
   // 모달 닫기 핸들러
   const handleModalClose = () => {
     setEditModalOpen(false);
     setSelectedOrder(null);
-    setOrderDetailData(null);
   };
 
   // 간단한 컬럼 정의
@@ -174,8 +136,12 @@ const AdminOrdersPage = () => {
     },
     {
       key: 'status',
-      label: '상태',
-      render: (value) => renderStatus(value as string)
+      label: '주문 상태',
+      render: (value) => {
+        const status = value as string;
+        const statusText = getOrderStatusText(status);
+        return <span className={styles[`status-${status.toLowerCase()}`]}>{statusText}</span>;
+      }
     },
     {
       key: 'peopleCount',
@@ -185,12 +151,12 @@ const AdminOrdersPage = () => {
     {
       key: 'orderDate',
       label: '주문일',
-      render: (value) => formatDateTime(value as string)
+      render: (value) => formatDate(value as string)
     },
     {
-      key: 'updatedAt',
-      label: '변경일',
-      render: (value) => formatDateTime(value as string | null)
+      key: 'cancelDate',
+      label: '취소일',
+      render: (value) => formatDate(value as string | null)
     },
     {
       key: 'actions',
@@ -201,7 +167,7 @@ const AdminOrdersPage = () => {
         return (
           <div className={styles.actionButtons}>
             <button className={styles.editButton} onClick={() => handleEditClick(order)}>
-              수정하기
+              상태 변경
             </button>
           </div>
         );
@@ -243,29 +209,29 @@ const AdminOrdersPage = () => {
           {
             key: 'startDate',
             label: '시작일',
-            type: 'text',
-            placeholder: 'YYYY-MM-DD'
+            type: 'date',
+            placeholder: '시작일 선택'
           },
           {
             key: 'endDate',
             label: '종료일',
-            type: 'text',
-            placeholder: 'YYYY-MM-DD'
+            type: 'date',
+            placeholder: '종료일 선택'
           }
         ]}
         onFiltersChange={handleFiltersChange}
       />
 
-      {/* 주문 수정 모달 (상세 정보 포함) */}
-      {editModalOpen && selectedOrder && orderDetailData && (
+      {/* 수정 모달 */}
+      {editModalOpen && selectedOrder && (
         <AdminEditModal
           isOpen={editModalOpen}
-          title={`주문 상세 정보 및 수정 - 주문 ID: ${selectedOrder.orderId}`}
-          fields={createOrderDetailEditFields(orderDetailData)}
+          title={`주문 정보 수정 - 주문 ID: ${selectedOrder.orderId}`}
+          fields={createOrderEditFields(selectedOrder)}
           loading={patchOrderMutation.isPending}
           onClose={handleModalClose}
           onSave={handleOrderSave}
-          saveButtonText="상태 수정"
+          saveButtonText="수정 완료"
           cancelButtonText="닫기"
         />
       )}

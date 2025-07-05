@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import DatePicker from '@/components/atoms/DatePicker/DatePicker';
 import type { ExtendedAdminTableProps, TableColumn } from '@/types/adminTable.types';
 
 import styles from './AdminTable.module.scss';
@@ -306,6 +307,13 @@ function AdminTable<T extends Record<string, unknown>>({
                     </option>
                   ))}
                 </select>
+              ) : filter.type === 'date' ? (
+                <DatePicker
+                  value={filterValues[filter.key] || ''}
+                  onChange={(value) => handleFilterChange(filter.key, value)}
+                  placeholder={filter.placeholder || 'YYYY-MM-DD'}
+                  className={styles.filterDatePicker}
+                />
               ) : (
                 <input
                   id={filter.key}

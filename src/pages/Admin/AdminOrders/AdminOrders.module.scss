@@ -6,6 +6,47 @@
   padding: 24px;
 }
 
+// 주문 상태별 스타일
+.status-pending {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #f59e0b;
+  font-size: 12px;
+  font-weight: 500;
+  color: #d97706;
+  background: #fef3c7;
+  border-radius: 4px;
+}
+
+.status-paid {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #10b981;
+  font-size: 12px;
+  font-weight: 500;
+  color: #059669;
+  background: #d1fae5;
+  border-radius: 4px;
+}
+
+.status-cancelled {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  border: 1px solid #ef4444;
+  font-size: 12px;
+  font-weight: 500;
+  color: #dc2626;
+  background: #fee2e2;
+  border-radius: 4px;
+}
+
+// 액션 버튼 스타일
 .actionButtons {
   display: flex;
   flex-wrap: wrap;
@@ -18,7 +59,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 70px;
+  min-width: 80px;
   height: 32px;
   padding: 6px 12px;
   border: none;
@@ -46,58 +87,15 @@
     box-shadow: 0 0 0 2px rgb(59 130 246 / 30%);
     outline: none;
   }
-}
 
-// 상태 배지 스타일
-.statusBadge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 60px;
-  height: 24px;
-  padding: 4px 8px;
-  font-size: 11px;
-  font-weight: 600;
-  text-align: center;
-  border-radius: 12px;
-  white-space: nowrap;
-}
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    transform: none;
 
-.statusPending {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border: 1px solid #f59e0b;
-  font-size: 12px;
-  font-weight: 500;
-  color: #d97706;
-  background: #fef3c7;
-  border-radius: 4px;
-}
-
-.statusPaid {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border: 1px solid #10b981;
-  font-size: 12px;
-  font-weight: 500;
-  color: #059669;
-  background: #d1fae5;
-  border-radius: 4px;
-}
-
-.statusCancelled {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4px 8px;
-  border: 1px solid #ef4444;
-  font-size: 12px;
-  font-weight: 500;
-  color: #dc2626;
-  background: #fee2e2;
-  border-radius: 4px;
+    &:hover {
+      box-shadow: none;
+      transform: none;
+    }
+  }
 }
