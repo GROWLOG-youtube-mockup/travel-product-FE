@@ -1,4 +1,4 @@
-import type { EditField } from '@/components/Modals/AdminEditModal';
+import type { EditField } from '@/components/Modals/Admin/AdminEditModal';
 import type { AdminOrder, AdminOrderDetail } from '@/types/api/AdminOrder.type';
 import type {
   AdminProduct,
@@ -240,6 +240,14 @@ export const createOrderEditFields = (order: AdminOrder): EditField[] => {
       label: '취소일',
       type: 'text',
       value: formatDateTime(order.cancelDate),
+      disabled: true,
+      required: false
+    },
+    {
+      key: 'updatedAt',
+      label: '변경일',
+      type: 'text',
+      value: formatDateTime(order.updatedAt),
       disabled: true,
       required: false
     }
