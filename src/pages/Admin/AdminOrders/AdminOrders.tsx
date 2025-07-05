@@ -1,4 +1,13 @@
+// 현재 날짜 포맷팅
+const getTodayString = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = renderToString(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 import { useEffect, useState } from 'react';
+import { renderToString } from 'react-dom/server';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
@@ -64,9 +73,7 @@ const AdminOrdersPage = () => {
     const error = validateDateRange(filterValues.startDate || '', filterValues.endDate || '');
     setDateValidationError(error);
 
-    if (error) {
-      toast.error(error);
-    }
+    // Toast 팝업 제거 - 안내 섹션으로만 표시
   }, [filterValues.startDate, filterValues.endDate]);
 
   // API 호출 파라미터에 필터 추가
@@ -226,7 +233,7 @@ const AdminOrdersPage = () => {
             <span className={styles.infoText}>
               📅{' '}
               {filterValues.startDate && !filterValues.endDate
-                ? `${filterValues.startDate} 날짜의 주문만 표시됩니다.`
+                ? `${filterValues.startDate} ~ ${getTodayString()} (오늘)까지의 주문을 표시합니다.`
                 : filterValues.startDate && filterValues.endDate
                   ? `${filterValues.startDate} ~ ${filterValues.endDate} 기간의 주문을 표시합니다.`
                   : filterValues.endDate && !filterValues.startDate
