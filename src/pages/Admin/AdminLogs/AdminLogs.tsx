@@ -138,9 +138,9 @@ const AdminLogsPage = () => {
         filters={[
           {
             key: 'userId',
-            label: '사용자 ID',
+            label: '관리자 ID',
             type: 'number',
-            placeholder: '사용자 ID 입력'
+            placeholder: '관리자 ID 입력'
           },
           {
             key: 'actionType',
