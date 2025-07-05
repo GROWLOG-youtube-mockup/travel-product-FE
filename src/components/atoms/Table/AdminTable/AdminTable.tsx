@@ -73,7 +73,7 @@ function AdminTable<T extends Record<string, unknown>>({
         label: col.label,
         render: col.render,
         width: index === 0 ? '120px' : index === simpleColumns.length - 1 ? '180px' : '150px',
-        align: 'center' // 모든 항목을 중앙 정렬로 변경
+        align: 'center'
       }));
     }
 
@@ -100,6 +100,25 @@ function AdminTable<T extends Record<string, unknown>>({
     if (onPageSizeChange) {
       onPageSizeChange(newSize);
     }
+  };
+
+  // 페이지 변경 시 스크롤을 테이블 상단으로 부드럽게 이동
+  const handlePageChangeWithScroll = (pageIndex: number) => {
+    // 테이블 컨테이너 찾기
+    const tableContainer = document.querySelector(`.${styles.tableContainer}`);
+    if (tableContainer) {
+      // 부드러운 스크롤 애니메이션
+      tableContainer.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+      });
+    }
+
+    // 약간의 지연 후 페이지 변경 (스크롤 애니메이션과 겹치지 않도록)
+    setTimeout(() => {
+      onPageChange(pageIndex);
+    }, 100);
   };
 
   const handleCustomPageSizeSubmit = () => {
@@ -144,106 +163,246 @@ function AdminTable<T extends Record<string, unknown>>({
     }
   };
 
+  // 페이지 점프 핸들러
+  const handlePageJump = () => {
+    const { totalPages } = pagination;
+    const input = prompt(`페이지 번호를 입력하세요 (1-${totalPages}):`);
+    if (input) {
+      const pageNum = parseInt(input, 10);
+      if (pageNum >= 1 && pageNum <= totalPages) {
+        onPageChange(pageNum - 1);
+      } else {
+        alert(`1부터 ${totalPages} 사이의 숫자를 입력해주세요.`);
+      }
+    }
+  };
+
+  // 프로그레스 슬라이더 핸들러
+  const handleProgressSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { totalPages } = pagination;
+    const percentage = parseInt(e.target.value, 10);
+    const targetPage = Math.round((percentage / 100) * (totalPages - 1));
+    handlePageChangeWithScroll(Math.max(0, Math.min(targetPage, totalPages - 1)));
+  };
+
   const renderPagination = () => {
     const { currentPage, totalPages } = pagination;
     const pages = [];
-    const maxVisiblePages = 5;
+    const maxVisiblePages = 3;
+    const sidePages = Math.floor(maxVisiblePages / 2);
 
-    let startPage = Math.max(0, currentPage - Math.floor(maxVisiblePages / 2));
-    const endPage = Math.min(totalPages - 1, startPage + maxVisiblePages - 1);
-
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(0, endPage - maxVisiblePages + 1);
-    }
+    // 첫 페이지로 이동 버튼 (항상 표시)
+    pages.push(
+      <button
+        key="first"
+        className={`${styles.paginationButton} ${styles.navButton} ${currentPage === 0 ? styles.disabled : ''}`}
+        onClick={() => currentPage > 0 && handlePageChangeWithScroll(0)}
+        disabled={currentPage === 0}
+        title="첫 페이지로"
+      >
+        <span className={styles.navIcon}>⟪</span>
+      </button>
+    );
 
     // 이전 버튼
     pages.push(
       <button
         key="prev"
-        className={`${styles.paginationButton} ${currentPage === 0 ? styles.disabled : ''}`}
-        onClick={() => currentPage > 0 && onPageChange(currentPage - 1)}
+        className={`${styles.paginationButton} ${styles.navButton} ${currentPage === 0 ? styles.disabled : ''}`}
+        onClick={() => currentPage > 0 && handlePageChangeWithScroll(currentPage - 1)}
         disabled={currentPage === 0}
+        title="이전 페이지"
       >
-        이전
+        <span className={styles.navIcon}>⟨</span>
+        <span className={styles.navText}>이전</span>
       </button>
     );
 
-    // 첫 페이지
-    if (startPage > 0) {
-      pages.push(
-        <button
-          key={0}
-          className={`${styles.paginationButton} ${currentPage === 0 ? styles.active : ''}`}
-          onClick={() => onPageChange(0)}
-        >
-          1
-        </button>
-      );
-
-      if (startPage > 1) {
+    // 페이지가 적을 때 (모든 페이지 표시)
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 0; i < totalPages; i++) {
         pages.push(
-          <span
-            key="ellipsis1"
-            className={styles.paginationButton}
-            style={{ cursor: 'default', border: 'none' }}
+          <button
+            key={i}
+            className={`${styles.paginationButton} ${styles.pageNumber} ${currentPage === i ? styles.active : ''}`}
+            onClick={() => handlePageChangeWithScroll(i)}
+            title={`${i + 1}페이지로 이동`}
           >
-            ...
-          </span>
+            {i + 1}
+          </button>
         );
       }
-    }
+    } else {
+      // 페이지가 많을 때 (스마트 페이지네이션)
+      let startPage: number;
+      let endPage: number;
 
-    // 페이지 번호들
-    for (let i = startPage; i <= endPage; i++) {
-      pages.push(
-        <button
-          key={i}
-          className={`${styles.paginationButton} ${currentPage === i ? styles.active : ''}`}
-          onClick={() => onPageChange(i)}
-        >
-          {i + 1}
-        </button>
-      );
-    }
+      // 현재 페이지가 앞쪽에 있을 때
+      if (currentPage <= sidePages) {
+        startPage = 0;
+        endPage = maxVisiblePages - 1;
+      }
+      // 현재 페이지가 뒤쪽에 있을 때
+      else if (currentPage >= totalPages - sidePages - 1) {
+        startPage = totalPages - maxVisiblePages;
+        endPage = totalPages - 1;
+      }
+      // 현재 페이지가 중간에 있을 때
+      else {
+        startPage = currentPage - sidePages;
+        endPage = currentPage + sidePages;
+      }
 
-    // 마지막 페이지
-    if (endPage < totalPages - 1) {
-      if (endPage < totalPages - 2) {
+      // 첫 페이지 (시작 페이지가 0이 아닐 때만)
+      if (startPage > 0) {
         pages.push(
-          <span
-            key="ellipsis2"
-            className={styles.paginationButton}
-            style={{ cursor: 'default', border: 'none' }}
+          <button
+            key={0}
+            className={`${styles.paginationButton} ${styles.pageNumber} ${currentPage === 0 ? styles.active : ''}`}
+            onClick={() => handlePageChangeWithScroll(0)}
+            title="1페이지로 이동"
           >
-            ...
-          </span>
+            1
+          </button>
+        );
+
+        // 첫 페이지와 시작 페이지 사이에 간격이 있으면 생략 표시
+        if (startPage > 1) {
+          const ellipsisStart = startPage === 2 ? 1 : Math.floor((0 + startPage) / 2);
+          pages.push(
+            <button
+              key="ellipsis-start"
+              className={`${styles.paginationButton} ${styles.ellipsis}`}
+              onClick={() => handlePageChangeWithScroll(ellipsisStart)}
+              title={`페이지 ${ellipsisStart + 1}로 이동`}
+            >
+              ...
+            </button>
+          );
+        }
+      }
+
+      // 중간 페이지들
+      for (let i = startPage; i <= endPage; i++) {
+        pages.push(
+          <button
+            key={i}
+            className={`${styles.paginationButton} ${styles.pageNumber} ${currentPage === i ? styles.active : ''}`}
+            onClick={() => handlePageChangeWithScroll(i)}
+            title={`${i + 1}페이지로 이동`}
+          >
+            {i + 1}
+          </button>
         );
       }
 
-      pages.push(
-        <button
-          key={totalPages - 1}
-          className={`${styles.paginationButton} ${currentPage === totalPages - 1 ? styles.active : ''}`}
-          onClick={() => onPageChange(totalPages - 1)}
-        >
-          {totalPages}
-        </button>
-      );
+      // 마지막 페이지 (끝 페이지가 마지막이 아닐 때만)
+      if (endPage < totalPages - 1) {
+        // 끝 페이지와 마지막 페이지 사이에 간격이 있으면 생략 표시
+        if (endPage < totalPages - 2) {
+          const ellipsisEnd =
+            endPage === totalPages - 3 ? totalPages - 2 : Math.ceil((endPage + totalPages - 1) / 2);
+
+          pages.push(
+            <button
+              key="ellipsis-end"
+              className={`${styles.paginationButton} ${styles.ellipsis}`}
+              onClick={() => handlePageChangeWithScroll(ellipsisEnd)}
+              title={`페이지 ${ellipsisEnd + 1}로 이동`}
+            >
+              ...
+            </button>
+          );
+        }
+
+        pages.push(
+          <button
+            key={totalPages - 1}
+            className={`${styles.paginationButton} ${styles.pageNumber} ${currentPage === totalPages - 1 ? styles.active : ''}`}
+            onClick={() => handlePageChangeWithScroll(totalPages - 1)}
+            title={`${totalPages}페이지로 이동`}
+          >
+            {totalPages}
+          </button>
+        );
+      }
     }
 
     // 다음 버튼
     pages.push(
       <button
         key="next"
-        className={`${styles.paginationButton} ${currentPage === totalPages - 1 ? styles.disabled : ''}`}
-        onClick={() => currentPage < totalPages - 1 && onPageChange(currentPage + 1)}
+        className={`${styles.paginationButton} ${styles.navButton} ${currentPage === totalPages - 1 ? styles.disabled : ''}`}
+        onClick={() => currentPage < totalPages - 1 && handlePageChangeWithScroll(currentPage + 1)}
         disabled={currentPage === totalPages - 1}
+        title="다음 페이지"
       >
-        다음
+        <span className={styles.navText}>다음</span>
+        <span className={styles.navIcon}>⟩</span>
       </button>
     );
 
+    // 마지막 페이지로 이동 버튼 (항상 표시)
+    pages.push(
+      <button
+        key="last"
+        className={`${styles.paginationButton} ${styles.navButton} ${currentPage === totalPages - 1 ? styles.disabled : ''}`}
+        onClick={() => currentPage < totalPages - 1 && handlePageChangeWithScroll(totalPages - 1)}
+        disabled={currentPage === totalPages - 1}
+        title="마지막 페이지로"
+      >
+        <span className={styles.navIcon}>⟫</span>
+      </button>
+    );
+
+    // 페이지 점프 버튼 (페이지가 많을 때만 표시)
+    if (totalPages > 20) {
+      pages.push(
+        <button
+          key="jump"
+          className={`${styles.paginationButton} ${styles.jumpButton}`}
+          onClick={handlePageJump}
+          title="원하는 페이지로 바로 이동"
+        >
+          이동
+        </button>
+      );
+    }
+
     return pages;
+  };
+
+  // 상세 페이지 정보 렌더링
+  const renderDetailedPageInfo = () => {
+    const { currentPage, totalPages } = pagination;
+
+    // 프로그레스 슬라이더를 위한 현재 위치 계산
+    const progressPercentage = totalPages > 1 ? (currentPage / (totalPages - 1)) * 100 : 0;
+
+    return (
+      <div className={styles.detailedPageInfo}>
+        <span className={styles.pageRange}>
+          {currentPage + 1} / {totalPages} 페이지
+        </span>
+        {totalPages > 1 && (
+          <div className={styles.progressContainer}>
+            <div className={styles.progressSliderContainer}>
+              <div className={styles.progressTrack} />
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={progressPercentage}
+                onChange={handleProgressSliderChange}
+                className={styles.progressSlider}
+                title={`현재 위치: ${Math.round(progressPercentage)}%`}
+              />
+            </div>
+            <span className={styles.progressText}>{Math.round(progressPercentage)}%</span>
+          </div>
+        )}
+      </div>
+    );
   };
 
   // 에러 처리
@@ -436,10 +595,7 @@ function AdminTable<T extends Record<string, unknown>>({
                 </div>
               )}
             </div>
-            <div className={styles.pageInfo}>
-              총 {pagination.totalElements}개 중 {pagination.currentPage + 1} /{' '}
-              {pagination.totalPages} 페이지
-            </div>
+            {renderDetailedPageInfo()}
           </div>
         </div>
       )}
