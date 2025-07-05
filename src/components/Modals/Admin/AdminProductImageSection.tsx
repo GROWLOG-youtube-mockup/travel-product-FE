@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 
 import Button from '@/components/atoms/Button/Button';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import ImageUploadModal from '@/components/Modals/ImageUploadModal';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
+import ImageUploadModal from '@/components/Modals/Admin/ImageUploadModal';
 import { useDeleteImagesApi } from '@/hooks/useDeleteImagesAPI';
 
 import styles from './AdminProductImageSection.module.scss';

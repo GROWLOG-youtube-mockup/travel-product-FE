@@ -6,7 +6,7 @@ import Input from '@/components/atoms/Input/Input';
 import Modal from '@/components/Modal/Modal';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
 import ModalHeader from '@/components/Modal/ModalHeader';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
 import { handleApiError } from '@/lib/handleApiError';
 
 import styles from './AdminEditModal.module.scss';

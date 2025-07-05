@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import AdminEditModal from '@/components/Modals/AdminEditModal';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
+import AdminEditModal from '@/components/Modals/Admin/AdminEditModal';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useDeleteApi } from '@/hooks/useDeleteAPI';
 import { useGetApi } from '@/hooks/useGetAPI';

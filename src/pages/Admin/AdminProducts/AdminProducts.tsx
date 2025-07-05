@@ -1,12 +1,10 @@
-// src/pages/Admin/AdminProducts/AdminProducts.tsx
-
 import { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import AdminProductModal from '@/components/Modals/AdminProductModal';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
+import AdminProductModal from '@/components/Modals/Admin/AdminProductModal';
 import Regions from '@/constants/regions';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useDeleteApi } from '@/hooks/useDeleteAPI';

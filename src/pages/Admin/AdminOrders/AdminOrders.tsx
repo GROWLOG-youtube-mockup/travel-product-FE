@@ -1,18 +1,9 @@
-// 현재 날짜 포맷팅
-const getTodayString = (): string => {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, '0');
-  const day = renderToString(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-};
 import { useEffect, useState } from 'react';
-import { renderToString } from 'react-dom/server';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
-import AdminEditModal from '@/components/Modals/AdminEditModal';
+import AdminEditModal from '@/components/Modals/Admin/AdminEditModal';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePatchApi } from '@/hooks/usePatchAPI';
@@ -22,6 +13,15 @@ import type { AdminOrder } from '@/types/api/AdminOrder.type';
 import { createOrderEditFields, getOrderStatusText } from '@/utils/adminModalUtils';
 
 import styles from './AdminOrders.module.scss';
+
+// 현재 날짜 포맷팅 함수
+const getTodayString = (): string => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
 
 const AdminOrdersPage = () => {
   const navigate = useNavigate();
@@ -72,8 +72,6 @@ const AdminOrdersPage = () => {
   useEffect(() => {
     const error = validateDateRange(filterValues.startDate || '', filterValues.endDate || '');
     setDateValidationError(error);
-
-    // Toast 팝업 제거 - 안내 섹션으로만 표시
   }, [filterValues.startDate, filterValues.endDate]);
 
   // API 호출 파라미터에 필터 추가

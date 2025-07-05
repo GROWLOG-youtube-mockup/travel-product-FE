@@ -6,11 +6,11 @@ import Button from '@/components/atoms/Button/Button';
 import Modal from '@/components/Modal/Modal';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
 import ModalHeader from '@/components/Modal/ModalHeader';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import AdminProductDescriptionSection from '@/components/Modals/AdminProductDescriptionSection';
-import AdminProductFormSection from '@/components/Modals/AdminProductFormSection';
-import AdminProductImageSection from '@/components/Modals/AdminProductImageSection';
-import AdminProductTagSection from '@/components/Modals/AdminProductTagSection';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
+import AdminProductDescriptionSection from '@/components/Modals/Admin/AdminProductDescriptionSection';
+import AdminProductFormSection from '@/components/Modals/Admin/AdminProductFormSection';
+import AdminProductImageSection from '@/components/Modals/Admin/AdminProductImageSection';
+import AdminProductTagSection from '@/components/Modals/Admin/AdminProductTagSection';
 import { handleApiError } from '@/lib/handleApiError';
 import type {
   AdminProductCreateRequest,
