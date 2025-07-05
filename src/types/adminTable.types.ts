@@ -19,7 +19,7 @@ export interface SimpleColumn {
 export interface FilterOption {
   key: string;
   label: string;
-  type: 'text' | 'number' | 'select';
+  type: 'text' | 'number' | 'select' | 'date';
   options?: { value: string; label: string }[]; // select용
   placeholder?: string;
 }
