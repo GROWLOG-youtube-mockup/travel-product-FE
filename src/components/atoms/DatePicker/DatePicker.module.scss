@@ -25,6 +25,7 @@
   background: white;
   border-radius: 8px;
   transition: all 0.3s ease;
+  cursor: pointer; // 읽기 전용이므로 포인터 커서
 
   &:focus {
     border-color: core.$pagination-active-bg;
@@ -34,6 +35,7 @@
 
   &:hover:not(:focus, :disabled) {
     border-color: #cbd5e1;
+    background: #f8fafc; // 호버 시 배경색 변경으로 클릭 가능함을 표시
   }
 
   &::placeholder {

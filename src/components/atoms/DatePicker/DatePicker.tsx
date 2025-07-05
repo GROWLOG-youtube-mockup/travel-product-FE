@@ -135,21 +135,6 @@ const DatePicker: React.FC<DatePickerProps> = ({
     setIsOpen(false);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    onChange(inputValue);
-
-    // 유효한 날짜 형식인지 확인
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
-    if (dateRegex.test(inputValue)) {
-      const date = new Date(inputValue);
-      if (!isNaN(date.getTime())) {
-        setSelectedDate(date);
-        setCurrentDate(date);
-      }
-    }
-  };
-
   const handleClear = () => {
     setSelectedDate(null);
     onChange('');
@@ -252,13 +237,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
           ref={inputRef}
           type="text"
           value={value}
-          onChange={handleInputChange}
           onClick={toggleCalendar}
           onFocus={openCalendar}
           placeholder={placeholder}
           disabled={disabled}
           className={`${styles.input} ${disabled ? styles.disabled : ''}`}
-          readOnly={false}
+          readOnly={true} // 직접 입력 방지
         />
         <div className={styles.iconContainer}>
           {value && !disabled && (
