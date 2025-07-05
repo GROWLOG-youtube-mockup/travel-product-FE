@@ -197,8 +197,8 @@ const AdminOrdersPage = () => {
       render: (value) => formatDate(value as string)
     },
     {
-      key: 'cancelDate',
-      label: '취소일',
+      key: 'updatedAt',
+      label: '변경일',
       render: (value) => formatDate(value as string | null)
     },
     {
