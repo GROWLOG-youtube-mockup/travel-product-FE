@@ -187,7 +187,6 @@ const AdminProductDescriptionSection: React.FC<AdminProductDescriptionSectionPro
       {/* 섹션 추가 모달 */}
       {showNewSectionModal && (
         <Modal
-          onClose={handleNewSectionModalClose}
           boxStyle={{
             width: 400,
             maxWidth: '90vw'

@@ -6,7 +6,7 @@ import type { GenericModalProps } from '@/types/modal';
 const GenericModal = ({ open, onClose, title, subtitle, children }: GenericModalProps) => {
   if (!open) return null;
   return (
-    <Modal onClose={onClose}>
+    <Modal>
       <ModalHeader title={title} subtitle={subtitle}>
         <ModalCloseButton onClick={onClose} />
       </ModalHeader>

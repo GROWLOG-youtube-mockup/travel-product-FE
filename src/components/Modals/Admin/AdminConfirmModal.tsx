@@ -48,10 +48,7 @@ const AdminConfirmModal = ({
   };
 
   return (
-    <Modal
-      onClose={loading ? () => {} : onClose}
-      boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}
-    >
+    <Modal boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}>
       <div className={modalStyles.headerWrapper}>
         <AdminModalHeader title={title} subtitle={subtitle}>
           <span className={modalStyles.contents}>{contents}</span>

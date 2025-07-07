@@ -399,7 +399,6 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
   return (
     <>
       <Modal
-        onClose={handleClose}
         boxStyle={{
           width: 750,
           maxWidth: '85vw'

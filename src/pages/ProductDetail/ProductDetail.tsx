@@ -9,7 +9,6 @@ import dayjs from 'dayjs';
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
 import ImageGallery from '@/components/ImageGallery/ImageGallery';
-import LoadingSpinner from '@/components/LoadingSpinner';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
@@ -33,7 +32,7 @@ const ProductDetailPage = () => {
   const { setSelectedItem } = useCartStore();
   const { isLoggedIn } = useAuthStore();
   const usePostCart = useAddCart();
-  const { data, isLoading } = useGetApi(`/products/${productId}`);
+  const { data } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
   const { mutate: createOrder } = usePostApi('/orders');
 
@@ -114,8 +113,6 @@ const ProductDetailPage = () => {
         }
       );
   };
-
-  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className={styles.page}>
