@@ -105,7 +105,7 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
             variant="xl"
             onClick={handleChange}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={isPending}
           >
             {isPending ? '변경 중...' : '전화번호 변경'}

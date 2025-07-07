@@ -77,7 +77,7 @@ const NameChangeModal = ({ open, onClose, onSuccess, currentName }: NameChangeMo
             variant="xl"
             onClick={handleChange}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={isPending}
           >
             {isPending ? '변경 중...' : '이름 변경'}

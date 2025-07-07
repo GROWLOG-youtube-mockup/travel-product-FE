@@ -10,16 +10,20 @@
 
 .box {
   position: relative;
-  padding: 40px 0 60px; // 좌우 패딩 제거
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh; // 최대 높이 제한
+  padding: 20px 0; // 상하 패딩만 유지, 좌우 패딩 제거
   background: #ffffff;
   box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
   border-radius: 16px;
+  overflow: hidden; // 박스 자체에서 오버플로우 처리
 }
 
 .closeButton {
   position: absolute;
-  top: 20px; // 모달 내부 상단에서 24px
-  right: 24px; // 모달 내부 우측에서 24px
+  top: 20px;
+  right: 24px;
   border: none;
   font-size: 48px;
   color: #bdbdbd;
@@ -40,7 +44,7 @@
 }
 
 .content {
-  height: 100px; // 임시 높이 설정
+  height: 100px;
   margin-top: 30px;
   background-color: red;
 }
@@ -58,6 +62,7 @@
 }
 
 .header {
+  margin: 0 auto;
   padding: 0 90px;
   text-align: left;
 }
@@ -69,12 +74,13 @@
 
 .headerWrapper {
   padding: 20px 0;
+  flex-shrink: 0;
 }
 
 .agreementContent {
   max-height: 600px;
   margin: 0 auto;
-  padding: 40px 90px 0;
+  padding: 40px 24px 0;
   text-align: left;
   border-top: 2px solid #cdcdcd;
   overflow-y: auto;
@@ -85,6 +91,7 @@
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
+  padding: 0 24px;
 
   .confirmButton {
     width: 25%;
