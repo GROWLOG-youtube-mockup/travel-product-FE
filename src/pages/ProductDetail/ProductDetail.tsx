@@ -9,11 +9,13 @@ import dayjs from 'dayjs';
 import AddCart from '@/components/AddCart/AddCart';
 import Calender from '@/components/Calendar/Calendar';
 import ImageGallery from '@/components/ImageGallery/ImageGallery';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import ConfirmModal from '@/components/Modals/ConfirmModal';
 import ProductInfo from '@/components/ProductInfo/ProductInfo';
 import { useAddCart } from '@/hooks/useAddCart';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
+import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import { useCartStore } from '@/store/CartStore';
 
@@ -31,7 +33,7 @@ const ProductDetailPage = () => {
   const { setSelectedItem } = useCartStore();
   const { isLoggedIn } = useAuthStore();
   const usePostCart = useAddCart();
-  const { data } = useGetApi(`/products/${productId}`);
+  const { data, isLoading } = useGetApi(`/products/${productId}`);
   const userRes = useGetApi(`/users/me`);
   const { mutate: createOrder } = usePostApi('/orders');
 
@@ -65,12 +67,12 @@ const ProductDetailPage = () => {
         startDate: dayjs(selectedData.date).format('YYYY-MM-DD')
       },
       {
-        onSuccess: (res) => {
+        onSuccess: () => {
           if (isMove) navigate('/cart');
           else setRefundOpen(false);
         },
         onError: (err) => {
-          throw new Error('주문 생성 실패');
+          handleApiError(err, navigate, location.pathname);
         }
       }
     );
@@ -106,12 +108,14 @@ const ProductDetailPage = () => {
             });
             navigate('/reservation');
           },
-          onError: () => {
-            throw new Error('주문 생성 실패');
+          onError: (err) => {
+            handleApiError(err, navigate, location.pathname);
           }
         }
       );
   };
+
+  if (isLoading) return <LoadingSpinner />;
 
   return (
     <div className={styles.page}>
