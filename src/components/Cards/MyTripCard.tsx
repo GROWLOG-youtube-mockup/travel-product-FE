@@ -20,9 +20,7 @@ const MyTripCard = ({ trip }: { trip: Trip }) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.image}>
-        {trip.thumbnailUrl && (
-          <img src={trip.thumbnailUrl} alt={trip.title} />
-        )}
+        {trip.thumbnailUrl && <img src={trip.thumbnailUrl} alt={trip.title} />}
       </div>
       <div className={styles.card}>
         <div className={styles.details}>
