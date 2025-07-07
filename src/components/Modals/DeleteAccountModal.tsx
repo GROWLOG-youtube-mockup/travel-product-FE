@@ -145,7 +145,7 @@ const DeleteAccountModal = ({ open, onClose, onSuccess }: DeleteAccountModalProp
             color="white"
             onClick={handlePasswordCheck}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={!password || isPending}
           >
             {isPending ? '확인 중...' : '회원 탈퇴'}
