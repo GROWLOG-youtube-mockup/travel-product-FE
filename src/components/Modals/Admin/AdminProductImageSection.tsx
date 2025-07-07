@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
 import ImageUploadModal from '@/components/Modals/Admin/ImageUploadModal';
 import { useDeleteImagesApi } from '@/hooks/useDeleteImagesAPI';
+import { handleApiError } from '@/lib/handleApiError';
 
 import styles from './AdminProductImageSection.module.scss';
 
@@ -21,6 +23,7 @@ const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
   isChanged = false,
   onImageUrlsChange
 }) => {
+  const navigate = useNavigate();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [selectedImageUrl, setSelectedImageUrl] = useState<string>('');
@@ -38,8 +41,10 @@ const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
       setSelectedImageIndex(-1);
     },
     onError: (error) => {
-      console.error('이미지 삭제 에러:', error);
-      toast.error('이미지 삭제 중 오류가 발생했습니다.');
+      handleApiError(error, navigate, '/admin/products', {
+        useToast: true,
+        defaultMessage: '이미지 삭제 중 오류가 발생했습니다.'
+      });
     }
   });
 
@@ -60,7 +65,10 @@ const AdminProductImageSection: React.FC<AdminProductImageSectionProps> = ({
         // API 요청 본문에 URL 배열 전달
         await deleteImageMutation.mutateAsync([selectedImageUrl]);
       } catch (error) {
-        console.error('삭제 API 호출 실패:', error);
+        handleApiError(error, navigate, '/admin/products', {
+          useToast: true,
+          defaultMessage: '삭제 API 호출에 실패했습니다.'
+        });
       }
     } else {
       setDeleteModalOpen(false);
