@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
@@ -560,7 +559,11 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   // 저장 처리
   const handleSave = async () => {
     if (!validateForm()) {
-      toast.error('입력 정보를 확인해주세요.');
+      // handleApiError로 통일 - 유효성 검사 실패 시
+      handleApiError(new Error('입력 정보를 확인해주세요.'), navigate, '/admin/products', {
+        useToast: true,
+        defaultMessage: '입력 정보를 확인해주세요.'
+      });
       return;
     }
 
