@@ -17,7 +17,7 @@ const CartPage = () => {
   const navigate = useNavigate();
   const cartRes = useGetApi('/carts');
   const userRes = useGetApi('/users/me');
-  const { mutate: createOrder, isPending } = usePostApi('/orders');
+  const { mutate: createOrder } = usePostApi('/orders');
   const [checkedItems, setCheckedItems] = useState<{ [id: number]: boolean }>({});
   const { setSelectedItem } = useCartStore();
   const deleteCart = useDeleteCartItems();

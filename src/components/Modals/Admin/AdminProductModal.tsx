@@ -652,7 +652,6 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
   return (
     <>
       <Modal
-        onClose={handleClose}
         boxStyle={{
           width: '90vw',
           maxWidth: 1000,

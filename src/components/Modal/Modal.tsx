@@ -3,7 +3,6 @@ import React from 'react';
 import styles from './Modal.module.scss';
 
 interface ModalProps {
-  onClose: () => void;
   children: React.ReactNode;
   overlayClassName?: string;
   modalClassName?: string;
@@ -13,7 +12,6 @@ interface ModalProps {
 const DEFAULT_BOX_WIDTH = 700;
 
 const Modal: React.FC<ModalProps> = ({
-  onClose,
   children,
   overlayClassName = '',
   modalClassName = '',

@@ -28,10 +28,7 @@ const AgreementModal = ({
   if (!open) return null;
 
   return (
-    <Modal
-      onClose={onClose}
-      boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}
-    >
+    <Modal boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}>
       <div className={styles.headerWrapper}>
         <ModalHeader title={title} subtitle={subtitle} />
       </div>

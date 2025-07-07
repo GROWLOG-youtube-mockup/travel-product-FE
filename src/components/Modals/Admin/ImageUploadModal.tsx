@@ -138,7 +138,6 @@ const ImageUploadModal: React.FC<ImageUploadModalProps> = ({
 
   return (
     <Modal
-      onClose={handleClose}
       boxStyle={{
         width: '90vw',
         maxWidth: 600,
