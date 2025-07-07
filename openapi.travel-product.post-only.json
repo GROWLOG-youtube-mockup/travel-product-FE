@@ -1,0 +1,684 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "API 문서 제목",
+    "description": "API 설명",
+    "version": "v1.0"
+  },
+  "servers": [
+    {
+      "url": "http://3.38.61.233:8080",
+      "description": "Generated server url"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    { "name": "auth API - 본인 인증", "description": "이메일 인증 기능을 제공." },
+    { "name": "user API - 회원", "description": "회원가입을 지원하는 API" },
+    {
+      "name": "auth API - 인증 복구",
+      "description": "이메일 찾기 및 비밀번호 재설정 기능을 제공."
+    },
+    { "name": "상품 API", "description": "여행 상품 관련 API입니다" },
+    { "name": "user API - 회원 마이페이지", "description": "회원의 마이페이지 관련 기능을 제공." },
+    { "name": "이미지 API", "description": "이미지 관련 API입니다" },
+    { "name": "auth API - 회원 인증", "description": "로그인 및 로그아웃 기능을 제공." },
+    { "name": "장바구니 API", "description": "장바구니 상품 관련 API입니다." },
+    { "name": "order API - 주문", "description": "주문 관련 API입니다." },
+    { "name": "payment API - 결제", "description": "결제 관련 API입니다." }
+  ],
+  "paths": {
+    "/users/verify-password": {
+      "post": {
+        "tags": ["user API - 회원 마이페이지"],
+        "summary": "비밀번호 검증",
+        "operationId": "verifyPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PasswordVerifyRequestDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseMapStringBoolean" } }
+            }
+          }
+        },
+        "security": [{ "bearerAuth": [] }]
+      }
+    },
+    "/users/signup": {
+      "post": {
+        "tags": ["user API - 회원"],
+        "summary": "회원가입 API",
+        "description": "사용자로부터 이름, 이메일, 비밀번호 등을 입력받아 회원으로 등록.",
+        "operationId": "registerMember",
+        "requestBody": {
+          "description": "회원가입 요청 정보",
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/UserInfo" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponse" } } }
+          }
+        }
+      }
+    },
+    "/payments/cancel": {
+      "post": {
+        "tags": ["payment API - 결제"],
+        "summary": "결제 취소",
+        "description": "주문 ID를 기반으로 결제 및 주문을 취소.",
+        "operationId": "cancelPayment",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseString" } } }
+          }
+        }
+      }
+    },
+    "/payments/approve": {
+      "post": {
+        "tags": ["payment API - 결제"],
+        "summary": "Toss 결제 승인 처리",
+        "description": "Toss 결제 성공 후, 프론트에서 전달받은 paymentKey, orderId, amount 값을 기반으로 결제를 최종 승인하고, 결제 상태를 'PAID'로 변경.",
+        "operationId": "approve",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PaymentApproveRequestDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponsePaymentResponseDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/orders": {
+      "post": {
+        "tags": ["order API - 주문"],
+        "summary": "단건 예약 생성 (결제는 별도 진행)",
+        "description": "장바구니에서 하나의 항목을 선택하여 예약을 생성. 결제는 toss API에서 별도로 처리.",
+        "operationId": "creatOrder",
+        "parameters": [
+          { "name": "email", "in": "query", "required": true, "schema": { "type": "string" } }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/OrderRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponse" } } }
+          }
+        }
+      }
+    },
+    "/images": {
+      "post": {
+        "tags": ["이미지 API"],
+        "summary": "이미지 업로드",
+        "description": "이미지 파일을 S3에 업로드하고 URL 리스트 반환",
+        "operationId": "uploadImages",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": ["files"],
+                "type": "object",
+                "properties": {
+                  "files": { "type": "array", "items": { "type": "string", "format": "binary" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "업로드 성공",
+            "content": { "*/*": { "schema": { "type": "array", "items": { "type": "string" } } } }
+          }
+        }
+      }
+    },
+    "/carts": {
+      "post": {
+        "tags": ["장바구니 API"],
+        "summary": "장바구니에 상품 추가",
+        "description": "- quantity: 인원 수(= people count)\n- startDate: 여행 시작일자",
+        "operationId": "addToCart",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AddToCartRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponse" } } }
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "post": {
+        "tags": ["auth API - 인증 복구"],
+        "operationId": "resetPassword",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ResetPasswordRequestDto" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseVoid" } } }
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "tags": ["auth API - 회원 인증"],
+        "operationId": "logout",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseString" } } }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["auth API - 회원 인증"],
+        "operationId": "login",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/LoginRequestDto" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseLoginResponseDto" } }
+            }
+          }
+        }
+      }
+    },
+    "/auth/find-email": {
+      "post": {
+        "tags": ["auth API - 인증 복구"],
+        "operationId": "findEmail",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/FindEmailRequestDto" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseString" } } }
+          }
+        }
+      }
+    },
+    "/auth/email/verify": {
+      "post": {
+        "tags": ["auth API - 본인 인증"],
+        "operationId": "verifyEmail",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EmailVerifyRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseMapStringBoolean" } }
+            }
+          }
+        }
+      }
+    },
+    "/auth/email/send": {
+      "post": {
+        "tags": ["auth API - 본인 인증"],
+        "operationId": "sendEmailVerificationCode",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/EmailSendRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": { "schema": { "$ref": "#/components/schemas/ApiResponseMapStringString" } }
+            }
+          }
+        }
+      }
+    },
+    "/admin/products": {
+      "post": {
+        "tags": ["관리자 상품 조회"],
+        "summary": "상품 추가",
+        "description": "- totalQuantity: 총 상품 수량\n- description: 단순 문자열\n- saleStatus:  0: UPCOMING, 1: ON_SALE, 2: SOLD_OUT\n- type: 0: FREE, 1: PACKAGE, 2: SUMMER_VAC, 3: HISTORY, 4: ACTIVITY\n- duration: 여행기간(days)\n- descriptionGroups - type: 0: 포함사항, 1: 불포함사항, 2: 기타",
+        "operationId": "createProduct",
+        "requestBody": {
+          "content": {
+            "application/json": { "schema": { "$ref": "#/components/schemas/AddProductRequest" } }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": { "$ref": "#/components/schemas/ApiResponseProductDetailResponse" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PasswordVerifyRequestDto": {
+        "type": "object",
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "현재비밀번호",
+            "example": "securePassword123"
+          }
+        }
+      },
+      "ApiResponseMapStringBoolean": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "type": "object", "additionalProperties": { "type": "boolean" } },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "phoneNumber": { "type": "string" },
+          "roleCode": { "type": "integer", "format": "int32" }
+        }
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "type": "object" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "ApiResponseString": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "type": "string" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "PaymentApproveRequestDto": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "integer",
+            "description": "결제 금액",
+            "format": "int32",
+            "example": 299000
+          },
+          "payment_key": {
+            "type": "string",
+            "description": "결제 키 (PG사에서 발급한 고유 식별자)",
+            "example": "toss-generated-key-12345"
+          },
+          "order_id": {
+            "type": "integer",
+            "description": "주문 ID",
+            "format": "int64",
+            "example": 1001
+          },
+          "payment_gateway": {
+            "type": "string",
+            "description": "결제 대행사 코드 (toss)",
+            "example": "toss"
+          },
+          "transaction_id": {
+            "type": "string",
+            "description": "프론트엔드 트랜잭션 식별자 (옵션)",
+            "example": "tx-001"
+          }
+        },
+        "description": "결제 승인 요청 DTO - 결제 승인 처리에 필요한 결제 정보 전달"
+      },
+      "ApiResponsePaymentResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "$ref": "#/components/schemas/PaymentResponseDto" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "PaymentResponseDto": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "결제 상태(PAID, FAILED, CANCELLED)",
+            "example": "PAID"
+          },
+          "method": {
+            "type": "string",
+            "description": "결제 방법 (카드, 가상계좌, 계좌이체, 휴대폰)",
+            "example": "CARD"
+          },
+          "payment_id": {
+            "type": "integer",
+            "description": "결제 ID",
+            "format": "int64",
+            "example": 123456789
+          },
+          "paid_at": {
+            "type": "string",
+            "description": "결제 완료 시간 (ISO 8601 형식)",
+            "example": "2025-08-01T12:34:56Z"
+          }
+        },
+        "description": "결제 응답 DTO - 결제 승인 후 클라이언트에 반환되는 결제 정보"
+      },
+      "OrderRequest": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "$ref": "#/components/schemas/OrderItem" } }
+        },
+        "description": "주문 요청 DTO"
+      },
+      "OrderItem": {
+        "required": ["product_id", "start_date"],
+        "type": "object",
+        "properties": {
+          "peopleCount": {
+            "minimum": 1,
+            "type": "integer",
+            "description": "예약 인원 수",
+            "format": "int32",
+            "example": 2
+          },
+          "product_id": {
+            "type": "integer",
+            "description": "예약할 여행 상품의 ID",
+            "format": "int64",
+            "example": 3
+          },
+          "start_date": {
+            "type": "string",
+            "description": "여행 시작일 (yyyy-MM-dd)",
+            "format": "date",
+            "example": "2025-08-01"
+          }
+        },
+        "description": "주문 항목 요청 DTO - 클라이언트가 주문 시 선택한 여행 상품 정보 (상품 ID, 인원 수, 시작일 포함)",
+        "example": [{ "peopleCount": 2, "product_id": 3, "start_date": "2025-08-01" }]
+      },
+      "AddToCartRequest": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "integer", "format": "int64" },
+          "quantity": { "type": "integer", "format": "int32" },
+          "startDate": { "type": "string", "format": "date" }
+        }
+      },
+      "ApiResponseVoid": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "type": "object" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "ResetPasswordRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "이름", "example": "홍길동" },
+          "phoneNumber": {
+            "type": "string",
+            "description": "휴대폰 번호",
+            "example": "01012345678"
+          },
+          "email": { "type": "string", "description": "이메일", "example": "hong@example.com" }
+        },
+        "description": "비밀번호 재설정 요청 DTO - 이름, 휴대폰 번호, 이메일을 통한 비밀번호 재설정 요청"
+      },
+      "LoginRequestDto": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "이메일", "example": "hong@example.com" },
+          "password": { "type": "string", "description": "비밀번호", "example": "password123" }
+        },
+        "description": "로그인 요청 DTO - 이메일과 비밀번호를 통한 로그인 요청"
+      },
+      "ApiResponseLoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "$ref": "#/components/schemas/LoginResponseDto" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "LoginResponseDto": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "integer",
+            "description": "사용자 ID",
+            "format": "int64",
+            "example": 1
+          },
+          "name": { "type": "string", "description": "이름", "example": "홍길동" },
+          "accessToken": {
+            "type": "string",
+            "description": "Access Token (Bearer 토큰 형식, Authorization 헤더에 포함)",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        },
+        "description": "로그인 응답 DTO - 로그인 성공 시 사용자 정보와 인증 토큰 반환"
+      },
+      "FindEmailRequestDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string", "description": "이름", "example": "홍길동" },
+          "phoneNumber": {
+            "type": "string",
+            "description": "휴대폰 번호",
+            "example": "01012345678"
+          }
+        },
+        "description": "이메일 찾기 요청 DTO - 이름과 휴대폰 번호를 통해 이메일 찾기 요청"
+      },
+      "EmailVerifyRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "이메일", "example": "hong@example.com" },
+          "code": { "type": "string", "description": "인증 코드", "example": "123456" }
+        },
+        "description": "이메일 인증 확인 DTO - 이메일과 인증 코드를 통해 인증 확인 요청"
+      },
+      "EmailSendRequest": {
+        "type": "object",
+        "properties": {
+          "email": { "type": "string", "description": "이메일", "example": "hong@example.com" }
+        },
+        "description": "이메일 전송 요청 DTO"
+      },
+      "ApiResponseMapStringString": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "type": "object", "additionalProperties": { "type": "string" } },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "AddProductRequest": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "price": { "type": "integer", "format": "int32" },
+          "totalQuantity": { "type": "integer", "format": "int32" },
+          "description": { "type": "string" },
+          "saleStatus": { "type": "integer", "format": "int32" },
+          "type": { "type": "integer", "format": "int32" },
+          "duration": { "type": "integer", "format": "int32" },
+          "regionId": { "type": "integer", "format": "int64" },
+          "imageUrls": { "type": "array", "items": { "type": "string" } },
+          "descriptionGroups": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ProductDescriptionGroupRequest" }
+          }
+        }
+      },
+      "ProductDescriptionGroupRequest": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "type": { "type": "integer", "format": "int32" },
+          "sortOrder": { "type": "integer", "format": "int32" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ProductDescriptionItemRequest" }
+          }
+        }
+      },
+      "ProductDescriptionItemRequest": {
+        "type": "object",
+        "properties": {
+          "content": { "type": "string" },
+          "sortOrder": { "type": "integer", "format": "int32" }
+        }
+      },
+      "ApiResponseProductDetailResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "data": { "$ref": "#/components/schemas/ProductDetailResponse" },
+          "error": { "$ref": "#/components/schemas/Error" }
+        }
+      },
+      "ProductDetailResponse": {
+        "type": "object",
+        "properties": {
+          "productId": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "price": { "type": "integer", "format": "int32" },
+          "totalQuantity": { "type": "integer", "format": "int32" },
+          "stockQuantity": { "type": "integer", "format": "int32" },
+          "description": { "type": "string" },
+          "saleStatus": { "type": "integer", "format": "int32" },
+          "type": { "type": "integer", "format": "int32" },
+          "duration": { "type": "integer", "format": "int32" },
+          "region": { "$ref": "#/components/schemas/RegionResponse" },
+          "imageUrls": { "type": "array", "items": { "type": "string" } },
+          "descriptionGroups": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ProductDescriptionGroupResponse" }
+          }
+        }
+      },
+      "RegionResponse": {
+        "type": "object",
+        "properties": {
+          "regionId": { "type": "integer", "format": "int64" },
+          "name": { "type": "string" },
+          "parentId": { "type": "integer", "format": "int64" }
+        }
+      },
+      "ProductDescriptionGroupResponse": {
+        "type": "object",
+        "properties": {
+          "groupId": { "type": "integer", "format": "int64" },
+          "title": { "type": "string" },
+          "type": { "type": "integer", "format": "int32" },
+          "sortOrder": { "type": "integer", "format": "int32" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ProductDescriptionItemResponse" }
+          }
+        }
+      },
+      "ProductDescriptionItemResponse": {
+        "type": "object",
+        "properties": {
+          "itemId": { "type": "integer", "format": "int64" },
+          "content": { "type": "string" },
+          "sortOrder": { "type": "integer", "format": "int32" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": { "code": { "type": "string" }, "message": { "type": "string" } }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
