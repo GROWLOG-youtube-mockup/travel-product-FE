@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-import type { RegionItem } from '../types/card';
+import type { RegionItem } from '@/types/card';
 
 interface RegionStore {
   selectedRegion: RegionItem | null;

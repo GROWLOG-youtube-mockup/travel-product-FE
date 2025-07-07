@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import type { PasswordInputFieldProps } from '../../type/PasswordInputField';
+import type { PasswordInputFieldProps } from '@/types/PasswordInputField';
 
 import PasswordInput from './PasswordInput';
 

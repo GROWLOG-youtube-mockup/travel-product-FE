@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
+import type { User } from '@/types/api/User.type';
+
 import Button from '../../components/atoms/Button/Button';
 import Input from '../../components/atoms/Input/Input';
 import DeleteAccountModal from '../../components/Modals/DeleteAccountModal';
@@ -8,8 +11,6 @@ import NameChangeModal from '../../components/Modals/NameChangeModal';
 import PasswordChangeModal from '../../components/Modals/PasswordChangeModal';
 import PhoneChangeModal from '../../components/Modals/PhoneChangeModal';
 import { api } from '../../lib/api';
-import type { EndpointResponseMap } from '../../types/api/EndpointResponseMap.type';
-import type { User } from '../../types/api/User.type';
 
 import styles from './UserEdit.module.scss';
 

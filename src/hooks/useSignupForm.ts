@@ -1,9 +1,9 @@
 import { useState } from 'react';
 
 import { usePostApi } from '@/hooks/usePostAPI';
+import type { SignupFormError, SignupValues } from '@/types/signupForm.types';
 
 import { SIGNUP_ERROR_MSG } from '../constants/signupForm.constants';
-import type { SignupFormError, SignupValues } from '../types/signupForm.types';
 import { normalizePhoneNumber } from '../utils/phone';
 
 function isValidPhone(phone: string) {

@@ -1,4 +1,5 @@
-import type { GenericModalProps } from '../../types/modal';
+import type { GenericModalProps } from '@/types/modal';
+
 import Modal from '../Modal/Modal';
 import ModalCloseButton from '../Modal/ModalCloseButton';
 import ModalHeader from '../Modal/ModalHeader';

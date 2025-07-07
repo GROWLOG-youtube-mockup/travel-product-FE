@@ -19,7 +19,7 @@ import type { TripDto } from './Trip.type';
 import type { User } from './User.type';
 
 export type CartRes = ApiResponse<Carts[]>;
-export type ProductRes = ApiResponse<Product>;
+export type ProductRes = ApiResponse<Product[]>;
 export type ProductDetailRes = ApiResponse<ProductDetail>;
 export type OrdersRes = ApiResponse<Orders[]>;
 export type OrderDetailRes = ApiResponse<Orders>;
