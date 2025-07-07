@@ -44,7 +44,13 @@ const RegionCardList = ({ RegionCardList, handleRegionCardClick }: RegionCardLis
   };
 
   return (
-    <div className={styles.cardSlideWrapper}>
+    <div
+      className={[
+        styles.cardSlideWrapper,
+        showButton.left ? styles.showLeftFade : '',
+        showButton.right ? styles.showRightFade : ''
+      ].join(' ')}
+    >
       <div className={styles.cardSlide} ref={sliderRef} onScroll={updateButtonVisibility}>
         {RegionCardList.map((card) => (
           <RegionCard
