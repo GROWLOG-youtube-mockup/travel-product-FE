@@ -1,0 +1,281 @@
+@use '@/styles/core';
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-height: 70vh;
+  min-height: 400px;
+  padding: 20px;
+  box-sizing: border-box;
+  gap: 20px;
+  overflow: hidden;
+}
+
+.dropZone {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 120px;
+  padding: 20px;
+  border: 2px dashed #d1d5db;
+  box-sizing: border-box;
+  background: #f9fafb;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+
+  &:hover {
+    border-color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
+
+  &.dragOver {
+    border-color: core.$pagination-active-bg;
+    background: #dbeafe;
+    transform: scale(1.02);
+  }
+}
+
+.dropZoneContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  pointer-events: none;
+  gap: 8px;
+}
+
+.icon {
+  font-size: 40px;
+  opacity: 0.6;
+}
+
+.mainText {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: core.$admin-table-text;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.subText {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.3;
+  color: core.$admin-table-text-secondary;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.fileInput {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  pointer-events: all;
+  opacity: 0;
+  inset: 0;
+}
+
+.selectButton {
+  margin-top: 8px;
+  pointer-events: all;
+}
+
+.previewSection {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  h4 {
+    margin: 0 0 12px;
+    font-size: 14px;
+    font-weight: 600;
+    color: core.$admin-table-header-text;
+    flex-shrink: 0;
+  }
+}
+
+.singlePreview {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-height: 200px;
+  padding: 10px 0;
+  box-sizing: border-box;
+  overflow-y: auto;
+
+  // 스크롤바 스타일링
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: core.$pagination-bg;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: core.$admin-table-border;
+    border-radius: 3px;
+
+    &:hover {
+      background: core.$admin-table-text-secondary;
+    }
+  }
+}
+
+.previewItem {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 160px;
+  max-width: 80%;
+  padding: 10px;
+  border: 1px solid core.$admin-table-border;
+  box-sizing: border-box;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
+  &:hover {
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  }
+}
+
+.previewImage {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 6px;
+  border-radius: 6px;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.fileInfo {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  gap: 4px;
+}
+
+.fileName {
+  font-size: 12px;
+  font-weight: 500;
+  color: core.$admin-table-text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  word-break: break-all;
+}
+
+.fileSize {
+  font-size: 11px;
+  color: core.$admin-table-text-secondary;
+}
+
+.removeButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: white;
+  background: rgb(0 0 0 / 60%);
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #ef4444;
+    transform: scale(1.1);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid core.$admin-table-border;
+  flex-shrink: 0;
+  gap: 12px;
+
+  button {
+    flex: 1;
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+}
+
+// 반응형 디자인
+@media (width <= 768px) {
+  .modalContent {
+    max-height: 80vh;
+    min-height: 350px;
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .dropZone {
+    min-height: 100px;
+    padding: 16px;
+  }
+
+  .icon {
+    font-size: 28px;
+  }
+
+  .mainText {
+    font-size: 12px;
+  }
+
+  .subText {
+    font-size: 10px;
+  }
+
+  .previewImage {
+    height: 70px;
+  }
+
+  .singlePreview {
+    max-height: 180px;
+  }
+
+  .previewItem {
+    width: 140px;
+    padding: 8px;
+  }
+
+  .footer {
+    flex-direction: row;
+    padding-top: 12px;
+    gap: 8px;
+
+    button {
+      flex: 1;
+    }
+  }
+}
