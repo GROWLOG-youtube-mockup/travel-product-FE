@@ -1,9 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 
+import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
-
-import Button from '../../components/atoms/Button/Button';
-import { useCartStore } from '../../store/CartStore';
+import { useCartStore } from '@/store/CartStore';
 
 import styles from './Reservation.module.scss';
 

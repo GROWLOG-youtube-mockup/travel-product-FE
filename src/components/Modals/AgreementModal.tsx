@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react';
 
+import Modal from '@/components/Modal/Modal';
+import ModalCloseButton from '@/components/Modal/ModalCloseButton';
+import ModalHeader from '@/components/Modal/ModalHeader';
 import type { AgreementModalProps } from '@/types/modal';
-
-import Modal from '../Modal/Modal';
-import ModalCloseButton from '../Modal/ModalCloseButton';
-import ModalHeader from '../Modal/ModalHeader';
 
 import styles from '../Modal/Modal.module.scss';
 

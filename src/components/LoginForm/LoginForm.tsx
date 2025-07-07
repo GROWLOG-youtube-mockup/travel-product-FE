@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
+import PasswordInput from '@/components/atoms/Input/PasswordInput';
 import type { LoginFormProps } from '@/types/login';
-
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
-import PasswordInput from '../atoms/Input/PasswordInput';
 
 import styles from './LoginForm.module.scss';
 
