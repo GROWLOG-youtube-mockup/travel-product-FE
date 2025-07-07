@@ -1,0 +1,27 @@
+.headerWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto;
+  padding-bottom: 30px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px;
+  text-align: left;
+  gap: 8px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1e293b;
+}
+
+.subtitle {
+  padding-bottom: 10px;
+  color: #64748b;
+  white-space: pre-line;
+}

@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
+import PasswordInput from '@/components/atoms/Input/PasswordInput';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
-
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
-import PasswordInput from '../atoms/Input/PasswordInput';
 
 import GenericModal from './GenericModal';
 
@@ -140,7 +139,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
               placeholder="현재 비밀번호를 입력하세요"
-              style={{ width: '520px' }}
+              style={{ width: '500px' }}
             />
             {error && <div className={styles.error}>{error}</div>}
           </div>
@@ -150,7 +149,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             variant="xl"
             onClick={handleVerifyPassword}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={!currentPassword || isPending}
           >
             {isPending ? '인증 중...' : '인증하기'}
@@ -188,7 +187,7 @@ const PasswordChangeModal = ({ open, onClose, onSuccess }: PasswordChangeModalPr
             variant="xl"
             onClick={handleChangePassword}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={
               isPending ||
               !isVerified ||

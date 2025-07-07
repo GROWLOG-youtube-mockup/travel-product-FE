@@ -1,9 +1,9 @@
 import { Outlet, useLocation } from 'react-router-dom';
 
-import MainBanner from '../../components/Banner/MainBanner/MainBanner';
-import ProductBanner from '../../components/Banner/ProductBanner/ProductBanner';
-import Footer from '../../components/Footer/Footer';
-import DefaultHeader from '../../components/Header/DefaultHeader/DefaultHeader';
+import MainBanner from '@/components/Banner/MainBanner/MainBanner';
+import ProductBanner from '@/components/Banner/ProductBanner/ProductBanner';
+import Footer from '@/components/Footer/Footer';
+import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 
 import styles from './DefaultLayout.module.scss';
 
@@ -24,7 +24,9 @@ const DefaultLayout = () => {
     <>
       <DefaultHeader />
       {renderBanner()}
-      <main className={styles.baseForm}>
+      <main
+        className={`${styles.baseForm} ${location.pathname === '/product' ? styles.baseFormNoPadding : ''}`}
+      >
         <Outlet />
       </main>
       <Footer />

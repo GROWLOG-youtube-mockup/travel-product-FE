@@ -24,13 +24,10 @@ import CancelCompletePage from '../pages/CancelComplete/CancelComplete';
 import CancelConfirmPage from '../pages/CancelConfirm/CancelConfirm';
 import CancelProgressPage from '../pages/CancelProgress/CancelProgress';
 import CartPage from '../pages/Cart/Cart';
-import DevelopGoto from '../pages/DevelopGoto/DevelopGoto';
 import FindAccountPage from '../pages/FindAccount/FindAccount';
 import JoinMembershipPage from '../pages/JoinMembership/JoinMembership';
 import LoginPage from '../pages/Login/Login';
 import MainPage from '../pages/Main/Main';
-import ModalExamplePage from '../pages/ModalExamplePage';
-import MswTestPage from '../pages/MswTestpage';
 import PaymentCompletePage from '../pages/PaymentComplete/PaymentComplete';
 import PaymentProcessPage from '../pages/PaymentProcess/PaymentProcess';
 import ProductPage from '../pages/Product/Product';
@@ -77,32 +74,19 @@ const routes: AppRouteObject[] = [
     element: <App />,
     children: [
       {
-        index: true, // 루트 경로('/')에서 보여질 페이지
-        element: <DevelopGoto /> // 개발 시에만 사용할 페이지
-      },
-      {
-        path: 'msw', // 루트 경로('/')에서 보여질 페이지
-        element: <MswTestPage /> // Msw 테스트 페이지
-      },
-      {
         element: <DefaultLayout />, // 일반 사용자용 레이아웃
         children: [
           {
-            path: 'main', // 루트 경로('/')에서 보여질 페이지
-            element: <MainPage /> // 기존 HomePage 대신 MainPage를 홈으로 사용
+            index: true, // 루트 경로('/')에서 보여질 페이지
+            element: <MainPage /> // 메인 페이지
           },
           {
             path: 'product',
             element: <ProductPage />
           },
           {
-            path: 'product/:id', // 동적 라우팅. 엔드포인트 관련 추가 논의 필요
+            path: 'product/:id',
             element: <ProductDetailPage />
-          },
-          {
-            // 기능 구현 후 삭제 필요 @@@@@@@@@@@@@
-            path: 'modal-example', // 모달 예제 페이지
-            element: <ModalExamplePage />
           }
         ]
       },

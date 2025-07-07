@@ -1,11 +1,10 @@
 import { useState } from 'react';
 
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
-
-import { normalizePhoneNumber } from '../../utils/phone';
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
+import { normalizePhoneNumber } from '@/utils/phone';
 
 import GenericModal from './GenericModal';
 
@@ -106,7 +105,7 @@ const PhoneChangeModal = ({ open, onClose, onSuccess, currentPhone }: PhoneChang
             variant="xl"
             onClick={handleChange}
             className={styles.button}
-            style={{ width: '520px' }}
+            style={{ width: '500px' }}
             disabled={isPending}
           >
             {isPending ? '변경 중...' : '전화번호 변경'}

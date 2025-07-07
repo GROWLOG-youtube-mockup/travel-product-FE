@@ -46,17 +46,18 @@ const MainBanner = () => {
 
   return (
     <div className={styles['mainBanner']}>
-      <div
-        className={styles['bannerTrack']}
-        style={{ transform: `translateX(-${imagesIndex * 100}%)` }}
-      >
-        {images.map((src, idx) => (
-          <div className={styles['bannerSlide']} key={idx}>
-            <img src={src} alt={`banner-${idx}`} draggable="false" />
-          </div>
-        ))}
+      <div className={styles['bannerInner']}>
+        <div
+          className={styles['bannerTrack']}
+          style={{ transform: `translateX(-${imagesIndex * 100}%)` }}
+        >
+          {images.map((src, idx) => (
+            <div className={styles['bannerSlide']} key={idx}>
+              <img src={src} alt={`banner-${idx}`} draggable="false" />
+            </div>
+          ))}
+        </div>
       </div>
-
       <div className={styles['bannerIndicators']}>
         {images.map((_, idx) => (
           <button

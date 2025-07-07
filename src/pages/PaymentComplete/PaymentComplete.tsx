@@ -21,7 +21,7 @@ const PaymentCompletePage = () => {
   }, []);
 
   const handleMainButtonClick = () => {
-    navigate('/main');
+    navigate('/');
     clearSelectedItem();
   };
 

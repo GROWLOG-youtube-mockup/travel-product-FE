@@ -1,11 +1,10 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import Label from '@/components/atoms/Label/Label';
 import Card from '@/components/Cards/Card';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { useRegionStore } from '@/store/RegionStore';
-
-import Label from '../../components/atoms/Label/Label';
 
 import styles from './Product.module.scss';
 
@@ -21,7 +20,7 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const { selectedRegion } = useRegionStore();
-  const { data, isLoading, isError } = useGetApi('/products', {
+  const { data, isError } = useGetApi('/products', {
     regionId: selectedRegion?.regionId?.toString()
   });
 
