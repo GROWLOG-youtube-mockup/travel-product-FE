@@ -24,7 +24,9 @@ const DefaultLayout = () => {
     <>
       <DefaultHeader />
       {renderBanner()}
-      <main className={styles.baseForm}>
+      <main
+        className={`${styles.baseForm} ${location.pathname === '/product' ? styles.baseFormNoPadding : ''}`}
+      >
         <Outlet />
       </main>
       <Footer />

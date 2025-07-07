@@ -5,7 +5,8 @@
 .titleArea {
   display: flex;
   flex-direction: column;
-  width: 1100px;
+  max-width: 1280px;
+  min-width: 1160px;
   margin: 0 auto;
   text-align: left;
   gap: 8px;
@@ -27,7 +28,8 @@
 
 .categoryBar {
   display: flex;
-  width: 1100px;
+  max-width: 1280px;
+  min-width: 1160px;
   margin: 20px auto 24px;
   gap: 12px;
 }
@@ -50,7 +52,8 @@
 
 .gridList {
   display: grid;
-  width: 1100px;
+  max-width: 1280px;
+  min-width: 1160px;
   margin: 0 auto 40px;
   padding-bottom: 40px;
   gap: 32px;
