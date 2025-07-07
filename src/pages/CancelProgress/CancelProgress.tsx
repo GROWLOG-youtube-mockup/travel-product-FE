@@ -24,7 +24,7 @@ const CancelProgressPage = () => {
     cancelOrder(
       { orderId: Number(orderId ?? 0) },
       {
-        onSuccess: (res) => {
+        onSuccess: () => {
           navigate(`/CancelComplete/${orderId}`);
         },
         onError: (err) => {
