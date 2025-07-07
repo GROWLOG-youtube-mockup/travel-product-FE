@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
 import Input from '@/components/atoms/Input/Input';
+import AdminModalHeader from '@/components/Modal/AdminModalHeader';
 import Modal from '@/components/Modal/Modal';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
-import ModalHeader from '@/components/Modal/ModalHeader';
 import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
 import { handleApiError } from '@/lib/handleApiError';
 
@@ -405,9 +405,9 @@ const AdminEditModal: React.FC<AdminEditModalProps> = ({
           maxWidth: '85vw'
         }}
       >
-        <ModalHeader title={title}>
+        <AdminModalHeader title={title}>
           <ModalCloseButton onClick={handleClose} />
-        </ModalHeader>
+        </AdminModalHeader>
         <div className={styles.modalContent}>
           {/* 로딩 오버레이 */}
           {loading && (
