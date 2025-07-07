@@ -81,10 +81,6 @@ const routes: AppRouteObject[] = [
             element: <MainPage /> // 메인 페이지
           },
           {
-            path: 'main',
-            element: <MainPage />
-          },
-          {
             path: 'product',
             element: <ProductPage />
           },

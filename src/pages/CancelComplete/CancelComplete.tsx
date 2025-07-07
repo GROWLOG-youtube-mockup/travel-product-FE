@@ -17,7 +17,7 @@ const CancelCompletePage = () => {
   const navigate = useNavigate();
 
   const handleMainButtonClick = () => {
-    navigate('/main');
+    navigate('/');
   };
 
   const handleUserButtonClick = () => {
