@@ -5,10 +5,10 @@ import imageLinks from '@/constants/imageLinks';
 import Regions from '@/constants/regions';
 import { useGetApi } from '@/hooks/useGetAPI';
 import { useRegionStore } from '@/store/RegionStore';
+import type { RegionItem } from '@/types/card';
 
 import CardSlide from '../../components/Cards/CardSlide';
 import RegionCardList from '../../components/Cards/RegionCardList';
-import type { RegionItem } from '../../type/card';
 
 import styles from './Main.module.scss';
 
@@ -51,7 +51,7 @@ const MainPage = () => {
   const navigate = useNavigate();
   const { setSelectedRegion, setRegionList, clearSelectedRegion, clearRegionList } =
     useRegionStore();
-  const { data, isLoading, isError } = useGetApi('/products');
+  const { data, isError } = useGetApi('/products');
   const regions = Regions.reduce((acc: RegionItem[], region) => {
     if (!region.level || region.level !== 1) return acc;
 
@@ -72,7 +72,6 @@ const MainPage = () => {
   const filteredTitleList = useMemo(() => {
     return contentsTitleList.reduce((acc: ContentsTitleList[], item, index: number) => {
       const filteredProducts = data?.data?.filter((product) => product?.type === index) ?? [];
-
       if (filteredProducts.length > 0) acc.push(item);
       return acc;
     }, [] as ContentsTitleList[]);

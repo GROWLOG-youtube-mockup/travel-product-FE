@@ -1,10 +1,9 @@
-import { Outlet, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 import Footer from '@/components/Footer/Footer';
 import DefaultHeader from '@/components/Header/DefaultHeader/DefaultHeader';
 import { useGetApi } from '@/hooks/useGetAPI';
-import UserPage from '@/pages/User/User';
 import type { TripDto } from '@/types/api/Trip.type';
 import type { User } from '@/types/api/User.type';
 

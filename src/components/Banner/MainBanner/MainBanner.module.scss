@@ -5,9 +5,15 @@
   width: 70%;
   max-width: 1280px;
   min-width: core.$default-min-width;
-  height: 40vh;
+  height: 400px;
   margin: 0 auto;
+  border-radius: 20px;
   overflow: hidden;
+
+  /* 내부 여백은 .bannerInner에서 처리 */
+  .bannerInner {
+    padding-top: 40px;
+  }
 
   .bannerTrack {
     display: flex;
@@ -26,6 +32,7 @@
       display: block;
       width: 100%;
       height: 100%;
+      border-radius: 20px;
       object-fit: fill;
       object-position: center;
       -webkit-user-drag: none;

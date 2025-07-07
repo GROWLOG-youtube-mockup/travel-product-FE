@@ -1,8 +1,8 @@
 import Button from '@/components/atoms/Button/Button';
+import AdminModalHeader from '@/components/Modal/AdminModalHeader';
 import Modal from '@/components/Modal/Modal';
 import modalStyles from '@/components/Modal/Modal.module.scss';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
-import ModalHeader from '@/components/Modal/ModalHeader';
 
 import styles from './AdminConfirmModal.module.scss';
 
@@ -53,9 +53,9 @@ const AdminConfirmModal = ({
       boxStyle={boxWidth ? { width: boxWidth, maxWidth: boxWidth } : undefined}
     >
       <div className={modalStyles.headerWrapper}>
-        <ModalHeader title={title} subtitle={subtitle}>
+        <AdminModalHeader title={title} subtitle={subtitle}>
           <span className={modalStyles.contents}>{contents}</span>
-        </ModalHeader>
+        </AdminModalHeader>
 
         <div className={modalStyles.buttonLayout}>
           <Button

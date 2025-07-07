@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
-
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
 
 import GenericModal from './GenericModal';
 

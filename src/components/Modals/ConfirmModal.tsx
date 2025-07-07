@@ -1,7 +1,7 @@
-import Button from '../../components/atoms/Button/Button';
-import Modal from '../Modal/Modal';
-import ModalCloseButton from '../Modal/ModalCloseButton';
-import ModalHeader from '../Modal/ModalHeader';
+import Button from '@/components/atoms/Button/Button';
+import Modal from '@/components/Modal/Modal';
+import ModalCloseButton from '@/components/Modal/ModalCloseButton';
+import ModalHeader from '@/components/Modal/ModalHeader';
 
 import styles from '../Modal/Modal.module.scss';
 

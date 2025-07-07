@@ -6,8 +6,7 @@ import { usePostApi } from '@/hooks/usePostAPI';
 import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import type { UserRes } from '@/types/api/EndpointResponseMap.type';
-
-import type { SignupValues } from '../../types/signupForm.types';
+import type { SignupValues } from '@/types/signupForm.types';
 
 import styles from './JoinMembership.module.scss';
 

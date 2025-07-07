@@ -1,7 +1,7 @@
-import type { GenericModalProps } from '../../types/modal';
-import Modal from '../Modal/Modal';
-import ModalCloseButton from '../Modal/ModalCloseButton';
-import ModalHeader from '../Modal/ModalHeader';
+import Modal from '@/components/Modal/Modal';
+import ModalCloseButton from '@/components/Modal/ModalCloseButton';
+import ModalHeader from '@/components/Modal/ModalHeader';
+import type { GenericModalProps } from '@/types/modal';
 
 const GenericModal = ({ open, onClose, title, subtitle, children }: GenericModalProps) => {
   if (!open) return null;

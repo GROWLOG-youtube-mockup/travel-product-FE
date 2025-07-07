@@ -8,6 +8,7 @@ export function toFETripArray(trips: TripDto[] = []): Trip[] {
     ? trips.map((trip) => ({
         orderItemId: trip.orderItemId,
         productId: trip.productId,
+        orderId: trip.orderId,
         title: trip.title,
         start_date: trip.startDate,
         end_date: trip.endDate,

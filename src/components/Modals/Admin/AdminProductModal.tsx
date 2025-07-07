@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Button from '@/components/atoms/Button/Button';
+import AdminModalHeader from '@/components/Modal/AdminModalHeader';
 import Modal from '@/components/Modal/Modal';
 import ModalCloseButton from '@/components/Modal/ModalCloseButton';
-import ModalHeader from '@/components/Modal/ModalHeader';
 import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
 import AdminProductDescriptionSection from '@/components/Modals/Admin/AdminProductDescriptionSection';
 import AdminProductFormSection from '@/components/Modals/Admin/AdminProductFormSection';
@@ -659,9 +659,9 @@ const AdminProductModal: React.FC<AdminProductModalProps> = ({
           height: '90vh'
         }}
       >
-        <ModalHeader title={mode === 'create' ? '상품 추가' : '상품 수정'}>
+        <AdminModalHeader title={mode === 'create' ? '상품 추가' : '상품 수정'}>
           <ModalCloseButton onClick={handleClose} />
-        </ModalHeader>
+        </AdminModalHeader>
 
         <div className={styles.modalContent}>
           {loading && (

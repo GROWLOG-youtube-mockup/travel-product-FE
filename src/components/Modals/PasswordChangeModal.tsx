@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
+import Button from '@/components/atoms/Button/Button';
+import Input from '@/components/atoms/Input/Input';
+import PasswordInput from '@/components/atoms/Input/PasswordInput';
 import { usePatchApi } from '@/hooks/usePatchAPI';
 import { usePostApi } from '@/hooks/usePostAPI';
 import type { EndpointResponseMap } from '@/types/api/EndpointResponseMap.type';
-
-import Button from '../atoms/Button/Button';
-import Input from '../atoms/Input/Input';
-import PasswordInput from '../atoms/Input/PasswordInput';
 
 import GenericModal from './GenericModal';
 

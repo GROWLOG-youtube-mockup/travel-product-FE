@@ -16,6 +16,7 @@ export interface TripDto {
 export interface Trip {
   orderItemId: number;
   productId: number;
+  orderId: number;
   title: string;
   start_date: string;
   end_date: string;

@@ -7,3 +7,11 @@
   margin: 0 auto;
   padding: 40px 16px;
 }
+
+.baseFormNoPadding {
+  width: core.$default-layout-width;
+  max-width: core.$default-layout-max-width;
+  min-width: core.$default-min-width;
+  margin: 0 auto;
+  padding: 0;
+}
