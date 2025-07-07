@@ -1,0 +1,325 @@
+@use '@/styles/core';
+
+.datePicker {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.input {
+  width: 100%;
+  min-width: 180px;
+  padding: 8px 45px 8px 12px;
+  border: 2px solid #e2e8f0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1f2937;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer; // 읽기 전용이므로 포인터 커서
+
+  &:focus {
+    border-color: core.$pagination-active-bg;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
+    outline: none;
+  }
+
+  &:hover:not(:focus, :disabled) {
+    border-color: #cbd5e1;
+    background: #f8fafc; // 호버 시 배경색 변경으로 클릭 가능함을 표시
+  }
+
+  &::placeholder {
+    font-weight: 400;
+    color: #9ca3af;
+  }
+
+  &.disabled {
+    border-color: #d1d5db;
+    color: #9ca3af;
+    background: #f3f4f6;
+    cursor: not-allowed;
+
+    &:focus {
+      border-color: #d1d5db;
+      background: #f3f4f6;
+      box-shadow: none;
+    }
+  }
+}
+
+.iconContainer {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  display: flex;
+  align-items: center;
+  transform: translateY(-50%);
+  gap: 4px;
+}
+
+.clearButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border: none;
+  font-size: 12px;
+  font-weight: bold;
+  color: #6b7280;
+  background: transparent;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: #ef4444;
+    background: #fee2e2;
+  }
+}
+
+.calendarButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  font-size: 14px;
+  color: #6b7280;
+  background: transparent;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
+
+  &:disabled {
+    color: #d1d5db;
+    cursor: not-allowed;
+  }
+}
+
+.calendar {
+  position: fixed; // absolute에서 fixed로 변경
+  top: auto;
+  left: auto;
+  width: 280px;
+  margin-top: 4px;
+  padding: 16px;
+  border: 1px solid #e2e8f0;
+  background: white;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 10%),
+    0 10px 10px -5px rgb(0 0 0 / 4%);
+  border-radius: 12px;
+  animation: fade-in 0.2s ease-out;
+  z-index: 9999; // z-index 높임
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+.calendarHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.navSection {
+  display: flex;
+  gap: 4px;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  font-size: 16px;
+  font-weight: bold;
+  color: #6b7280;
+  background: transparent;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: core.$pagination-active-bg;
+    background: #f0f9ff;
+  }
+}
+
+.monthYear {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+
+  .year {
+    font-size: 14px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+
+  .month {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1f2937;
+  }
+}
+
+.weekHeader {
+  display: grid;
+  margin-bottom: 8px;
+  gap: 2px;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekDay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-align: center;
+}
+
+.daysGrid {
+  display: grid;
+  margin-bottom: 16px;
+  gap: 2px;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.dayButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+  background: transparent;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+
+  &:hover:not(.selected) {
+    background: #f3f4f6;
+  }
+
+  &.selected {
+    color: white;
+    background: core.$pagination-active-bg;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 20%);
+  }
+
+  &.today {
+    font-weight: 700;
+    color: core.$pagination-active-bg;
+    background: #dbeafe;
+
+    &.selected {
+      color: white;
+      background: core.$pagination-active-bg;
+    }
+  }
+
+  &.otherMonth {
+    color: #d1d5db;
+
+    &:hover {
+      color: #9ca3af;
+      background: #f9fafb;
+    }
+  }
+}
+
+.calendarFooter {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #e2e8f0;
+  gap: 8px;
+}
+
+.todayButton,
+.clearButtonFooter {
+  padding: 6px 12px;
+  border: 1px solid #e2e8f0;
+  font-size: 12px;
+  font-weight: 500;
+  background: white;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.todayButton {
+  border-color: core.$pagination-active-bg;
+  color: core.$pagination-active-bg;
+
+  &:hover {
+    color: white;
+    background: core.$pagination-active-bg;
+  }
+}
+
+.clearButtonFooter {
+  color: #6b7280;
+
+  &:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: #fef2f2;
+  }
+}
+
+// 반응형 디자인
+@media (width <= 768px) {
+  .calendar {
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 300px;
+    max-height: 80vh;
+    margin-top: 0;
+    transform: translate(-50%, -50%) !important;
+    overflow-y: auto;
+  }
+
+  .input {
+    min-width: 120px;
+    font-size: 12px;
+  }
+}

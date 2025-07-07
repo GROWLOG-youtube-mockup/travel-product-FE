@@ -3,6 +3,12 @@
   "plugins": ["stylelint-order", "stylelint-scss"],
   "customSyntax": "postcss-scss",
   "rules": {
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
+    ],
     "order/properties-order": [
       [
         {
@@ -138,6 +144,7 @@
     "**/*.jsx",
     "**/*.ts",
     "**/*.tsx",
-    "src/styles/**/*reset*.scss"
+    "src/styles/**/*reset*.scss",
+    "**/*.yaml"
   ]
 }

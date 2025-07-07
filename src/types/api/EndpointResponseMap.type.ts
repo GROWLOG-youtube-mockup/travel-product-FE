@@ -1,4 +1,13 @@
 import type { AdminLog } from './AdminLog.type';
+import type { AdminOrder, AdminOrderDetail } from './AdminOrder.type';
+import type {
+  AdminProduct,
+  AdminProductCreateResponse,
+  AdminProductDeleteResponse,
+  AdminProductDetail,
+  AdminProductUpdateResponse,
+  ImageUploadResponse
+} from './AdminProduct.type';
 import type { AdminUser } from './AdminUser.type';
 import type { Carts } from './Carts.type';
 import type { Orders } from './Orders.type';
@@ -42,6 +51,21 @@ export type AdminLogsRes = ApiResponse<PaginatedResponse<AdminLog>>;
 export type AdminUsersRes = ApiResponse<PaginatedResponse<AdminUser>>;
 export type UserUpdateRes = ApiResponse<{ updated_at: string; user_id: number }>;
 export type UserDeleteRes = ApiResponse<{ message: string }>;
+export type AdminOrdersRes = ApiResponse<PaginatedResponse<AdminOrder>>;
+export type AdminOrderDetailRes = ApiResponse<AdminOrderDetail>;
+export type AdminOrderUpdateRes = ApiResponse<{
+  updated_at: string;
+  status: string;
+  order_id: number;
+}>;
+
+// 상품 관리 관련 응답 타입
+export type AdminProductsRes = ApiResponse<PaginatedResponse<AdminProduct>>;
+export type AdminProductDetailRes = ApiResponse<AdminProductDetail>;
+export type AdminProductCreateRes = ApiResponse<AdminProductCreateResponse>;
+export type AdminProductUpdateRes = ApiResponse<AdminProductUpdateResponse>;
+export type AdminProductDeleteRes = ApiResponse<AdminProductDeleteResponse>;
+export type ImageUploadRes = ImageUploadResponse; // 직접 배열 반환
 
 export interface EndpointResponseMap {
   '/carts': CartRes;
@@ -67,4 +91,10 @@ export interface EndpointResponseMap {
   '/admin/logs': AdminLogsRes;
   '/admin/users': AdminUsersRes;
   [k: `/admin/users/${string}`]: UserUpdateRes | UserDeleteRes;
+  '/admin/orders': AdminOrdersRes;
+  [k: `/admin/orders/${string}`]: AdminOrderDetailRes | AdminOrderUpdateRes;
+  '/admin/products': AdminProductsRes;
+  [k: `/admin/products/${string}`]: AdminProductDetailRes;
+  '/images': ImageUploadRes;
+  [k: `/images/${string}`]: void;
 }

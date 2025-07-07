@@ -12,6 +12,7 @@
     0 1px 2px 0 rgb(0 0 0 / 6%);
   border-radius: 8px;
   overflow: hidden;
+  scroll-margin-top: 20px; // 스크롤 시 상단 여백 확보
 
   &.fullWidth {
     max-width: none;
@@ -27,6 +28,17 @@
   background: core.$admin-table-bg;
   border-bottom: 1px solid core.$admin-table-border;
 
+  .headerLeft {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .headerRight {
+    display: flex;
+    align-items: center;
+  }
+
   h1 {
     margin: 0;
     font-size: 28px;
@@ -39,6 +51,36 @@
     font-weight: 500;
     color: core.$admin-table-text-secondary;
   }
+
+  .addButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    background: core.$button-primary-bg;
+    box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background: core.$button-primary-hover;
+      box-shadow: 0 2px 6px rgb(0 0 0 / 15%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 20%);
+      outline: none;
+    }
+  }
 }
 
 // 필터 영역
@@ -46,69 +88,156 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 16px 24px;
-  background: core.$admin-table-bg;
-  border-bottom: 1px solid core.$admin-table-border;
-  gap: 16px;
+  padding: 20px 24px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 5%);
+  border-radius: 8px 8px 0 0;
+  border-bottom: 1px solid #e2e8f0;
+  gap: 20px;
 
   .filterGroup {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 
     label {
+      display: flex;
+      align-items: center;
       font-size: 14px;
-      font-weight: 500;
-      color: core.$admin-table-text;
+      font-weight: 600;
+      color: #374151;
+      gap: 6px;
       white-space: nowrap;
-    }
-  }
 
-  .filterInput {
-    width: 120px;
-    padding: 6px 12px;
-    border: 1px solid core.$admin-table-border;
-    font-size: 14px;
-    border-radius: 4px;
-
-    &:focus {
-      border-color: core.$pagination-active-bg;
-      outline: none;
-    }
-  }
-
-  .filterSelect {
-    min-width: 100px;
-    padding: 6px 12px;
-    border: 1px solid core.$admin-table-border;
-    font-size: 14px;
-    border-radius: 4px;
-
-    &:focus {
-      border-color: core.$pagination-active-bg;
-      outline: none;
+      &::before {
+        font-size: 16px;
+        content: '🏷️';
+      }
     }
   }
 
   .resetButton {
-    padding: 6px 16px;
-    border: 1px solid core.$admin-table-border;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    border: 2px solid #e5e7eb;
+    font-size: 13px;
     font-weight: 500;
-    color: core.$admin-table-text;
-    background: core.$pagination-border;
-    border-radius: 4px;
-    transition: all 0.2s ease;
+    color: #6b7280;
+    background: white;
+    border-radius: 8px;
+    transition: all 0.3s ease;
     cursor: pointer;
+    gap: 6px;
+
+    &::before {
+      font-size: 14px;
+      content: '🔄';
+    }
 
     &:hover {
-      background: core.$admin-table-row-hover;
+      border-color: #3b82f6;
+      color: #3b82f6;
+      background: #f0f9ff;
+      box-shadow: 0 2px 8px rgb(59 130 246 / 15%);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+}
+
+.filterInput {
+  max-width: 300px;
+  min-width: 180px;
+  padding: 8px 12px;
+  border: 2px solid #e2e8f0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 13px;
+  color: #1f2937;
+  background: white;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:focus {
+    border-color: core.$pagination-active-bg;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
+    outline: none;
+  }
+
+  &:hover:not(:focus) {
+    border-color: #cbd5e1;
+  }
+
+  &::placeholder {
+    font-weight: 400;
+    color: #9ca3af;
+  }
+}
+
+.filterDatePicker {
+  max-width: 300px;
+  min-width: 180px;
+}
+
+.filterSelect {
+  max-width: 300px;
+  min-width: 200px;
+  padding: 8px 12px;
+  border: 2px solid #e2e8f0;
+  font-size: 13px;
+  background: white;
+  background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6,9 12,15 18,9'></polyline></svg>");
+  background-size: 16px;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  appearance: none;
+  background-position: right 12px center;
+
+  &:focus {
+    border-color: core.$pagination-active-bg;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
+    outline: none;
+  }
+
+  &:hover {
+    border-color: #cbd5e1;
+  }
+
+  option {
+    padding: 8px 12px;
+    font-size: 13px;
+    line-height: 1.4;
+
+    &[value=''] {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      background: #f8fafc;
+
+      &:disabled {
+        color: #94a3b8;
+        background: #f1f5f9;
+      }
+    }
+
+    &[value]:not([value='']) {
+      &:hover {
+        background: #eff6ff;
+      }
     }
   }
 }
 
 .tableScrollWrapper {
+  position: relative;
   width: 100%;
+  min-height: 400px; // 최소 높이 설정으로 레이아웃 시프트 방지
   -webkit-overflow-scrolling: touch;
   overflow-x: auto;
 
@@ -128,13 +257,12 @@
 
 .table {
   width: 100%;
-  min-width: 800px; // 최소 너비 강제 설정
+  min-width: 800px;
   border-collapse: collapse;
-  table-layout: fixed; // 고정 레이아웃으로 변경
+  table-layout: fixed;
 
   th,
   td {
-    // 각 열에 균등한 너비 배분
     width: auto;
     padding: 12px 16px;
     text-align: left;
@@ -151,6 +279,7 @@
     color: core.$admin-table-header-text;
     background-color: core.$admin-table-header-bg;
     text-transform: uppercase;
+    vertical-align: middle;
 
     &.center {
       text-align: center;
@@ -164,6 +293,7 @@
   td {
     font-size: 14px;
     color: core.$admin-table-text;
+    vertical-align: middle;
 
     &.center {
       text-align: center;
@@ -278,15 +408,17 @@
 .paginationContainer {
   display: flex;
   flex-direction: column;
-  padding: 16px 24px;
+  min-height: 90px; // 최소 높이 설정으로 레이아웃 시프트 방지
+  padding: 20px 24px;
   background: core.$pagination-bg;
   border-top: 1px solid core.$admin-table-border;
-  gap: 12px;
+  gap: 16px;
 
   @media (width >= 768px) {
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    min-height: 70px;
   }
 }
 
@@ -295,49 +427,178 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
 }
 
 .paginationButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   min-width: 40px;
+  height: 40px;
   padding: 8px 12px;
-  border: 1px solid core.$pagination-border;
+  border: 2px solid core.$pagination-border;
   font-size: 14px;
   font-weight: 500;
   color: core.$pagination-text;
   background: core.$pagination-bg;
-  border-radius: 6px;
-  transition: all 0.2s ease;
+  border-radius: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
+  will-change: transform;
+  gap: 6px;
+  white-space: nowrap;
 
-  &:hover:not(.disabled) {
+  &:hover:not(.disabled, .ellipsis) {
+    border-color: core.$pagination-active-bg;
     background: core.$pagination-hover-bg;
+    box-shadow: 0 6px 16px rgb(59 130 246 / 20%);
+    transform: translateY(-2px);
   }
 
   &.active {
     border-color: core.$pagination-active-bg;
+    font-weight: 700;
     color: core.$pagination-active-text;
     background: core.$pagination-active-bg;
+    box-shadow: 0 4px 12px rgb(59 130 246 / 30%);
+    transform: scale(1.05);
   }
 
   &.disabled {
+    border-color: #e5e7eb;
     color: core.$pagination-text-disabled;
     cursor: not-allowed;
     opacity: 0.5;
+
+    &:hover {
+      border-color: #e5e7eb;
+      background: core.$pagination-bg;
+      box-shadow: none;
+      transform: none;
+    }
+  }
+
+  // 네비게이션 버튼 (첫/이전/다음/마지막)
+  &.navButton {
+    min-width: 50px;
+    border-color: #d1d5db;
+    font-weight: 600;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+
+    &:not(.disabled) {
+      &:hover {
+        border-color: core.$pagination-active-bg;
+        color: white;
+        background: linear-gradient(135deg, core.$pagination-active-bg 0%, #2563eb 100%);
+        box-shadow: 0 6px 20px rgb(59 130 246 / 25%);
+      }
+    }
+
+    .navIcon {
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .navText {
+      font-size: 13px;
+    }
+  }
+
+  // 페이지 번호 버튼
+  &.pageNumber {
+    min-width: 44px;
+    font-weight: 600;
+    border-radius: 10px;
+
+    &:not(.active):hover {
+      border-color: #93c5fd;
+      color: #1d4ed8;
+      background: #f0f9ff;
+    }
+  }
+
+  // 생략 표시 스타일
+  &.ellipsis {
+    position: relative;
+    border-color: transparent;
+    font-weight: 700;
+    color: core.$pagination-text;
+    background: transparent;
+    cursor: pointer;
+
+    &:hover {
+      border-color: core.$pagination-border;
+      color: core.$pagination-active-bg;
+      background: core.$pagination-hover-bg;
+      transform: translateY(-1px);
+
+      &::after {
+        position: absolute;
+        top: -35px;
+        left: 50%;
+        padding: 6px 12px;
+        font-size: 11px;
+        font-weight: 500;
+        color: white;
+        background: #1f2937;
+        box-shadow: 0 4px 12px rgb(0 0 0 / 20%);
+        border-radius: 6px;
+        z-index: 1000;
+        transform: translateX(-50%);
+        content: '클릭하여 이동';
+        white-space: nowrap;
+      }
+
+      &::before {
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        width: 0;
+        height: 0;
+        z-index: 1001;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 5px solid #1f2937;
+        content: '';
+      }
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // 페이지 점프 버튼 스타일
+  &.jumpButton {
+    min-width: 60px;
+    border-color: #10b981;
+    font-weight: 700;
+    color: #10b981;
+    background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+
+    &:hover {
+      border-color: #10b981;
+      color: white;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      box-shadow: 0 6px 20px rgb(16 185 129 / 25%);
+    }
   }
 }
 
+// 페이지 정보
 .paginationInfo {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-size: 14px;
   color: core.$admin-table-text-secondary;
-  gap: 8px;
+  gap: 12px;
 
   @media (width >= 768px) {
     flex-direction: row;
-    gap: 16px;
+    gap: 20px;
   }
 }
 
@@ -359,36 +620,43 @@
 }
 
 .pageSizeSelect {
-  padding: 4px 8px;
-  border: 1px solid core.$admin-table-border;
+  padding: 6px 10px;
+  border: 2px solid core.$admin-table-border;
   font-size: 14px;
   background: white;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
   cursor: pointer;
 
   &:focus {
     border-color: core.$pagination-active-bg;
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
     outline: none;
+  }
+
+  &:hover {
+    border-color: #cbd5e1;
   }
 }
 
 .customPageSize {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
 }
 
 .customInput {
   width: 80px;
-  padding: 4px 8px;
-  border: 1px solid core.$pagination-active-bg;
+  padding: 6px 10px;
+  border: 2px solid core.$pagination-active-bg;
   font-size: 14px;
   text-align: center;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: all 0.2s ease;
 
   &:focus {
     border-color: core.$pagination-active-bg;
-    box-shadow: 0 0 0 2px rgb(59 130 246 / 10%);
+    box-shadow: 0 0 0 3px rgb(59 130 246 / 10%);
     outline: none;
   }
 }
@@ -398,12 +666,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border: none;
   font-size: 12px;
   font-weight: bold;
-  border-radius: 4px;
+  border-radius: 6px;
   transition: all 0.2s ease;
   cursor: pointer;
 }
@@ -414,6 +682,7 @@
 
   &:hover {
     background: #059669;
+    transform: scale(1.1);
   }
 }
 
@@ -423,9 +692,214 @@
 
   &:hover {
     background: #dc2626;
+    transform: scale(1.1);
   }
 }
 
-.pageInfo {
-  white-space: nowrap;
+// 상세 페이지 정보
+.detailedPageInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 13px;
+  gap: 8px;
+
+  @media (width >= 768px) {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+.pageRange {
+  color: core.$admin-table-text-secondary;
+}
+
+.progressContainer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progressSliderContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 120px;
+  height: 20px;
+
+  @media (width >= 768px) {
+    width: 150px;
+  }
+}
+
+.progressTrack {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  z-index: 1;
+}
+
+.progressSlider {
+  position: absolute;
+  width: 100%;
+  height: 4px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  z-index: 2;
+  appearance: none;
+
+  &::-webkit-slider-track {
+    height: 4px;
+    background: transparent;
+    border-radius: 2px;
+  }
+
+  &::-webkit-slider-thumb {
+    width: 16px;
+    height: 16px;
+    background: core.$pagination-active-bg;
+    box-shadow: 0 2px 6px rgb(59 130 246 / 30%);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    appearance: none;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgb(59 130 246 / 40%);
+      transform: scale(1.2);
+    }
+  }
+
+  &::-moz-range-track {
+    height: 4px;
+    border: none;
+    background: transparent;
+    border-radius: 2px;
+  }
+
+  &::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border: none;
+    background: core.$pagination-active-bg;
+    box-shadow: 0 2px 6px rgb(59 130 246 / 30%);
+    border-radius: 50%;
+    transition: all 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 4px 12px rgb(59 130 246 / 40%);
+      transform: scale(1.2);
+    }
+  }
+
+  &:focus {
+    outline: none;
+
+    &::-webkit-slider-thumb {
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 20%);
+    }
+
+    &::-moz-range-thumb {
+      box-shadow: 0 0 0 3px rgb(59 130 246 / 20%);
+    }
+  }
+}
+
+.progressText {
+  min-width: 40px;
+  font-size: 12px;
+  font-weight: 600;
+  color: core.$pagination-active-bg;
+  text-align: right;
+}
+
+// 반응형 디자인
+@media (width <= 768px) {
+  .filterContainer {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px 20px;
+    gap: 16px;
+
+    .filterGroup {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+
+      label {
+        font-size: 13px;
+      }
+    }
+
+    .filterSelect,
+    .filterInput,
+    .filterDatePicker {
+      width: 100%;
+      min-width: auto;
+    }
+
+    .resetButton {
+      min-width: 120px;
+      align-self: center;
+    }
+  }
+
+  .paginationControls {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .paginationButton {
+    min-width: 36px;
+    height: 36px;
+    padding: 6px 8px;
+    font-size: 13px;
+
+    &.navButton {
+      min-width: 45px;
+
+      .navText {
+        font-size: 12px;
+      }
+
+      .navIcon {
+        font-size: 14px;
+      }
+    }
+
+    &.pageNumber {
+      min-width: 40px;
+    }
+
+    &.jumpButton {
+      min-width: 50px;
+      font-size: 12px;
+    }
+
+    &.ellipsis {
+      &:hover::after {
+        top: -30px;
+        padding: 4px 8px;
+        font-size: 10px;
+        content: '이동';
+      }
+    }
+  }
+
+  .detailedPageInfo {
+    font-size: 12px;
+  }
+
+  .progressSliderContainer {
+    width: 100px;
+  }
+
+  .progressText {
+    min-width: 35px;
+    font-size: 11px;
+  }
 }

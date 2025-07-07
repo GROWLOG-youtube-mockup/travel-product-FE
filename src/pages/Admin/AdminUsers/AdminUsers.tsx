@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '@/components/atoms/Table/AdminTable/AdminTable';
-import AdminConfirmModal from '@/components/Modals/AdminConfirmModal';
-import AdminEditModal from '@/components/Modals/AdminEditModal';
+import AdminConfirmModal from '@/components/Modals/Admin/AdminConfirmModal';
+import AdminEditModal from '@/components/Modals/Admin/AdminEditModal';
 import { useAdminPagination } from '@/hooks/useAdminPagination';
 import { useDeleteApi } from '@/hooks/useDeleteAPI';
 import { useGetApi } from '@/hooks/useGetAPI';
@@ -13,7 +13,7 @@ import { handleApiError } from '@/lib/handleApiError';
 import { useAuthStore } from '@/store/AuthStore';
 import type { SimpleColumn } from '@/types/adminTable.types';
 import type { AdminUser } from '@/types/api/AdminUser.type';
-import { createUserEditFields, normalizePhoneForSave } from '@/utils/userModalUtils';
+import { createUserEditFields, normalizePhoneForSave } from '@/utils/adminModalUtils';
 
 import styles from './AdminUsers.module.scss';
 

@@ -19,7 +19,7 @@ export interface SimpleColumn {
 export interface FilterOption {
   key: string;
   label: string;
-  type: 'text' | 'number' | 'select';
+  type: 'text' | 'number' | 'select' | 'date';
   options?: { value: string; label: string }[]; // select용
   placeholder?: string;
 }
@@ -81,4 +81,9 @@ export interface ExtendedAdminTableProps<T extends Record<string, unknown>>
   // 제목과 요약 정보
   title?: string; // 테이블 제목
   summary?: string; // 요약 정보 (예: "총 X개의 항목")
+
+  // 추가 버튼 기능
+  showAddButton?: boolean; // 추가 버튼 표시 여부
+  addButtonText?: string; // 추가 버튼 텍스트
+  onAddClick?: () => void; // 추가 버튼 클릭 콜백
 }
