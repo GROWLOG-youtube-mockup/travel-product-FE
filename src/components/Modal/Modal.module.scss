@@ -13,7 +13,7 @@
   display: flex;
   flex-direction: column;
   max-height: 90vh; // 최대 높이 제한
-  padding: 20px 0 40px; // 상하 패딩만 유지, 좌우 패딩 제거
+  padding: 20px 0; // 상하 패딩만 유지, 좌우 패딩 제거
   background: #ffffff;
   box-shadow: 0 2px 16px rgb(0 0 0 / 8%);
   border-radius: 16px;
