@@ -10,7 +10,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://3.38.61.233:8080',
+        target: 'https://travel-product-be.duckdns.org',
         changeOrigin: true,
         rewrite: (p) => p.replace(/^\/api/, ''),
         secure: false
