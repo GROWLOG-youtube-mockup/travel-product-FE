@@ -27,7 +27,7 @@ const CartItemCard = ({
       <div className={styles.itemLayout}>
         <Checkbox checked={checked} onChange={(e) => onCheckChange(e.target.checked)} />
         <div className={styles.itemImage}>
-          <img src="https://cdn.pixabay.com/photo/2021/11/04/16/19/travel-6768660_1280.png" />
+          <img src={item.productImage} />
         </div>
         <div className={styles.itemInfoWrapper}>
           <div>{item.productName}</div>
