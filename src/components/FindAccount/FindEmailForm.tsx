@@ -37,34 +37,26 @@ const FindEmailForm = ({ onResult, styles }: FindEmailFormProps) => {
     setError(err);
     if (Object.keys(err).length > 0) return;
 
-    try {
-      // 전화번호 형식 검증 후 순수 숫자로 전송
-      normalizePhoneNumber(phone);
+    const requestData = {
+      name,
+      phoneNumber: phone
+    };
 
-      const requestData = {
-        name,
-        phoneNumber: phone
-      };
-
-      // mutation을 실행하고 결과를 기다림
-      findEmailMutation.mutate(requestData, {
-        onSuccess: (data) => {
-          if (data?.success) {
-            onResult('이메일 찾기 결과', `가입된 이메일: ${maskEmail(data.data)}`);
-          } else {
-            onResult('이메일 찾기 실패', data?.error?.message || '이메일을 찾을 수 없습니다.');
-          }
-        },
-        onError: (error) => {
-          // 에러 메시지 추출 (서버에서 보낸 구체적인 메시지 우선)
-          const message = error instanceof Error ? error.message : '잠시 후 다시 시도해 주세요.';
-          onResult('이메일 찾기 실패', message);
+    // mutation을 실행하고 결과를 기다림
+    findEmailMutation.mutate(requestData, {
+      onSuccess: (data) => {
+        if (data?.success) {
+          onResult('이메일 찾기 결과', `가입된 이메일: ${maskEmail(data.data)}`);
+        } else {
+          onResult('이메일 찾기 실패', data?.error?.message || '이메일을 찾을 수 없습니다.');
         }
-      });
-    } catch (error) {
-      console.error('FindEmail 검증 에러:', error);
-      onResult('입력 오류', '입력 정보를 확인해 주세요.');
-    }
+      },
+      onError: (error) => {
+        // 에러 메시지 추출 (서버에서 보낸 구체적인 메시지 우선)
+        const message = error instanceof Error ? error.message : '잠시 후 다시 시도해 주세요.';
+        onResult('이메일 찾기 실패', message);
+      }
+    });
   };
 
   return (
