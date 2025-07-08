@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getAuthAccessToken } from '@/store/AuthStore';
 
 export const api = axios.create({
-  baseURL: '/api',
+  baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true,
   timeout: 10_000,
   headers: {
