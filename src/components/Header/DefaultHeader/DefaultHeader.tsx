@@ -8,7 +8,7 @@ import styles from './DefaultHeader.module.scss';
 
 const DefaultHeader = () => {
   const navigate = useNavigate();
-  const { name, roleCode, isLoggedIn, logout } = useAuthStore();
+  const { name, isLoggedIn, logout } = useAuthStore();
 
   const handleLogout = () => {
     logout();
@@ -28,10 +28,6 @@ const DefaultHeader = () => {
     navigate('/cart');
   };
 
-  const handleAdmin = () => {
-    navigate('/admin');
-  };
-
   const handleMyPage = () => {
     navigate('/user');
   };
@@ -46,11 +42,6 @@ const DefaultHeader = () => {
           {isLoggedIn ? (
             <>
               {name && <span>안녕하세요, {name}님!</span>}
-              {roleCode !== 1 && (
-                <label onClick={handleAdmin} style={{ cursor: 'pointer' }}>
-                  관리자페이지
-                </label>
-              )}
               <label onClick={handleCart} style={{ cursor: 'pointer' }}>
                 장바구니
               </label>
