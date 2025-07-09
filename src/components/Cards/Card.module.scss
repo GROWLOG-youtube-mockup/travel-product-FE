@@ -13,6 +13,14 @@
   &.normal,
   &.longHeight {
     width: calc((100% - 5rem) / 5);
+
+    .cardContent {
+      .cardTitle {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
   }
 
   &.gridCard {
@@ -61,6 +69,7 @@
     text-align: left;
 
     .cardTitle {
+      display: block;
       margin: 0;
       font-size: 0.9rem;
       line-height: 1.5rem;
