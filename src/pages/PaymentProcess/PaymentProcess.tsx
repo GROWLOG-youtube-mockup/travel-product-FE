@@ -25,7 +25,7 @@ const PaymentProcessPage = () => {
   const { selectedItem } = useCartStore((state) => state);
   const [amount] = useState<{ currency: string; value: number }>({
     currency: 'KRW',
-    value: selectedItem?.price ?? 0
+    value: selectedItem?.totalPrice ?? 0
   });
   const [ready, setReady] = useState(false);
   const [widgets, setWidgets] = useState<any>(null);
@@ -86,7 +86,7 @@ const PaymentProcessPage = () => {
 
   const handlePaymentApprove = () => {
     approveApi({
-      amount: selectedItem?.price ?? 0,
+      amount: selectedItem?.totalPrice ?? 0,
       payment_key: selectedItem?.order_id?.toString() ?? '',
       order_id: selectedItem?.order_id ?? 0,
       payment_gateway: 'toss',
