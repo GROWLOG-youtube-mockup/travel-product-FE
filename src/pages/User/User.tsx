@@ -6,6 +6,7 @@ import UserBanner from '@/components/Banner/UserBanner/UserBanner';
 import MyTripCard from '@/components/Cards/MyTripCard';
 import UserInfo from '@/components/UserInfo/UserInfo';
 import { useGetApi } from '@/hooks/useGetAPI';
+import { useCancelStore } from '@/store/CancelStore';
 import type { Trip, TripDto } from '@/types/api/Trip.type';
 import type { User } from '@/types/api/User.type';
 import { toFETripArray } from '@/utils/trip';
@@ -28,6 +29,7 @@ type TripTab = 'upcoming' | 'past';
 const UserPage = () => {
   const navigate = useNavigate();
   const [tab, setTab] = useState<TripTab>('upcoming');
+  const { setSelectedItem } = useCancelStore();
 
   // 데이터 패칭
   const {
@@ -66,8 +68,9 @@ const UserPage = () => {
     navigate(`/product/${productId}`);
   };
 
-  const handleCancelConfirm = (orderId: number) => {
-    navigate(`/CancelConfirm/${orderId}`);
+  const handleCancelConfirm = (trip: Trip) => {
+    setSelectedItem(trip);
+    navigate(`/CancelConfirm/${trip.orderId}`);
   };
 
   if (tripsLoading || userInfoLoading) {
@@ -110,7 +113,7 @@ const UserPage = () => {
                   <Button
                     variant="sm"
                     style={{ margin: '16px 0 0 0' }}
-                    onClick={() => handleCancelConfirm(trip.orderId)}
+                    onClick={() => handleCancelConfirm(trip)}
                   >
                     결제 취소하기
                   </Button>

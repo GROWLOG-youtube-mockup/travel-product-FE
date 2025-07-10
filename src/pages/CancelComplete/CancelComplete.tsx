@@ -6,6 +6,7 @@ import dayjs from 'dayjs';
 
 import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
+import { useCancelStore } from '@/store/CancelStore';
 
 import styles from './CancelComplete.module.scss';
 
@@ -13,14 +14,17 @@ const CancelCompletePage = () => {
   const { pathname } = useLocation();
   const orderId = pathname.split('/').pop();
   const { data: orderRes } = useGetApi(`/orders/${orderId}`);
+  const { clearSelectedItem } = useCancelStore();
 
   const navigate = useNavigate();
 
   const handleMainButtonClick = () => {
+    clearSelectedItem();
     navigate('/');
   };
 
   const handleUserButtonClick = () => {
+    clearSelectedItem();
     navigate('/user');
   };
 

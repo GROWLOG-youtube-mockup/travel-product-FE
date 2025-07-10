@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 
 import Button from '@/components/atoms/Button/Button';
 import { useGetApi } from '@/hooks/useGetAPI';
+import { useCancelStore } from '@/store/CancelStore';
 
 import styles from './CancelConfirm.module.scss';
 
@@ -11,6 +12,7 @@ const CancelConfirmPage = () => {
   const { pathname } = useLocation();
   const orderId = pathname.split('/').pop();
   const navigate = useNavigate();
+  const { selectedItem } = useCancelStore();
   const { data: userRes } = useGetApi('/users/me');
   const { data: orderRes } = useGetApi(`/orders/${orderId}`);
 
@@ -34,7 +36,7 @@ const CancelConfirmPage = () => {
           <h1 className={styles.title}>결제 취소 상품</h1>
           <div className={styles.itemWrapper}>
             <div className={styles.itemImage}>
-              {/* <img src={orderRes?.data?.items[0]?.} alt="" /> */}
+              <img src={selectedItem?.thumbnailUrl} alt="" />
             </div>
             <div className={styles.itemInfoWrapper}>
               <div className={styles.itemName}>{orderRes?.data?.items[0]?.productName}</div>
