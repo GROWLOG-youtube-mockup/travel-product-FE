@@ -34,6 +34,14 @@
   &.longHeight {
     height: 300px;
 
+    .cardContent {
+      .cardTitle {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
     .cardImage {
       flex: 1;
       height: 75%;
