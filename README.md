@@ -6,6 +6,8 @@ React 기반으로 개발되었으며, 상태 관리는 Zustand, 데이터 패�
 
 <br />
 
+---
+
 ## 🚀 주요 기능
 
 - 여행 상품 목록 조회
@@ -13,6 +15,23 @@ React 기반으로 개발되었으며, 상태 관리는 Zustand, 데이터 패�
 - 장바구니 담기 및 삭제
 - 예약 진행 및 주문 내역 확인
 - 반응형 UI 지원
+
+<br />
+
+---
+
+## 🧰 기술 스택
+
+| 구분         | 사용 기술                                |
+|--------------|-------------------------------------------|
+| **Framework** | React + TypeScript                       |
+| **Build Tool**| Vite                                      |
+| **State**     | Zustand, TanStack Query (React Query)    |
+| **Style**     | SCSS (모듈 기반), CSS Modules             |
+| **Routing**   | React Router                              |
+| **API**       | axios 기반 RESTful API 통신               |
+| **Testing**   | Vitest, React Testing Library             |
+| **Linter & Formatter** | ESLint, Stylelint, Prettier, Husky |
 
 <br />
 
@@ -29,67 +48,6 @@ React 기반으로 개발되었으며, 상태 관리는 Zustand, 데이터 패�
 
 ### 관리자 페이지
 ![image](https://github.com/user-attachments/assets/ca92255a-68be-4b7c-a2b6-329398fc50b4)
-
-<br />
-
----
-
-## ⚛️ Core
-
-- **React** (TypeScript + TSX)
-- **Vite** (프론트엔드 번들러)
-
-<br />
-
-
----
-
-## 🧭 Architecture
-
-- **React Router** – 클라이언트 사이드 라우팅
-- **Zustand** – 경량 전역 상태 관리
-- **TanStack Query (React Query)** – 서버 상태 및 캐싱
-- **axios** – HTTP 클라이언트
-
-<br />
-
-
----
-
-## 📝 Form Handling
-
-- **React Hook Form** – 다중 입력 폼 처리에 최적화  
-  - [공식 문서](https://react-hook-form.com/docs)  
-  - [예제 코드](https://github.com/react-hook-form/react-hook-form/tree/master/examples)
-
-<br />
-
-
----
-
-## 🎨 Styling
-
-- **SCSS (Sass)** – 모듈화된 스타일 작성
-
-<br />
-
----
-
-## 🧪 Testing
-
-- **Vitest** – Vite 기반 테스트 러너
-- **React Testing Library** – React 컴포넌트 테스트 도구
-
-<br />
-
----
-
-## ⚙️ 개발 도구
-
-- **PNPM** – 빠르고 효율적인 패키지 매니저
-- **Prettier** – 코드 포매터
-- **ESLint / Stylelint** – JS/SCSS 코드 린팅
-- **Husky + lint-staged** – 커밋 전 코드 검사 자동화 및 포맷팅
 
 <br />
 
