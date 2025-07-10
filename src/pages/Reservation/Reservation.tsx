@@ -31,10 +31,7 @@ const ReservationPage = () => {
           <h1 className={styles.title}>결제 상품</h1>
           <div className={styles.itemWrapper}>
             <div className={styles.itemImage}>
-              <img
-                src="https://cdn.pixabay.com/photo/2014/06/03/19/38/board-361516_1280.jpg"
-                alt=""
-              />
+              <img src={selectedItem?.productImage} alt="" />
             </div>
             <div className={styles.itemInfoWrapper}>
               <div>{selectedItem?.productName}</div>
