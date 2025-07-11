@@ -40,7 +40,7 @@ React 기반으로 개발되었으며, 상태 관리는 Zustand, 데이터 패�
 ## 📸 Screenshots
 
 ### 사용자 페이지
-![image](https://github.com/user-attachments/assets/21b6007a-b58e-46b8-abb3-0f3de5eb478f)
+![image](https://github.com/user-attachments/assets/9661f347-5d3b-4646-9e3d-9ae8fe385ecf)
 
 <br />
 
